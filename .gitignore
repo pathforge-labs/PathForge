@@ -1,0 +1,49 @@
+# ── Environment ─────────────────────────────────────
+.env
+.env.local
+.env.*.local
+
+# ── Dependencies ────────────────────────────────────
+node_modules/
+.pnp/
+.pnp.js
+
+# ── Build Output ────────────────────────────────────
+dist/
+build/
+.next/
+out/
+*.egg-info/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# ── IDE ─────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# ── OS ──────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Python Virtual Environments ─────────────────────
+venv/
+.venv/
+env/
+
+# ── Logs ────────────────────────────────────────────
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# ── Coverage ────────────────────────────────────────
+coverage/
+htmlcov/
+.nyc_output/
+
+# ── Docker ──────────────────────────────────────────
+docker-compose.override.yml
