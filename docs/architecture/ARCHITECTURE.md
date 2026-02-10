@@ -1,26 +1,46 @@
-# PathForge — AI Career Growth Platform
+# PathForge — Career Intelligence Platform
 
 > **Architecture Decision Record** | **Classification**: Senior Engineer Reference
-> **Version**: 1.0.0 | **Date**: 2026-02-09
-> **Author**: AI Career Growth Platform Architect (Antigravity AI Kit v2.0.0)
+> **Version**: 1.1.0 | **Date**: 2026-02-10
+> **Author**: Career Intelligence Platform Architect (Antigravity AI Kit v2.0.0)
 > **Status**: APPROVED — Ready for Phase 1 Implementation
 
 ---
 
 ## 1. Product Vision
 
-PathForge is an **AI Career Growth Platform** — not a job application bot.
+PathForge is a **Career Intelligence Platform** — the Waze for careers.
 
-**Core Philosophy:**
+**Mission:** _Democratize career intelligence._
 
-> "Job searching is a full-time job. This system doesn't apply on behalf of the user — it becomes the user's **career strategist** and **operations manager**."
+> Enterprise-grade career intelligence — Skills Graphs, Market Signals, Predictive Analytics — has been locked behind $100K+ enterprise contracts (LinkedIn, Gloat, Workday, Eightfold). PathForge makes this intelligence available to every individual professional.
 
-**Principles:**
+**Vision:** _A world where no career decision is made blind._
 
-- **No full automation** — controlled semi-automation with human approval
-- **Transparency** — every AI decision is explainable and auditable
-- **Ethics first** — GDPR compliance, reputation protection, employer ToS respect
-- **Career lifecycle** — not just apply, but prepare, analyze, learn, and grow
+### 1.1 Career DNA™
+
+Every user has a living, multi-dimensional **Career DNA™** — not a static CV:
+
+| Dimension              | What It Captures                                 | Source                      |
+| :--------------------- | :----------------------------------------------- | :-------------------------- |
+| **Skills Genome**      | Explicit + hidden transferable skills            | CV analysis + AI extraction |
+| **Experience Pattern** | Career trajectory and velocity                   | Timeline + role analysis    |
+| **Growth Vector**      | Where you're heading, not just where you've been | Trend projection            |
+| **Values Alignment**   | Culture, impact, autonomy preferences            | Preference profiling        |
+| **Market Position**    | Real-time standing vs. demand                    | Market intelligence         |
+| **Opportunity Radar**  | Emerging fits before they're posted              | Predictive matching         |
+
+Career DNA is **alive** (updates continuously), **predictive** (future fit, not just current), **yours** (GDPR-native, data sovereign), and **proactive** (alerts without asking).
+
+### 1.2 The PathForge Manifesto
+
+1. **Your career data is YOUR intelligence** — not a recruiter's inventory
+2. **Proactive, not reactive** — career guidance before crisis, not after layoff
+3. **Evidence over intuition** — every recommendation backed by market data
+4. **Precision over volume** — one right move beats 100 blind applications
+5. **Human-first AI** — technology amplifies decisions, never replaces judgment
+6. **Transparent AI** — every score, match, and recommendation is explainable
+7. **EU-native privacy** — GDPR is not a compliance burden, it's trust architecture
 
 ---
 
@@ -211,15 +231,16 @@ PathForge is an **AI Career Growth Platform** — not a job application bot.
 
 ```mermaid
 graph LR
-    subgraph "Profile Context"
+    subgraph "Career DNA Context"
         USER["User"]
         RESUME["Resume"]
         SKILL["Skill"]
         BLACKLIST["Blacklist"]
         PREFERENCE["Preference"]
+        CAREERDNA["CareerDNA"]
     end
 
-    subgraph "Matching Context"
+    subgraph "Career Radar Context"
         JOBLISTING["JobListing"]
         MATCHRESULT["MatchResult"]
         MATCHSCORE["MatchScore"]
@@ -238,43 +259,52 @@ graph LR
         QUESTIONSET["QuestionSet"]
     end
 
-    subgraph "Analytics Context"
+    subgraph "Career Intelligence Context"
         FUNNELEVENT["FunnelEvent"]
         MARKETINSIGHT["MarketInsight"]
         RECOMMENDATION["Recommendation"]
+        THREATALERT["ThreatAlert"]
+        TRANSITIONPATH["TransitionPath"]
     end
 
     USER --> RESUME
     USER --> BLACKLIST
     USER --> PREFERENCE
+    USER --> CAREERDNA
     RESUME --> SKILL
+    SKILL --> CAREERDNA
     JOBLISTING --> MATCHRESULT
     MATCHRESULT --> MATCHSCORE
     APPLICATION --> CVVERSION
     APPLICATION --> COVERLETTER
     APPLICATION --> DIFFLOG
     APPLICATION --> FUNNELEVENT
+    CAREERDNA --> THREATALERT
+    CAREERDNA --> TRANSITIONPATH
 ```
 
 ### 3.2 Core Entity Definitions
 
-| Entity          | Description                          | Key Fields                                                        |
-| :-------------- | :----------------------------------- | :---------------------------------------------------------------- |
-| `User`          | Platform user account                | id, email, name, auth_provider, created_at                        |
-| `Resume`        | Parsed, structured CV data           | id, user_id, raw_text, structured_data, embedding, version        |
-| `Skill`         | Individual competency                | id, name, category, proficiency_level, verified                   |
-| `Blacklist`     | Company exclusion list               | id, user_id, company_name, reason, is_current_employer            |
-| `Preference`    | Job search preferences               | id, user_id, locations, salary_range, work_type, sectors          |
-| `JobListing`    | Scraped/imported job posting         | id, title, company, description, embedding, source_url, posted_at |
-| `MatchResult`   | Semantic match between user and job  | id, user_id, job_id, overall_score, explanation, created_at       |
-| `MatchScore`    | Dimensional scoring breakdown        | id, match_id, dimension, score, rationale                         |
-| `Application`   | Tracked job application              | id, user_id, job_id, cv_version_id, status, submitted_at          |
-| `CVVersion`     | Tailored CV for specific application | id, resume_id, job_id, content, diff_from_base, generation_log    |
-| `CoverLetter`   | Generated cover letter               | id, application_id, content, tone, generation_log                 |
-| `DiffLog`       | CV customization changelog           | id, cv_version_id, field, original, modified, reason              |
-| `InterviewPrep` | Interview preparation bundle         | id, application_id, company_brief, questions, star_examples       |
-| `FunnelEvent`   | Application lifecycle event          | id, application_id, stage, timestamp, metadata                    |
-| `MarketInsight` | Aggregated market intelligence       | id, user_id, insight_type, data, period, generated_at             |
+| Entity           | Description                          | Key Fields                                                             |
+| :--------------- | :----------------------------------- | :--------------------------------------------------------------------- |
+| `User`           | Platform user account                | id, email, name, auth_provider, created_at                             |
+| `Resume`         | Parsed, structured CV data           | id, user_id, raw_text, structured_data, embedding, version             |
+| `Skill`          | Individual competency                | id, name, category, proficiency_level, verified                        |
+| `Blacklist`      | Company exclusion list               | id, user_id, company_name, reason, is_current_employer                 |
+| `Preference`     | Job search preferences               | id, user_id, locations, salary_range, work_type, sectors               |
+| `JobListing`     | Scraped/imported job posting         | id, title, company, description, embedding, source_url, posted_at      |
+| `MatchResult`    | Semantic match between user and job  | id, user_id, job_id, overall_score, explanation, created_at            |
+| `MatchScore`     | Dimensional scoring breakdown        | id, match_id, dimension, score, rationale                              |
+| `Application`    | Tracked job application              | id, user_id, job_id, cv_version_id, status, submitted_at               |
+| `CVVersion`      | Tailored CV for specific application | id, resume_id, job_id, content, diff_from_base, generation_log         |
+| `CoverLetter`    | Generated cover letter               | id, application_id, content, tone, generation_log                      |
+| `DiffLog`        | CV customization changelog           | id, cv_version_id, field, original, modified, reason                   |
+| `InterviewPrep`  | Interview preparation bundle         | id, application_id, company_brief, questions, star_examples            |
+| `FunnelEvent`    | Application lifecycle event          | id, application_id, stage, timestamp, metadata                         |
+| `MarketInsight`  | Aggregated market intelligence       | id, user_id, insight_type, data, period, generated_at                  |
+| `CareerDNA`      | Living multi-dimensional profile     | id, user_id, skills_genome, growth_vector, market_position, updated_at |
+| `ThreatAlert`    | Proactive career threat detection    | id, user_id, alert_type, severity, message, action_items               |
+| `TransitionPath` | Proven career transition pathway     | id, from_role, to_role, success_rate, avg_duration, required_skills    |
 
 ---
 
@@ -461,34 +491,69 @@ pathforge/
 
 ## 7. Delivery Roadmap
 
+### Phase A: Core Platform (MVP)
+
 | Phase | Focus               | Duration     | Key Deliverables                                                        |
 | :---- | :------------------ | :----------- | :---------------------------------------------------------------------- |
 | **1** | Foundation          | 2-3 sessions | Monorepo, FastAPI, DB schema, JWT auth, Docker Compose                  |
 | **2** | AI Engine           | 3-4 sessions | Resume parsing, embeddings, semantic matching, CV tailoring, skill gaps |
-| **3** | Web App             | 3-4 sessions | Next.js UI, onboarding, job discovery, dashboard, interview prep        |
+| **3** | Web App             | 3-4 sessions | Next.js UI, onboarding, Career Radar dashboard, interview prep          |
 | **4** | Automation          | 2-3 sessions | Playwright, form filling, safety controls, application logging          |
 | **5** | Analytics           | 2 sessions   | Funnel pipeline, market intelligence, CV A/B tracking                   |
 | **6** | Mobile + Production | 3-4 sessions | Expo mobile app, push notifications, security audit, monitoring         |
 
-**Total estimated**: ~16-20 sessions for full platform.
+> **Architecture note**: Career DNA data schema is baked in from Phase 1. Every feature generates Career DNA signals, even before the intelligence layer is activated.
+
+### Phase B: Career Intelligence (Post-MVP, 3-6 months)
+
+| Phase | Focus                 | Key Deliverables                                                   |
+| :---- | :-------------------- | :----------------------------------------------------------------- |
+| **7** | Career DNA Activation | Living Career DNA profiles, hidden skills discovery, growth vector |
+| **8** | Career Weather        | Market signal aggregation, skill demand trends, threat alerts      |
+| **9** | Transition Pathways   | Anonymized career movement patterns, proven pivot paths            |
+
+### Phase C: Network Intelligence (6-12 months)
+
+| Phase  | Focus                    | Key Deliverables                                                     |
+| :----- | :----------------------- | :------------------------------------------------------------------- |
+| **10** | Collective Intelligence  | Anonymized career movement analytics, industry pulse, salary compass |
+| **11** | Predictive Career Engine | Emerging role detection, proactive opportunity surfacing             |
+
+**Total estimated**: ~16-20 sessions for MVP, ~24-30 sessions for full Career Intelligence Platform.
 
 ---
 
 ## 8. Competitive Differentiators Summary
 
-| What exists today                | What PathForge does differently                    |
-| :------------------------------- | :------------------------------------------------- |
-| Keyword matching (Jobscan, Rezi) | Semantic vector similarity + LLM reasoning         |
-| Mass auto-apply (LazyApply)      | Human-approved semi-automation                     |
-| Basic job tracker (Teal, Huntr)  | Full funnel analytics + market intelligence        |
-| No interview prep                | AI-powered STAR coaching + company research        |
-| No skill gap analysis            | ROI-quantified gaps with learning recommendations  |
-| No ethics layer                  | Blacklists, consent management, GDPR, audit trails |
-| Opaque AI decisions              | Full explainability on every match and CV change   |
+### 8.1 Category-Level Differentiation
+
+| Market Segment                             | What They Do                               | What PathForge Does                            |
+| :----------------------------------------- | :----------------------------------------- | :--------------------------------------------- |
+| Job search tools (Teal, Jobscan, Huntr)    | Optimize the existing job search loop      | **Replaces the loop with Career Intelligence** |
+| Mass apply bots (LazyApply, AIApply)       | Spray-and-pray automation                  | **Precision-and-strategy, human-first**        |
+| Enterprise HR platforms (Gloat, Eightfold) | Career intelligence for employers ($100K+) | **Same intelligence, for individuals**         |
+| LinkedIn Skills Graph                      | Recruiter-facing skills data               | **Individual-facing Career DNA™**              |
+
+### 8.2 Feature-Level Differentiation
+
+| What exists today                  | What PathForge does differently                      |
+| :--------------------------------- | :--------------------------------------------------- |
+| Keyword matching (Jobscan, Rezi)   | Semantic vector similarity + LLM reasoning           |
+| Static CV (everywhere)             | Living Career DNA™ — evolves continuously            |
+| Reactive job search (event-driven) | Proactive Career Radar — opportunities find you      |
+| No career forecasting              | Career Weather — skill demand trends + threat alerts |
+| No proven career paths             | Transition Pathways — evidence-based pivot routes    |
+| Mass auto-apply (LazyApply)        | Human-approved semi-automation                       |
+| Basic job tracker (Teal, Huntr)    | Full funnel analytics + market intelligence          |
+| No skill gap analysis              | ROI-quantified gaps with learning recommendations    |
+| No ethics layer                    | Blacklists, consent management, GDPR, audit trails   |
+| Opaque AI decisions                | Full explainability on every match and CV change     |
 
 ---
 
 ## 9. Success Metrics
+
+### 9.1 Core Platform Metrics (MVP)
 
 | Metric                        | Target                    | Measurement                |
 | :---------------------------- | :------------------------ | :------------------------- |
@@ -498,6 +563,16 @@ pathforge/
 | User retention (30-day)       | >60%                      | Active user tracking       |
 | GDPR compliance               | 100%                      | Audit checklist            |
 | AI explainability coverage    | 100% of decisions         | Explanation presence check |
+
+### 9.2 Career Intelligence Metrics (Post-MVP)
+
+| Metric                        | Target                     | Measurement            |
+| :---------------------------- | :------------------------- | :--------------------- |
+| Career DNA completeness       | >80% of profile dimensions | Profile analysis       |
+| Hidden skills discovered/user | >3 per analysis            | AI extraction audit    |
+| Proactive alert engagement    | >40% open rate             | Notification analytics |
+| Threat alert lead time        | >60 days before crisis     | Market signal accuracy |
+| Transition pathway accuracy   | >70% user-validated        | Feedback loop          |
 
 ---
 
