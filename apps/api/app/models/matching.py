@@ -1,7 +1,7 @@
 """
 PathForge — JobListing & MatchResult Models
 =============================================
-Scraped/imported job postings and semantic match results.
+Aggregated job postings (via API) and semantic match results.
 """
 
 import uuid
