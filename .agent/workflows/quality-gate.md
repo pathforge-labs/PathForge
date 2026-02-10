@@ -1,5 +1,5 @@
 ---
-description: CareerPilot Tier-1 Quality Gate - Mandatory pre-task research and validation protocol
+description: PathForge Tier-1 Quality Gate - Mandatory pre-task research and validation protocol
 ---
 
 # /quality-gate — Pre-Task Research & Validation Protocol
@@ -36,14 +36,14 @@ Produce a comparison table covering:
 
 Identify and document:
 
-- Where CareerPilot already meets/exceeds market standards
-- Where CareerPilot is BELOW market level
+- Where PathForge already meets/exceeds market standards
+- Where PathForge is BELOW market level
 - Outdated patterns in the current or proposed approach
 - If the task uses deceptive, spammy, or ethically harmful automation patterns → REJECT
 
 ### Step 4: Enhancement Strategy (REQUIRED)
 
-Define how CareerPilot IMPROVES upon the market baseline:
+Define how PathForge IMPROVES upon the market baseline:
 
 - More transparent scoring? How? (e.g., explainable skill gap metrics)
 - More ethical automation? How? (e.g., human-in-the-loop checkpoints)
@@ -70,7 +70,7 @@ Prepare a structured plan containing:
 1. Research summary (from Steps 1-5)
 2. Key insights extracted
 3. Risks of weak approaches
-4. Proposed CareerPilot-grade solution
+4. Proposed PathForge-grade solution
 5. Why this approach is superior
 6. Step-by-step execution plan
 7. Dependencies and blockers
@@ -92,5 +92,5 @@ If any of these conditions are met, REJECT the task:
 
 ## Rejection Response Format
 
-> "This task cannot be implemented in its current form, as it does not meet CareerPilot's quality and market standards.
+> "This task cannot be implemented in its current form, as it does not meet PathForge's quality and market standards.
 > Below are the identified risks and gaps. A revised, modern alternative is proposed."

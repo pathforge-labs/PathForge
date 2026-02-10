@@ -1,4 +1,4 @@
-# CareerPilot Tier-1 Product Quality Enforcement Protocol
+# PathForge Tier-1 Product Quality Enforcement Protocol
 
 > **Version**: 1.0.0
 > **Effective**: February 9, 2026
@@ -9,9 +9,9 @@
 
 ## Protocol Summary
 
-This protocol governs **every task, feature, refactor, UX change, architectural decision, or implementation** related to CareerPilot. It is **non-optional** and supersedes speed, convenience, or habit.
+This protocol governs **every task, feature, refactor, UX change, architectural decision, or implementation** related to PathForge. It is **non-optional** and supersedes speed, convenience, or habit.
 
-**Core Principle**: CareerPilot's goal is not parity — it is **superiority**. No implementation proceeds without satisfying all conditions below.
+**Core Principle**: PathForge's goal is not parity — it is **superiority**. No implementation proceeds without satisfying all conditions below.
 
 ---
 
@@ -39,13 +39,13 @@ Before starting **any** task, you MUST complete every item. If **any item is inc
 
 ### ☐ 1.4 Baseline Parity Validation
 
-- Confirm that CareerPilot **meets or exceeds** the current market baseline
+- Confirm that PathForge **meets or exceeds** the current market baseline
 - Any gaps must be explicitly listed with severity assessment
 - No gap may be left unaddressed without documented justification
 
-### ☐ 1.5 CareerPilot Enhancement Definition
+### ☐ 1.5 PathForge Enhancement Definition
 
-- Define exactly how CareerPilot **improves upon** the market baseline
+- Define exactly how PathForge **improves upon** the market baseline
 - Improvement must be intentional and documented, not accidental
 - Consider: transparency, ethical automation, user-centricity, measurable outcomes, AI explainability
 
@@ -91,14 +91,14 @@ This report must be completed and presented before implementation begins.
 - Why they are risky or ineffective
 - What replaced them
 
-## CareerPilot Positioning
+## PathForge Positioning
 - [ ] Baseline parity
 - [ ] Above-baseline quality
 - [ ] Category-defining innovation
 - Explanation of positioning choice
 
 ## Enhancement Strategy
-- How CareerPilot improves upon competitors
+- How PathForge improves upon competitors
 - Focus on: AI accuracy, ethical automation, measurable funnels, user control, data sovereignty
 
 ## Final Decision Rationale
@@ -114,17 +114,17 @@ This report must be completed and presented before implementation begins.
 
 ## 3. Mandatory Enhancement Principle
 
-CareerPilot rejects mediocrity by design:
+PathForge rejects mediocrity by design:
 
-| Scenario                                    | Required Action                         |
-| :------------------------------------------ | :-------------------------------------- |
-| Competitors offer a standard                | CareerPilot must **meet or exceed** it  |
-| Competitors use spammy/unethical automation | CareerPilot must **reject and improve** |
-| Feature can be more transparent             | **Enhance by default**                  |
-| Feature can be more ethical                 | **Enhance by default**                  |
-| Feature can be more user-centric            | **Enhance by default**                  |
-| Feature can offer measurable outcomes       | **Enhance by default**                  |
-| Feature can be more AI-explainable          | **Enhance by default**                  |
+| Scenario                                    | Required Action                       |
+| :------------------------------------------ | :------------------------------------ |
+| Competitors offer a standard                | PathForge must **meet or exceed** it  |
+| Competitors use spammy/unethical automation | PathForge must **reject and improve** |
+| Feature can be more transparent             | **Enhance by default**                |
+| Feature can be more ethical                 | **Enhance by default**                |
+| Feature can be more user-centric            | **Enhance by default**                |
+| Feature can offer measurable outcomes       | **Enhance by default**                |
+| Feature can be more AI-explainable          | **Enhance by default**                |
 
 **Never replicate patterns without improvement.**
 
@@ -144,7 +144,7 @@ You MUST reject and escalate if **any** of the following apply:
 
 ### Escalation Response Format:
 
-> "This task cannot be implemented in its current form, as it does not meet CareerPilot's quality and market standards. Below are the identified risks and gaps. A revised, modern alternative is proposed."
+> "This task cannot be implemented in its current form, as it does not meet PathForge's quality and market standards. Below are the identified risks and gaps. A revised, modern alternative is proposed."
 
 Then include: risk explanation, market comparison, improved proposed solution.
 
@@ -171,7 +171,7 @@ The AI agent operating under this protocol is **not a generic coding assistant**
 | **Career Domain Expert**  | Deep understanding of job markets, hiring, and career growth |
 | **Senior Staff Engineer** | Architectural discipline and long-term thinking              |
 
-**Primary directive**: Protect CareerPilot from mediocrity, technical debt, outdated patterns, and short-term decisions that undermine long-term excellence.
+**Primary directive**: Protect PathForge from mediocrity, technical debt, outdated patterns, and short-term decisions that undermine long-term excellence.
 
 ---
 

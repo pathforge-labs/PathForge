@@ -1,12 +1,12 @@
 ---
-description: CareerPilot Tier-1 Retrospective Quality Audit - Full product, architecture, and AI pipeline review against market standards
+description: PathForge Tier-1 Retrospective Quality Audit - Full product, architecture, and AI pipeline review against market standards
 ---
 
 # /retrospective — Tier-1 Retrospective Quality Audit
 
 > **Platform**: Antigravity AI Kit
-> **Origin**: CareerPilot Trust-Grade AI Governance
-> **Purpose**: Repeatable, on-demand retrospective audit of CareerPilot's entire product surface
+> **Origin**: PathForge Trust-Grade AI Governance
+> **Purpose**: Repeatable, on-demand retrospective audit of PathForge's entire product surface
 > **Trigger**: `/retrospective` or `/tier1-audit`
 > **Agents**: architect, code-reviewer, security-reviewer, ux-agent
 > **Updated**: February 9, 2026
@@ -14,7 +14,7 @@ description: CareerPilot Tier-1 Retrospective Quality Audit - Full product, arch
 ---
 
 > [!CAUTION]
-> This is a **critical governance workflow**. You are NOT allowed to defend previous decisions by default, minimize issues to preserve past work, or optimize for speed over correctness. Be critical, precise, and honest — treat CareerPilot as a product competing with category leaders.
+> This is a **critical governance workflow**. You are NOT allowed to defend previous decisions by default, minimize issues to preserve past work, or optimize for speed over correctness. Be critical, precise, and honest — treat PathForge as a product competing with category leaders.
 
 ---
 
@@ -90,9 +90,9 @@ For each completed feature or system, evaluate against market leaders:
 ```markdown
 ## Market Benchmark Table (per feature)
 
-| Feature | CareerPilot Impl. | Market Leader | Gap?     | Notes    |
-| :------ | :---------------- | :------------ | :------- | :------- |
-| [name]  | [approach]        | [best impl.]  | ✅/⚠️/❌ | [detail] |
+| Feature | PathForge Impl. | Market Leader | Gap?     | Notes    |
+| :------ | :-------------- | :------------ | :------- | :------- |
+| [name]  | [approach]      | [best impl.]  | ✅/⚠️/❌ | [detail] |
 ```
 
 ### Step 3: Outdated Pattern Detection
@@ -134,9 +134,9 @@ Evaluate each area through the ethics lens:
 - [ ] Are all automation safeguards (human-in-the-loop, rate limiting, opt-out) effective?
 - [ ] Does browser automation comply with **target platform Terms of Service**?
 
-### Step 6: CareerPilot Differentiation Alignment
+### Step 6: PathForge Differentiation Alignment
 
-For each feature, check alignment with CareerPilot's core values:
+For each feature, check alignment with PathForge's core values:
 
 - [ ] Does this actively support **Precision > Volume** philosophy (quality over mass applications)?
 - [ ] Does it reinforce **measurable, transparent application funnels**?
@@ -150,11 +150,11 @@ For each feature, check alignment with CareerPilot's core values:
 
 Classify each analyzed area using this scale:
 
-| Classification             | Meaning                                                  | Action Required             |
-| :------------------------- | :------------------------------------------------------- | :-------------------------- |
-| ✅ **Tier-1 Compliant**    | Meets or exceeds market standards + CareerPilot values   | No action needed            |
-| ⚠️ **Partially Compliant** | Functional but below Tier-1 expectations                 | Refinement plan required    |
-| ❌ **Non-Compliant**       | Below market standard or violates CareerPilot principles | Revision required — blocker |
+| Classification             | Meaning                                                | Action Required             |
+| :------------------------- | :----------------------------------------------------- | :-------------------------- |
+| ✅ **Tier-1 Compliant**    | Meets or exceeds market standards + PathForge values   | No action needed            |
+| ⚠️ **Partially Compliant** | Functional but below Tier-1 expectations               | Refinement plan required    |
+| ❌ **Non-Compliant**       | Below market standard or violates PathForge principles | Revision required — blocker |
 
 ---
 
@@ -163,7 +163,7 @@ Classify each analyzed area using this scale:
 You MUST produce the final audit using this exact structure:
 
 ```markdown
-# CareerPilot Tier-1 Retrospective Audit Report
+# PathForge Tier-1 Retrospective Audit Report
 
 > Date: [audit date]
 > Sprint/Phase: [current sprint]
@@ -185,7 +185,7 @@ Per-area classification (✅ / ⚠️ / ❌) with justification.
 
 - Missing best practices
 - Weak or rushed decisions
-- Areas below market or CareerPilot standards
+- Areas below market or PathForge standards
 
 ## 5. Outdated or Suboptimal Implementations
 
@@ -222,7 +222,7 @@ When issues are found, you MUST:
 
 1. **Prefer structural improvements** over cosmetic fixes
 2. **Avoid incremental patching** when foundations are weak
-3. **Ensure all revisions** move CareerPilot closer to Tier-1 standards
+3. **Ensure all revisions** move PathForge closer to Tier-1 standards
 4. **Provide concrete examples** — not vague suggestions
 5. **Reference market data** to justify every recommendation
 
@@ -245,7 +245,7 @@ When issues are found, you MUST:
 | ✅ Required                                          | Standard                         |
 | :--------------------------------------------------- | :------------------------------- |
 | Be critical, precise, and honest                     | PhD-level rigor                  |
-| Treat CareerPilot as competing with category leaders | Market-grade bar                 |
+| Treat PathForge as competing with category leaders   | Market-grade bar                 |
 | Recommend revisions whenever standards aren't met    | Zero tolerance for "good enough" |
 | Provide actionable, measurable recommendations       | Engineering precision            |
 | Cite competitors or best practices for every finding | Evidence-based audit             |
@@ -265,7 +265,7 @@ This workflow is considered complete ONLY when:
 - [ ] Findings are presented to the Product Owner via `notify_user`
 
 > [!NOTE]
-> If **no gaps are found**, you must explicitly state WHY CareerPilot already meets Tier-1 standards, with evidence from market benchmarks and internal quality metrics.
+> If **no gaps are found**, you must explicitly state WHY PathForge already meets Tier-1 standards, with evidence from market benchmarks and internal quality metrics.
 
 ---
 
