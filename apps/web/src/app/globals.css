@@ -283,3 +283,26 @@
   pointer-events: none;
   z-index: 0;
 }
+
+/* CTA button premium hover glow */
+.cta-button {
+  position: relative;
+}
+
+.cta-button::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, oklch(0.7 0.2 270 / 0%), oklch(0.75 0.15 195 / 0%));
+  z-index: -1;
+  transition: all 300ms ease;
+  opacity: 0;
+}
+
+.cta-button:hover::after {
+  inset: -3px;
+  background: linear-gradient(135deg, oklch(0.7 0.2 270 / 30%), oklch(0.75 0.15 195 / 30%));
+  opacity: 1;
+  filter: blur(8px);
+}

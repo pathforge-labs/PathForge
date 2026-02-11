@@ -3,7 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowRight, CheckCircle2, Loader2 } from "lucide-react";
+import { ArrowRight, CheckCircle2, Loader2, Shield, Lock } from "lucide-react";
 
 type WaitlistState = "idle" | "loading" | "success" | "error";
 
@@ -135,9 +135,13 @@ export function WaitlistForm({
       {state === "error" && (
         <p className="mt-2 text-sm text-destructive">{message}</p>
       )}
-      <p className="mt-3 text-center text-xs text-muted-foreground sm:text-left">
-        Free forever for early adopters · No spam · GDPR compliant 🇪🇺
-      </p>
+      <div className="mt-3 flex items-center justify-center gap-4 text-[11px] text-muted-foreground/60 sm:justify-start">
+        <span className="flex items-center gap-1"><Shield className="h-3 w-3" />GDPR compliant</span>
+        <span className="h-3 w-px bg-border/30" />
+        <span className="flex items-center gap-1"><Lock className="h-3 w-3" />No spam, ever</span>
+        <span className="h-3 w-px bg-border/30" />
+        <span>Free for early adopters</span>
+      </div>
     </div>
   );
 }
