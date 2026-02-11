@@ -54,14 +54,15 @@
 
 ## 📂 Key File Locations
 
-| File                                       | Purpose                          |
-| :----------------------------------------- | :------------------------------- |
-| `docs/architecture/ARCHITECTURE.md`        | Senior engineer architecture ref |
-| `docs/research/market_viability_report.md` | Market viability analysis        |
-| `docs/BRANDING.md`                         | Brand constants & naming guide   |
-| `.env.example`                             | Environment variable template    |
-| `.agent/session-context.md`                | This file                        |
-| `.agent/session-state.json`                | Machine-readable state           |
+| File                                                        | Purpose                          |
+| :---------------------------------------------------------- | :------------------------------- |
+| `docs/architecture/ARCHITECTURE.md`                         | Senior engineer architecture ref |
+| `docs/architecture/ADR-001-agent-orchestration-strategy.md` | Agent orchestration decision     |
+| `docs/research/market_viability_report.md`                  | Market viability analysis        |
+| `docs/BRANDING.md`                                          | Brand constants & naming guide   |
+| `.env.example`                                              | Environment variable template    |
+| `.agent/session-context.md`                                 | This file                        |
+| `.agent/session-state.json`                                 | Machine-readable state           |
 
 ---
 
@@ -80,4 +81,5 @@ git log --oneline -5
 - Phase 3 (Application Automation) deferred to v2 per viability report
 - Target: ship MVP in ≤4 months (web-only first, mobile later)
 - Brand constants framework created — all future code reads from centralized config
+- ADR-001: Agent Teams adoption deferred until feature exits experimental status (see `docs/architecture/ADR-001-agent-orchestration-strategy.md`)
 - Next priority: landing page on pathforge.eu for early audience building
