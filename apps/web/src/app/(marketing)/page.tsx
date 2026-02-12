@@ -5,6 +5,7 @@ import { AnimatedSection, HeroDashboard } from "@/components/animated-sections";
 import { TestimonialsMarquee } from "@/components/testimonials-marquee";
 import { TestimonialAvatar } from "@/components/testimonial-avatar";
 import { SpotlightCard } from "@/components/spotlight-card";
+import { BorderGlow } from "@/components/border-glow";
 import { CountUp } from "@/components/count-up";
 import { AnimatedBar } from "@/components/animated-bar";
 import { FaqAccordion } from "@/components/faq-accordion";
@@ -746,50 +747,51 @@ export default function LandingPage() {
           <div className="mt-14">
             <TestimonialsMarquee speed="normal">
               {TESTIMONIALS.map((t) => (
-                <div
-                  key={t.name}
-                  className="group relative flex w-[340px] shrink-0 flex-col overflow-hidden rounded-2xl border border-border/30 bg-card/50 p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-border/50 hover:shadow-lg hover:shadow-primary/5 sm:w-[380px]"
-                >
-                  {/* Gradient glow line */}
-                  {t.featured && (
-                    <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary/50 to-transparent" />
-                  )}
-
-                  <MessageSquareQuote className="mb-4 h-5 w-5 text-primary/30" />
-
-                  <blockquote className="flex-1 text-sm leading-relaxed text-muted-foreground">
-                    &ldquo;{t.quote}&rdquo;
-                  </blockquote>
-
-                  <div className="mt-6 flex items-center justify-between border-t border-border/15 pt-5">
-                    <div className="flex items-center gap-3">
-                      <TestimonialAvatar
-                        name={t.name}
-                        image={t.image}
-                        gradient={t.gradient}
-                        size={80}
-                      />
-                      <div>
-                        <p className="text-[13px] font-semibold">{t.name}</p>
-                        <p className="text-xs text-muted-foreground/70">
-                          {t.role} · {t.company}
-                        </p>
-                      </div>
-                    </div>
-                    {/* LinkedIn link */}
-                    {t.linkedin && (
-                      <a
-                        href={t.linkedin}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="rounded-lg p-1.5 text-muted-foreground/40 transition-colors hover:bg-secondary/50 hover:text-primary"
-                        aria-label={`View ${t.name} on LinkedIn`}
-                      >
-                        <Linkedin className="h-6 w-6" />
-                      </a>
+                <BorderGlow key={t.name} className="w-[340px] shrink-0 sm:w-[380px]">
+                  <div
+                    className="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-card/80 p-6 transition-all duration-300 hover:-translate-y-0.5"
+                  >
+                    {/* Gradient glow line */}
+                    {t.featured && (
+                      <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary/50 to-transparent" />
                     )}
+
+                    <MessageSquareQuote className="mb-4 h-5 w-5 text-primary/30" />
+
+                    <blockquote className="flex-1 text-sm leading-relaxed text-muted-foreground">
+                      &ldquo;{t.quote}&rdquo;
+                    </blockquote>
+
+                    <div className="mt-6 flex items-center justify-between border-t border-border/15 pt-5">
+                      <div className="flex items-center gap-3">
+                        <TestimonialAvatar
+                          name={t.name}
+                          image={t.image}
+                          gradient={t.gradient}
+                          size={80}
+                        />
+                        <div>
+                          <p className="text-[13px] font-semibold">{t.name}</p>
+                          <p className="text-xs text-muted-foreground/70">
+                            {t.role} · {t.company}
+                          </p>
+                        </div>
+                      </div>
+                      {/* LinkedIn link */}
+                      {t.linkedin && (
+                        <a
+                          href={t.linkedin}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="rounded-lg p-1.5 text-muted-foreground/40 transition-colors hover:bg-secondary/50 hover:text-primary"
+                          aria-label={`View ${t.name} on LinkedIn`}
+                        >
+                          <Linkedin className="h-6 w-6" />
+                        </a>
+                      )}
+                    </div>
                   </div>
-                </div>
+                </BorderGlow>
               ))}
             </TestimonialsMarquee>
           </div>

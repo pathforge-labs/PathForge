@@ -409,3 +409,46 @@
   background: linear-gradient(90deg, transparent, oklch(0.7 0.18 270 / 50%), transparent);
   border-radius: 1px;
 }
+
+/* ─── Animated Border Glow (Testimonial cards) ─────────────────────────────── */
+
+@property --border-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes border-rotate {
+  to { --border-angle: 360deg; }
+}
+
+.border-glow {
+  background: oklch(1 0 0 / 8%);
+  animation: border-rotate 4s linear infinite;
+  animation-play-state: paused;
+  transition: box-shadow 300ms ease-out;
+}
+
+.border-glow:hover {
+  background: conic-gradient(
+    from var(--border-angle),
+    oklch(1 0 0 / 8%) 0%,
+    oklch(0.7 0.18 270) 25%,
+    oklch(0.75 0.15 195) 50%,
+    oklch(1 0 0 / 8%) 75%,
+    oklch(0.7 0.18 270) 100%
+  );
+  animation-play-state: running;
+  box-shadow: 0 0 20px oklch(0.7 0.18 270 / 15%),
+              0 0 40px oklch(0.75 0.15 195 / 8%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .border-glow {
+    animation: none !important;
+  }
+  .border-glow:hover {
+    background: oklch(1 0 0 / 15%);
+    box-shadow: none;
+  }
+}
