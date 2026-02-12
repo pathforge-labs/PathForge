@@ -86,43 +86,31 @@ export default function FeaturesPage() {
 
       {/* Features grid */}
       <section className="px-6 pb-20">
-        <div className="mx-auto max-w-6xl space-y-8">
+        <div className="mx-auto grid max-w-5xl gap-5 sm:grid-cols-2">
           {FEATURES.map((feature, i) => {
             const details = FEATURE_DETAILS[feature.title];
             return (
-              <AnimatedSection key={feature.title} delay={i * 100}>
-                <SpotlightCard className="glass-card rounded-2xl p-0">
-                  <div className="grid items-stretch gap-0 md:grid-cols-2">
-                    {/* Left — content */}
-                    <div className="relative z-10 p-8 sm:p-10">
-                      <div className={`mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br ${feature.gradient} shadow-lg`}>
-                        <feature.icon className="h-6 w-6 text-white" />
-                      </div>
-                      <h2 className="font-display mb-3 text-2xl font-bold tracking-tight">
-                        {feature.title}
-                      </h2>
-                      <p className="mb-6 text-muted-foreground leading-relaxed">
-                        {feature.description}
-                      </p>
-                      {details && (
-                        <ul className="space-y-3">
-                          {details.details.map((d) => (
-                            <li key={d} className="flex items-start gap-3 text-sm text-muted-foreground">
-                              <div className={`mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-linear-to-br ${feature.gradient}`} />
-                              {d}
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                    {/* Right — visual accent */}
-                    <div className="relative hidden min-h-[200px] items-center justify-center md:flex">
-                      <div className="absolute inset-0 bg-linear-to-br from-card/50 to-card/20" />
-                      <div className={`relative flex h-32 w-32 items-center justify-center rounded-3xl bg-linear-to-br ${feature.gradient} opacity-10`}>
-                        <feature.icon className="h-16 w-16 text-white" />
-                      </div>
-                    </div>
+              <AnimatedSection key={feature.title} delay={i * 80}>
+                <SpotlightCard className="glass-card h-full rounded-2xl p-7 sm:p-8">
+                  <div className={`mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-linear-to-br ${feature.gradient} shadow-lg`}>
+                    <feature.icon className="h-5 w-5 text-white" />
                   </div>
+                  <h2 className="font-display mb-2 text-lg font-bold tracking-tight">
+                    {feature.title}
+                  </h2>
+                  <p className="mb-5 text-sm text-muted-foreground leading-relaxed">
+                    {feature.description}
+                  </p>
+                  {details && (
+                    <ul className="space-y-2.5">
+                      {details.details.map((d) => (
+                        <li key={d} className="flex items-start gap-2.5 text-xs text-muted-foreground/80">
+                          <div className={`mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-linear-to-br ${feature.gradient}`} />
+                          {d}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </SpotlightCard>
               </AnimatedSection>
             );
