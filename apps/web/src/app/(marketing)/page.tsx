@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { WaitlistForm } from "@/components/waitlist-form";
-import { MobileNav } from "@/components/mobile-nav";
 import { AnimatedSection, HeroDashboard } from "@/components/animated-sections";
 import { TestimonialsMarquee } from "@/components/testimonials-marquee";
 import { TestimonialAvatar } from "@/components/testimonial-avatar";
@@ -10,18 +9,8 @@ import { BorderGlow } from "@/components/border-glow";
 import { CountUp } from "@/components/count-up";
 import { AnimatedBar } from "@/components/animated-bar";
 import { FaqAccordion } from "@/components/faq-accordion";
-import { ActiveNav } from "@/components/active-nav";
-import { NavScrollEffect } from "@/components/nav-scroll-effect";
-import { BackToTop } from "@/components/back-to-top";
 import { OrganizationJsonLd, WebSiteJsonLd, FAQPageJsonLd } from "@/components/json-ld";
-import {
-  APP_NAME,
-  APP_COMPANY,
-  APP_COUNTRY,
-  APP_COUNTRY_FLAG,
-  APP_AUTHOR_EMAIL,
-  SOCIAL_LINKS,
-} from "@/config/brand";
+import { APP_NAME } from "@/config/brand";
 import {
   FEATURES,
   STATS,
@@ -38,74 +27,23 @@ import {
   FileText,
   DollarSign,
   Sparkles,
-  Globe,
   ChevronRight,
   ArrowRight,
   Check,
   X,
   MessageSquareQuote,
   Linkedin,
-  Github,
 } from "lucide-react";
 
 /* ─────────────────────── Page (Server Component) ──── */
 
 export default function LandingPage() {
   return (
-    <div className="flex min-h-screen flex-col">
+    <>
       {/* ── Structured Data (JSON-LD) ─────────────────── */}
       <OrganizationJsonLd />
       <WebSiteJsonLd />
       <FAQPageJsonLd items={FAQ} />
-
-      {/* ── Skip to content (a11y) ──────────────────────── */}
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-100 focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
-      >
-        Skip to content
-      </a>
-
-      {/* ── Navbar ────────────────────────────────────── */}
-      <nav className="sticky top-0 z-50 border-b border-border/30 bg-background/80 backdrop-blur-xl transition-all duration-300" aria-label="Main navigation">
-        <NavScrollEffect />
-        <div className="mx-auto flex h-16 max-w-7xl 2xl:max-w-[1400px] 3xl:max-w-[1600px] 4xl:max-w-[1800px] items-center justify-between px-6">
-          <Link href="/" className="flex items-center gap-2.5" aria-label={`${APP_NAME} home`}>
-            <Image
-              src="/brand/logo-primary.png"
-              alt={`${APP_NAME} logo`}
-              width={32}
-              height={32}
-              className="h-8 w-8 rounded-lg object-contain"
-            />
-            <span className="gradient-text-animated font-display text-2xl font-bold tracking-tight">
-              {APP_NAME}
-            </span>
-          </Link>
-
-          {/* Desktop nav */}
-          <div className="hidden items-center gap-2 md:flex">
-            <ActiveNav />
-            <Link
-              href="/login"
-              className="cursor-pointer rounded-lg px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-            >
-              Sign In
-            </Link>
-            <Link
-              href="#cta"
-              className="cta-button cursor-pointer rounded-xl bg-linear-to-r from-primary to-accent px-5 py-2 text-sm font-semibold text-white transition-all hover:opacity-90 hover:shadow-lg hover:shadow-primary/20"
-            >
-              Join Waitlist
-            </Link>
-          </div>
-
-          {/* Mobile nav */}
-          <MobileNav />
-        </div>
-      </nav>
-
-      <main id="main-content" className="flex-1">
         {/* ── Hero Section ────────────────────────────── */}
         <section className="noise-overlay relative overflow-hidden px-6 pb-8 pt-16 sm:pb-12 sm:pt-24 lg:pt-28">
           {/* Ambient glow effects */}
@@ -669,113 +607,6 @@ export default function LandingPage() {
             <WaitlistForm variant="hero" className="mx-auto max-w-md" />
           </AnimatedSection>
         </section>
-      </main>
-
-      {/* ── Footer ─────────────────────────────────── */}
-      <footer className="relative overflow-hidden border-t border-border/20" role="contentinfo">
-        {/* Premium gradient mesh background */}
-        <div className="absolute inset-0 bg-linear-to-b from-card/50 via-card/20 to-background" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_50%,oklch(0.7_0.18_270/4%),transparent_60%),radial-gradient(ellipse_at_80%_20%,oklch(0.75_0.15_195/3%),transparent_50%)]" />
-        {/* Subtle top gradient accent line */}
-        <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary/25 to-transparent" />
-
-        <div className="relative mx-auto max-w-7xl 2xl:max-w-[1400px] 3xl:max-w-[1600px] 4xl:max-w-[1800px] px-6 py-16 sm:py-20">
-          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-5 lg:gap-16">
-            {/* Brand — spans 2 columns on lg */}
-            <div className="lg:col-span-2">
-              <div className="flex items-center gap-3">
-                <Image
-                  src="/brand/logo-primary.png"
-                  alt={`${APP_NAME} logo`}
-                  width={40}
-                  height={40}
-                  className="h-10 w-10 rounded-xl object-contain"
-                />
-                <span className="gradient-text-animated font-display text-2xl font-bold tracking-tight">
-                  {APP_NAME}
-                </span>
-              </div>
-              <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
-                Career Intelligence, Intelligently Forged. Decode your unique Career DNA™ and discover opportunities that truly align.
-              </p>
-
-              {/* Social icons — large, prominent */}
-              <div className="mt-6">
-                <div className="mb-4 h-px w-48 bg-linear-to-r from-primary/50 to-accent/50" />
-                <div className="flex items-center gap-4">
-                  <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noopener noreferrer" className="flex h-12 w-12 items-center justify-center rounded-xl text-muted-foreground/70 transition-all duration-200 hover:bg-primary/5 hover:text-primary" aria-label="LinkedIn">
-                    <Linkedin className="h-6 w-6" />
-                  </a>
-                  <a href={SOCIAL_LINKS.github} target="_blank" rel="noopener noreferrer" className="flex h-12 w-12 items-center justify-center rounded-xl text-muted-foreground/70 transition-all duration-200 hover:bg-primary/5 hover:text-primary" aria-label="GitHub">
-                    <Github className="h-6 w-6" />
-                  </a>
-                  <a href={SOCIAL_LINKS.x} target="_blank" rel="noopener noreferrer" className="flex h-12 w-12 items-center justify-center rounded-xl text-muted-foreground/70 transition-all duration-200 hover:bg-primary/5 hover:text-primary" aria-label="X (Twitter)">
-                    <X className="h-6 w-6" />
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            {/* Product */}
-            <div>
-              <p className="footer-heading mb-4 cursor-default text-xs font-semibold uppercase tracking-widest text-foreground/60">
-                Product
-              </p>
-              <div className="flex flex-col gap-2.5 text-sm">
-                <Link href="#features" className="footer-link w-fit cursor-pointer text-muted-foreground transition-colors hover:text-foreground">Features</Link>
-                <Link href="#how-it-works" className="footer-link w-fit cursor-pointer text-muted-foreground transition-colors hover:text-foreground">How it Works</Link>
-                <Link href="#comparison" className="footer-link w-fit cursor-pointer text-muted-foreground transition-colors hover:text-foreground">Comparison</Link>
-              </div>
-            </div>
-
-            {/* Legal */}
-            <div>
-              <p className="footer-heading mb-4 cursor-default text-xs font-semibold uppercase tracking-widest text-foreground/60">
-                Legal
-              </p>
-              <div className="flex flex-col gap-2.5 text-sm">
-                <Link href="/privacy" className="footer-link w-fit cursor-pointer text-muted-foreground transition-colors hover:text-foreground">Privacy Policy</Link>
-                <Link href="/terms" className="footer-link w-fit cursor-pointer text-muted-foreground transition-colors hover:text-foreground">Terms of Service</Link>
-                <Link href="/cookies" className="footer-link w-fit cursor-pointer text-muted-foreground transition-colors hover:text-foreground">Cookie Policy</Link>
-              </div>
-            </div>
-
-            {/* Company */}
-            <div>
-              <p className="footer-heading mb-4 cursor-default text-xs font-semibold uppercase tracking-widest text-foreground/60">
-                Company
-              </p>
-              <div className="flex flex-col gap-2.5 text-sm">
-                <Link href="/about" className="footer-link w-fit cursor-pointer text-muted-foreground transition-colors hover:text-foreground">About</Link>
-                <Link href={`mailto:${APP_AUTHOR_EMAIL}`} className="footer-link w-fit cursor-pointer text-muted-foreground transition-colors hover:text-foreground">Contact</Link>
-                <Link href="/careers" className="footer-link w-fit cursor-pointer text-muted-foreground transition-colors hover:text-foreground">Careers</Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom bar */}
-          <div className="relative mt-14 pt-8">
-            {/* Gradient divider line */}
-            <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-border/40 to-transparent" />
-            <div className="flex flex-col items-center justify-between gap-4 text-xs text-muted-foreground/50 sm:flex-row">
-              <div className="flex items-center gap-1.5">
-                <span className="text-sm leading-none">{APP_COUNTRY_FLAG}</span>
-                <span>Made in {APP_COUNTRY}</span>
-              </div>
-              <p>
-                © {new Date().getFullYear()} {APP_NAME} by {APP_COMPANY}
-              </p>
-              <div className="flex items-center gap-1.5 text-muted-foreground/40 transition-colors hover:text-muted-foreground/60">
-                <Globe className="h-3 w-3" />
-                <span>English</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
-
-      {/* Back to top */}
-      <BackToTop />
-    </div>
+    </>
   );
 }

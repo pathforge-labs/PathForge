@@ -1,3 +1,6 @@
+import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
+import { BackToTop } from "@/components/back-to-top";
 import { ScrollProgress } from "@/components/scroll-progress";
 import { CookieConsent } from "@/components/cookie-consent";
 
@@ -7,11 +10,25 @@ export default function MarketingLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
+      {/* Skip to content (a11y) */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-100 focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
+      >
+        Skip to content
+      </a>
+
       <ScrollProgress />
-      {children}
+      <Navbar />
+
+      <main id="main-content" className="flex-1">
+        {children}
+      </main>
+
+      <Footer />
+      <BackToTop />
       <CookieConsent />
-    </>
+    </div>
   );
 }
-
