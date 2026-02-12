@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { APP_NAME } from "@/config/brand";
+
+export const metadata: Metadata = {
+  title: "Terms of Service",
+  description: `${APP_NAME} Terms of Service. Clear, fair terms designed to protect both you and the platform. No hidden clauses — transparency is core to our mission.`,
+};
 
 export default function TermsPage() {
   return (
@@ -9,22 +15,16 @@ export default function TermsPage() {
           Terms of Service
         </h1>
         <p className="mb-8 text-lg text-muted-foreground">
-          {APP_NAME}&apos;s terms of service are being prepared. We believe in
-          clear, fair terms that respect your rights as a user.
+          We believe in clear, fair terms. {APP_NAME}&apos;s terms of service
+          are designed to protect both you and the platform — no hidden clauses,
+          no surprises.
         </p>
-        <p className="mb-10 text-sm text-muted-foreground/60">
-          This page will be updated before our public launch. For questions,
-          contact{" "}
-          <a
-            href="mailto:hello@pathforge.eu"
-            className="text-primary underline underline-offset-4"
-          >
-            hello@pathforge.eu
-          </a>
+        <p className="mb-12 text-sm text-muted-foreground/60">
+          Full terms of service will be published before launch.
         </p>
         <Link
           href="/"
-          className="rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-all hover:opacity-90"
+          className="inline-flex items-center gap-2 rounded-xl bg-linear-to-r from-primary to-accent px-6 py-3 text-sm font-semibold text-white transition-all hover:opacity-90"
         >
           ← Back to Home
         </Link>

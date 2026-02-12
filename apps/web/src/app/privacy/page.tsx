@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { APP_NAME } from "@/config/brand";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description: `${APP_NAME} Privacy Policy. Learn how we protect your data with GDPR-native practices. Your career data is encrypted, never sold, and fully under your control.`,
+};
 
 export default function PrivacyPage() {
   return (
@@ -9,23 +15,16 @@ export default function PrivacyPage() {
           Privacy Policy
         </h1>
         <p className="mb-8 text-lg text-muted-foreground">
-          {APP_NAME}&apos;s privacy policy is being finalized. We are committed
-          to GDPR-native data handling and full transparency in how we process
-          your career data.
+          Your privacy is fundamental to {APP_NAME}. We&apos;re building a
+          GDPR-native platform from the ground up — your career data is
+          encrypted, never sold, and always under your control.
         </p>
-        <p className="mb-10 text-sm text-muted-foreground/60">
-          This page will be updated before our public launch. For questions,
-          contact{" "}
-          <a
-            href="mailto:hello@pathforge.eu"
-            className="text-primary underline underline-offset-4"
-          >
-            hello@pathforge.eu
-          </a>
+        <p className="mb-12 text-sm text-muted-foreground/60">
+          Full privacy policy will be published before launch.
         </p>
         <Link
           href="/"
-          className="rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-all hover:opacity-90"
+          className="inline-flex items-center gap-2 rounded-xl bg-linear-to-r from-primary to-accent px-6 py-3 text-sm font-semibold text-white transition-all hover:opacity-90"
         >
           ← Back to Home
         </Link>

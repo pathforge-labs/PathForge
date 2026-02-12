@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { APP_NAME } from "@/config/brand";
+
+export const metadata: Metadata = {
+  title: "Cookie Policy",
+  description: `${APP_NAME} Cookie Policy. We use only essential cookies — no tracking, no ads, no third-party data sharing. Full transparency on how cookies work on our platform.`,
+};
 
 export default function CookiesPage() {
   return (
@@ -9,23 +15,15 @@ export default function CookiesPage() {
           Cookie Policy
         </h1>
         <p className="mb-8 text-lg text-muted-foreground">
-          {APP_NAME}&apos;s cookie policy is being finalized. We use minimal,
-          essential cookies only and will provide full transparency about
-          tracking and consent.
+          {APP_NAME} uses only essential cookies to make the platform work. No
+          tracking cookies, no advertising cookies, no third-party data sharing.
         </p>
-        <p className="mb-10 text-sm text-muted-foreground/60">
-          This page will be updated before our public launch. For questions,
-          contact{" "}
-          <a
-            href="mailto:hello@pathforge.eu"
-            className="text-primary underline underline-offset-4"
-          >
-            hello@pathforge.eu
-          </a>
+        <p className="mb-12 text-sm text-muted-foreground/60">
+          Full cookie policy will be published before launch.
         </p>
         <Link
           href="/"
-          className="rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-all hover:opacity-90"
+          className="inline-flex items-center gap-2 rounded-xl bg-linear-to-r from-primary to-accent px-6 py-3 text-sm font-semibold text-white transition-all hover:opacity-90"
         >
           ← Back to Home
         </Link>

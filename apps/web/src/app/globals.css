@@ -177,6 +177,18 @@
   }
 }
 
+@keyframes loading-bar {
+  0% {
+    transform: scaleX(0) translateX(-100%);
+  }
+  50% {
+    transform: scaleX(0.6) translateX(0%);
+  }
+  100% {
+    transform: scaleX(0) translateX(100%);
+  }
+}
+
 @keyframes float {
   0%,
   100% {
