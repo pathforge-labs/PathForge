@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import {
+  APP_NAME,
+  APP_TAGLINE,
+  APP_COMPANY,
+  APP_URL,
+} from "@/config/brand";
 import "./globals.css";
 
 const inter = Inter({
@@ -15,8 +21,8 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: "PathForge — AI-Powered Career Intelligence",
-    template: "%s | PathForge",
+    default: `${APP_NAME} — AI-Powered Career Intelligence`,
+    template: `%s | ${APP_NAME}`,
   },
   description:
     "Career Intelligence Platform with Career DNA™ technology. " +
@@ -34,33 +40,38 @@ export const metadata: Metadata = {
     "GDPR career tool",
     "EU career platform",
   ],
-  authors: [{ name: "BesyncLabs", url: "https://pathforge.eu" }],
-  creator: "PathForge by BesyncLabs",
-  metadataBase: new URL("https://pathforge.eu"),
+  authors: [{ name: APP_COMPANY, url: APP_URL }],
+  creator: `${APP_NAME} by ${APP_COMPANY}`,
+  metadataBase: new URL(APP_URL),
+  icons: {
+    icon: "/brand/logo-primary.png",
+    apple: "/apple-touch-icon.png",
+  },
+  manifest: "/site.webmanifest",
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://pathforge.eu",
-    siteName: "PathForge",
-    title: "PathForge — AI-Powered Career Intelligence",
+    url: APP_URL,
+    siteName: APP_NAME,
+    title: `${APP_NAME} — AI-Powered Career Intelligence`,
     description:
-      "Your Career, Intelligently Forged. Career DNA™ technology for semantic job matching, " +
-      "CV tailoring, and career strategy. Built in the EU.",
+      `Your Career, Intelligently Forged. Career DNA™ technology for semantic job matching, ` +
+      `CV tailoring, and career strategy. Built in the EU.`,
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "PathForge — Career Intelligence for Everyone",
+        alt: `${APP_NAME} — ${APP_TAGLINE}`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "PathForge — AI-Powered Career Intelligence",
+    title: `${APP_NAME} — AI-Powered Career Intelligence`,
     description:
-      "Your Career, Intelligently Forged. Career DNA™ technology for semantic job matching, " +
-      "CV tailoring, and career strategy.",
+      `Your Career, Intelligently Forged. Career DNA™ technology for semantic job matching, ` +
+      `CV tailoring, and career strategy.`,
     images: ["/og-image.png"],
   },
   robots: {

@@ -13,6 +13,15 @@ import { FaqAccordion } from "@/components/faq-accordion";
 import { ActiveNav } from "@/components/active-nav";
 import { NavScrollEffect } from "@/components/nav-scroll-effect";
 import { BackToTop } from "@/components/back-to-top";
+import { OrganizationJsonLd, WebSiteJsonLd, FAQPageJsonLd } from "@/components/json-ld";
+import {
+  APP_NAME,
+  APP_COMPANY,
+  APP_COUNTRY,
+  APP_COUNTRY_FLAG,
+  APP_AUTHOR_EMAIL,
+  SOCIAL_LINKS,
+} from "@/config/brand";
 import {
   Dna,
   Target,
@@ -240,6 +249,11 @@ const FAQ = [
 export default function LandingPage() {
   return (
     <div className="flex min-h-screen flex-col">
+      {/* ── Structured Data (JSON-LD) ─────────────────── */}
+      <OrganizationJsonLd />
+      <WebSiteJsonLd />
+      <FAQPageJsonLd items={FAQ} />
+
       {/* ── Skip to content (a11y) ──────────────────────── */}
       <a
         href="#main-content"
@@ -252,16 +266,16 @@ export default function LandingPage() {
       <nav className="sticky top-0 z-50 border-b border-border/30 bg-background/80 backdrop-blur-xl transition-all duration-300" aria-label="Main navigation">
         <NavScrollEffect />
         <div className="mx-auto flex h-16 max-w-7xl 2xl:max-w-[1400px] 3xl:max-w-[1600px] 4xl:max-w-[1800px] items-center justify-between px-6">
-          <Link href="/" className="flex items-center gap-2.5" aria-label="PathForge home">
+          <Link href="/" className="flex items-center gap-2.5" aria-label={`${APP_NAME} home`}>
             <Image
-              src="/testimonials/pathforge-logo.png"
-              alt="PathForge logo"
+              src="/brand/logo-primary.png"
+              alt={`${APP_NAME} logo`}
               width={32}
               height={32}
               className="h-8 w-8 rounded-lg object-contain"
             />
             <span className="gradient-text-animated font-display text-2xl font-bold tracking-tight">
-              PathForge
+              {APP_NAME}
             </span>
           </Link>
 
@@ -323,7 +337,7 @@ export default function LandingPage() {
 
             {/* Sub-headline */}
             <p className="animate-fade-in-up delay-200 mx-auto mb-10 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg lg:text-xl">
-              PathForge uses AI to decode your unique Career DNA™ — matching you
+              {APP_NAME} uses AI to decode your unique Career DNA™ — matching you
               with opportunities that align with your skills, trajectory, and
               ambitions.{" "}
               <span className="font-medium text-foreground/80">
@@ -867,30 +881,31 @@ export default function LandingPage() {
             <div className="lg:col-span-2">
               <div className="flex items-center gap-3">
                 <Image
-                  src="/testimonials/pathforge-logo.png"
-                  alt="PathForge logo"
+                  src="/brand/logo-primary.png"
+                  alt={`${APP_NAME} logo`}
                   width={40}
                   height={40}
                   className="h-10 w-10 rounded-xl object-contain"
                 />
                 <span className="gradient-text-animated font-display text-2xl font-bold tracking-tight">
-                  PathForge
+                  {APP_NAME}
                 </span>
               </div>
               <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
                 Career Intelligence, Intelligently Forged. Decode your unique Career DNA™ and discover opportunities that truly align.
               </p>
+
               {/* Social icons — large, prominent */}
               <div className="mt-6">
                 <div className="mb-4 h-px w-48 bg-linear-to-r from-primary/50 to-accent/50" />
                 <div className="flex items-center gap-4">
-                  <a href="https://linkedin.com/company/besynclabs" target="_blank" rel="noopener noreferrer" className="flex h-12 w-12 items-center justify-center rounded-xl text-muted-foreground/70 transition-all duration-200 hover:bg-primary/5 hover:text-primary" aria-label="LinkedIn">
+                  <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noopener noreferrer" className="flex h-12 w-12 items-center justify-center rounded-xl text-muted-foreground/70 transition-all duration-200 hover:bg-primary/5 hover:text-primary" aria-label="LinkedIn">
                     <Linkedin className="h-6 w-6" />
                   </a>
-                  <a href="https://github.com/besync-labs" target="_blank" rel="noopener noreferrer" className="flex h-12 w-12 items-center justify-center rounded-xl text-muted-foreground/70 transition-all duration-200 hover:bg-primary/5 hover:text-primary" aria-label="GitHub">
+                  <a href={SOCIAL_LINKS.github} target="_blank" rel="noopener noreferrer" className="flex h-12 w-12 items-center justify-center rounded-xl text-muted-foreground/70 transition-all duration-200 hover:bg-primary/5 hover:text-primary" aria-label="GitHub">
                     <Github className="h-6 w-6" />
                   </a>
-                  <a href="https://x.com/besynclabs" target="_blank" rel="noopener noreferrer" className="flex h-12 w-12 items-center justify-center rounded-xl text-muted-foreground/70 transition-all duration-200 hover:bg-primary/5 hover:text-primary" aria-label="X (Twitter)">
+                  <a href={SOCIAL_LINKS.x} target="_blank" rel="noopener noreferrer" className="flex h-12 w-12 items-center justify-center rounded-xl text-muted-foreground/70 transition-all duration-200 hover:bg-primary/5 hover:text-primary" aria-label="X (Twitter)">
                     <X className="h-6 w-6" />
                   </a>
                 </div>
@@ -928,7 +943,7 @@ export default function LandingPage() {
               </p>
               <div className="flex flex-col gap-2.5 text-sm">
                 <Link href="/about" className="footer-link w-fit cursor-pointer text-muted-foreground transition-colors hover:text-foreground">About</Link>
-                <Link href="mailto:hello@pathforge.eu" className="footer-link w-fit cursor-pointer text-muted-foreground transition-colors hover:text-foreground">Contact</Link>
+                <Link href={`mailto:${APP_AUTHOR_EMAIL}`} className="footer-link w-fit cursor-pointer text-muted-foreground transition-colors hover:text-foreground">Contact</Link>
                 <Link href="/careers" className="footer-link w-fit cursor-pointer text-muted-foreground transition-colors hover:text-foreground">Careers</Link>
               </div>
             </div>
@@ -940,11 +955,11 @@ export default function LandingPage() {
             <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-border/40 to-transparent" />
             <div className="flex flex-col items-center justify-between gap-4 text-xs text-muted-foreground/50 sm:flex-row">
               <div className="flex items-center gap-1.5">
-                <span className="text-sm leading-none">🇳🇱</span>
-                <span>Made in Netherlands</span>
+                <span className="text-sm leading-none">{APP_COUNTRY_FLAG}</span>
+                <span>Made in {APP_COUNTRY}</span>
               </div>
               <p>
-                © {new Date().getFullYear()} PathForge by BesyncLabs
+                © {new Date().getFullYear()} {APP_NAME} by {APP_COMPANY}
               </p>
               <div className="flex items-center gap-1.5 text-muted-foreground/40 transition-colors hover:text-muted-foreground/60">
                 <Globe className="h-3 w-3" />
