@@ -2,6 +2,7 @@ import Link from "next/link";
 import { WaitlistForm } from "@/components/waitlist-form";
 import { MobileNav } from "@/components/mobile-nav";
 import { AnimatedSection, HeroDashboard } from "@/components/animated-sections";
+import { TestimonialsMarquee } from "@/components/testimonials-marquee";
 import {
   Dna,
   Target,
@@ -713,8 +714,8 @@ export default function LandingPage() {
         <div className="section-divider mx-auto max-w-4xl" />
 
         {/* ── Testimonials Section ────────────────────── */}
-        <section className="px-6 py-20 sm:py-28" aria-label="What people say">
-          <AnimatedSection className="mx-auto max-w-3xl text-center">
+        <section className="py-20 sm:py-28" aria-label="What people say">
+          <AnimatedSection className="mx-auto max-w-3xl px-6 text-center">
             <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-primary">
               Early Believers
             </p>
@@ -726,47 +727,34 @@ export default function LandingPage() {
             </p>
           </AnimatedSection>
 
-          <div className="mx-auto mt-14 grid max-w-5xl gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {TESTIMONIALS.map((t, i) => (
-              <AnimatedSection
-                key={t.name}
-                delay={i * 120}
-                className={t.featured ? "md:col-span-2" : ""}
-              >
+          <div className="mt-14">
+            <TestimonialsMarquee speed="normal">
+              {TESTIMONIALS.map((t) => (
                 <div
-                  className={`group relative flex h-full flex-col overflow-hidden rounded-2xl border transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/5 ${
-                    t.featured
-                      ? "border-primary/20 bg-linear-to-br from-primary/4 to-accent/4 p-8"
-                      : "border-border/30 bg-card/50 p-6 hover:border-border/50"
-                  }`}
+                  key={t.name}
+                  className="group relative flex w-[340px] shrink-0 flex-col overflow-hidden rounded-2xl border border-border/30 bg-card/50 p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-border/50 hover:shadow-lg hover:shadow-primary/5 sm:w-[380px]"
                 >
-                  {/* Gradient glow line at top of featured card */}
+                  {/* Gradient glow line */}
                   {t.featured && (
                     <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary/50 to-transparent" />
                   )}
 
-                  <MessageSquareQuote className={`mb-4 text-primary/30 ${t.featured ? "h-7 w-7" : "h-5 w-5"}`} />
+                  <MessageSquareQuote className="mb-4 h-5 w-5 text-primary/30" />
 
-                  <blockquote className={`flex-1 leading-relaxed text-muted-foreground ${
-                    t.featured
-                      ? "text-base sm:text-lg font-light"
-                      : "text-sm"
-                  }`}>
+                  <blockquote className="flex-1 text-sm leading-relaxed text-muted-foreground">
                     &ldquo;{t.quote}&rdquo;
                   </blockquote>
 
                   <div className="mt-6 flex items-center justify-between border-t border-border/15 pt-5">
                     <div className="flex items-center gap-3">
                       {/* Gradient avatar initial */}
-                      <div className={`flex items-center justify-center rounded-full bg-linear-to-br text-white shadow-sm ${
-                        t.featured ? "h-11 w-11 text-sm" : "h-9 w-9 text-xs"
-                      } ${t.gradient}`}>
+                      <div
+                        className={`flex h-9 w-9 items-center justify-center rounded-full bg-linear-to-br text-xs text-white shadow-sm ${t.gradient}`}
+                      >
                         {t.name.charAt(0)}
                       </div>
                       <div>
-                        <p className={`font-semibold ${t.featured ? "text-sm" : "text-[13px]"}`}>
-                          {t.name}
-                        </p>
+                        <p className="text-[13px] font-semibold">{t.name}</p>
                         <p className="text-xs text-muted-foreground/70">
                           {t.role} · {t.company}
                         </p>
@@ -786,8 +774,8 @@ export default function LandingPage() {
                     )}
                   </div>
                 </div>
-              </AnimatedSection>
-            ))}
+              ))}
+            </TestimonialsMarquee>
           </div>
         </section>
 
