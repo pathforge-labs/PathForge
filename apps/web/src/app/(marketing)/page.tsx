@@ -339,10 +339,10 @@ export default function LandingPage() {
 
         {/* ── Stats Bar ────────────────────────────────── */}
         <section className="border-y border-border/20 bg-card/20" aria-label="Key metrics">
-          <div className="mx-auto grid max-w-5xl grid-cols-2 gap-4 px-6 py-8 sm:grid-cols-4 sm:gap-8 sm:py-10">
+          <div className="mx-auto grid max-w-5xl grid-cols-2 gap-4 px-6 py-8 sm:grid-cols-4 sm:gap-0 sm:py-10">
             {STATS.map((stat, i) => (
               <AnimatedSection key={stat.label} delay={i * 80}>
-                <div className="text-center">
+                <div className={`text-center ${i < STATS.length - 1 ? "sm:border-r sm:border-border/15" : ""}`}>
                   <div className="flex items-center justify-center gap-2">
                     <stat.icon className="h-4 w-4 text-primary/70" />
                     <span className="font-display text-2xl font-bold sm:text-3xl">
@@ -433,7 +433,7 @@ export default function LandingPage() {
                   },
                 ].map((item, i) => (
                   <AnimatedSection key={item.label} delay={i * 120}>
-                    <div className="glass-card group flex cursor-default items-center gap-4 rounded-xl p-4">
+                    <div className="problem-card group flex cursor-default items-center gap-4 rounded-xl p-4">
                       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-destructive/10 transition-colors duration-300 group-hover:bg-primary/10">
                         <item.icon className="h-4 w-4 text-destructive/70 transition-colors duration-300 group-hover:text-primary" />
                       </div>
@@ -477,12 +477,12 @@ export default function LandingPage() {
                     {/* Step number */}
                     <div className="mb-6 inline-flex items-center justify-center">
                       <div className="relative">
-                        <div className={`flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br ${
+                        <div className={`flex h-20 w-20 items-center justify-center rounded-2xl bg-linear-to-br ${
                           i === 0 ? "from-violet-500 to-purple-500" :
                           i === 1 ? "from-cyan-500 to-blue-500" :
                           "from-emerald-500 to-teal-500"
                         } shadow-lg`}>
-                          <step.icon className="h-7 w-7 text-white" />
+                          <step.icon className="h-8 w-8 text-white" />
                         </div>
                         <div className="absolute -right-2 -top-2 flex h-7 w-7 items-center justify-center rounded-full bg-background text-xs font-bold text-foreground ring-2 ring-border/50">
                           {step.step}
@@ -822,10 +822,10 @@ export default function LandingPage() {
         {/* ── Final CTA Section ──────────────────────── */}
         <section className="noise-overlay relative overflow-hidden px-6 py-20 sm:py-28" aria-label="Join the waitlist">
           <div
-            className="pointer-events-none absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full"
+            className="cta-aura pointer-events-none absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full"
             style={{
               background:
-                "radial-gradient(circle, oklch(0.7 0.2 270 / 8%) 0%, transparent 70%)",
+                "radial-gradient(circle, oklch(0.7 0.2 270 / 12%) 0%, oklch(0.75 0.15 195 / 6%) 50%, transparent 70%)",
             }}
           />
           <AnimatedSection className="relative mx-auto max-w-2xl text-center">
@@ -851,10 +851,10 @@ export default function LandingPage() {
             {/* Brand — spans 2 columns on lg */}
             <div className="lg:col-span-2">
               <div className="flex items-center gap-2.5">
-                <div className="flex h-7 w-7 items-center justify-center rounded-md bg-linear-to-br from-primary to-accent">
-                  <span className="text-xs font-bold text-white">P</span>
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br from-primary to-accent">
+                  <span className="text-sm font-bold text-white">P</span>
                 </div>
-                <span className="font-display text-sm font-semibold">
+                <span className="font-display text-base font-semibold">
                   PathForge
                 </span>
               </div>

@@ -23,7 +23,7 @@ export function AnimatedBar({
   const [ref, isVisible] = useScrollAnimation();
 
   return (
-    <div ref={ref} className="h-2 overflow-hidden rounded-full bg-secondary">
+    <div ref={ref} className="glow-bar h-2 overflow-hidden rounded-full bg-secondary">
       <div
         className={`h-full rounded-full ${colorClass} transition-all duration-1000 ease-out`}
         style={{
