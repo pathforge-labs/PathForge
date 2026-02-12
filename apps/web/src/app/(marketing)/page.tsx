@@ -159,6 +159,15 @@ const TESTIMONIALS = [
     featured: false,
   },
   {
+    quote: "As a designer moving from graphic design into UI, I know how hard it is when your skills don't fit a neat job title. PathForge understands the creative journey — it sees the transferable skills others overlook.",
+    name: "Anna Khotynenko",
+    role: "Graphic & UI Designer",
+    company: "Wrocław, Poland",
+    linkedin: "https://www.linkedin.com/in/anna-khotynenko-897181187/",
+    gradient: "from-fuchsia-500 to-pink-500",
+    featured: false,
+  },
+  {
     quote: "As someone who transitioned from backend engineering into data, I wish Career DNA™ existed when I was navigating that shift. PathForge sees the skills you're building — not just the title you hold.",
     name: "Müslüm Gezgin",
     role: "Software Engineer",
