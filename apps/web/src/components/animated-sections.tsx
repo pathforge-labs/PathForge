@@ -60,6 +60,7 @@ export function HeroDashboard() {
         {/* Dashboard content — 3-column metrics */}
         <div className="grid gap-4 p-6 sm:grid-cols-3">
           {/* DNA Score */}
+          <div className="animate-float" style={{ animationDelay: "0ms" }}>
           <div className="rounded-xl bg-background/30 p-4">
             <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground/70">
               Career DNA™ Score
@@ -76,9 +77,11 @@ export function HeroDashboard() {
                 style={{ width: "92%" }}
               />
             </div>
+            </div>
           </div>
 
           {/* Match Quality */}
+          <div className="animate-float" style={{ animationDelay: "300ms" }}>
           <div className="rounded-xl bg-background/30 p-4">
             <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground/70">
               Best Match
@@ -95,16 +98,18 @@ export function HeroDashboard() {
                 +18% salary
               </div>
             </div>
+            </div>
           </div>
 
           {/* Trajectory */}
+          <div className="animate-float" style={{ animationDelay: "600ms" }}>
           <div className="rounded-xl bg-background/30 p-4">
             <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground/70">
               Growth Trajectory
             </p>
             <div className="mt-2 flex items-center gap-1.5">
               <TrendingUp className="h-4 w-4 text-emerald-400" />
-              <span className="font-display text-sm font-semibold text-emerald-400">
+              <span className="animate-pulse-subtle font-display text-sm font-semibold text-emerald-400">
                 Accelerating
               </span>
             </div>
@@ -119,6 +124,7 @@ export function HeroDashboard() {
                   />
                 )
               )}
+            </div>
             </div>
           </div>
         </div>

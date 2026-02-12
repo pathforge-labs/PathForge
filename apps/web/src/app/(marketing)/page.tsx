@@ -4,6 +4,11 @@ import { MobileNav } from "@/components/mobile-nav";
 import { AnimatedSection, HeroDashboard } from "@/components/animated-sections";
 import { TestimonialsMarquee } from "@/components/testimonials-marquee";
 import { TestimonialAvatar } from "@/components/testimonial-avatar";
+import { SpotlightCard } from "@/components/spotlight-card";
+import { CountUp } from "@/components/count-up";
+import { AnimatedBar } from "@/components/animated-bar";
+import { FaqAccordion } from "@/components/faq-accordion";
+import { ActiveNav } from "@/components/active-nav";
 import {
   Dna,
   Target,
@@ -25,7 +30,6 @@ import {
   Check,
   X,
   MessageSquareQuote,
-  ChevronDown,
   Linkedin,
 } from "lucide-react";
 
@@ -253,18 +257,7 @@ export default function LandingPage() {
 
           {/* Desktop nav */}
           <div className="hidden items-center gap-2 md:flex">
-            <Link
-              href="#how-it-works"
-              className="cursor-pointer rounded-lg px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-            >
-              How it Works
-            </Link>
-            <Link
-              href="#features"
-              className="cursor-pointer rounded-lg px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-            >
-              Features
-            </Link>
+            <ActiveNav />
             <Link
               href="/login"
               className="cursor-pointer rounded-lg px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
@@ -352,7 +345,14 @@ export default function LandingPage() {
                   <div className="flex items-center justify-center gap-2">
                     <stat.icon className="h-4 w-4 text-primary/70" />
                     <span className="font-display text-2xl font-bold sm:text-3xl">
-                      {stat.value}
+                      {/^\d+/.test(stat.value) ? (
+                        <CountUp
+                          end={stat.value.replace(/[^0-9]/g, "")}
+                          suffix={stat.value.replace(/[0-9]/g, "")}
+                        />
+                      ) : (
+                        stat.value
+                      )}
                     </span>
                   </div>
                   <p className="mt-1 text-xs font-medium text-muted-foreground sm:text-sm">
@@ -369,8 +369,8 @@ export default function LandingPage() {
           <div className="mx-auto flex max-w-4xl flex-col items-center justify-center gap-6 sm:flex-row sm:gap-12">
             {TRUST_BADGES.map((badge) => (
               <AnimatedSection key={badge.label}>
-                <div className="flex items-center gap-3 text-sm">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/5">
+                <div className="group flex cursor-default items-center gap-3 rounded-xl px-3 py-2 text-sm transition-all duration-300 hover:scale-[1.03] hover:bg-primary/5">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/5 transition-colors group-hover:bg-primary/10">
                     <badge.icon className="h-4 w-4 text-primary" />
                   </div>
                   <div>
@@ -432,9 +432,9 @@ export default function LandingPage() {
                   },
                 ].map((item, i) => (
                   <AnimatedSection key={item.label} delay={i * 120}>
-                    <div className="glass-card flex cursor-default items-center gap-4 rounded-xl p-4">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-destructive/10">
-                        <item.icon className="h-4 w-4 text-destructive/70" />
+                    <div className="glass-card group flex cursor-default items-center gap-4 rounded-xl p-4">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-destructive/10 transition-colors duration-300 group-hover:bg-primary/10">
+                        <item.icon className="h-4 w-4 text-destructive/70 transition-colors duration-300 group-hover:text-primary" />
                       </div>
                       <div>
                         <p className="text-sm font-semibold">{item.label}</p>
@@ -491,9 +491,9 @@ export default function LandingPage() {
 
                     {/* Connecting arrow (hidden on last) */}
                     {i < 2 && (
-                      <div className="pointer-events-none absolute right-0 top-8 hidden -translate-y-1/2 translate-x-1/2 md:block">
-                        <ArrowRight className="h-5 w-5 text-muted-foreground/30" />
-                      </div>
+                      <svg className="step-connector pointer-events-none hidden md:block" viewBox="0 0 48 4" aria-hidden="true">
+                        <line x1="0" y1="2" x2="48" y2="2" />
+                      </svg>
                     )}
 
                     <h3 className="font-display mb-2 text-lg font-semibold">
@@ -531,22 +531,22 @@ export default function LandingPage() {
           <div className="mx-auto mt-14 grid max-w-6xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {FEATURES.map((feature, i) => (
               <AnimatedSection key={feature.title} delay={i * 80}>
-                <div className="glass-card group cursor-default rounded-xl p-6 h-full">
+                <SpotlightCard className="glass-card group cursor-default rounded-xl p-6 h-full">
                   <div
-                    className={`mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-linear-to-br ${feature.gradient} shadow-lg transition-transform duration-300 group-hover:scale-110`}
+                    className={`relative z-10 mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-linear-to-br ${feature.gradient} shadow-lg transition-transform duration-300 group-hover:scale-110`}
                     style={{
                       boxShadow: "0 4px 14px oklch(0 0 0 / 25%)",
                     }}
                   >
                     <feature.icon className="h-5 w-5 text-white" />
                   </div>
-                  <h3 className="font-display mb-2 text-base font-semibold">
+                  <h3 className="relative z-10 font-display mb-2 text-base font-semibold">
                     {feature.title}
                   </h3>
-                  <p className="text-sm leading-relaxed text-muted-foreground">
+                  <p className="relative z-10 text-sm leading-relaxed text-muted-foreground">
                     {feature.description}
                   </p>
-                </div>
+                </SpotlightCard>
               </AnimatedSection>
             ))}
           </div>
@@ -583,7 +583,7 @@ export default function LandingPage() {
 
                   {/* Visual bars */}
                   <div className="space-y-4">
-                    {DNA_CAPABILITIES.map((cap) => (
+                    {DNA_CAPABILITIES.map((cap, i) => (
                       <div key={cap.label}>
                         <div className="mb-1.5 flex items-center justify-between text-sm">
                           <span className="text-muted-foreground">
@@ -593,12 +593,11 @@ export default function LandingPage() {
                             {cap.value}
                           </span>
                         </div>
-                        <div className="h-2 overflow-hidden rounded-full bg-secondary">
-                          <div
-                            className={`h-full rounded-full ${cap.color} transition-all duration-1000`}
-                            style={{ width: cap.width }}
-                          />
-                        </div>
+                        <AnimatedBar
+                          targetWidth={cap.width}
+                          colorClass={cap.color}
+                          delay={i * 150}
+                        />
                       </div>
                     ))}
                   </div>
@@ -688,7 +687,7 @@ export default function LandingPage() {
                         key={header || "feature"}
                         className={`px-4 py-4 text-left font-display font-semibold ${
                           i === 4
-                            ? "text-primary"
+                            ? "text-primary pathforge-column-header pathforge-column-cell"
                             : i === 0
                               ? "text-muted-foreground"
                               : "text-muted-foreground/70"
@@ -707,7 +706,7 @@ export default function LandingPage() {
                     >
                       <td className="px-4 py-3.5 font-medium">{row.feature}</td>
                       {row.values.map((val, i) => (
-                        <td key={i} className="px-4 py-3.5 text-center">
+                        <td key={i} className={`px-4 py-3.5 text-center ${i === 3 ? "pathforge-column-cell" : ""}`}>
                           {val ? (
                             <Check
                               className={`mx-auto h-4 w-4 ${
@@ -810,21 +809,9 @@ export default function LandingPage() {
             </h2>
           </AnimatedSection>
 
-          <div className="mx-auto mt-12 max-w-2xl space-y-4">
-            {FAQ.map((faq, i) => (
-              <AnimatedSection key={faq.q} delay={i * 80}>
-                <details className="group glass-card rounded-xl" name="faq">
-                  <summary className="flex cursor-pointer items-center justify-between p-5 text-sm font-semibold transition-colors hover:text-primary [&::-webkit-details-marker]:hidden">
-                    {faq.q}
-                    <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200 group-open:rotate-180" />
-                  </summary>
-                  <div className="px-5 pb-5 text-sm leading-relaxed text-muted-foreground">
-                    {faq.a}
-                  </div>
-                </details>
-              </AnimatedSection>
-            ))}
-          </div>
+          <AnimatedSection className="mx-auto mt-12 max-w-2xl">
+            <FaqAccordion items={FAQ} />
+          </AnimatedSection>
         </section>
 
         {/* ── Section Divider ─────────────────────────── */}
@@ -885,9 +872,9 @@ export default function LandingPage() {
                 Product
               </p>
               <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-                <Link href="#features" className="cursor-pointer transition-colors hover:text-foreground">Features</Link>
-                <Link href="#how-it-works" className="cursor-pointer transition-colors hover:text-foreground">How it Works</Link>
-                <Link href="#waitlist" className="cursor-pointer transition-colors hover:text-foreground">Join Waitlist</Link>
+                <Link href="#features" className="hover-underline cursor-pointer transition-colors hover:text-foreground">Features</Link>
+                <Link href="#how-it-works" className="hover-underline cursor-pointer transition-colors hover:text-foreground">How it Works</Link>
+                <Link href="#waitlist" className="hover-underline cursor-pointer transition-colors hover:text-foreground">Join Waitlist</Link>
               </div>
             </div>
 
@@ -897,9 +884,9 @@ export default function LandingPage() {
                 Legal
               </p>
               <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-                <Link href="/privacy" className="cursor-pointer transition-colors hover:text-foreground">Privacy Policy</Link>
-                <Link href="/terms" className="cursor-pointer transition-colors hover:text-foreground">Terms of Service</Link>
-                <Link href="/cookies" className="cursor-pointer transition-colors hover:text-foreground">Cookie Policy</Link>
+                <Link href="/privacy" className="hover-underline cursor-pointer transition-colors hover:text-foreground">Privacy Policy</Link>
+                <Link href="/terms" className="hover-underline cursor-pointer transition-colors hover:text-foreground">Terms of Service</Link>
+                <Link href="/cookies" className="hover-underline cursor-pointer transition-colors hover:text-foreground">Cookie Policy</Link>
               </div>
             </div>
 
@@ -909,10 +896,10 @@ export default function LandingPage() {
                 Connect
               </p>
               <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-                <a href="https://linkedin.com/company/besynclabs" target="_blank" rel="noopener noreferrer" className="cursor-pointer transition-colors hover:text-foreground">LinkedIn</a>
-                <a href="https://github.com/besync-labs" target="_blank" rel="noopener noreferrer" className="cursor-pointer transition-colors hover:text-foreground">GitHub</a>
-                <a href="https://x.com/besynclabs" target="_blank" rel="noopener noreferrer" className="cursor-pointer transition-colors hover:text-foreground">X (Twitter)</a>
-                <Link href="mailto:hello@pathforge.eu" className="cursor-pointer transition-colors hover:text-foreground">Contact</Link>
+                <a href="https://linkedin.com/company/besynclabs" target="_blank" rel="noopener noreferrer" className="hover-underline cursor-pointer transition-colors hover:text-foreground">LinkedIn</a>
+                <a href="https://github.com/besync-labs" target="_blank" rel="noopener noreferrer" className="hover-underline cursor-pointer transition-colors hover:text-foreground">GitHub</a>
+                <a href="https://x.com/besynclabs" target="_blank" rel="noopener noreferrer" className="hover-underline cursor-pointer transition-colors hover:text-foreground">X (Twitter)</a>
+                <Link href="mailto:hello@pathforge.eu" className="hover-underline cursor-pointer transition-colors hover:text-foreground">Contact</Link>
               </div>
             </div>
           </div>

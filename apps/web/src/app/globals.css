@@ -231,12 +231,8 @@
   transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.glass-card:hover {
-  background: oklch(1 0 0 / 6%);
-  border-color: oklch(1 0 0 / 12%);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 40px oklch(0.7 0.18 270 / 6%);
-}
+
+
 
 /* Elevated card — for featured sections */
 .elevated-card {
@@ -305,4 +301,111 @@
   background: linear-gradient(135deg, oklch(0.7 0.2 270 / 30%), oklch(0.75 0.15 195 / 30%));
   opacity: 1;
   filter: blur(8px);
+}
+
+/* ─── Spotlight Card (Linear-style mouse-tracking glow) ────────────────────── */
+
+.spotlight-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.spotlight-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    350px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    oklch(0.7 0.18 270 / 10%) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 300ms ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.spotlight-card:hover::before {
+  opacity: 1;
+}
+
+/* Gradient border glow on glass-card hover (Linear-style) */
+.glass-card:hover {
+  background: oklch(1 0 0 / 6%);
+  border-color: transparent;
+  background-image: linear-gradient(oklch(1 0 0 / 6%), oklch(1 0 0 / 6%)),
+                    linear-gradient(135deg, oklch(0.7 0.2 270 / 25%), oklch(0.75 0.15 195 / 25%), oklch(0.7 0.2 300 / 25%));
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px oklch(0.7 0.18 270 / 8%);
+}
+
+/* ─── Hover Underline Slide ────────────────────────────────────────────────── */
+
+.hover-underline {
+  position: relative;
+}
+
+.hover-underline::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, oklch(0.7 0.18 270), oklch(0.75 0.15 195));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 300ms ease;
+}
+
+.hover-underline:hover::after {
+  transform: scaleX(1);
+}
+
+/* ─── How-it-Works Animated Dashed Line ────────────────────────────────────── */
+
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -20;
+  }
+}
+
+.step-connector {
+  position: absolute;
+  top: 2rem;
+  right: -1.5rem;
+  width: 3rem;
+  height: 2px;
+  overflow: visible;
+}
+
+.step-connector line {
+  stroke: oklch(0.7 0.18 270 / 30%);
+  stroke-width: 2;
+  stroke-dasharray: 6 4;
+  animation: dash-flow 1.5s linear infinite;
+}
+
+/* ─── Comparison Table PathForge Column Highlight ──────────────────────────── */
+
+.pathforge-column-cell {
+  background: oklch(0.7 0.18 270 / 4%);
+}
+
+.pathforge-column-header {
+  position: relative;
+}
+
+.pathforge-column-header::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, oklch(0.7 0.18 270 / 50%), transparent);
+  border-radius: 1px;
 }
