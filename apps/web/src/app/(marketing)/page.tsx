@@ -3,6 +3,7 @@ import { WaitlistForm } from "@/components/waitlist-form";
 import { MobileNav } from "@/components/mobile-nav";
 import { AnimatedSection, HeroDashboard } from "@/components/animated-sections";
 import { TestimonialsMarquee } from "@/components/testimonials-marquee";
+import { TestimonialAvatar } from "@/components/testimonial-avatar";
 import {
   Dna,
   Target,
@@ -136,7 +137,8 @@ const TESTIMONIALS = [
     name: "Emre Dursun",
     role: "Founder & Lead Engineer",
     company: "BesyncLabs",
-    linkedin: "https://www.linkedin.com/in/emredursun/",
+    linkedin: "https://www.linkedin.com/in/emre-dursun-nl/",
+    image: "/testimonials/emre-dursun.png",
     gradient: "from-violet-500 to-indigo-500",
     featured: true,
   },
@@ -146,6 +148,7 @@ const TESTIMONIALS = [
     role: "Senior QA Engineer",
     company: "Elsevier",
     linkedin: "https://www.linkedin.com/in/mahmut-kaya-b9832614a/",
+    image: "/testimonials/mahmut-kaya.png",
     gradient: "from-cyan-500 to-blue-500",
     featured: false,
   },
@@ -155,6 +158,7 @@ const TESTIMONIALS = [
     role: "Test Consultant",
     company: "Pancompany",
     linkedin: "https://www.linkedin.com/in/ilkerakkaya/",
+    image: "/testimonials/ilker-akkaya.png",
     gradient: "from-emerald-500 to-teal-500",
     featured: false,
   },
@@ -164,6 +168,7 @@ const TESTIMONIALS = [
     role: "Graphic & UI Designer",
     company: "Wrocław, Poland",
     linkedin: "https://www.linkedin.com/in/anna-khotynenko-897181187/",
+    image: "/testimonials/anna-khotynenko.png",
     gradient: "from-fuchsia-500 to-pink-500",
     featured: false,
   },
@@ -173,6 +178,7 @@ const TESTIMONIALS = [
     role: "Software Engineer",
     company: "Shipcloud",
     linkedin: "https://www.linkedin.com/in/muslumgezgin/",
+    image: "/testimonials/muslum-gezgin.png",
     gradient: "from-amber-500 to-orange-500",
     featured: false,
   },
@@ -182,6 +188,7 @@ const TESTIMONIALS = [
     role: "QA Engineer",
     company: "Netherlands",
     linkedin: "https://www.linkedin.com/in/murat-bigin-08439419a/",
+    image: "/testimonials/murat-bigin.png",
     gradient: "from-sky-500 to-blue-500",
     featured: false,
   },
@@ -190,6 +197,7 @@ const TESTIMONIALS = [
     name: "PathForge Team",
     role: "Product Vision",
     company: "BesyncLabs",
+    image: "/testimonials/pathforge.png",
     gradient: "from-rose-500 to-pink-500",
     featured: false,
   },
@@ -756,12 +764,12 @@ export default function LandingPage() {
 
                   <div className="mt-6 flex items-center justify-between border-t border-border/15 pt-5">
                     <div className="flex items-center gap-3">
-                      {/* Gradient avatar initial */}
-                      <div
-                        className={`flex h-9 w-9 items-center justify-center rounded-full bg-linear-to-br text-xs text-white shadow-sm ${t.gradient}`}
-                      >
-                        {t.name.charAt(0)}
-                      </div>
+                      <TestimonialAvatar
+                        name={t.name}
+                        image={t.image}
+                        gradient={t.gradient}
+                        size={80}
+                      />
                       <div>
                         <p className="text-[13px] font-semibold">{t.name}</p>
                         <p className="text-xs text-muted-foreground/70">
@@ -778,7 +786,7 @@ export default function LandingPage() {
                         className="rounded-lg p-1.5 text-muted-foreground/40 transition-colors hover:bg-secondary/50 hover:text-primary"
                         aria-label={`View ${t.name} on LinkedIn`}
                       >
-                        <Linkedin className="h-4 w-4" />
+                        <Linkedin className="h-6 w-6" />
                       </a>
                     )}
                   </div>
