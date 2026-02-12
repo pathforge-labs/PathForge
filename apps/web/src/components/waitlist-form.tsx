@@ -101,33 +101,31 @@ export function WaitlistForm({
     <div className={className}>
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col gap-3 sm:flex-row sm:items-center"
+        className="relative flex items-center gap-1.5 rounded-full border border-border/40 bg-card/60 p-1.5 backdrop-blur-md transition-all duration-300 focus-within:border-primary/30 focus-within:shadow-lg focus-within:shadow-primary/5"
       >
-        <div className="relative flex-1">
-          <Input
-            type="email"
-            placeholder="you@example.com"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              if (state === "error") setState("idle");
-            }}
-            required
-            className="h-12 rounded-xl border-border/50 bg-card/50 pl-4 pr-4 text-base backdrop-blur-sm placeholder:text-muted-foreground/40 focus:border-primary/50"
-            aria-label="Email address for waitlist"
-          />
-        </div>
+        <input
+          type="email"
+          placeholder="you@example.com"
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            if (state === "error") setState("idle");
+          }}
+          required
+          className="h-11 flex-1 bg-transparent pl-5 text-base text-foreground outline-none placeholder:text-muted-foreground/40"
+          aria-label="Email address for waitlist"
+        />
         <Button
           type="submit"
           size="lg"
           disabled={state === "loading"}
-          className="h-12 min-w-[180px] cursor-pointer rounded-xl bg-white text-base font-semibold text-gray-900 shadow-lg shadow-white/10 transition-all hover:bg-gray-100 hover:shadow-xl hover:shadow-white/15"
+          className="h-11 cursor-pointer rounded-full bg-linear-to-r from-violet-500 via-primary to-cyan-400 px-6 text-sm font-semibold text-white shadow-lg shadow-primary/20 transition-all duration-300 hover:shadow-xl hover:shadow-primary/30 hover:brightness-110"
         >
           {state === "loading" ? (
             <Loader2 className="h-4 w-4 animate-spin" />
           ) : (
             <>
-              Join the Waitlist <ArrowRight className="ml-2 h-4 w-4" />
+              Get Early Access <ArrowRight className="ml-1.5 h-4 w-4" />
             </>
           )}
         </Button>
@@ -135,7 +133,7 @@ export function WaitlistForm({
       {state === "error" && (
         <p className="mt-2 text-sm text-destructive">{message}</p>
       )}
-      <div className="mt-3 flex items-center justify-center gap-4 text-[11px] text-muted-foreground/60 sm:justify-start">
+      <div className="mt-3 flex items-center justify-center gap-4 text-[11px] text-muted-foreground/60">
         <span className="flex items-center gap-1"><Shield className="h-3 w-3" />GDPR compliant</span>
         <span className="h-3 w-px bg-border/30" />
         <span className="flex items-center gap-1"><Lock className="h-3 w-3" />No spam, ever</span>

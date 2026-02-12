@@ -10,6 +10,8 @@ import { CountUp } from "@/components/count-up";
 import { AnimatedBar } from "@/components/animated-bar";
 import { FaqAccordion } from "@/components/faq-accordion";
 import { ActiveNav } from "@/components/active-nav";
+import { NavScrollEffect } from "@/components/nav-scroll-effect";
+import { BackToTop } from "@/components/back-to-top";
 import {
   Dna,
   Target,
@@ -32,6 +34,7 @@ import {
   X,
   MessageSquareQuote,
   Linkedin,
+  Github,
 } from "lucide-react";
 
 /* ─────────────────────── Data ─────────────────────── */
@@ -245,10 +248,11 @@ export default function LandingPage() {
       </a>
 
       {/* ── Navbar ────────────────────────────────────── */}
-      <nav className="sticky top-0 z-50 border-b border-border/30 bg-background/80 backdrop-blur-xl" aria-label="Main navigation">
+      <nav className="sticky top-0 z-50 border-b border-border/30 bg-background/80 backdrop-blur-xl transition-all duration-300" aria-label="Main navigation">
+        <NavScrollEffect />
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
           <Link href="/" className="flex items-center gap-2.5" aria-label="PathForge home">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br from-primary to-accent">
+            <div className="logo-icon flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br from-primary to-accent">
               <span className="text-sm font-bold text-white">P</span>
             </div>
             <span className="font-display text-lg font-bold tracking-tight">
@@ -342,10 +346,10 @@ export default function LandingPage() {
           <div className="mx-auto grid max-w-5xl grid-cols-2 gap-4 px-6 py-8 sm:grid-cols-4 sm:gap-0 sm:py-10">
             {STATS.map((stat, i) => (
               <AnimatedSection key={stat.label} delay={i * 80}>
-                <div className={`text-center ${i < STATS.length - 1 ? "sm:border-r sm:border-border/15" : ""}`}>
+                <div className={`stat-item text-center ${i < STATS.length - 1 ? "sm:border-r sm:border-border/15" : ""}`}>
                   <div className="flex items-center justify-center gap-2">
-                    <stat.icon className="h-4 w-4 text-primary/70" />
-                    <span className="font-display text-2xl font-bold sm:text-3xl">
+                    <stat.icon className="stat-icon h-4 w-4 text-primary/70" />
+                    <span className="stat-value font-display text-2xl font-bold sm:text-3xl">
                       {/^\d+/.test(stat.value) ? (
                         <CountUp
                           end={stat.value.replace(/[^0-9]/g, "")}
@@ -371,7 +375,7 @@ export default function LandingPage() {
             {TRUST_BADGES.map((badge) => (
               <AnimatedSection key={badge.label}>
                 <div className="group flex cursor-default items-center gap-3 rounded-xl px-3 py-2 text-sm transition-all duration-300 hover:scale-[1.03] hover:bg-primary/5">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/5 transition-colors group-hover:bg-primary/10">
+                  <div className="trust-icon flex h-9 w-9 items-center justify-center rounded-lg bg-primary/5 transition-colors group-hover:bg-primary/10">
                     <badge.icon className="h-4 w-4 text-primary" />
                   </div>
                   <div>
@@ -473,18 +477,18 @@ export default function LandingPage() {
             <div className="grid gap-8 md:grid-cols-3">
               {HOW_IT_WORKS.map((step, i) => (
                 <AnimatedSection key={step.step} delay={i * 150}>
-                  <div className="relative text-center">
+                  <div className="step-card relative text-center">
                     {/* Step number */}
                     <div className="mb-6 inline-flex items-center justify-center">
                       <div className="relative">
-                        <div className={`flex h-20 w-20 items-center justify-center rounded-2xl bg-linear-to-br ${
+                        <div className={`step-icon-box flex h-20 w-20 items-center justify-center rounded-2xl bg-linear-to-br ${
                           i === 0 ? "from-violet-500 to-purple-500" :
                           i === 1 ? "from-cyan-500 to-blue-500" :
                           "from-emerald-500 to-teal-500"
                         } shadow-lg`}>
                           <step.icon className="h-8 w-8 text-white" />
                         </div>
-                        <div className="absolute -right-2 -top-2 flex h-7 w-7 items-center justify-center rounded-full bg-background text-xs font-bold text-foreground ring-2 ring-border/50">
+                        <div className="step-badge absolute -right-2 -top-2 flex h-7 w-7 items-center justify-center rounded-full bg-background text-xs font-bold text-foreground ring-2 ring-border/50">
                           {step.step}
                         </div>
                       </div>
@@ -534,7 +538,7 @@ export default function LandingPage() {
               <AnimatedSection key={feature.title} delay={i * 80}>
                 <SpotlightCard className="glass-card group cursor-default rounded-xl p-6 h-full">
                   <div
-                    className={`relative z-10 mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-linear-to-br ${feature.gradient} shadow-lg transition-transform duration-300 group-hover:scale-110`}
+                    className={`icon-glow relative z-10 mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-linear-to-br ${feature.gradient} shadow-lg transition-transform duration-300 group-hover:scale-110`}
                     style={{
                       boxShadow: "0 4px 14px oklch(0 0 0 / 25%)",
                     }}
@@ -686,12 +690,12 @@ export default function LandingPage() {
                     {COMPARISON.headers.map((header, i) => (
                       <th
                         key={header || "feature"}
-                        className={`px-4 py-4 text-left font-display font-semibold ${
+                        className={`px-4 py-4 font-display font-semibold ${
                           i === 4
-                            ? "text-primary pathforge-column-header pathforge-column-cell"
+                            ? "text-center text-primary pathforge-column-header pathforge-column-cell"
                             : i === 0
-                              ? "text-muted-foreground"
-                              : "text-muted-foreground/70"
+                              ? "text-left text-muted-foreground"
+                              : "text-center text-muted-foreground/70"
                         }`}
                       >
                         {header}
@@ -703,7 +707,7 @@ export default function LandingPage() {
                   {COMPARISON.rows.map((row) => (
                     <tr
                       key={row.feature}
-                      className="border-b border-border/10 transition-colors hover:bg-card/30"
+                      className="comparison-row border-b border-border/10"
                     >
                       <td className="px-4 py-3.5 font-medium">{row.feature}</td>
                       {row.values.map((val, i) => (
@@ -711,7 +715,7 @@ export default function LandingPage() {
                           {val ? (
                             <Check
                               className={`mx-auto h-4 w-4 ${
-                                i === 3 ? "text-emerald-400" : "text-muted-foreground/50"
+                                i === 3 ? "pathforge-check text-emerald-400" : "text-muted-foreground/50"
                               }`}
                             />
                           ) : (
@@ -851,38 +855,53 @@ export default function LandingPage() {
             {/* Brand — spans 2 columns on lg */}
             <div className="lg:col-span-2">
               <div className="flex items-center gap-2.5">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br from-primary to-accent">
+                <div className="logo-icon flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br from-primary to-accent">
                   <span className="text-sm font-bold text-white">P</span>
                 </div>
                 <span className="font-display text-base font-semibold">
                   PathForge
                 </span>
               </div>
+              {/* Status badge */}
+              <div className="mt-2.5 flex items-center gap-2">
+                <span className="status-dot relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+                </span>
+                <span className="text-xs font-medium text-emerald-400">Launching Soon</span>
+              </div>
               <p className="mt-3 max-w-xs text-xs leading-relaxed text-muted-foreground">
-                Career Intelligence, Intelligently Forged. Built in Amsterdam,
-                NL. GDPR-native from day one.
+                Career Intelligence, Intelligently Forged.
               </p>
-              {/* Compact newsletter */}
-              <div className="mt-5">
-                <WaitlistForm variant="compact" className="max-w-xs" />
+              {/* Social icons */}
+              <div className="mt-4 flex items-center gap-2">
+                <a href="https://linkedin.com/company/besynclabs" target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="LinkedIn">
+                  <Linkedin className="h-4 w-4" />
+                </a>
+                <a href="https://github.com/besync-labs" target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="GitHub">
+                  <Github className="h-4 w-4" />
+                </a>
+                <a href="https://x.com/besynclabs" target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="X (Twitter)">
+                  <X className="h-4 w-4" />
+                </a>
               </div>
             </div>
 
             {/* Product */}
             <div>
-              <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground/70">
+              <p className="footer-heading mb-3 cursor-default text-xs font-semibold uppercase tracking-widest text-muted-foreground/70">
                 Product
               </p>
               <div className="flex flex-col gap-2 text-sm text-muted-foreground">
                 <Link href="#features" className="hover-underline w-fit cursor-pointer transition-colors hover:text-foreground">Features</Link>
                 <Link href="#how-it-works" className="hover-underline w-fit cursor-pointer transition-colors hover:text-foreground">How it Works</Link>
-                <Link href="#waitlist" className="hover-underline w-fit cursor-pointer transition-colors hover:text-foreground">Join Waitlist</Link>
+                <Link href="#comparison" className="hover-underline w-fit cursor-pointer transition-colors hover:text-foreground">Comparison</Link>
               </div>
             </div>
 
             {/* Legal */}
             <div>
-              <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground/70">
+              <p className="footer-heading mb-3 cursor-default text-xs font-semibold uppercase tracking-widest text-muted-foreground/70">
                 Legal
               </p>
               <div className="flex flex-col gap-2 text-sm text-muted-foreground">
@@ -892,39 +911,45 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Connect */}
+            {/* Company */}
             <div>
-              <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground/70">
-                Connect
+              <p className="footer-heading mb-3 cursor-default text-xs font-semibold uppercase tracking-widest text-muted-foreground/70">
+                Company
               </p>
               <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-                <a href="https://linkedin.com/company/besynclabs" target="_blank" rel="noopener noreferrer" className="hover-underline w-fit cursor-pointer transition-colors hover:text-foreground">LinkedIn</a>
-                <a href="https://github.com/besync-labs" target="_blank" rel="noopener noreferrer" className="hover-underline w-fit cursor-pointer transition-colors hover:text-foreground">GitHub</a>
-                <a href="https://x.com/besynclabs" target="_blank" rel="noopener noreferrer" className="hover-underline w-fit cursor-pointer transition-colors hover:text-foreground">X (Twitter)</a>
+                <Link href="/about" className="hover-underline w-fit cursor-pointer transition-colors hover:text-foreground">About</Link>
                 <Link href="mailto:hello@pathforge.eu" className="hover-underline w-fit cursor-pointer transition-colors hover:text-foreground">Contact</Link>
+                <Link href="/careers" className="hover-underline w-fit cursor-pointer transition-colors hover:text-foreground">Careers</Link>
               </div>
             </div>
           </div>
 
           {/* Bottom bar */}
           <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-border/15 pt-6 text-xs text-muted-foreground sm:flex-row">
+            <div className="flex items-center gap-2 rounded-full border border-border/30 px-3 py-1.5">
+              <span className="text-sm font-medium leading-none">🇳🇱</span>
+              <span className="font-medium">Made in Netherlands</span>
+            </div>
             <p>
               © {new Date().getFullYear()} PathForge by BesyncLabs. All rights
               reserved.
             </p>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-1.5">
-                <Globe className="h-3.5 w-3.5" />
-                <span>pathforge.eu</span>
-              </div>
-              <div className="flex items-center gap-1.5">
                 <Lock className="h-3.5 w-3.5" />
                 <span>GDPR Compliant</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Globe className="h-3.5 w-3.5" />
+                <span>EN</span>
               </div>
             </div>
           </div>
         </div>
       </footer>
+
+      {/* Back to top */}
+      <BackToTop />
     </div>
   );
 }

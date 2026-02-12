@@ -134,35 +134,70 @@
 /* ─── Animation Keyframes ──────────────────────────────────────────────────── */
 
 @keyframes fade-in-up {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 @keyframes pulse-subtle {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
 }
 
 @keyframes beam-scan {
-  0% { transform: translateY(-100%); opacity: 0; }
-  20% { opacity: 0.3; }
-  80% { opacity: 0.3; }
-  100% { transform: translateY(100%); opacity: 0; }
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.3;
+  }
+  80% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
 }
 
 /* Utility animation classes */
@@ -184,11 +219,21 @@
 }
 
 /* Stagger delays */
-.delay-100 { animation-delay: 100ms; }
-.delay-200 { animation-delay: 200ms; }
-.delay-300 { animation-delay: 300ms; }
-.delay-400 { animation-delay: 400ms; }
-.delay-500 { animation-delay: 500ms; }
+.delay-100 {
+  animation-delay: 100ms;
+}
+.delay-200 {
+  animation-delay: 200ms;
+}
+.delay-300 {
+  animation-delay: 300ms;
+}
+.delay-400 {
+  animation-delay: 400ms;
+}
+.delay-500 {
+  animation-delay: 500ms;
+}
 
 /* WCAG: Respect reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
@@ -207,7 +252,12 @@
 
 /* Gradient text — primary brand accent */
 .gradient-text {
-  background: linear-gradient(135deg, oklch(0.72 0.2 270), oklch(0.78 0.16 195), oklch(0.72 0.2 300));
+  background: linear-gradient(
+    135deg,
+    oklch(0.72 0.2 270),
+    oklch(0.78 0.16 195),
+    oklch(0.72 0.2 300)
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -215,7 +265,13 @@
 
 /* Animated gradient text — for hero headlines */
 .gradient-text-animated {
-  background: linear-gradient(90deg, oklch(0.72 0.2 270), oklch(0.78 0.16 195), oklch(0.72 0.2 300), oklch(0.72 0.2 270));
+  background: linear-gradient(
+    90deg,
+    oklch(0.72 0.2 270),
+    oklch(0.78 0.16 195),
+    oklch(0.72 0.2 300),
+    oklch(0.72 0.2 270)
+  );
   background-size: 300% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -231,29 +287,29 @@
   transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-
-
-
 /* Elevated card — for featured sections */
 .elevated-card {
   background: oklch(0.14 0.008 270);
   border: 1px solid oklch(1 0 0 / 6%);
-  box-shadow: 0 0 0 1px oklch(1 0 0 / 3%),
-              0 4px 24px oklch(0 0 0 / 25%);
+  box-shadow:
+    0 0 0 1px oklch(1 0 0 / 3%),
+    0 4px 24px oklch(0 0 0 / 25%);
   transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .elevated-card:hover {
   border-color: oklch(1 0 0 / 10%);
-  box-shadow: 0 0 0 1px oklch(1 0 0 / 5%),
-              0 8px 40px oklch(0 0 0 / 35%);
+  box-shadow:
+    0 0 0 1px oklch(1 0 0 / 5%),
+    0 8px 40px oklch(0 0 0 / 35%);
 }
 
 /* Gradient border effect */
 .gradient-border {
   border: 1px solid transparent;
-  background-image: linear-gradient(var(--background), var(--background)),
-                    linear-gradient(135deg, oklch(0.7 0.2 270), oklch(0.75 0.15 195));
+  background-image:
+    linear-gradient(var(--background), var(--background)),
+    linear-gradient(135deg, oklch(0.7 0.2 270), oklch(0.75 0.15 195));
   background-origin: border-box;
   background-clip: padding-box, border-box;
 }
@@ -290,7 +346,11 @@
   position: absolute;
   inset: -2px;
   border-radius: inherit;
-  background: linear-gradient(135deg, oklch(0.7 0.2 270 / 0%), oklch(0.75 0.15 195 / 0%));
+  background: linear-gradient(
+    135deg,
+    oklch(0.7 0.2 270 / 0%),
+    oklch(0.75 0.15 195 / 0%)
+  );
   z-index: -1;
   transition: all 300ms ease;
   opacity: 0;
@@ -298,7 +358,11 @@
 
 .cta-button:hover::after {
   inset: -3px;
-  background: linear-gradient(135deg, oklch(0.7 0.2 270 / 30%), oklch(0.75 0.15 195 / 30%));
+  background: linear-gradient(
+    135deg,
+    oklch(0.7 0.2 270 / 30%),
+    oklch(0.75 0.15 195 / 30%)
+  );
   opacity: 1;
   filter: blur(8px);
 }
@@ -334,12 +398,19 @@
 .glass-card:hover {
   background: oklch(1 0 0 / 5%);
   border-color: transparent;
-  background-image: linear-gradient(oklch(1 0 0 / 5%), oklch(1 0 0 / 5%)),
-                    linear-gradient(135deg, oklch(0.7 0.2 270 / 25%), oklch(0.75 0.15 195 / 25%), oklch(0.7 0.2 300 / 25%));
+  background-image:
+    linear-gradient(oklch(1 0 0 / 5%), oklch(1 0 0 / 5%)),
+    linear-gradient(
+      135deg,
+      oklch(0.7 0.2 270 / 25%),
+      oklch(0.75 0.15 195 / 25%),
+      oklch(0.7 0.2 300 / 25%)
+    );
   background-origin: border-box;
   background-clip: padding-box, border-box;
-  box-shadow: 0 8px 32px oklch(0.7 0.18 270 / 10%),
-              0 0 0 1px oklch(1 0 0 / 8%);
+  box-shadow:
+    0 8px 32px oklch(0.7 0.18 270 / 10%),
+    0 0 0 1px oklch(1 0 0 / 8%);
 }
 
 /* ─── Hover Underline Slide ────────────────────────────────────────────────── */
@@ -408,7 +479,12 @@
   left: 10%;
   right: 10%;
   height: 2px;
-  background: linear-gradient(90deg, transparent, oklch(0.7 0.18 270 / 50%), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    oklch(0.7 0.18 270 / 50%),
+    transparent
+  );
   border-radius: 1px;
 }
 
@@ -421,7 +497,9 @@
 }
 
 @keyframes border-rotate {
-  to { --border-angle: 360deg; }
+  to {
+    --border-angle: 360deg;
+  }
 }
 
 .border-glow {
@@ -441,8 +519,9 @@
     oklch(0.7 0.18 270) 100%
   );
   animation-play-state: running;
-  box-shadow: 0 0 20px oklch(0.7 0.18 270 / 15%),
-              0 0 40px oklch(0.75 0.15 195 / 8%);
+  box-shadow:
+    0 0 20px oklch(0.7 0.18 270 / 15%),
+    0 0 40px oklch(0.75 0.15 195 / 8%);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -468,13 +547,22 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(90deg, transparent 40%, oklch(1 0 0 / 25%) 70%, transparent 100%);
+  background: linear-gradient(
+    90deg,
+    transparent 40%,
+    oklch(1 0 0 / 25%) 70%,
+    transparent 100%
+  );
   animation: bar-shimmer 2.5s ease-in-out infinite;
 }
 
 @keyframes bar-shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(200%); }
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -487,8 +575,15 @@
 /* ─── CTA Pulsing Aura ────────────────────────────────────────────────────── */
 
 @keyframes pulse-glow {
-  0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
-  50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.05); }
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translate(-50%, -50%) scale(1.05);
+  }
 }
 
 .cta-aura {
@@ -541,8 +636,9 @@ html {
 .next-move-card:hover {
   background: oklch(1 0 0 / 7%);
   border-color: oklch(0.7 0.18 270 / 30%);
-  box-shadow: 0 0 24px oklch(0.7 0.18 270 / 12%),
-              0 0 0 1px oklch(0.75 0.15 195 / 10%);
+  box-shadow:
+    0 0 24px oklch(0.7 0.18 270 / 12%),
+    0 0 0 1px oklch(0.75 0.15 195 / 10%);
   transform: translateY(-1px);
 }
 
@@ -551,19 +647,337 @@ html {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(105deg, transparent 40%, oklch(0.7 0.18 270 / 8%) 50%, transparent 60%);
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    oklch(0.7 0.18 270 / 8%) 50%,
+    transparent 60%
+  );
   animation: card-shimmer 4s ease-in-out infinite;
   pointer-events: none;
 }
 
 @keyframes card-shimmer {
-  0% { transform: translateX(-150%); }
-  100% { transform: translateX(250%); }
+  0% {
+    transform: translateX(-150%);
+  }
+  100% {
+    transform: translateX(250%);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .next-move-card::before {
     animation: none;
     display: none;
+  }
+}
+
+/* ─── Navbar Scroll-Aware Glass Effect ─────────────────────────────────────── */
+
+.nav-scrolled {
+  border-color: oklch(0.7 0.18 270 / 12%) !important;
+  box-shadow:
+    0 4px 30px oklch(0 0 0 / 25%),
+    0 0 1px oklch(1 0 0 / 6%);
+}
+
+.nav-scrolled::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    oklch(0.7 0.18 270 / 25%),
+    oklch(0.75 0.15 195 / 25%),
+    transparent
+  );
+  transition: opacity 300ms ease;
+}
+
+/* Navbar logo hover glow */
+.logo-icon {
+  transition:
+    box-shadow 300ms ease,
+    transform 300ms ease;
+}
+
+.logo-icon:hover {
+  box-shadow:
+    0 0 16px oklch(0.7 0.18 270 / 35%),
+    0 0 4px oklch(0.75 0.15 195 / 25%);
+  transform: scale(1.05);
+}
+
+/* ─── Comparison Table Tier-1 Row Hover ────────────────────────────────────── */
+
+.comparison-row {
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.comparison-row:hover {
+  background: oklch(0.7 0.18 270 / 5%);
+}
+
+/* Gradient left border on first cell */
+.comparison-row td:first-child {
+  position: relative;
+}
+
+.comparison-row td:first-child::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 25%;
+  bottom: 25%;
+  width: 2px;
+  border-radius: 1px;
+  background: linear-gradient(180deg, oklch(0.7 0.18 270), oklch(0.75 0.15 195));
+  opacity: 0;
+  transform: scaleY(0);
+  transition: all 250ms ease;
+}
+
+.comparison-row:hover td:first-child::before {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+/* PathForge column check icon hover pulse */
+.pathforge-check {
+  transition: all 250ms ease;
+}
+
+.comparison-row:hover .pathforge-check {
+  filter: drop-shadow(0 0 6px oklch(0.7 0.2 160 / 50%));
+  transform: scale(1.2);
+}
+
+/* ─── How-it-Works Step Card Hover ─────────────────────────────────────────── */
+
+.step-card {
+  position: relative;
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid transparent;
+}
+
+.step-card:hover {
+  background: oklch(1 0 0 / 3%);
+  border-color: oklch(1 0 0 / 8%);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px oklch(0 0 0 / 20%);
+}
+
+.step-card::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 15%;
+  right: 15%;
+  height: 2px;
+  border-radius: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    oklch(0.7 0.18 270 / 40%),
+    oklch(0.75 0.15 195 / 40%),
+    transparent
+  );
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.step-card:hover::after {
+  opacity: 1;
+}
+
+/* Step icon container glow on card hover */
+.step-card:hover .step-icon-box {
+  box-shadow:
+    0 4px 20px oklch(0 0 0 / 30%),
+    0 0 12px oklch(0.7 0.18 270 / 20%);
+  transform: scale(1.08);
+}
+
+.step-icon-box {
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Step number badge hover */
+.step-badge {
+  transition: all 300ms ease;
+}
+
+.step-card:hover .step-badge {
+  background: oklch(0.7 0.18 270);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 0 8px oklch(0.7 0.18 270 / 40%);
+}
+
+/* ─── Icon Glow Utility ────────────────────────────────────────────────────── */
+
+.icon-glow {
+  transition:
+    box-shadow 300ms ease,
+    transform 300ms ease;
+}
+
+.group:hover .icon-glow {
+  box-shadow:
+    0 4px 16px oklch(0 0 0 / 30%),
+    0 0 10px oklch(0.7 0.18 270 / 18%);
+  transform: scale(1.1);
+}
+
+/* ─── Trust Badge Icon Hover ───────────────────────────────────────────────── */
+
+.trust-icon {
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.group:hover .trust-icon {
+  box-shadow: 0 0 12px oklch(0.7 0.18 270 / 20%);
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* ─── Social Icon Hover ────────────────────────────────────────────────────── */
+
+.social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  color: oklch(0.65 0 0);
+}
+
+.social-icon:hover {
+  background: linear-gradient(
+    135deg,
+    oklch(0.7 0.18 270 / 15%),
+    oklch(0.75 0.15 195 / 15%)
+  );
+  color: oklch(0.7 0.18 270);
+  transform: translateY(-2px) scale(1.1);
+  box-shadow: 0 4px 12px oklch(0.7 0.18 270 / 15%);
+}
+
+/* ─── Stat Item Hover ──────────────────────────────────────────────────────── */
+
+.stat-item {
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 0.75rem;
+  padding: 0.5rem;
+  cursor: default;
+}
+
+.stat-item:hover {
+  background: oklch(0.7 0.18 270 / 5%);
+}
+
+.stat-item:hover .stat-value {
+  text-shadow: 0 0 20px oklch(0.7 0.18 270 / 30%);
+}
+
+.stat-item:hover .stat-icon {
+  color: oklch(0.7 0.18 270);
+  filter: drop-shadow(0 0 4px oklch(0.7 0.18 270 / 30%));
+  transform: scale(1.15);
+}
+
+.stat-value,
+.stat-icon {
+  transition: all 300ms ease;
+}
+
+/* ─── Footer Column Header Hover ───────────────────────────────────────────── */
+
+.footer-heading {
+  position: relative;
+  display: inline-block;
+}
+
+.footer-heading::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    oklch(0.7 0.18 270 / 40%),
+    oklch(0.75 0.15 195 / 40%)
+  );
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 300ms ease;
+}
+
+.footer-heading:hover::after {
+  transform: scaleX(1);
+}
+
+/* ─── Feature Card Gradient Border Shimmer ─────────────────────────────────── */
+
+@keyframes gradient-sweep {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.glass-card:hover .icon-glow {
+  animation: icon-breathe 2s ease-in-out infinite;
+}
+
+@keyframes icon-breathe {
+  0%,
+  100% {
+    box-shadow:
+      0 4px 16px oklch(0 0 0 / 30%),
+      0 0 10px oklch(0.7 0.18 270 / 18%);
+  }
+  50% {
+    box-shadow:
+      0 4px 20px oklch(0 0 0 / 35%),
+      0 0 16px oklch(0.7 0.18 270 / 25%);
+  }
+}
+
+/* ─── Reduced Motion — New Animations ──────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-icon:hover,
+  .step-card:hover,
+  .step-card:hover .step-icon-box,
+  .step-card:hover .step-badge,
+  .social-icon:hover,
+  .stat-item:hover .stat-icon,
+  .group:hover .icon-glow,
+  .group:hover .trust-icon,
+  .comparison-row:hover .pathforge-check {
+    transform: none !important;
+    animation: none !important;
+  }
+  .nav-scrolled::after {
+    display: none;
+  }
+  .glass-card:hover .icon-glow {
+    animation: none !important;
   }
 }
