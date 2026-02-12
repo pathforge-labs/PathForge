@@ -515,3 +515,55 @@
   border-color: oklch(0.7 0.19 22 / 20%);
   box-shadow: 0 8px 32px oklch(0.7 0.19 22 / 8%);
 }
+
+/* ─── Smooth Scroll ────────────────────────────────────────────────────────── */
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ─── Recommended Next Move Card ───────────────────────────────────────────── */
+
+.next-move-card {
+  position: relative;
+  background: oklch(1 0 0 / 4%);
+  border: 1px solid oklch(0.7 0.18 270 / 15%);
+  box-shadow: 0 0 12px oklch(0.7 0.18 270 / 5%);
+  overflow: hidden;
+}
+
+.next-move-card:hover {
+  background: oklch(1 0 0 / 7%);
+  border-color: oklch(0.7 0.18 270 / 30%);
+  box-shadow: 0 0 24px oklch(0.7 0.18 270 / 12%),
+              0 0 0 1px oklch(0.75 0.15 195 / 10%);
+  transform: translateY(-1px);
+}
+
+.next-move-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(105deg, transparent 40%, oklch(0.7 0.18 270 / 8%) 50%, transparent 60%);
+  animation: card-shimmer 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes card-shimmer {
+  0% { transform: translateX(-150%); }
+  100% { transform: translateX(250%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .next-move-card::before {
+    animation: none;
+    display: none;
+  }
+}

@@ -266,8 +266,8 @@ export default function LandingPage() {
               Sign In
             </Link>
             <Link
-              href="#waitlist"
-              className="cta-button cursor-pointer rounded-xl bg-white px-5 py-2 text-sm font-semibold text-gray-900 transition-all hover:bg-gray-100 hover:shadow-lg hover:shadow-white/10"
+              href="#cta"
+              className="cta-button cursor-pointer rounded-xl bg-linear-to-r from-primary to-accent px-5 py-2 text-sm font-semibold text-white transition-all hover:opacity-90 hover:shadow-lg hover:shadow-primary/20"
             >
               Join Waitlist
             </Link>
@@ -604,11 +604,11 @@ export default function LandingPage() {
                   </div>
 
                   {/* Next move suggestion */}
-                  <div className="mt-6 rounded-xl border border-border/30 bg-background/30 p-4">
-                    <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground/70">
+                  <div className="next-move-card group mt-6 cursor-pointer rounded-xl p-4 transition-all duration-300">
+                    <p className="relative z-10 text-[11px] font-medium uppercase tracking-wider text-muted-foreground/70">
                       Recommended Next Move
                     </p>
-                    <div className="mt-2 flex items-center justify-between">
+                    <div className="relative z-10 mt-2 flex items-center justify-between">
                       <div>
                         <p className="font-display font-semibold">
                           Staff Engineer
@@ -617,7 +617,7 @@ export default function LandingPage() {
                           87% confidence · 8-14 months
                         </p>
                       </div>
-                      <ChevronRight className="h-4 w-4 text-muted-foreground/50" />
+                      <ChevronRight className="h-4 w-4 text-muted-foreground/50 transition-all duration-300 group-hover:translate-x-1 group-hover:text-primary" />
                     </div>
                   </div>
                 </div>
@@ -820,7 +820,7 @@ export default function LandingPage() {
         <div className="section-divider mx-auto max-w-4xl" />
 
         {/* ── Final CTA Section ──────────────────────── */}
-        <section className="noise-overlay relative overflow-hidden px-6 py-20 sm:py-28" aria-label="Join the waitlist">
+        <section id="cta" className="noise-overlay relative overflow-hidden px-6 py-20 sm:py-28" aria-label="Join the waitlist">
           <div
             className="cta-aura pointer-events-none absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full"
             style={{
@@ -874,9 +874,9 @@ export default function LandingPage() {
                 Product
               </p>
               <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-                <Link href="#features" className="hover-underline cursor-pointer transition-colors hover:text-foreground">Features</Link>
-                <Link href="#how-it-works" className="hover-underline cursor-pointer transition-colors hover:text-foreground">How it Works</Link>
-                <Link href="#waitlist" className="hover-underline cursor-pointer transition-colors hover:text-foreground">Join Waitlist</Link>
+                <Link href="#features" className="hover-underline w-fit cursor-pointer transition-colors hover:text-foreground">Features</Link>
+                <Link href="#how-it-works" className="hover-underline w-fit cursor-pointer transition-colors hover:text-foreground">How it Works</Link>
+                <Link href="#waitlist" className="hover-underline w-fit cursor-pointer transition-colors hover:text-foreground">Join Waitlist</Link>
               </div>
             </div>
 
@@ -886,9 +886,9 @@ export default function LandingPage() {
                 Legal
               </p>
               <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-                <Link href="/privacy" className="hover-underline cursor-pointer transition-colors hover:text-foreground">Privacy Policy</Link>
-                <Link href="/terms" className="hover-underline cursor-pointer transition-colors hover:text-foreground">Terms of Service</Link>
-                <Link href="/cookies" className="hover-underline cursor-pointer transition-colors hover:text-foreground">Cookie Policy</Link>
+                <Link href="/privacy" className="hover-underline w-fit cursor-pointer transition-colors hover:text-foreground">Privacy Policy</Link>
+                <Link href="/terms" className="hover-underline w-fit cursor-pointer transition-colors hover:text-foreground">Terms of Service</Link>
+                <Link href="/cookies" className="hover-underline w-fit cursor-pointer transition-colors hover:text-foreground">Cookie Policy</Link>
               </div>
             </div>
 
@@ -898,10 +898,10 @@ export default function LandingPage() {
                 Connect
               </p>
               <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-                <a href="https://linkedin.com/company/besynclabs" target="_blank" rel="noopener noreferrer" className="hover-underline cursor-pointer transition-colors hover:text-foreground">LinkedIn</a>
-                <a href="https://github.com/besync-labs" target="_blank" rel="noopener noreferrer" className="hover-underline cursor-pointer transition-colors hover:text-foreground">GitHub</a>
-                <a href="https://x.com/besynclabs" target="_blank" rel="noopener noreferrer" className="hover-underline cursor-pointer transition-colors hover:text-foreground">X (Twitter)</a>
-                <Link href="mailto:hello@pathforge.eu" className="hover-underline cursor-pointer transition-colors hover:text-foreground">Contact</Link>
+                <a href="https://linkedin.com/company/besynclabs" target="_blank" rel="noopener noreferrer" className="hover-underline w-fit cursor-pointer transition-colors hover:text-foreground">LinkedIn</a>
+                <a href="https://github.com/besync-labs" target="_blank" rel="noopener noreferrer" className="hover-underline w-fit cursor-pointer transition-colors hover:text-foreground">GitHub</a>
+                <a href="https://x.com/besynclabs" target="_blank" rel="noopener noreferrer" className="hover-underline w-fit cursor-pointer transition-colors hover:text-foreground">X (Twitter)</a>
+                <Link href="mailto:hello@pathforge.eu" className="hover-underline w-fit cursor-pointer transition-colors hover:text-foreground">Contact</Link>
               </div>
             </div>
           </div>
