@@ -30,7 +30,7 @@ export function FaqAccordion({ items }: FaqAccordionProps) {
         const isOpen = openIndex === i;
 
         return (
-          <div key={faq.q} className="glass-card rounded-xl">
+          <div key={faq.q} className="faq-item glass-card rounded-xl">
             <button
               type="button"
               onClick={() => toggle(i)}

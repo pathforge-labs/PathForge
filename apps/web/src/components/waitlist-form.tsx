@@ -99,40 +99,44 @@ export function WaitlistForm({
 
   return (
     <div className={className}>
-      <form
-        onSubmit={handleSubmit}
-        className="relative flex items-center gap-1.5 rounded-full border border-border/40 bg-card/60 p-1.5 backdrop-blur-md transition-all duration-300 focus-within:border-primary/30 focus-within:shadow-lg focus-within:shadow-primary/5"
-      >
-        <input
-          type="email"
-          placeholder="you@example.com"
-          value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-            if (state === "error") setState("idle");
-          }}
-          required
-          className="h-11 flex-1 bg-transparent pl-5 text-base text-foreground outline-none placeholder:text-muted-foreground/40"
-          aria-label="Email address for waitlist"
-        />
-        <Button
-          type="submit"
-          size="lg"
-          disabled={state === "loading"}
-          className="h-11 cursor-pointer rounded-full bg-linear-to-r from-violet-500 via-primary to-cyan-400 px-6 text-sm font-semibold text-white shadow-lg shadow-primary/20 transition-all duration-300 hover:shadow-xl hover:shadow-primary/30 hover:brightness-110"
+      <div className="relative overflow-hidden rounded-2xl border border-border/30 bg-card/60 p-5 backdrop-blur-md sm:p-6">
+        {/* Subtle top gradient accent */}
+        <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary/30 to-transparent" />
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-3"
         >
-          {state === "loading" ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <>
-              Get Early Access <ArrowRight className="ml-1.5 h-4 w-4" />
-            </>
-          )}
-        </Button>
-      </form>
-      {state === "error" && (
-        <p className="mt-2 text-sm text-destructive">{message}</p>
-      )}
+          <input
+            type="email"
+            placeholder="your@email.com"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              if (state === "error") setState("idle");
+            }}
+            required
+            className="h-12 w-full rounded-xl border border-border/30 bg-background/40 px-4 text-base text-foreground outline-none transition-all duration-200 placeholder:text-muted-foreground/40 focus:border-primary/40 focus:ring-1 focus:ring-primary/20"
+            aria-label="Email address for waitlist"
+          />
+          <Button
+            type="submit"
+            size="lg"
+            disabled={state === "loading"}
+            className="h-12 w-full cursor-pointer rounded-xl bg-linear-to-r from-violet-500 via-primary to-cyan-400 text-sm font-semibold text-white shadow-lg shadow-primary/20 transition-all duration-300 hover:shadow-xl hover:shadow-primary/30 hover:brightness-110"
+          >
+            {state === "loading" ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <>
+                Get Early Access <ArrowRight className="ml-1.5 h-4 w-4" />
+              </>
+            )}
+          </Button>
+        </form>
+        {state === "error" && (
+          <p className="mt-2 text-sm text-destructive">{message}</p>
+        )}
+      </div>
       <div className="mt-3 flex items-center justify-center gap-4 text-[11px] text-muted-foreground/60">
         <span className="flex items-center gap-1"><Shield className="h-3 w-3" />GDPR compliant</span>
         <span className="h-3 w-px bg-border/30" />

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { WaitlistForm } from "@/components/waitlist-form";
 import { MobileNav } from "@/components/mobile-nav";
 import { AnimatedSection, HeroDashboard } from "@/components/animated-sections";
@@ -250,12 +251,16 @@ export default function LandingPage() {
       {/* ── Navbar ────────────────────────────────────── */}
       <nav className="sticky top-0 z-50 border-b border-border/30 bg-background/80 backdrop-blur-xl transition-all duration-300" aria-label="Main navigation">
         <NavScrollEffect />
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
+        <div className="mx-auto flex h-16 max-w-7xl 2xl:max-w-[1400px] 3xl:max-w-[1600px] 4xl:max-w-[1800px] items-center justify-between px-6">
           <Link href="/" className="flex items-center gap-2.5" aria-label="PathForge home">
-            <div className="logo-icon flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br from-primary to-accent">
-              <span className="text-sm font-bold text-white">P</span>
-            </div>
-            <span className="font-display text-lg font-bold tracking-tight">
+            <Image
+              src="/testimonials/pathforge-logo.png"
+              alt="PathForge logo"
+              width={32}
+              height={32}
+              className="h-8 w-8 rounded-lg object-contain"
+            />
+            <span className="gradient-text-animated font-display text-2xl font-bold tracking-tight">
               PathForge
             </span>
           </Link>
@@ -301,7 +306,7 @@ export default function LandingPage() {
             }}
           />
 
-          <div className="relative mx-auto max-w-4xl text-center">
+          <div className="relative mx-auto max-w-4xl 2xl:max-w-[1000px] 3xl:max-w-[1200px] text-center">
             {/* Badge */}
             <div className="animate-fade-in mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm text-primary">
               <Sparkles className="h-3.5 w-3.5" />
@@ -343,7 +348,7 @@ export default function LandingPage() {
 
         {/* ── Stats Bar ────────────────────────────────── */}
         <section className="border-y border-border/20 bg-card/20" aria-label="Key metrics">
-          <div className="mx-auto grid max-w-5xl grid-cols-2 gap-4 px-6 py-8 sm:grid-cols-4 sm:gap-0 sm:py-10">
+          <div className="mx-auto grid max-w-5xl 2xl:max-w-[1100px] 3xl:max-w-[1280px] grid-cols-2 gap-4 px-6 py-8 sm:grid-cols-4 sm:gap-0 sm:py-10">
             {STATS.map((stat, i) => (
               <AnimatedSection key={stat.label} delay={i * 80}>
                 <div className={`stat-item text-center ${i < STATS.length - 1 ? "sm:border-r sm:border-border/15" : ""}`}>
@@ -371,7 +376,7 @@ export default function LandingPage() {
 
         {/* ── Trust Bar ──────────────────────────────── */}
         <section className="px-6 py-8" aria-label="Trust signals">
-          <div className="mx-auto flex max-w-4xl flex-col items-center justify-center gap-6 sm:flex-row sm:gap-12">
+          <div className="mx-auto flex max-w-4xl 2xl:max-w-[1000px] 3xl:max-w-[1200px] flex-col items-center justify-center gap-6 sm:flex-row sm:gap-12">
             {TRUST_BADGES.map((badge) => (
               <AnimatedSection key={badge.label}>
                 <div className="group flex cursor-default items-center gap-3 rounded-xl px-3 py-2 text-sm transition-all duration-300 hover:scale-[1.03] hover:bg-primary/5">
@@ -391,11 +396,11 @@ export default function LandingPage() {
         </section>
 
         {/* ── Section Divider ─────────────────────────── */}
-        <div className="section-divider mx-auto max-w-4xl" />
+        <div className="section-divider mx-auto max-w-4xl 2xl:max-w-[1000px] 3xl:max-w-[1200px]" />
 
         {/* ── Problem Section ────────────────────────── */}
         <section className="px-6 py-20 sm:py-28" aria-label="The problem we solve">
-          <div className="mx-auto max-w-6xl">
+          <div className="mx-auto max-w-6xl 2xl:max-w-[1200px] 3xl:max-w-[1400px]">
             <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
               {/* Left — copy */}
               <AnimatedSection>
@@ -456,7 +461,7 @@ export default function LandingPage() {
         </section>
 
         {/* ── Section Divider ─────────────────────────── */}
-        <div className="section-divider mx-auto max-w-4xl" />
+        <div className="section-divider mx-auto max-w-4xl 2xl:max-w-[1000px] 3xl:max-w-[1200px]" />
 
         {/* ── How it Works Section ────────────────────── */}
         <section id="how-it-works" className="px-6 py-20 sm:py-28" aria-label="How PathForge works">
@@ -473,7 +478,7 @@ export default function LandingPage() {
             </p>
           </AnimatedSection>
 
-          <div className="mx-auto mt-16 max-w-5xl">
+          <div className="mx-auto mt-16 max-w-5xl 2xl:max-w-[1100px] 3xl:max-w-[1280px]">
             <div className="grid gap-8 md:grid-cols-3">
               {HOW_IT_WORKS.map((step, i) => (
                 <AnimatedSection key={step.step} delay={i * 150}>
@@ -515,7 +520,7 @@ export default function LandingPage() {
         </section>
 
         {/* ── Section Divider ─────────────────────────── */}
-        <div className="section-divider mx-auto max-w-4xl" />
+        <div className="section-divider mx-auto max-w-4xl 2xl:max-w-[1000px] 3xl:max-w-[1200px]" />
 
         {/* ── Features Section ───────────────────────── */}
         <section id="features" className="px-6 py-20 sm:py-28" aria-label="Platform features">
@@ -533,7 +538,7 @@ export default function LandingPage() {
             </p>
           </AnimatedSection>
 
-          <div className="mx-auto mt-14 grid max-w-6xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mx-auto mt-14 grid max-w-6xl 2xl:max-w-[1200px] 3xl:max-w-[1400px] gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {FEATURES.map((feature, i) => (
               <AnimatedSection key={feature.title} delay={i * 80}>
                 <SpotlightCard className="glass-card group cursor-default rounded-xl p-6 h-full">
@@ -558,11 +563,11 @@ export default function LandingPage() {
         </section>
 
         {/* ── Section Divider ─────────────────────────── */}
-        <div className="section-divider mx-auto max-w-4xl" />
+        <div className="section-divider mx-auto max-w-4xl 2xl:max-w-[1000px] 3xl:max-w-[1200px]" />
 
         {/* ── Career DNA™ Section ────────────────────── */}
         <section className="px-6 py-20 sm:py-28" aria-label="Career DNA technology">
-          <div className="mx-auto max-w-6xl">
+          <div className="mx-auto max-w-6xl 2xl:max-w-[1200px] 3xl:max-w-[1400px]">
             <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
               {/* Left — Career DNA visualization */}
               <AnimatedSection>
@@ -651,8 +656,8 @@ export default function LandingPage() {
                     "Market position & growth potential scoring",
                     "AI-disruption vulnerability analysis",
                   ].map((item) => (
-                    <li key={item} className="flex items-center gap-3 text-sm">
-                      <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                    <li key={item} className="dna-list-item flex items-center gap-3 text-sm">
+                      <div className="dna-icon flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10">
                         <ArrowRight className="h-3 w-3 text-primary" />
                       </div>
                       <span className="text-muted-foreground">{item}</span>
@@ -665,10 +670,10 @@ export default function LandingPage() {
         </section>
 
         {/* ── Section Divider ─────────────────────────── */}
-        <div className="section-divider mx-auto max-w-4xl" />
+        <div className="section-divider mx-auto max-w-4xl 2xl:max-w-[1000px] 3xl:max-w-[1200px]" />
 
         {/* ── Comparison Table ────────────────────────── */}
-        <section className="px-6 py-20 sm:py-28" aria-label="Feature comparison">
+        <section id="comparison" className="px-6 py-20 sm:py-28" aria-label="Feature comparison">
           <AnimatedSection className="mx-auto max-w-3xl text-center">
             <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-primary">
               Why PathForge
@@ -683,7 +688,7 @@ export default function LandingPage() {
           </AnimatedSection>
 
           <AnimatedSection delay={200}>
-            <div className="mx-auto mt-14 max-w-4xl overflow-x-auto">
+            <div className="mx-auto mt-14 max-w-4xl 2xl:max-w-[1000px] 3xl:max-w-[1200px] overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-border/30">
@@ -732,7 +737,7 @@ export default function LandingPage() {
         </section>
 
         {/* ── Section Divider ─────────────────────────── */}
-        <div className="section-divider mx-auto max-w-4xl" />
+        <div className="section-divider mx-auto max-w-4xl 2xl:max-w-[1000px] 3xl:max-w-[1200px]" />
 
         {/* ── Testimonials Section ────────────────────── */}
         <section className="py-20 sm:py-28" aria-label="What people say">
@@ -748,7 +753,7 @@ export default function LandingPage() {
             </p>
           </AnimatedSection>
 
-          <div className="mt-14">
+          <div className="mx-auto mt-14 max-w-7xl px-4 sm:px-6 lg:px-8 2xl:max-w-[1400px] 3xl:max-w-[1600px] 4xl:max-w-[1800px]">
             <TestimonialsMarquee speed="normal">
               {TESTIMONIALS.map((t) => (
                 <BorderGlow key={t.name} className="w-[340px] shrink-0 sm:w-[380px]">
@@ -802,7 +807,7 @@ export default function LandingPage() {
         </section>
 
         {/* ── Section Divider ─────────────────────────── */}
-        <div className="section-divider mx-auto max-w-4xl" />
+        <div className="section-divider mx-auto max-w-4xl 2xl:max-w-[1000px] 3xl:max-w-[1200px]" />
 
         {/* ── FAQ Section ─────────────────────────────── */}
         <section className="px-6 py-20 sm:py-28" aria-label="Frequently asked questions">
@@ -821,7 +826,7 @@ export default function LandingPage() {
         </section>
 
         {/* ── Section Divider ─────────────────────────── */}
-        <div className="section-divider mx-auto max-w-4xl" />
+        <div className="section-divider mx-auto max-w-4xl 2xl:max-w-[1000px] 3xl:max-w-[1200px]" />
 
         {/* ── Final CTA Section ──────────────────────── */}
         <section id="cta" className="noise-overlay relative overflow-hidden px-6 py-20 sm:py-28" aria-label="Join the waitlist">
@@ -849,99 +854,101 @@ export default function LandingPage() {
       </main>
 
       {/* ── Footer ─────────────────────────────────── */}
-      <footer className="border-t border-border/20" role="contentinfo">
-        <div className="mx-auto max-w-7xl px-6 py-12">
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-5">
+      <footer className="relative overflow-hidden border-t border-border/20" role="contentinfo">
+        {/* Premium gradient mesh background */}
+        <div className="absolute inset-0 bg-linear-to-b from-card/50 via-card/20 to-background" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_50%,oklch(0.7_0.18_270/4%),transparent_60%),radial-gradient(ellipse_at_80%_20%,oklch(0.75_0.15_195/3%),transparent_50%)]" />
+        {/* Subtle top gradient accent line */}
+        <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary/25 to-transparent" />
+
+        <div className="relative mx-auto max-w-7xl 2xl:max-w-[1400px] 3xl:max-w-[1600px] 4xl:max-w-[1800px] px-6 py-16 sm:py-20">
+          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-5 lg:gap-16">
             {/* Brand — spans 2 columns on lg */}
             <div className="lg:col-span-2">
-              <div className="flex items-center gap-2.5">
-                <div className="logo-icon flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br from-primary to-accent">
-                  <span className="text-sm font-bold text-white">P</span>
-                </div>
-                <span className="font-display text-base font-semibold">
+              <div className="flex items-center gap-3">
+                <Image
+                  src="/testimonials/pathforge-logo.png"
+                  alt="PathForge logo"
+                  width={40}
+                  height={40}
+                  className="h-10 w-10 rounded-xl object-contain"
+                />
+                <span className="gradient-text-animated font-display text-2xl font-bold tracking-tight">
                   PathForge
                 </span>
               </div>
-              {/* Status badge */}
-              <div className="mt-2.5 flex items-center gap-2">
-                <span className="status-dot relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-                </span>
-                <span className="text-xs font-medium text-emerald-400">Launching Soon</span>
-              </div>
-              <p className="mt-3 max-w-xs text-xs leading-relaxed text-muted-foreground">
-                Career Intelligence, Intelligently Forged.
+              <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
+                Career Intelligence, Intelligently Forged. Decode your unique Career DNA™ and discover opportunities that truly align.
               </p>
-              {/* Social icons */}
-              <div className="mt-4 flex items-center gap-2">
-                <a href="https://linkedin.com/company/besynclabs" target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="LinkedIn">
-                  <Linkedin className="h-4 w-4" />
-                </a>
-                <a href="https://github.com/besync-labs" target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="GitHub">
-                  <Github className="h-4 w-4" />
-                </a>
-                <a href="https://x.com/besynclabs" target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="X (Twitter)">
-                  <X className="h-4 w-4" />
-                </a>
+              {/* Social icons — large, prominent */}
+              <div className="mt-6">
+                <div className="mb-4 h-px w-48 bg-linear-to-r from-primary/50 to-accent/50" />
+                <div className="flex items-center gap-4">
+                  <a href="https://linkedin.com/company/besynclabs" target="_blank" rel="noopener noreferrer" className="flex h-12 w-12 items-center justify-center rounded-xl text-muted-foreground/70 transition-all duration-200 hover:bg-primary/5 hover:text-primary" aria-label="LinkedIn">
+                    <Linkedin className="h-6 w-6" />
+                  </a>
+                  <a href="https://github.com/besync-labs" target="_blank" rel="noopener noreferrer" className="flex h-12 w-12 items-center justify-center rounded-xl text-muted-foreground/70 transition-all duration-200 hover:bg-primary/5 hover:text-primary" aria-label="GitHub">
+                    <Github className="h-6 w-6" />
+                  </a>
+                  <a href="https://x.com/besynclabs" target="_blank" rel="noopener noreferrer" className="flex h-12 w-12 items-center justify-center rounded-xl text-muted-foreground/70 transition-all duration-200 hover:bg-primary/5 hover:text-primary" aria-label="X (Twitter)">
+                    <X className="h-6 w-6" />
+                  </a>
+                </div>
               </div>
             </div>
 
             {/* Product */}
             <div>
-              <p className="footer-heading mb-3 cursor-default text-xs font-semibold uppercase tracking-widest text-muted-foreground/70">
+              <p className="footer-heading mb-4 cursor-default text-xs font-semibold uppercase tracking-widest text-foreground/60">
                 Product
               </p>
-              <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-                <Link href="#features" className="hover-underline w-fit cursor-pointer transition-colors hover:text-foreground">Features</Link>
-                <Link href="#how-it-works" className="hover-underline w-fit cursor-pointer transition-colors hover:text-foreground">How it Works</Link>
-                <Link href="#comparison" className="hover-underline w-fit cursor-pointer transition-colors hover:text-foreground">Comparison</Link>
+              <div className="flex flex-col gap-2.5 text-sm">
+                <Link href="#features" className="footer-link w-fit cursor-pointer text-muted-foreground transition-colors hover:text-foreground">Features</Link>
+                <Link href="#how-it-works" className="footer-link w-fit cursor-pointer text-muted-foreground transition-colors hover:text-foreground">How it Works</Link>
+                <Link href="#comparison" className="footer-link w-fit cursor-pointer text-muted-foreground transition-colors hover:text-foreground">Comparison</Link>
               </div>
             </div>
 
             {/* Legal */}
             <div>
-              <p className="footer-heading mb-3 cursor-default text-xs font-semibold uppercase tracking-widest text-muted-foreground/70">
+              <p className="footer-heading mb-4 cursor-default text-xs font-semibold uppercase tracking-widest text-foreground/60">
                 Legal
               </p>
-              <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-                <Link href="/privacy" className="hover-underline w-fit cursor-pointer transition-colors hover:text-foreground">Privacy Policy</Link>
-                <Link href="/terms" className="hover-underline w-fit cursor-pointer transition-colors hover:text-foreground">Terms of Service</Link>
-                <Link href="/cookies" className="hover-underline w-fit cursor-pointer transition-colors hover:text-foreground">Cookie Policy</Link>
+              <div className="flex flex-col gap-2.5 text-sm">
+                <Link href="/privacy" className="footer-link w-fit cursor-pointer text-muted-foreground transition-colors hover:text-foreground">Privacy Policy</Link>
+                <Link href="/terms" className="footer-link w-fit cursor-pointer text-muted-foreground transition-colors hover:text-foreground">Terms of Service</Link>
+                <Link href="/cookies" className="footer-link w-fit cursor-pointer text-muted-foreground transition-colors hover:text-foreground">Cookie Policy</Link>
               </div>
             </div>
 
             {/* Company */}
             <div>
-              <p className="footer-heading mb-3 cursor-default text-xs font-semibold uppercase tracking-widest text-muted-foreground/70">
+              <p className="footer-heading mb-4 cursor-default text-xs font-semibold uppercase tracking-widest text-foreground/60">
                 Company
               </p>
-              <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-                <Link href="/about" className="hover-underline w-fit cursor-pointer transition-colors hover:text-foreground">About</Link>
-                <Link href="mailto:hello@pathforge.eu" className="hover-underline w-fit cursor-pointer transition-colors hover:text-foreground">Contact</Link>
-                <Link href="/careers" className="hover-underline w-fit cursor-pointer transition-colors hover:text-foreground">Careers</Link>
+              <div className="flex flex-col gap-2.5 text-sm">
+                <Link href="/about" className="footer-link w-fit cursor-pointer text-muted-foreground transition-colors hover:text-foreground">About</Link>
+                <Link href="mailto:hello@pathforge.eu" className="footer-link w-fit cursor-pointer text-muted-foreground transition-colors hover:text-foreground">Contact</Link>
+                <Link href="/careers" className="footer-link w-fit cursor-pointer text-muted-foreground transition-colors hover:text-foreground">Careers</Link>
               </div>
             </div>
           </div>
 
           {/* Bottom bar */}
-          <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-border/15 pt-6 text-xs text-muted-foreground sm:flex-row">
-            <div className="flex items-center gap-2 rounded-full border border-border/30 px-3 py-1.5">
-              <span className="text-sm font-medium leading-none">🇳🇱</span>
-              <span className="font-medium">Made in Netherlands</span>
-            </div>
-            <p>
-              © {new Date().getFullYear()} PathForge by BesyncLabs. All rights
-              reserved.
-            </p>
-            <div className="flex items-center gap-4">
+          <div className="relative mt-14 pt-8">
+            {/* Gradient divider line */}
+            <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-border/40 to-transparent" />
+            <div className="flex flex-col items-center justify-between gap-4 text-xs text-muted-foreground/50 sm:flex-row">
               <div className="flex items-center gap-1.5">
-                <Lock className="h-3.5 w-3.5" />
-                <span>GDPR Compliant</span>
+                <span className="text-sm leading-none">🇳🇱</span>
+                <span>Made in Netherlands</span>
               </div>
-              <div className="flex items-center gap-1.5">
-                <Globe className="h-3.5 w-3.5" />
-                <span>EN</span>
+              <p>
+                © {new Date().getFullYear()} PathForge by BesyncLabs
+              </p>
+              <div className="flex items-center gap-1.5 text-muted-foreground/40 transition-colors hover:text-muted-foreground/60">
+                <Globe className="h-3 w-3" />
+                <span>English</span>
               </div>
             </div>
           </div>
