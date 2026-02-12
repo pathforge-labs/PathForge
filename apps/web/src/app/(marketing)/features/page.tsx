@@ -91,10 +91,10 @@ export default function FeaturesPage() {
             const details = FEATURE_DETAILS[feature.title];
             return (
               <AnimatedSection key={feature.title} delay={i * 100}>
-                <SpotlightCard className="glass-card overflow-hidden rounded-2xl p-0">
-                  <div className="grid items-center gap-0 md:grid-cols-2">
+                <SpotlightCard className="glass-card rounded-2xl p-0">
+                  <div className="grid items-stretch gap-0 md:grid-cols-2">
                     {/* Left — content */}
-                    <div className="p-8 sm:p-10">
+                    <div className="relative z-10 p-8 sm:p-10">
                       <div className={`mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br ${feature.gradient} shadow-lg`}>
                         <feature.icon className="h-6 w-6 text-white" />
                       </div>
@@ -116,7 +116,7 @@ export default function FeaturesPage() {
                       )}
                     </div>
                     {/* Right — visual accent */}
-                    <div className="relative hidden h-full items-center justify-center md:flex">
+                    <div className="relative hidden min-h-[200px] items-center justify-center md:flex">
                       <div className="absolute inset-0 bg-linear-to-br from-card/50 to-card/20" />
                       <div className={`relative flex h-32 w-32 items-center justify-center rounded-3xl bg-linear-to-br ${feature.gradient} opacity-10`}>
                         <feature.icon className="h-16 w-16 text-white" />
