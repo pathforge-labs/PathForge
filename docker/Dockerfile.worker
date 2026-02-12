@@ -1,0 +1,47 @@
+# ─────────────────────────────────────────────
+# PathForge Worker — Production Dockerfile
+# ─────────────────────────────────────────────
+# Task worker for background processing (AI pipeline, embeddings, etc.)
+# Same base as API but with different entrypoint.
+#
+# Usage: docker build -f docker/Dockerfile.worker -t pathforge-worker .
+#        (run from repo root)
+
+# ── Stage 1: Builder ────────────────────────
+FROM python:3.12-slim AS builder
+
+WORKDIR /build
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends gcc libpq-dev && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY apps/api/pyproject.toml ./
+RUN pip install --no-cache-dir --prefix=/install ".[ai]"
+
+# ── Stage 2: Runtime ────────────────────────
+FROM python:3.12-slim AS runtime
+
+RUN groupadd --gid 1001 pathforge && \
+    useradd --uid 1001 --gid pathforge --shell /bin/bash --create-home pathforge
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends libpq5 curl && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY --from=builder /install /usr/local
+
+WORKDIR /app
+
+COPY apps/api/app ./app
+COPY apps/api/alembic ./alembic
+COPY apps/api/alembic.ini .
+
+USER pathforge
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1
+
+# Worker entrypoint — placeholder for Celery/Dramatiq when Sprint 2+ arrives.
+# For now, runs the app module's worker command or can be overridden at runtime.
+CMD ["python", "-m", "app.worker"]

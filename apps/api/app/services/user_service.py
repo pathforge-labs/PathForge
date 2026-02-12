@@ -1,0 +1,100 @@
+"""
+PathForge — User Service
+==========================
+Business logic for user registration, authentication, and profile management.
+Separates domain logic from route handlers for testability and reuse.
+"""
+
+import uuid
+
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.core.security import (
+    create_access_token,
+    create_refresh_token,
+    hash_password,
+    verify_password,
+)
+from app.models.user import User
+from app.schemas.user import TokenResponse
+
+
+class UserService:
+    """Encapsulates user-related business logic."""
+
+    @staticmethod
+    async def create_user(
+        db: AsyncSession,
+        *,
+        email: str,
+        password: str,
+        full_name: str,
+    ) -> User:
+        """Register a new user. Raises ValueError if email already taken."""
+        result = await db.execute(select(User).where(User.email == email))
+        if result.scalar_one_or_none():
+            raise ValueError("A user with this email already exists")
+
+        user = User(
+            email=email,
+            hashed_password=hash_password(password),
+            full_name=full_name,
+        )
+        db.add(user)
+        await db.flush()
+        await db.refresh(user)
+        return user
+
+    @staticmethod
+    async def authenticate(
+        db: AsyncSession,
+        *,
+        email: str,
+        password: str,
+    ) -> TokenResponse:
+        """Authenticate a user and return access + refresh tokens.
+
+        Raises:
+            ValueError: If credentials are invalid or account is inactive.
+        """
+        result = await db.execute(select(User).where(User.email == email))
+        user = result.scalar_one_or_none()
+
+        if not user or not verify_password(password, user.hashed_password):
+            raise ValueError("Incorrect email or password")
+
+        if not user.is_active:
+            raise ValueError("User account is inactive")
+
+        return TokenResponse(
+            access_token=create_access_token(str(user.id)),
+            refresh_token=create_refresh_token(str(user.id)),
+        )
+
+    @staticmethod
+    async def get_by_id(db: AsyncSession, user_id: uuid.UUID | str) -> User | None:
+        """Fetch a user by their UUID (accepts string for JWT subject)."""
+        uid = uuid.UUID(user_id) if isinstance(user_id, str) else user_id
+        result = await db.execute(select(User).where(User.id == uid))
+        return result.scalar_one_or_none()
+
+    @staticmethod
+    async def get_by_email(db: AsyncSession, email: str) -> User | None:
+        """Fetch a user by their email address."""
+        result = await db.execute(select(User).where(User.email == email))
+        return result.scalar_one_or_none()
+
+    @staticmethod
+    async def update_profile(
+        db: AsyncSession,
+        user: User,
+        **fields: str | None,
+    ) -> User:
+        """Update a user's profile fields. Only sets non-None values."""
+        for field, value in fields.items():
+            if value is not None:
+                setattr(user, field, value)
+        await db.flush()
+        await db.refresh(user)
+        return user

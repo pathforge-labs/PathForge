@@ -11,6 +11,7 @@ from app.core.database import get_db
 from app.core.security import get_current_user
 from app.models.user import User
 from app.schemas.user import UserResponse, UserUpdateRequest
+from app.services.user_service import UserService
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
@@ -35,8 +36,4 @@ async def update_me(
     db: AsyncSession = Depends(get_db),
 ) -> User:
     update_data = payload.model_dump(exclude_unset=True)
-    for field, value in update_data.items():
-        setattr(current_user, field, value)
-    await db.flush()
-    await db.refresh(current_user)
-    return current_user
+    return await UserService.update_profile(db, current_user, **update_data)

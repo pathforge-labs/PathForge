@@ -11,12 +11,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.core.database import get_db
-from app.core.security import (
-    create_access_token,
-    create_refresh_token,
-    hash_password,
-    verify_password,
-)
+from app.core.security import create_access_token, create_refresh_token
 from app.models.user import User
 from app.schemas.user import (
     RefreshTokenRequest,
@@ -25,6 +20,7 @@ from app.schemas.user import (
     UserRegisterRequest,
     UserResponse,
 )
+from app.services.user_service import UserService
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -39,23 +35,18 @@ async def register(
     payload: UserRegisterRequest,
     db: AsyncSession = Depends(get_db),
 ) -> User:
-    # Check if email already exists
-    result = await db.execute(select(User).where(User.email == payload.email))
-    if result.scalar_one_or_none():
+    try:
+        return await UserService.create_user(
+            db,
+            email=payload.email,
+            password=payload.password,
+            full_name=payload.full_name,
+        )
+    except ValueError as exc:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail="A user with this email already exists",
-        )
-
-    user = User(
-        email=payload.email,
-        hashed_password=hash_password(payload.password),
-        full_name=payload.full_name,
-    )
-    db.add(user)
-    await db.flush()
-    await db.refresh(user)
-    return user
+            detail=str(exc),
+        ) from exc
 
 
 @router.post(
@@ -67,25 +58,22 @@ async def login(
     payload: UserLoginRequest,
     db: AsyncSession = Depends(get_db),
 ) -> TokenResponse:
-    result = await db.execute(select(User).where(User.email == payload.email))
-    user = result.scalar_one_or_none()
-
-    if not user or not verify_password(payload.password, user.hashed_password):
+    try:
+        return await UserService.authenticate(
+            db, email=payload.email, password=payload.password
+        )
+    except ValueError as exc:
+        # Map inactive account to 403, bad credentials to 401
+        detail = str(exc)
+        if "inactive" in detail.lower():
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=detail,
+            ) from exc
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect email or password",
-        )
-
-    if not user.is_active:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="User account is inactive",
-        )
-
-    return TokenResponse(
-        access_token=create_access_token(str(user.id)),
-        refresh_token=create_refresh_token(str(user.id)),
-    )
+            detail=detail,
+        ) from exc
 
 
 @router.post(
@@ -116,8 +104,7 @@ async def refresh_token(
             detail="Invalid or expired refresh token",
         ) from exc
 
-    result = await db.execute(select(User).where(User.id == user_id))
-    user = result.scalar_one_or_none()
+    user = await UserService.get_by_id(db, user_id)
     if not user or not user.is_active:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
