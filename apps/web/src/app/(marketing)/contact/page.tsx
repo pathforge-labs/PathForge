@@ -30,19 +30,19 @@ const SOCIAL_CHANNELS = [
     icon: Linkedin,
     label: "LinkedIn",
     href: SOCIAL_LINKS.linkedin,
-    handle: "BesyncLabs",
+    handle: "PathForge",
   },
   {
     icon: Github,
     label: "GitHub",
     href: SOCIAL_LINKS.github,
-    handle: "besync-labs",
+    handle: "pathforge",
   },
   {
     icon: X,
     label: "X (Twitter)",
     href: SOCIAL_LINKS.x,
-    handle: "@besynclabs",
+    handle: "@pathforge",
   },
 ];
 

@@ -32,7 +32,7 @@ export const APP_AUTHOR_EMAIL =
   process.env.NEXT_PUBLIC_APP_AUTHOR_EMAIL ?? `hello@${APP_DOMAIN}`;
 
 // Company
-export const APP_COMPANY = "BesyncLabs";
+export const APP_COMPANY = "PathForge";
 export const APP_COUNTRY = "Netherlands";
 export const APP_COUNTRY_FLAG = "🇳🇱";
 
@@ -42,9 +42,9 @@ export const APP_TWITTER_HANDLE = `@${APP_SLUG}`;
 
 // Social Links
 export const SOCIAL_LINKS = {
-  linkedin: "https://linkedin.com/company/besynclabs",
-  github: "https://github.com/besync-labs",
-  x: "https://x.com/besynclabs",
+  linkedin: "https://linkedin.com/company/pathforge",
+  github: "https://github.com/pathforge",
+  x: "https://x.com/pathforge",
 } as const;
 
 // Helper: Generate page title

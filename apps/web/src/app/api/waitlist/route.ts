@@ -73,7 +73,7 @@ export async function POST(request: Request) {
             </p>
           </div>
           <p style="font-size: 13px; color: #64748b; text-align: center; margin-top: 40px;">
-            © ${new Date().getFullYear()} PathForge by BesyncLabs — Career Intelligence, Intelligently Forged.
+            © ${new Date().getFullYear()} PathForge — Career Intelligence, Intelligently Forged.
           </p>
         </div>
       `,
