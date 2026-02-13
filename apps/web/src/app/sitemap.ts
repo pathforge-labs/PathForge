@@ -18,7 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
-      url: `${APP_URL}/how-it-works`,
+      url: `${APP_URL}/process`,
       lastModified: now,
       changeFrequency: "monthly",
       priority: 0.8,

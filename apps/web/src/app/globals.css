@@ -51,6 +51,9 @@
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 8px);
 
+  /* Navbar breakpoint — desktop nav needs ≥860px to avoid cramped layout */
+  --breakpoint-nav: 860px;
+
   /* Ultra-wide breakpoints for 49" monitors */
   --breakpoint-3xl: 1920px;
   --breakpoint-4xl: 2560px;
@@ -58,37 +61,37 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: oklch(0.985 0.002 270);
   --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
+  --card: oklch(0.98 0.003 270);
   --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
+  --popover: oklch(0.98 0.003 270);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
+  --primary: oklch(0.55 0.18 270);
+  --primary-foreground: oklch(0.98 0 0);
+  --secondary: oklch(0.955 0.005 270);
   --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.955 0.005 270);
+  --muted-foreground: oklch(0.45 0 0);
+  --accent: oklch(0.6 0.15 195);
+  --accent-foreground: oklch(0.12 0 0);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
+  --border: oklch(0.88 0.005 270);
+  --input: oklch(0.88 0.005 270);
+  --ring: oklch(0.55 0.18 270);
+  --chart-1: oklch(0.55 0.18 270);
+  --chart-2: oklch(0.6 0.15 195);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
+  --sidebar: oklch(0.975 0.003 270);
   --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-primary: oklch(0.55 0.18 270);
+  --sidebar-primary-foreground: oklch(0.98 0 0);
+  --sidebar-accent: oklch(0.955 0.005 270);
   --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar-border: oklch(0.88 0.005 270);
+  --sidebar-ring: oklch(0.55 0.18 270);
 }
 
 /* PathForge Dark Theme — Primary brand experience */
@@ -266,8 +269,20 @@
 
 /* ─── Brand Effects ────────────────────────────────────────────────────────── */
 
-/* Gradient text — primary brand accent */
+/* Gradient text — primary brand accent (light mode: deeper for contrast) */
 .gradient-text {
+  background: linear-gradient(
+    135deg,
+    oklch(0.45 0.25 270),
+    oklch(0.5 0.2 195),
+    oklch(0.45 0.25 300)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.dark .gradient-text {
   background: linear-gradient(
     135deg,
     oklch(0.72 0.2 270),
@@ -279,8 +294,23 @@
   background-clip: text;
 }
 
-/* Animated gradient text — for hero headlines */
+/* Animated gradient text — for hero headlines (light mode: deeper) */
 .gradient-text-animated {
+  background: linear-gradient(
+    90deg,
+    oklch(0.45 0.25 270),
+    oklch(0.5 0.2 195),
+    oklch(0.45 0.25 300),
+    oklch(0.45 0.25 270)
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 6s ease infinite;
+}
+
+.dark .gradient-text-animated {
   background: linear-gradient(
     90deg,
     oklch(0.72 0.2 270),
@@ -295,25 +325,47 @@
   animation: gradient-shift 6s ease infinite;
 }
 
-/* Glassmorphism card — premium dark UI */
+/* Glassmorphism card — light mode */
 .glass-card {
-  background: oklch(1 0 0 / 3%);
+  background: oklch(0 0 0 / 2%);
   backdrop-filter: blur(16px);
-  border: 1px solid oklch(1 0 0 / 10%);
+  border: 1px solid oklch(0 0 0 / 6%);
   transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Elevated card — for featured sections */
+/* Glassmorphism card — dark mode */
+.dark .glass-card {
+  background: oklch(1 0 0 / 3%);
+  border: 1px solid oklch(1 0 0 / 10%);
+}
+
+/* Elevated card — light mode */
 .elevated-card {
+  background: oklch(0.98 0.003 270);
+  border: 1px solid oklch(0 0 0 / 8%);
+  box-shadow:
+    0 0 0 1px oklch(0 0 0 / 3%),
+    0 4px 24px oklch(0 0 0 / 8%);
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Elevated card — dark mode */
+.dark .elevated-card {
   background: oklch(0.14 0.008 270);
   border: 1px solid oklch(1 0 0 / 6%);
   box-shadow:
     0 0 0 1px oklch(1 0 0 / 3%),
     0 4px 24px oklch(0 0 0 / 25%);
-  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .elevated-card:hover {
+  border-color: oklch(0 0 0 / 12%);
+  box-shadow:
+    0 0 0 1px oklch(0 0 0 / 5%),
+    0 8px 40px oklch(0 0 0 / 12%);
+}
+
+.dark .elevated-card:hover {
   border-color: oklch(1 0 0 / 10%);
   box-shadow:
     0 0 0 1px oklch(1 0 0 / 5%),
@@ -410,8 +462,27 @@
   opacity: 1;
 }
 
-/* Gradient border glow on glass-card hover (Linear-style) */
+/* Gradient border glow on glass-card hover — light mode */
 .glass-card:hover {
+  background: oklch(0 0 0 / 3%);
+  border-color: transparent;
+  background-image:
+    linear-gradient(oklch(0 0 0 / 3%), oklch(0 0 0 / 3%)),
+    linear-gradient(
+      135deg,
+      oklch(0.55 0.18 270 / 30%),
+      oklch(0.6 0.15 195 / 30%),
+      oklch(0.55 0.18 300 / 30%)
+    );
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  box-shadow:
+    0 8px 32px oklch(0.55 0.18 270 / 8%),
+    0 0 0 1px oklch(0 0 0 / 5%);
+}
+
+/* Gradient border glow on glass-card hover — dark mode */
+.dark .glass-card:hover {
   background: oklch(1 0 0 / 5%);
   border-color: transparent;
   background-image:
@@ -452,7 +523,7 @@
   transform: scaleX(1);
 }
 
-/* ─── How-it-Works Animated Dashed Line ────────────────────────────────────── */
+/* ─── The Process Animated Dashed Line ────────────────────────────────────── */
 
 @keyframes dash-flow {
   to {
@@ -518,14 +589,35 @@
   }
 }
 
+/* light mode */
 .border-glow {
-  background: oklch(1 0 0 / 8%);
+  background: oklch(0 0 0 / 4%);
   animation: border-rotate 4s linear infinite;
   animation-play-state: paused;
   transition: box-shadow 300ms ease-out;
 }
 
+/* dark mode */
+.dark .border-glow {
+  background: oklch(1 0 0 / 8%);
+}
+
 .border-glow:hover {
+  background: conic-gradient(
+    from var(--border-angle),
+    oklch(0 0 0 / 4%) 0%,
+    oklch(0.55 0.18 270) 25%,
+    oklch(0.6 0.15 195) 50%,
+    oklch(0 0 0 / 4%) 75%,
+    oklch(0.55 0.18 270) 100%
+  );
+  animation-play-state: running;
+  box-shadow:
+    0 0 20px oklch(0.55 0.18 270 / 15%),
+    0 0 40px oklch(0.6 0.15 195 / 8%);
+}
+
+.dark .border-glow:hover {
   background: conic-gradient(
     from var(--border-angle),
     oklch(1 0 0 / 8%) 0%,
@@ -534,7 +626,6 @@
     oklch(1 0 0 / 8%) 75%,
     oklch(0.7 0.18 270) 100%
   );
-  animation-play-state: running;
   box-shadow:
     0 0 20px oklch(0.7 0.18 270 / 15%),
     0 0 40px oklch(0.75 0.15 195 / 8%);
@@ -614,14 +705,27 @@
 
 /* ─── Problem Card (Destructive-tinted hover) ─────────────────────────────── */
 
+/* light mode */
 .problem-card {
-  background: oklch(1 0 0 / 3%);
+  background: oklch(0 0 0 / 2%);
   backdrop-filter: blur(16px);
-  border: 1px solid oklch(1 0 0 / 10%);
+  border: 1px solid oklch(0 0 0 / 6%);
   transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .problem-card:hover {
+  background: oklch(0 0 0 / 3%);
+  border-color: oklch(0.7 0.19 22 / 25%);
+  box-shadow: 0 8px 32px oklch(0.7 0.19 22 / 10%);
+}
+
+/* dark mode */
+.dark .problem-card {
+  background: oklch(1 0 0 / 3%);
+  border: 1px solid oklch(1 0 0 / 10%);
+}
+
+.dark .problem-card:hover {
   background: oklch(1 0 0 / 5%);
   border-color: oklch(0.7 0.19 22 / 20%);
   box-shadow: 0 8px 32px oklch(0.7 0.19 22 / 8%);
@@ -641,15 +745,32 @@ html {
 
 /* ─── Recommended Next Move Card ───────────────────────────────────────────── */
 
+/* light mode */
 .next-move-card {
   position: relative;
-  background: oklch(1 0 0 / 4%);
-  border: 1px solid oklch(0.7 0.18 270 / 15%);
-  box-shadow: 0 0 12px oklch(0.7 0.18 270 / 5%);
+  background: oklch(0 0 0 / 2%);
+  border: 1px solid oklch(0.55 0.18 270 / 15%);
+  box-shadow: 0 0 12px oklch(0.55 0.18 270 / 5%);
   overflow: hidden;
 }
 
 .next-move-card:hover {
+  background: oklch(0 0 0 / 4%);
+  border-color: oklch(0.55 0.18 270 / 30%);
+  box-shadow:
+    0 0 24px oklch(0.55 0.18 270 / 12%),
+    0 0 0 1px oklch(0.6 0.15 195 / 10%);
+  transform: translateY(-1px);
+}
+
+/* dark mode */
+.dark .next-move-card {
+  background: oklch(1 0 0 / 4%);
+  border: 1px solid oklch(0.7 0.18 270 / 15%);
+  box-shadow: 0 0 12px oklch(0.7 0.18 270 / 5%);
+}
+
+.dark .next-move-card:hover {
   background: oklch(1 0 0 / 7%);
   border-color: oklch(0.7 0.18 270 / 30%);
   box-shadow:
@@ -691,20 +812,32 @@ html {
 
 /* ─── Navbar Scroll-Aware Glass Effect ─────────────────────────────────────── */
 
+/* light mode */
 .nav-scrolled {
-  border-color: oklch(0.7 0.18 270 / 12%) !important;
+  background: oklch(1 0 0 / 85%) !important;
+  border-color: oklch(0 0 0 / 8%) !important;
   box-shadow:
-    0 4px 30px oklch(0 0 0 / 25%),
-    0 0 1px oklch(1 0 0 / 6%);
+    0 8px 40px oklch(0 0 0 / 10%),
+    0 0 1px oklch(0 0 0 / 12%);
+}
+
+/* dark mode */
+.dark .nav-scrolled {
+  background: oklch(0.09 0.01 270 / 85%) !important;
+  border-color: oklch(0.7 0.18 270 / 15%) !important;
+  box-shadow:
+    0 8px 40px oklch(0 0 0 / 35%),
+    0 0 1px oklch(1 0 0 / 8%);
 }
 
 .nav-scrolled::after {
   content: "";
   position: absolute;
-  bottom: -1px;
-  left: 10%;
-  right: 10%;
+  bottom: 0;
+  left: 15%;
+  right: 15%;
   height: 1px;
+  border-radius: 1px;
   background: linear-gradient(
     90deg,
     transparent,
@@ -777,7 +910,7 @@ html {
   transform: scale(1.2);
 }
 
-/* ─── How-it-Works Step Card Hover ─────────────────────────────────────────── */
+/* ─── The Process Step Card Hover ──────────────────────────────────────────── */
 
 .step-card {
   position: relative;
@@ -787,10 +920,18 @@ html {
   border: 1px solid transparent;
 }
 
+/* Light mode */
 .step-card:hover {
+  background: oklch(0 0 0 / 3%);
+  border-color: oklch(0 0 0 / 8%);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px oklch(0 0 0 / 8%);
+}
+
+/* Dark mode */
+.dark .step-card:hover {
   background: oklch(1 0 0 / 3%);
   border-color: oklch(1 0 0 / 8%);
-  transform: translateY(-4px);
   box-shadow: 0 12px 40px oklch(0 0 0 / 20%);
 }
 
@@ -1004,7 +1145,14 @@ html {
   transition: all 300ms ease;
 }
 
+/* Light mode */
 .faq-item:hover {
+  background: oklch(0 0 0 / 3%) !important;
+  border-color: oklch(0.55 0.18 270 / 18%) !important;
+}
+
+/* Dark mode */
+.dark .faq-item:hover {
   background: oklch(1 0 0 / 5%) !important;
   border-color: oklch(0.7 0.18 270 / 15%) !important;
 }
@@ -1111,7 +1259,6 @@ html {
 }
 
 /* ─── Reduced Motion — New Animations ──────────────────────────────────────── */
-
 
 @media (prefers-reduced-motion: reduce) {
   .logo-icon:hover,

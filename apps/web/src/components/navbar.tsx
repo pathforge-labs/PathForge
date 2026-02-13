@@ -3,48 +3,70 @@ import Image from "next/image";
 import { ActiveNav } from "@/components/active-nav";
 import { MobileNav } from "@/components/mobile-nav";
 import { NavScrollEffect } from "@/components/nav-scroll-effect";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { APP_NAME } from "@/config/brand";
 
 export function Navbar() {
   return (
     <nav
-      className="sticky top-0 z-50 border-b border-border/30 bg-background/80 backdrop-blur-xl transition-all duration-300"
+      className="fixed top-4 left-4 right-4 z-50 mx-auto max-w-7xl rounded-2xl border border-foreground/8 bg-background/70 backdrop-blur-xl transition-all duration-300"
       aria-label="Main navigation"
     >
       <NavScrollEffect />
-      <div className="mx-auto flex h-16 max-w-7xl 2xl:max-w-[1400px] 3xl:max-w-[1600px] 4xl:max-w-[1800px] items-center justify-between px-6">
+      <div className="grid h-14 grid-cols-[auto_1fr_auto] items-center px-5">
+        {/* Logo — left */}
         <Link href="/" className="flex items-center gap-2.5" aria-label={`${APP_NAME} home`}>
           <Image
-            src="/brand/logo-primary.png"
+            src="/brand/logo-light.png"
             alt={`${APP_NAME} logo`}
-            width={32}
-            height={32}
-            className="h-8 w-8 rounded-lg object-contain"
+            width={30}
+            height={30}
+            className="logo-icon h-[30px] w-[30px] rounded-lg object-contain dark:hidden"
           />
-          <span className="gradient-text-animated font-display text-2xl font-bold tracking-tight">
+          <Image
+            src="/brand/logo-dark.png"
+            alt={`${APP_NAME} logo`}
+            width={30}
+            height={30}
+            className="logo-icon hidden h-[30px] w-[30px] rounded-lg object-contain dark:block"
+          />
+          <span className="gradient-text-animated font-display text-xl font-bold tracking-tight">
             {APP_NAME}
           </span>
         </Link>
 
-        {/* Desktop nav */}
-        <div className="hidden items-center gap-2 md:flex">
+        {/* Desktop nav — centered */}
+        <div className="hidden items-center justify-center gap-1 nav:flex">
           <ActiveNav />
-          <Link
-            href="/login"
-            className="cursor-pointer rounded-lg px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Sign In
-          </Link>
-          <Link
-            href="#cta"
-            className="cta-button cursor-pointer rounded-xl bg-linear-to-r from-primary to-accent px-5 py-2 text-sm font-semibold text-white transition-all hover:opacity-90 hover:shadow-lg hover:shadow-primary/20"
-          >
-            Join Waitlist
-          </Link>
         </div>
 
-        {/* Mobile nav */}
-        <MobileNav />
+        {/* CTA Cluster + Mobile — right */}
+        <div className="flex items-center justify-end">
+          {/* Gradient-bordered CTA pill — border matches brand gradient */}
+          <div className="hidden rounded-full bg-linear-to-r from-primary/25 to-accent/25 p-px nav:block">
+            <div className="flex items-center gap-1 rounded-full bg-background/80 p-1 backdrop-blur-sm">
+              <ThemeToggle />
+              {/* Gradient pipe — matches brand gradient */}
+              <div className="h-5 w-px bg-linear-to-b from-primary to-accent opacity-40" />
+              <Link
+                href="/login"
+                className="cursor-pointer rounded-full px-4 py-1.5 text-sm font-medium text-muted-foreground transition-all hover:text-foreground hover:bg-foreground/6"
+              >
+                Sign In
+              </Link>
+              {/* Gradient pipe — matches brand gradient */}
+              <div className="h-5 w-px bg-linear-to-b from-primary to-accent opacity-40" />
+              <Link
+                href="#cta"
+                className="cta-button cursor-pointer rounded-full bg-linear-to-r from-primary to-accent px-5 py-1.5 text-sm font-semibold text-white transition-all hover:opacity-90 hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5"
+              >
+                Join Waitlist
+              </Link>
+            </div>
+          </div>
+          {/* Mobile nav */}
+          <MobileNav />
+        </div>
       </div>
     </nav>
   );

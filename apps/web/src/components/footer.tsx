@@ -24,11 +24,18 @@ export function Footer() {
           <div className="lg:col-span-2">
             <div className="flex items-center gap-3">
               <Image
-                src="/brand/logo-primary.png"
+                src="/brand/logo-light.png"
                 alt={`${APP_NAME} logo`}
                 width={40}
                 height={40}
-                className="h-10 w-10 rounded-xl object-contain"
+                className="h-10 w-10 rounded-xl object-contain dark:hidden"
+              />
+              <Image
+                src="/brand/logo-dark.png"
+                alt={`${APP_NAME} logo`}
+                width={40}
+                height={40}
+                className="hidden h-10 w-10 rounded-xl object-contain dark:block"
               />
               <span className="gradient-text-animated font-display text-2xl font-bold tracking-tight">
                 {APP_NAME}
@@ -62,7 +69,7 @@ export function Footer() {
             </p>
             <div className="flex flex-col gap-2.5 text-sm">
               <Link href="/features" className="footer-link w-fit cursor-pointer text-muted-foreground transition-colors hover:text-foreground">Features</Link>
-              <Link href="/how-it-works" className="footer-link w-fit cursor-pointer text-muted-foreground transition-colors hover:text-foreground">How it Works</Link>
+              <Link href="/#process" className="footer-link w-fit cursor-pointer text-muted-foreground transition-colors hover:text-foreground">The Process</Link>
               <Link href="/comparison" className="footer-link w-fit cursor-pointer text-muted-foreground transition-colors hover:text-foreground">Comparison</Link>
             </div>
           </div>

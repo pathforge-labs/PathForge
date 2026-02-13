@@ -45,7 +45,7 @@ export default function LandingPage() {
       <WebSiteJsonLd />
       <FAQPageJsonLd items={FAQ} />
         {/* ── Hero Section ────────────────────────────── */}
-        <section className="noise-overlay relative overflow-hidden px-6 pb-8 pt-16 sm:pb-12 sm:pt-24 lg:pt-28">
+        <section className="noise-overlay relative overflow-hidden px-6 pb-8 pt-24 sm:pb-12 sm:pt-32 lg:pt-36">
           {/* Ambient glow effects */}
           <div
             className="pointer-events-none absolute -left-64 -top-64 h-[600px] w-[600px] rounded-full"
@@ -219,8 +219,8 @@ export default function LandingPage() {
         {/* ── Section Divider ─────────────────────────── */}
         <div className="section-divider mx-auto max-w-4xl 2xl:max-w-[1000px] 3xl:max-w-[1200px]" />
 
-        {/* ── How it Works Section ────────────────────── */}
-        <section id="how-it-works" className="px-6 py-20 sm:py-28" aria-label="How PathForge works">
+        {/* ── The Process Section ────────────────────── */}
+        <section id="process" className="px-6 py-20 sm:py-28" aria-label="How PathForge works">
           <AnimatedSection className="mx-auto max-w-3xl text-center">
             <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-primary">
               Simple Process
@@ -429,7 +429,7 @@ export default function LandingPage() {
         <div className="section-divider mx-auto max-w-4xl 2xl:max-w-[1000px] 3xl:max-w-[1200px]" />
 
         {/* ── Comparison Table ────────────────────────── */}
-        <section id="comparison" className="px-6 py-20 sm:py-28" aria-label="Feature comparison">
+        <section id="pricing" className="px-6 py-20 sm:py-28" aria-label="Feature comparison">
           <AnimatedSection className="mx-auto max-w-3xl text-center">
             <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-primary">
               Why PathForge

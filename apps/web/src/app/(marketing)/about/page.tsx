@@ -54,7 +54,7 @@ export default function AboutPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden px-6 pb-16 pt-20 sm:pt-28">
+      <section className="relative overflow-hidden px-6 pb-16 pt-28 sm:pt-36">
         <div className="pointer-events-none absolute -left-64 -top-64 h-[500px] w-[500px] rounded-full" style={{ background: "radial-gradient(circle, oklch(0.7 0.18 270 / 8%), transparent 70%)" }} />
         <AnimatedSection className="relative mx-auto max-w-3xl text-center">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-medium text-primary">
@@ -95,10 +95,16 @@ export default function AboutPage() {
           <div className="flex flex-col items-center gap-6 rounded-2xl border border-border/20 bg-card/20 p-8 text-center sm:p-10">
             <div className="relative h-24 w-24 overflow-hidden rounded-2xl border-2 border-primary/20">
               <Image
-                src="/brand/logo-primary.png"
+                src="/brand/logo-light.png"
                 alt="Emre Dursun"
                 fill
-                className="object-cover"
+                className="object-cover dark:hidden"
+              />
+              <Image
+                src="/brand/logo-dark.png"
+                alt="Emre Dursun"
+                fill
+                className="hidden object-cover dark:block"
               />
             </div>
             <div>

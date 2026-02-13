@@ -41,7 +41,7 @@ const COOKIE_TYPES = [
 
 export default function CookiesPage() {
   return (
-    <article className="px-6 pb-24 pt-16 sm:pt-24">
+    <article className="px-6 pb-24 pt-24 sm:pt-32">
       <AnimatedSection className="mx-auto max-w-3xl">
         {/* Header */}
         <div className="mb-12 border-b border-border/30 pb-8">

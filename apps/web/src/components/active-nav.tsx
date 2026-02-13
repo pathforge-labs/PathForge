@@ -9,8 +9,10 @@ interface NavLink {
 }
 
 const NAV_LINKS: NavLink[] = [
-  { href: "#how-it-works", label: "How it Works" },
+  { href: "#process", label: "The Process" },
   { href: "#features", label: "Features" },
+  { href: "#pricing", label: "Pricing" },
+  { href: "/about", label: "About" },
 ];
 
 /**
@@ -54,7 +56,7 @@ export function ActiveNav() {
           <Link
             key={link.href}
             href={link.href}
-            className={`relative cursor-pointer rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+            className={`hover-underline relative cursor-pointer rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
               isActive
                 ? "text-foreground"
                 : "text-muted-foreground hover:text-foreground"

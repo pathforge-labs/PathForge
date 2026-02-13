@@ -48,7 +48,7 @@ export default function ComparisonPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden px-6 pb-16 pt-20 sm:pt-28">
+      <section className="relative overflow-hidden px-6 pb-16 pt-28 sm:pt-36">
         <div className="pointer-events-none absolute -right-64 -top-64 h-[500px] w-[500px] rounded-full" style={{ background: "radial-gradient(circle, oklch(0.7 0.18 270 / 8%), transparent 70%)" }} />
         <AnimatedSection className="relative mx-auto max-w-3xl text-center">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-medium text-primary">
