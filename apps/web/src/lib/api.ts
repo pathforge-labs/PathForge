@@ -217,3 +217,86 @@ export const ai = {
       body: JSON.stringify(params),
     }),
 };
+
+// ── Applications ────────────────────────────────────────────
+
+export interface ApplicationResponse {
+  id: string;
+  job_listing_id: string;
+  status: string;
+  notes: string | null;
+  source_url: string | null;
+  created_at: string;
+  updated_at: string;
+  job_title: string | null;
+  job_company: string | null;
+}
+
+export interface ApplicationListResponse {
+  items: ApplicationResponse[];
+  total: number;
+  page: number;
+  per_page: number;
+}
+
+export const applications = {
+  create: (jobListingId: string, status?: string, notes?: string) =>
+    request<ApplicationResponse>("/api/v1/applications", {
+      method: "POST",
+      body: JSON.stringify({ job_listing_id: jobListingId, status, notes }),
+    }),
+
+  list: (status?: string, page: number = 1, perPage: number = 20) => {
+    const params = new URLSearchParams();
+    if (status) params.set("status", status);
+    params.set("page", String(page));
+    params.set("per_page", String(perPage));
+    return request<ApplicationListResponse>(
+      `/api/v1/applications?${params.toString()}`,
+    );
+  },
+
+  get: (id: string) =>
+    request<ApplicationResponse>(`/api/v1/applications/${id}`),
+
+  updateStatus: (id: string, status: string) =>
+    request<ApplicationResponse>(`/api/v1/applications/${id}/status`, {
+      method: "PATCH",
+      body: JSON.stringify({ status }),
+    }),
+
+  delete: (id: string) =>
+    request<void>(`/api/v1/applications/${id}`, { method: "DELETE" }),
+};
+
+// ── Blacklist ───────────────────────────────────────────────
+
+export interface BlacklistResponse {
+  id: string;
+  company_name: string;
+  reason: string | null;
+  is_current_employer: boolean;
+  created_at: string;
+}
+
+export interface BlacklistListResponse {
+  items: BlacklistResponse[];
+  total: number;
+}
+
+export const blacklist = {
+  add: (companyName: string, reason?: string, isCurrentEmployer?: boolean) =>
+    request<BlacklistResponse>("/api/v1/blacklist", {
+      method: "POST",
+      body: JSON.stringify({
+        company_name: companyName,
+        reason,
+        is_current_employer: isCurrentEmployer ?? false,
+      }),
+    }),
+
+  list: () => request<BlacklistListResponse>("/api/v1/blacklist"),
+
+  remove: (id: string) =>
+    request<void>(`/api/v1/blacklist/${id}`, { method: "DELETE" }),
+};

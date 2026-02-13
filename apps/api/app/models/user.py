@@ -31,6 +31,9 @@ class User(UUIDMixin, TimestampMixin, Base):
     blacklist_entries: Mapped[list["BlacklistEntry"]] = relationship(
         "BlacklistEntry", back_populates="user", cascade="all, delete-orphan"
     )
+    applications: Mapped[list["Application"]] = relationship(
+        "Application", back_populates="user", cascade="all, delete-orphan"
+    )
 
     def __repr__(self) -> str:
         return f"<User {self.email}>"

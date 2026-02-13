@@ -12,6 +12,7 @@ const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: "📊" },
   { name: "Onboarding", href: "/dashboard/onboarding", icon: "🚀" },
   { name: "Job Matches", href: "/dashboard/matches", icon: "🎯" },
+  { name: "Applications", href: "/dashboard/applications", icon: "📋" },
   { name: "Resumes", href: "/dashboard/resumes", icon: "📄" },
   { name: "Career DNA", href: "/dashboard/career-dna", icon: "🧬" },
   { name: "Threat Radar", href: "/dashboard/threats", icon: "🛡️" },
