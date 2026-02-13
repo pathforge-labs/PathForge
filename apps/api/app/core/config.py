@@ -54,10 +54,25 @@ class Settings(BaseSettings):
         "http://localhost:5173",
     ]
 
-    # ── AI / LLM Providers (loaded when needed) ─────────────────
+    # ── AI / LLM Providers ─────────────────────────────────────
     anthropic_api_key: str = ""
     google_ai_api_key: str = ""
     voyage_api_key: str = ""
+
+    # ── LiteLLM Tiered Model Routing ─────────────────────────
+    # Models are tier-based and swappable via env without code changes.
+    # Primary (80%): workhorse for CV gen, match explanations
+    # Fast (15%): high-volume parsing, classification
+    # Deep (5%): complex career DNA analysis only
+    llm_primary_model: str = "anthropic/claude-sonnet-4-20250514"
+    llm_fast_model: str = "gemini/gemini-2.0-flash"
+    llm_deep_model: str = "anthropic/claude-sonnet-4-20250514"
+    llm_timeout: int = 60
+    llm_max_retries: int = 3
+
+    # ── Voyage AI Embeddings ─────────────────────────────────
+    voyage_model: str = "voyage-3"
+    voyage_embed_batch_size: int = 128
 
     @property
     def is_production(self) -> bool:
