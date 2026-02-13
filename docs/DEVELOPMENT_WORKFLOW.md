@@ -264,7 +264,82 @@ Every PR to `main` gets an auto-deployed preview URL via Vercel, enabling:
 
 ---
 
-## 8. Release Process
+## 8. Merge Policy — `main` → `production`
+
+> [!IMPORTANT]
+> `production` is the **live deployment branch**. All development happens on `main`.
+> Merges to `production` are **deliberate releases**, never ad-hoc pushes.
+
+### When to Merge
+
+| Trigger               | Cadence                     | Description                                                           |
+| :-------------------- | :-------------------------- | :-------------------------------------------------------------------- |
+| **Sprint Release**    | End of each sprint (weekly) | All sprint stories verified → merge `main` → `production`             |
+| **Milestone Release** | As needed                   | Major feature complete → cut `release/v{x.y.z}` → merge to both       |
+| **Hotfix**            | Immediate                   | Critical production bug → `hotfix/*` → merge to `main` + `production` |
+
+### Merge Rules
+
+1. **Never merge daily** — `main` is the active development branch; frequent merges to `production` defeat its purpose as a stable baseline
+2. **Sprint-end release (recommended cadence)** — At the end of each 1-week sprint, after all stories are verified and the `/retrospective` audit passes, merge `main` → `production`
+3. **Milestone release (for significant features)** — When a major feature or group of features is complete, create a `release/v{x.y.z}` branch, stabilize, then merge to `production`
+4. **Hotfixes bypass the sprint** — Critical production bugs get `hotfix/*` branches that merge directly to both `main` and `production`
+5. **Always use PRs** — Even for solo development, create a PR from `main` → `production` to maintain an audit trail and trigger CI checks
+6. **Tag every release** — Every merge to `production` gets a `v{x.y.z}` tag
+
+### Pre-Merge Checklist (`main` → `production`)
+
+- [ ] All sprint stories verified and marked ✅
+- [ ] `/retrospective` audit completed with grade ≥ B
+- [ ] Build passes (`pnpm build:web`)
+- [ ] No critical or high-severity open issues
+- [ ] Lighthouse score ≥ 90 (Performance, A11y, SEO)
+- [ ] Changelog generated from Conventional Commits
+- [ ] PR created with release notes summary
+- [ ] Tag created: `git tag v{x.y.z}`
+
+### Merge Flow Diagram
+
+```
+Sprint End / Milestone Complete
+        │
+        ▼
+┌─────────────────────┐
+│  /retrospective     │  ← Audit build, lint, code quality
+│  audit on main      │
+└────────┬────────────┘
+         │ Pass?
+    ┌────┴────┐
+   Yes       No → Fix issues on main, re-audit
+    │
+    ▼
+┌─────────────────────┐
+│  Create PR:         │
+│  main → production  │
+└────────┬────────────┘
+         │
+         ▼
+┌─────────────────────┐
+│  CI checks pass     │  ← Lint, type-check, build, tests
+│  Review & approve   │
+└────────┬────────────┘
+         │
+         ▼
+┌─────────────────────┐
+│  Merge + Tag        │
+│  git tag v{x.y.z}   │
+└────────┬────────────┘
+         │
+         ▼
+┌─────────────────────┐
+│  Deploy to          │
+│  production env     │
+└─────────────────────┘
+```
+
+---
+
+## 9. Release Process
 
 ### Versioning
 
@@ -292,7 +367,7 @@ PATCH — Bug fixes, patches
 
 ---
 
-## 9. Project Structure Reference
+## 10. Project Structure Reference
 
 ```
 pathforge/
@@ -345,7 +420,7 @@ pathforge/
 
 ---
 
-## 10. Development Environment
+## 11. Development Environment
 
 ### Prerequisites
 
@@ -390,7 +465,7 @@ pnpm lint
 
 ---
 
-## 11. Session Management Protocol
+## 12. Session Management Protocol
 
 ### Session Start
 
@@ -408,7 +483,7 @@ pnpm lint
 
 ---
 
-## 12. Code Review Standards
+## 13. Code Review Standards
 
 ### Self-Review Checklist
 
