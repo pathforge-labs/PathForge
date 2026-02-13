@@ -10,12 +10,14 @@ from __future__ import annotations
 
 import uuid
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.config import settings
 from app.core.database import get_db
+from app.core.rate_limit import limiter
 from app.core.security import get_current_user
 from app.models.matching import JobListing
 from app.models.user import User
@@ -105,7 +107,9 @@ class TailorCVResponse(BaseModel):
     summary="Parse raw resume text into structured data",
     status_code=status.HTTP_200_OK,
 )
+@limiter.limit(settings.rate_limit_parse)
 async def parse_resume(
+    request: Request,
     payload: ParseResumeRequest,
     _current_user: User = Depends(get_current_user),
 ) -> ParseResumeResponse:
@@ -137,7 +141,9 @@ async def parse_resume(
     summary="Generate and store embedding for a resume",
     status_code=status.HTTP_200_OK,
 )
+@limiter.limit(settings.rate_limit_embed)
 async def embed_resume(
+    request: Request,
     resume_id: uuid.UUID,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
@@ -190,7 +196,9 @@ async def embed_resume(
     summary="Find semantically matching jobs for a resume",
     status_code=status.HTTP_200_OK,
 )
+@limiter.limit(settings.rate_limit_match)
 async def match_resume(
+    request: Request,
     resume_id: uuid.UUID,
     payload: MatchRequest | None = None,
     current_user: User = Depends(get_current_user),
@@ -247,7 +255,9 @@ async def match_resume(
     summary="Generate a tailored CV for a specific job",
     status_code=status.HTTP_200_OK,
 )
+@limiter.limit(settings.rate_limit_tailor)
 async def tailor_cv(
+    request: Request,
     payload: TailorCVRequest,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),

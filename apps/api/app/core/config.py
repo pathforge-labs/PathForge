@@ -74,6 +74,14 @@ class Settings(BaseSettings):
     voyage_model: str = "voyage-3"
     voyage_embed_batch_size: int = 128
 
+    # ── Rate Limiting ────────────────────────────────────────────
+    # Per-user limits on expensive AI endpoints (req/minute)
+    rate_limit_parse: str = "30/minute"
+    rate_limit_embed: str = "20/minute"
+    rate_limit_match: str = "30/minute"
+    rate_limit_tailor: str = "10/minute"
+    ratelimit_storage_uri: str = "memory://"
+
     @property
     def is_production(self) -> bool:
         return self.environment == "production"
