@@ -102,3 +102,118 @@ export interface HealthResponse {
 export const health = {
   ready: () => request<HealthResponse>("/api/v1/health/ready"),
 };
+
+// ── AI Engine ───────────────────────────────────────────────
+
+// Parse Resume
+export interface ParseResumeResponse {
+  full_name: string;
+  email: string;
+  phone: string;
+  location: string;
+  summary: string;
+  skills: Array<{ name: string; category?: string; level?: string }>;
+  experience: Array<{
+    title: string;
+    company: string;
+    start_date?: string;
+    end_date?: string;
+    description?: string;
+  }>;
+  education: Array<{
+    degree: string;
+    institution: string;
+    year?: string;
+  }>;
+  certifications: Array<{ name: string; issuer?: string; year?: string }>;
+  languages: Array<{ name: string; proficiency?: string }>;
+}
+
+// Embed Resume
+export interface EmbedResumeResponse {
+  resume_id: string;
+  dimensions: number;
+  message: string;
+}
+
+// Match Resume
+export interface MatchCandidate {
+  job_id: string;
+  score: number;
+  title: string;
+  company: string;
+}
+
+export interface MatchResponse {
+  resume_id: string;
+  matches: MatchCandidate[];
+  total: number;
+}
+
+// Tailor CV
+export interface TailorCVResponse {
+  tailored_summary: string;
+  tailored_skills: string[];
+  tailored_experience: string[];
+  diffs: Array<{
+    field: string;
+    original: string;
+    modified: string;
+    reason: string;
+  }>;
+  ats_score: number;
+  ats_suggestions: string[];
+}
+
+// Ingest Jobs
+export interface IngestJobsResponse {
+  total_fetched: number;
+  total_new: number;
+  total_duplicates: number;
+  providers: Array<{
+    provider: string;
+    fetched: number;
+    new: number;
+    duplicates: number;
+    errors: number;
+  }>;
+  embedded: number;
+}
+
+export const ai = {
+  parseResume: (rawText: string) =>
+    request<ParseResumeResponse>("/api/v1/ai/parse-resume", {
+      method: "POST",
+      body: JSON.stringify({ raw_text: rawText }),
+    }),
+
+  embedResume: (resumeId: string) =>
+    request<EmbedResumeResponse>(`/api/v1/ai/embed-resume/${resumeId}`, {
+      method: "POST",
+    }),
+
+  matchResume: (resumeId: string, topK: number = 20) =>
+    request<MatchResponse>(`/api/v1/ai/match-resume/${resumeId}`, {
+      method: "POST",
+      body: JSON.stringify({ top_k: topK }),
+    }),
+
+  tailorCV: (resumeId: string, jobId: string) =>
+    request<TailorCVResponse>("/api/v1/ai/tailor-cv", {
+      method: "POST",
+      body: JSON.stringify({ resume_id: resumeId, job_id: jobId }),
+    }),
+
+  ingestJobs: (params: {
+    keywords: string;
+    location?: string;
+    country?: string;
+    pages?: number;
+    results_per_page?: number;
+    embed?: boolean;
+  }) =>
+    request<IngestJobsResponse>("/api/v1/ai/ingest-jobs", {
+      method: "POST",
+      body: JSON.stringify(params),
+    }),
+};
