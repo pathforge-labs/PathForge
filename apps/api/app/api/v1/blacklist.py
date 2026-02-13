@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import uuid
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -99,14 +99,23 @@ async def add_to_blacklist(
 
 @router.get("", response_model=BlacklistListResponse)
 async def list_blacklist(
+    page: int = Query(1, ge=1),
+    per_page: int = Query(50, ge=1, le=200),
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    """List all companies on the user's blacklist."""
+    """List all companies on the user's blacklist with pagination."""
+    base = select(BlacklistEntry).where(BlacklistEntry.user_id == current_user.id)
+
+    # Count
+    count_stmt = select(func.count()).select_from(base.subquery())
+    total = await db.scalar(count_stmt) or 0
+
+    # Fetch
     result = await db.execute(
-        select(BlacklistEntry)
-        .where(BlacklistEntry.user_id == current_user.id)
-        .order_by(BlacklistEntry.created_at.desc())
+        base.order_by(BlacklistEntry.created_at.desc())
+        .offset((page - 1) * per_page)
+        .limit(per_page)
     )
     entries = list(result.scalars().all())
 
@@ -121,7 +130,7 @@ async def list_blacklist(
             )
             for e in entries
         ],
-        total=len(entries),
+        total=total,
     )
 
 

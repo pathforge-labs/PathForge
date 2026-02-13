@@ -114,7 +114,7 @@ class TestIngestionPipeline:
 
         provider = AsyncMock()
         provider.name = "failing"
-        provider.search = AsyncMock(side_effect=Exception("Network error"))
+        provider.search = AsyncMock(side_effect=OSError("Network error"))
 
         with patch("app.jobs.ingestion._dedupe_and_insert", new_callable=AsyncMock) as mock_dedup:
             mock_dedup.return_value = (0, 0)

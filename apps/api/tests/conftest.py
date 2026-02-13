@@ -90,9 +90,19 @@ async def db_session(test_engine) -> AsyncGenerator[AsyncSession, None]:
     async with test_engine.connect() as conn:
         transaction = await conn.begin()
 
+        # Use a nested savepoint so session.commit() doesn't
+        # finalize the outer transaction (avoids SAWarning)
+        nested = await conn.begin_nested()
+
         session = AsyncSession(bind=conn, expire_on_commit=False)
 
-        # Prevent the session from committing — we want rollback isolation
+        # Restart nested savepoint after each session commit
+        @event.listens_for(session.sync_session, "after_transaction_end")
+        def _restart_nested(session_sync, transaction_sync):
+            nonlocal nested
+            if not nested.is_active:
+                nested = conn.sync_connection.begin_nested()
+
         yield session
 
         await session.close()

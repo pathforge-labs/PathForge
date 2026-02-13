@@ -44,6 +44,7 @@ class Settings(BaseSettings):
 
     # ── JWT Authentication ──────────────────────────────────────
     jwt_secret: str = "change-me-in-production-use-a-real-secret"
+    jwt_refresh_secret: str = "change-me-refresh-secret-must-differ"
     jwt_algorithm: str = "HS256"
     jwt_access_token_expire_minutes: int = 60
     jwt_refresh_token_expire_days: int = 30

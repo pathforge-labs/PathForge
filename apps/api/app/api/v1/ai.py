@@ -31,7 +31,10 @@ router = APIRouter(prefix="/ai", tags=["AI Engine"])
 class ParseResumeRequest(BaseModel):
     """Request body for resume parsing."""
 
-    raw_text: str = Field(..., min_length=50, description="Raw resume/CV text to parse")
+    raw_text: str = Field(
+        ..., min_length=50, max_length=100_000,
+        description="Raw resume/CV text to parse (max 100KB)",
+    )
 
 
 class ParseResumeResponse(BaseModel):
@@ -83,8 +86,8 @@ class MatchResponse(BaseModel):
 class TailorCVRequest(BaseModel):
     """Request body for CV tailoring."""
 
-    resume_id: str = Field(..., description="UUID of the resume to tailor")
-    job_id: str = Field(..., description="UUID of the target job listing")
+    resume_id: uuid.UUID = Field(..., description="UUID of the resume to tailor")
+    job_id: uuid.UUID = Field(..., description="UUID of the target job listing")
 
 
 class TailorCVResponse(BaseModel):
@@ -273,8 +276,8 @@ async def tailor_cv(
     from app.ai.resume_parser import ResumeParser
     from app.services.resume_service import ResumeService
 
-    resume_id = uuid.UUID(payload.resume_id)
-    job_id = uuid.UUID(payload.job_id)
+    resume_id = payload.resume_id
+    job_id = payload.job_id
 
     resume = await ResumeService.get_by_id(db, resume_id)
     if not resume:
@@ -394,7 +397,7 @@ async def ingest_jobs(
             from app.jobs.embed_pipeline import embed_new_jobs
 
             embedded = await embed_new_jobs(session=db)
-        except Exception:
+        except (ValueError, RuntimeError, ImportError):
             import logging
 
             logging.getLogger(__name__).exception("Embedding failed, jobs saved without embeddings")

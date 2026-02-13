@@ -37,7 +37,7 @@ router = APIRouter(prefix="/applications", tags=["Applications"])
 class CreateApplicationRequest(BaseModel):
     """Create a new application."""
 
-    job_listing_id: str = Field(..., description="UUID of the job listing")
+    job_listing_id: uuid.UUID = Field(..., description="UUID of the job listing")
     status: str = Field(
         default=ApplicationStatus.SAVED,
         description="Initial status (saved or applied)",
@@ -126,7 +126,7 @@ async def create_app_endpoint(
         app = await create_application(
             db,
             user_id=current_user.id,
-            job_listing_id=uuid.UUID(payload.job_listing_id),
+            job_listing_id=payload.job_listing_id,
             status=payload.status,
             notes=payload.notes,
         )

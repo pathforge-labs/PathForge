@@ -122,7 +122,7 @@ async def ingest_jobs(
                     results_per_page=results_per_page,
                 )
                 raw_listings.extend(page_results)
-            except Exception:
+            except (OSError, ValueError, KeyError):
                 logger.exception("Error fetching page %d from %s", page, provider.name)
                 stats.errors += 1
 

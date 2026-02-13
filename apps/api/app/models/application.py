@@ -7,7 +7,7 @@ Job application lifecycle tracking and tailored CV versioning.
 import uuid
 from enum import StrEnum
 
-from sqlalchemy import ForeignKey, Integer, String, Text, UniqueConstraint
+from sqlalchemy import CheckConstraint, ForeignKey, Integer, String, Text, UniqueConstraint
 from sqlalchemy.dialects.postgresql import JSON, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -53,6 +53,10 @@ class Application(UUIDMixin, TimestampMixin, Base):
     __tablename__ = "applications"
     __table_args__ = (
         UniqueConstraint("user_id", "job_listing_id", name="uq_user_job_application"),
+        CheckConstraint(
+            "status IN ('saved','applied','interviewing','offered','rejected','withdrawn')",
+            name="ck_application_status",
+        ),
     )
 
     user_id: Mapped[uuid.UUID] = mapped_column(

@@ -51,10 +51,15 @@ def create_access_token(
 
 
 def create_refresh_token(subject: str) -> str:
-    """Create a JWT refresh token with longer expiry."""
+    """Create a JWT refresh token with longer expiry and unique jti."""
     expire = datetime.now(UTC) + timedelta(days=settings.jwt_refresh_token_expire_days)
-    to_encode = {"sub": subject, "exp": expire, "type": "refresh"}
-    return jwt.encode(to_encode, settings.jwt_secret, algorithm=settings.jwt_algorithm)
+    to_encode = {
+        "sub": subject,
+        "exp": expire,
+        "type": "refresh",
+        "jti": str(_uuid.uuid4()),  # unique ID for token rotation/revocation
+    }
+    return jwt.encode(to_encode, settings.jwt_refresh_secret, algorithm=settings.jwt_algorithm)
 
 
 async def get_current_user(

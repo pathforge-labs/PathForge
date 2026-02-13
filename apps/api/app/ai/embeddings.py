@@ -9,6 +9,7 @@ and used for cosine similarity matching.
 
 from __future__ import annotations
 
+import asyncio
 import logging
 import time
 
@@ -68,7 +69,9 @@ class EmbeddingService:
 
         start = time.monotonic()
         client = self._get_client()
-        result = client.embed(
+        # Run sync Voyage SDK call off the event loop
+        result = await asyncio.to_thread(
+            client.embed,
             texts=[text],
             model=self._model,
             input_type="document",
@@ -100,7 +103,9 @@ class EmbeddingService:
 
         for i in range(0, len(texts), self._batch_size):
             chunk = texts[i : i + self._batch_size]
-            result = client.embed(
+            # Run sync Voyage SDK call off the event loop
+            result = await asyncio.to_thread(
+                client.embed,
                 texts=chunk,
                 model=self._model,
                 input_type="document",

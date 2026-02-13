@@ -9,6 +9,7 @@ Pipeline: resume embedding → pgvector top-K query → LLM explanation → stor
 from __future__ import annotations
 
 import logging
+import math
 import uuid
 from typing import Any
 
@@ -55,7 +56,14 @@ class MatchingService:
         Returns:
             Ranked list of MatchCandidate objects with scores.
         """
-        embedding_str = "[" + ",".join(str(f) for f in resume_embedding) + "]"
+        # Validate all values are finite floats (guards against NaN/Inf injection)
+        validated = []
+        for f in resume_embedding:
+            val = float(f)
+            if not math.isfinite(val):
+                raise ValueError(f"Non-finite embedding value detected: {val}")
+            validated.append(val)
+        embedding_str = "[" + ",".join(str(v) for v in validated) + "]"
 
         query = text("""
             SELECT
