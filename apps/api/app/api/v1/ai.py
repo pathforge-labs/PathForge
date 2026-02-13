@@ -316,3 +316,93 @@ async def tailor_cv(
         ats_score=tailored.ats_score,
         ats_suggestions=tailored.ats_suggestions,
     )
+
+
+# ── Job Ingestion ──────────────────────────────────────────────
+
+
+class IngestJobsRequest(BaseModel):
+    """Request body for job ingestion."""
+
+    keywords: str = Field(..., min_length=2, max_length=200, description="Search keywords")
+    location: str = Field("", max_length=200, description="Location filter")
+    country: str = Field("nl", max_length=5, description="ISO 3166-1 alpha-2 country code")
+    pages: int = Field(1, ge=1, le=10, description="Number of pages per provider")
+    results_per_page: int = Field(20, ge=1, le=50, description="Results per page")
+    embed: bool = Field(True, description="Embed new listings after ingestion")
+
+
+class IngestJobsResponse(BaseModel):
+    """Response for job ingestion."""
+
+    total_fetched: int
+    total_new: int
+    total_duplicates: int
+    providers: list[dict]
+    embedded: int = 0
+
+
+@router.post(
+    "/ingest-jobs",
+    response_model=IngestJobsResponse,
+    summary="Ingest job listings from external APIs",
+    status_code=status.HTTP_200_OK,
+)
+@limiter.limit(settings.rate_limit_parse)
+async def ingest_jobs(
+    request: Request,
+    payload: IngestJobsRequest,
+    db: AsyncSession = Depends(get_db),
+    _current_user: User = Depends(get_current_user),
+) -> IngestJobsResponse:
+    """
+    Trigger job ingestion from configured providers (Adzuna, Jooble).
+
+    Fetches jobs, deduplicates against DB, inserts new listings,
+    and optionally embeds them for semantic matching.
+    """
+    from app.jobs.ingestion import ingest_jobs as run_ingestion
+    from app.jobs.providers.adzuna import AdzunaProvider
+    from app.jobs.providers.jooble import JoobleProvider
+
+    # Build list of configured providers
+    providers = []
+    if settings.adzuna_app_id and settings.adzuna_app_key:
+        providers.append(AdzunaProvider())
+    if settings.jooble_api_key:
+        providers.append(JoobleProvider())
+
+    if not providers:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No job providers configured. Set ADZUNA_APP_ID/ADZUNA_APP_KEY or JOOBLE_API_KEY.",
+        )
+
+    result = await run_ingestion(
+        session=db,
+        providers=providers,
+        keywords=payload.keywords,
+        location=payload.location,
+        country=payload.country,
+        pages=payload.pages,
+        results_per_page=payload.results_per_page,
+    )
+
+    embedded = 0
+    if payload.embed and result.total_new > 0:
+        try:
+            from app.jobs.embed_pipeline import embed_new_jobs
+
+            embedded = await embed_new_jobs(session=db)
+        except Exception:
+            import logging
+
+            logging.getLogger(__name__).exception("Embedding failed, jobs saved without embeddings")
+
+    return IngestJobsResponse(
+        total_fetched=result.total_fetched,
+        total_new=result.total_new,
+        total_duplicates=result.total_duplicates,
+        providers=[s.to_dict() for s in result.providers],
+        embedded=embedded,
+    )

@@ -7,7 +7,7 @@ Aggregated job postings (via API) and semantic match results.
 import uuid
 
 from pgvector.sqlalchemy import Vector
-from sqlalchemy import Float, ForeignKey, String, Text
+from sqlalchemy import Boolean, Float, ForeignKey, String, Text
 from sqlalchemy.dialects.postgresql import JSON, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -23,8 +23,13 @@ class JobListing(UUIDMixin, TimestampMixin, Base):
     location: Mapped[str | None] = mapped_column(String(255), nullable=True)
     work_type: Mapped[str | None] = mapped_column(String(50), nullable=True)
     salary_info: Mapped[str | None] = mapped_column(String(255), nullable=True)
-    source_url: Mapped[str | None] = mapped_column(Text, nullable=True, unique=True)
+    source_url: Mapped[str | None] = mapped_column(Text, nullable=True)
     source_platform: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    external_id: Mapped[str | None] = mapped_column(String(255), nullable=True, index=True)
+    fingerprint: Mapped[str | None] = mapped_column(
+        String(64), nullable=True, unique=True, index=True,
+        comment="SHA256 of normalized(title+company+location) for dedup",
+    )
     structured_data: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     embedding = mapped_column(Vector(3072), nullable=True)
 

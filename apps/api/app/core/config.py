@@ -82,6 +82,11 @@ class Settings(BaseSettings):
     rate_limit_tailor: str = "10/minute"
     ratelimit_storage_uri: str = "memory://"
 
+    # ── Job Aggregation Providers ────────────────────────────────
+    adzuna_app_id: str = ""
+    adzuna_app_key: str = ""
+    jooble_api_key: str = ""
+
     @property
     def is_production(self) -> bool:
         return self.environment == "production"
