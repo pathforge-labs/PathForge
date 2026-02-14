@@ -51,7 +51,10 @@ def _compile_json_sqlite(type_, compiler, **kw):
 
 # ── Now import models (which triggers Base.metadata population) ──
 from app.models.base import Base
-from app.models import User, Resume, Skill, Preference, BlacklistEntry, JobListing, MatchResult, Application, CVVersion
+from app.models import (
+    User, Resume, Skill, Preference, BlacklistEntry, JobListing, MatchResult,
+    Application, CVVersion, FunnelEvent, MarketInsight, CVExperiment,
+)
 
 
 # ── Test Database ─────────────────────────────────────────────

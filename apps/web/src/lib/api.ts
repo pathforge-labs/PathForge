@@ -300,3 +300,165 @@ export const blacklist = {
   remove: (id: string) =>
     request<void>(`/api/v1/blacklist/${id}`, { method: "DELETE" }),
 };
+
+// ── Analytics ───────────────────────────────────────────────
+
+export type FunnelStage =
+  | "viewed"
+  | "saved"
+  | "cv_tailored"
+  | "applied"
+  | "interviewing"
+  | "offered"
+  | "accepted"
+  | "rejected"
+  | "withdrawn";
+
+export type InsightType =
+  | "skill_demand"
+  | "salary_trend"
+  | "market_heat"
+  | "competition_level"
+  | "application_velocity";
+
+export type ExperimentStatus = "running" | "completed" | "cancelled";
+
+export interface FunnelEventResponse {
+  id: string;
+  user_id: string;
+  application_id: string | null;
+  stage: FunnelStage;
+  metadata: Record<string, unknown> | null;
+  created_at: string;
+}
+
+export interface FunnelStageMetric {
+  stage: FunnelStage;
+  count: number;
+  conversion_rate: number;
+}
+
+export interface FunnelMetricsResponse {
+  user_id: string;
+  period: string;
+  total_events: number;
+  stages: FunnelStageMetric[];
+}
+
+export interface FunnelTimelinePoint {
+  date: string;
+  stage: FunnelStage;
+  count: number;
+}
+
+export interface FunnelTimelineResponse {
+  user_id: string;
+  days: number;
+  data: FunnelTimelinePoint[];
+}
+
+export interface MarketInsightResponse {
+  id: string;
+  user_id: string;
+  insight_type: InsightType;
+  data: Record<string, unknown>;
+  period: string;
+  generated_at: string;
+}
+
+export interface MarketInsightsListResponse {
+  user_id: string;
+  insights: MarketInsightResponse[];
+  count: number;
+}
+
+export interface CVExperimentResponse {
+  id: string;
+  user_id: string;
+  job_listing_id: string;
+  variant_a_id: string;
+  variant_b_id: string;
+  winner_id: string | null;
+  status: ExperimentStatus;
+  metrics: Record<string, unknown> | null;
+  hypothesis: string | null;
+  created_at: string;
+  completed_at: string | null;
+}
+
+export interface CVExperimentsListResponse {
+  user_id: string;
+  experiments: CVExperimentResponse[];
+  count: number;
+}
+
+export const analytics = {
+  // Funnel pipeline
+  recordFunnelEvent: (
+    stage: FunnelStage,
+    applicationId?: string,
+    metadata?: Record<string, unknown>,
+  ) =>
+    request<FunnelEventResponse>("/api/v1/analytics/funnel/events", {
+      method: "POST",
+      body: JSON.stringify({
+        stage,
+        application_id: applicationId,
+        metadata,
+      }),
+    }),
+
+  getFunnelMetrics: (period: string = "30d") =>
+    request<FunnelMetricsResponse>(
+      `/api/v1/analytics/funnel/metrics?period=${period}`,
+    ),
+
+  getFunnelTimeline: (days: number = 30) =>
+    request<FunnelTimelineResponse>(
+      `/api/v1/analytics/funnel/timeline?days=${days}`,
+    ),
+
+  // Market intelligence
+  getMarketInsights: () =>
+    request<MarketInsightsListResponse>("/api/v1/analytics/market/insights"),
+
+  generateInsight: (insightType: InsightType, period: string = "30d") =>
+    request<MarketInsightResponse>("/api/v1/analytics/market/insights/generate", {
+      method: "POST",
+      body: JSON.stringify({ insight_type: insightType, period }),
+    }),
+
+  // CV experiments
+  listExperiments: () =>
+    request<CVExperimentsListResponse>("/api/v1/analytics/experiments"),
+
+  createExperiment: (
+    jobListingId: string,
+    variantAId: string,
+    variantBId: string,
+    hypothesis?: string,
+  ) =>
+    request<CVExperimentResponse>("/api/v1/analytics/experiments", {
+      method: "POST",
+      body: JSON.stringify({
+        job_listing_id: jobListingId,
+        variant_a_id: variantAId,
+        variant_b_id: variantBId,
+        hypothesis,
+      }),
+    }),
+
+  recordResult: (
+    experimentId: string,
+    winnerId: string,
+    metrics?: Record<string, unknown>,
+  ) =>
+    request<CVExperimentResponse>(
+      `/api/v1/analytics/experiments/${experimentId}/result`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({ winner_id: winnerId, metrics }),
+      },
+    ),
+};
+
