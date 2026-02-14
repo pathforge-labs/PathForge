@@ -49,15 +49,12 @@
 
 ---
 
-## 📌 Open Items (Priority Order)
+## 📌 Sprint Tracking
 
-1. **Sprint 6 continuation** — Remaining navbar stories (S6-04 responsive polish, etc.)
-2. **Sprint 7: Career Intelligence Dashboard** — Threat Radar, Career DNA, analytics widgets
-3. **Alembic migration** for CHECK constraint on `applications.status`
-4. **Background task queue** (Celery/Dramatiq) for AI pipeline operations
-5. **Redis-backed token blacklist** for JWT revocation
-6. **GitHub Actions CI/CD** — Implement `ci.yml` per `DEVELOPMENT_WORKFLOW.md`
-7. **Start LinkedIn content marketing** (Recommendation #5)
+> **⚠️ Task tracking has moved to `docs/ROADMAP.md` (SSOT)**
+> See `.agent/rules/sprint-tracking.md` for the full protocol.
+>
+> Do NOT add task lists to this file. This section is a pointer only.
 
 ---
 

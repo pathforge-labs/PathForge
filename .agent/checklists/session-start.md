@@ -9,13 +9,34 @@
 ## 🔄 Context Loading
 
 - [ ] **session-context.md** loaded
-  - Last session summary reviewed
-  - Open items identified
+  - Last session handoff notes reviewed
+  - ⚠️ This file contains handoff context ONLY — not task tracking
 - [ ] **session-state.json** loaded
-  - Last commit verified
-  - Current task identified
+  - Last commit, branch, test count verified
+  - ⚠️ This file contains metadata ONLY — not task tracking
 - [ ] **rules.md** loaded (if project has one)
   - Project-specific rules acknowledged
+
+---
+
+## 🗺️ Sprint State Validation (Auto)
+
+> **MANDATORY**: This section replaces all previous task tracking approaches.
+> See `.agent/rules/sprint-tracking.md` for full protocol.
+
+- [ ] **docs/ROADMAP.md** loaded (SSOT)
+  - Current sprint identified
+  - In-progress tasks (`[/]`) identified
+  - Next priority tasks (`[ ]`) identified
+- [ ] **Present to user**:
+  - Current sprint name + goal
+  - 🔴 In-progress tasks
+  - 📋 Next priority tasks
+  - ⚠️ Blockers or dependencies
+- [ ] **Validate against ARCHITECTURE.md**
+  - Sprint numbers match Section 7
+  - No drift between roadmap and board
+- [ ] **docs/CHANGELOG.md** reviewed for recent entries
 
 ---
 

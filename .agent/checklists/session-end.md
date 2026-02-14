@@ -9,10 +9,30 @@
 ## 📝 Context Preservation
 
 - [ ] **session-context.md** updated with:
-  - What was accomplished
-  - Open items and next steps
+  - Session summary (handoff notes only)
+  - Handoff notes for next session
   - Any blockers discovered
-- [ ] **session-state.json** updated (if applicable)
+  - ⚠️ NO task lists — use ROADMAP.md instead
+- [ ] **session-state.json** updated:
+  - Last commit, branch, test count
+  - ⚠️ NO task arrays — use ROADMAP.md instead
+
+---
+
+## 🗺️ Sprint State Sync (Auto)
+
+> **MANDATORY**: See `.agent/rules/sprint-tracking.md` for full protocol.
+
+- [ ] **docs/ROADMAP.md** updated:
+  - Completed tasks marked `[x]`
+  - In-progress tasks marked `[/]`
+  - New ad-hoc work logged in Ad-Hoc Work Log table
+  - Sprint velocity table updated
+- [ ] **docs/CHANGELOG.md** updated:
+  - This session's changes logged under current sprint
+- [ ] **Verify no duplicate tracking**:
+  - No task arrays in `session-state.json`
+  - No task lists in `session-context.md`
 
 ---
 
