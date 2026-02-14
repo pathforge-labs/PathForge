@@ -5,6 +5,26 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [Sprint 6b] — Analytics — 2026-02-14
+
+### Added
+
+- **Funnel pipeline**: `FunnelEvent` model + 3 endpoints (record, metrics, timeline)
+- **Market intelligence**: `MarketInsight` model + 2 endpoints (list, generate)
+- **CV A/B experiments**: `CVExperiment` model + 3 endpoints (list, create, result)
+- Analytics service layer with 8 public methods + 5 compute functions
+- 15 Pydantic schemas for request/response validation
+- Alembic migration `4c5d6e7f8g9h` — 3 tables, 10 indexes
+- Frontend analytics dashboard at `/dashboard/analytics`
+- Typed API client with 10 TypeScript interfaces + 8 functions
+- 17 new tests (146 total, 0 failures)
+
+### Fixed
+
+- `FunnelEventResponse` metadata field mapping (`validation_alias="metadata_"`)
+
+---
+
 ## [Sprint 6a.1] — Performance Optimization — 2026-02-14
 
 ### Added

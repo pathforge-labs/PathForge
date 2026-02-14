@@ -1,9 +1,9 @@
 {
   "schemaVersion": "2.0.0",
   "session": {
-    "lastDate": "2026-02-13",
-    "lastTime": "19:00:00+01:00",
-    "focus": "Sprint 6 — Navbar, Drawer, Theme System + Gitflow Setup",
+    "lastDate": "2026-02-14",
+    "lastTime": "03:50:00+01:00",
+    "focus": "Sprint 6b — Analytics (Funnel, Market Intelligence, CV A/B)",
     "status": "completed"
   },
   "project": {
@@ -19,13 +19,13 @@
       "development": "main",
       "production": "production"
     },
-    "lastCommit": "09f5ae0",
+    "lastCommit": "477ff86",
     "workflow": "docs/DEVELOPMENT_WORKFLOW.md"
   },
   "sprintTracking": "docs/ROADMAP.md",
   "testSuite": {
-    "total": 129,
-    "passed": 129,
+    "total": 146,
+    "passed": 146,
     "failed": 0,
     "warnings": 0
   },
@@ -45,6 +45,7 @@
     "All Sprint 3-5 audit findings resolved — production-ready",
     "Gitflow is live: main (dev) + production (releases), merge at sprint-end",
     "Follow docs/DEVELOPMENT_WORKFLOW.md for all Git operations",
-    "Conventional Commits required: type(scope): description"
+    "Conventional Commits required: type(scope): description",
+    "Sprint 6b Analytics complete — 3 models, 8 endpoints, 146 tests"
   ]
 }

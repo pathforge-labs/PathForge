@@ -103,13 +103,13 @@
 - [x] @next/bundle-analyzer integration
 - [x] Lucide icon audit (confirmed tree-shakeable)
 
-### Sprint 6b — Analytics (📋 Current)
+### Sprint 6b — Analytics (✅ Complete)
 
 > Resumes original Sprint 6 definition from ARCHITECTURE.md.
 
-- [ ] Funnel pipeline event tracking
-- [ ] Market intelligence dashboard
-- [ ] CV A/B tracking system
+- [x] Funnel pipeline event tracking
+- [x] Market intelligence dashboard
+- [x] CV A/B tracking system
 
 ### Sprint 7 — Mobile + Production (⏳ Upcoming)
 
@@ -166,12 +166,13 @@
 
 > Unplanned tasks that emerged during development. These are logged here and attributed to the sprint during which they occurred.
 
-| Date       | Task                                 | During Sprint | Status    | Notes                                 |
-| :--------- | :----------------------------------- | :------------ | :-------- | :------------------------------------ |
-| 2026-02-13 | Production branch setup & gitflow    | 6a            | ✅ Done   | Documented in DEVELOPMENT_WORKFLOW.md |
-| 2026-02-13 | Retrospective audit remediation      | 5→6a          | ✅ Done   | 11 findings across 12 files           |
-| 2026-02-14 | Performance optimization (Tier 1-4)  | 6a.1          | ✅ Done   | Image, scroll, bundle optimizations   |
-| 2026-02-14 | Professional Project Tracking System | 6b            | 🔄 Active | This system itself                    |
+| Date       | Task                                 | During Sprint | Status  | Notes                                 |
+| :--------- | :----------------------------------- | :------------ | :------ | :------------------------------------ |
+| 2026-02-13 | Production branch setup & gitflow    | 6a            | ✅ Done | Documented in DEVELOPMENT_WORKFLOW.md |
+| 2026-02-13 | Retrospective audit remediation      | 5→6a          | ✅ Done | 11 findings across 12 files           |
+| 2026-02-14 | Performance optimization (Tier 1-4)  | 6a.1          | ✅ Done | Image, scroll, bundle optimizations   |
+| 2026-02-14 | Professional Project Tracking System | 6b            | ✅ Done | This system itself                    |
+| 2026-02-14 | Sprint 6b Analytics implementation   | 6b            | ✅ Done | 3 models, 8 endpoints, 17 tests       |
 
 ---
 
@@ -185,4 +186,4 @@
 | 5      | 6             | 6         | 2            | ~3       |
 | 6a     | 12            | 12        | 3            | ~3       |
 | 6a.1   | 6             | 6         | 0            | 1        |
-| 6b     | 3             | 0         | 1            | —        |
+| 6b     | 3             | 3         | 2            | 1        |
