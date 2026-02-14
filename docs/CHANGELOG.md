@@ -5,6 +5,26 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [Ad-Hoc] — Agent Customization Architecture — 2026-02-14
+
+### Added
+
+- `GEMINI.md` global rules file (cross-workspace identity, principles, code standards)
+- Workspace rules: `architecture.md`, `documentation.md` (2 new)
+- Workflows: `/review` (quality gate), `/migrate` (Alembic lifecycle) (2 new)
+- `docs/AGENT_ARCHITECTURE.md` — comprehensive 3-layer system reference
+- `docs/MCP_ARCHITECTURE.md` — MCP server strategy and expansion plan
+
+### Changed
+
+- Enhanced `coding-style.md` with Python/FastAPI standards
+- Enhanced `security.md` with GDPR compliance and AI pipeline safety
+- Enhanced `testing.md` with pytest conventions and example patterns
+- Updated `/deploy` workflow with PathForge-specific Vercel + Railway config
+- Updated `session-state.json` capabilities: rules 6→8, workflows 14→16
+
+---
+
 ## [Sprint 6b] — Analytics — 2026-02-14
 
 ### Added
