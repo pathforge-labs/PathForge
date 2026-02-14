@@ -1,14 +1,15 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { MatchCard } from "@/components/match-card";
 import { ai, type MatchCandidate, type TailorCVResponse } from "@/lib/api";
 
 export default function MatchesPage() {
+  const router = useRouter();
   const [matches, setMatches] = useState<MatchCandidate[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -152,7 +153,7 @@ export default function MatchesPage() {
                 the best opportunities for you.
               </p>
             </div>
-            <Button onClick={() => window.location.href = "/dashboard/onboarding"}>
+            <Button onClick={() => router.push("/dashboard/onboarding")}>
               🚀 Start Onboarding
             </Button>
           </CardContent>

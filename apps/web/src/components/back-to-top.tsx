@@ -1,24 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { ArrowUp } from "lucide-react";
+import { useScrollState } from "@/hooks/use-scroll-state";
 
 /**
  * Floating back-to-top button that appears after scrolling past
  * the hero section. Smooth-scrolls to top on click.
  * Tier-1 design: subtle glass effect with brand gradient hover.
+ *
+ * Performance: Uses shared useScrollState hook — one rAF-throttled
+ * scroll listener for the entire app.
  */
 export function BackToTop() {
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    function onScroll() {
-      setVisible(window.scrollY > 500);
-    }
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  const { scrollY } = useScrollState();
+  const visible = scrollY > 500;
 
   function scrollToTop() {
     window.scrollTo({ top: 0, behavior: "smooth" });

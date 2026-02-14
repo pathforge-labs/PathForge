@@ -1,32 +1,32 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, type RefObject } from "react";
+import { useScrollState } from "@/hooks/use-scroll-state";
+
+interface NavScrollEffectProps {
+  navRef: RefObject<HTMLElement | null>;
+}
 
 /**
  * Adds/removes the `nav-scrolled` class on the <nav> element
- * based on scroll position. Activates after scrolling past the
- * hero section (~80px threshold) for a premium glass-intensify effect.
+ * based on scroll position. Uses a React ref instead of DOM query.
+ *
+ * Performance: Uses shared useScrollState hook — one rAF-throttled
+ * scroll listener for the entire app (replaces per-component listener).
  */
-export function NavScrollEffect() {
+export function NavScrollEffect({ navRef }: NavScrollEffectProps) {
+  const { isScrolled } = useScrollState();
+
   useEffect(() => {
-    const nav = document.querySelector("nav[aria-label='Main navigation']");
+    const nav = navRef.current;
     if (!nav) return;
 
-    const THRESHOLD = 80;
-
-    function onScroll() {
-      if (window.scrollY > THRESHOLD) {
-        nav!.classList.add("nav-scrolled");
-      } else {
-        nav!.classList.remove("nav-scrolled");
-      }
+    if (isScrolled) {
+      nav.classList.add("nav-scrolled");
+    } else {
+      nav.classList.remove("nav-scrolled");
     }
+  }, [navRef, isScrolled]);
 
-    // Check initial position
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  return null; // This is a side-effect-only component
+  return null; // Side-effect-only component
 }

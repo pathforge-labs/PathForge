@@ -54,6 +54,12 @@
   /* Navbar breakpoint — desktop nav needs ≥860px to avoid cramped layout */
   --breakpoint-nav: 860px;
 
+  /* Z-index scale — single source of truth for stacking contexts */
+  --z-sticky: 50;
+  --z-overlay: 100;
+  --z-modal: 100;
+  --z-popover: 110;
+
   /* Ultra-wide breakpoints for 49" monitors */
   --breakpoint-3xl: 1920px;
   --breakpoint-4xl: 2560px;
@@ -740,6 +746,38 @@ html {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+}
+
+/* ─── Scroll Progress Bar (CSS-only, zero JS) ──────────────────────────────── */
+
+@keyframes scroll-progress {
+  to {
+    scale: 1 1;
+  }
+}
+
+.scroll-progress-bar {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 60;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    oklch(0.7 0.18 270),
+    oklch(0.75 0.15 195)
+  );
+  transform-origin: left;
+  scale: 0 1;
+  animation: scroll-progress linear;
+  animation-timeline: scroll();
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-progress-bar {
+    animation: none;
+    display: none;
   }
 }
 

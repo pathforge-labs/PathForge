@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { APP_NAME } from "@/config/brand";
 import { ThemeToggle } from "@/components/theme-toggle";
+// Twitter = X (formerly Twitter) brand logo; X = close/dismiss icon
 import { Instagram, Linkedin, Twitter, X } from "lucide-react";
 
 const NAV_LINKS = [
@@ -61,7 +62,7 @@ export function MobileNav() {
       {/* Hamburger / X toggle button */}
       <button
         onClick={() => setOpen((prev) => !prev)}
-        className="relative z-110 flex h-10 w-10 items-center justify-center rounded-full nav:hidden"
+        className="relative z-(--z-popover) flex h-10 w-10 items-center justify-center rounded-full nav:hidden"
         aria-label={open ? "Close menu" : "Open menu"}
         aria-expanded={open}
       >
@@ -88,7 +89,7 @@ export function MobileNav() {
       {mounted &&
         createPortal(
           <div
-            className={`fixed inset-0 z-100 transition-all duration-500 ease-out nav:hidden ${
+            className={`fixed inset-0 z-(--z-modal) transition-all duration-500 ease-out nav:hidden ${
               open
                 ? "pointer-events-auto visible opacity-100"
                 : "pointer-events-none invisible opacity-0"

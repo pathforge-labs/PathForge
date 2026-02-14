@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { ai, type ParseResumeResponse } from "@/lib/api";
 
 export default function ResumesPage() {
+  const router = useRouter();
   const [rawText, setRawText] = useState("");
   const [parsed, setParsed] = useState<ParseResumeResponse | null>(null);
   const [loading, setLoading] = useState(false);
@@ -264,7 +266,7 @@ export default function ResumesPage() {
                 the onboarding wizard for a guided experience.
               </p>
             </div>
-            <Button variant="outline" onClick={() => window.location.href = "/dashboard/onboarding"}>
+            <Button variant="outline" onClick={() => router.push("/dashboard/onboarding")}>
               🚀 Start Onboarding
             </Button>
           </CardContent>

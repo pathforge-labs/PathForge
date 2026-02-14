@@ -56,7 +56,7 @@ export function ActiveNav() {
           <Link
             key={link.href}
             href={link.href}
-            className={`hover-underline relative cursor-pointer rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+            className={`hover-underline relative cursor-pointer rounded-lg px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
               isActive
                 ? "text-foreground"
                 : "text-muted-foreground hover:text-foreground"

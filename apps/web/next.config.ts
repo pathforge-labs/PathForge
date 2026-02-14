@@ -1,4 +1,9 @@
 import type { NextConfig } from "next";
+import withBundleAnalyzer from "@next/bundle-analyzer";
+
+const analyze = withBundleAnalyzer({
+  enabled: process.env.ANALYZE === "true",
+});
 
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
@@ -16,6 +21,16 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  reactStrictMode: true,
+
+  /** Image optimization: prefer AVIF > WebP, 1-year cache */
+  images: {
+    formats: ["image/avif", "image/webp"],
+    deviceSizes: [640, 828, 1080, 1200, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256],
+    minimumCacheTTL: 31_536_000, // 1 year
+  },
+
   /** Proxy API requests to FastAPI during development */
   async rewrites() {
     return [
@@ -37,5 +52,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
-
+export default analyze(nextConfig);

@@ -1,14 +1,29 @@
 import Link from "next/link";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { WaitlistForm } from "@/components/waitlist-form";
 import { AnimatedSection, HeroDashboard } from "@/components/animated-sections";
-import { TestimonialsMarquee } from "@/components/testimonials-marquee";
 import { TestimonialAvatar } from "@/components/testimonial-avatar";
 import { SpotlightCard } from "@/components/spotlight-card";
 import { BorderGlow } from "@/components/border-glow";
 import { CountUp } from "@/components/count-up";
 import { AnimatedBar } from "@/components/animated-bar";
-import { FaqAccordion } from "@/components/faq-accordion";
+
+/* ── Below-fold code splitting ─────────────────────── */
+const TestimonialsMarquee = dynamic(
+  () =>
+    import("@/components/testimonials-marquee").then((m) => ({
+      default: m.TestimonialsMarquee,
+    })),
+  { ssr: true }
+);
+const FaqAccordion = dynamic(
+  () =>
+    import("@/components/faq-accordion").then((m) => ({
+      default: m.FaqAccordion,
+    })),
+  { ssr: true }
+);
 import { OrganizationJsonLd, WebSiteJsonLd, FAQPageJsonLd } from "@/components/json-ld";
 import { APP_NAME } from "@/config/brand";
 import {
