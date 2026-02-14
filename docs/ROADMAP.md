@@ -111,16 +111,18 @@
 - [x] Market intelligence dashboard
 - [x] CV A/B tracking system
 
-### Sprint 7 — Mobile + Production (⏳ Upcoming)
+### Sprint 7 — Production Readiness (✅ Complete)
 
 > Original definition: Expo mobile app, push notifications, security audit, monitoring.
+> **Pivoted**: Mobile deferred; focused on production readiness for web platform.
 
-- [ ] GitHub Actions CI/CD pipeline (ci.yml, deploy.yml)
-- [ ] Alembic migration for CHECK constraint on applications.status
-- [ ] Background task queue (Celery/Dramatiq) for AI pipeline
-- [ ] Redis-backed token blacklist for JWT revocation
-- [ ] Security audit
-- [ ] Production deployment (Vercel + Railway)
+- [x] GitHub Actions CI/CD pipeline (ci.yml + deploy.yml)
+- [x] Alembic migration — CHECK constraint on applications.status
+- [x] Redis-backed JWT token blacklist + /auth/logout endpoint
+- [x] ARQ async background task queue for AI pipeline
+- [x] Security headers middleware (OWASP compliance)
+- [x] Production deployment configuration (Railway + Vercel)
+- [x] Pre-production deployment checklist (docs/TODO-pre-production.md)
 
 ---
 
@@ -188,3 +190,4 @@
 | 6a     | 12            | 12        | 3            | ~3       |
 | 6a.1   | 6             | 6         | 0            | 1        |
 | 6b     | 3             | 3         | 2            | 1        |
+| 7      | 6             | 7         | 1            | 1        |

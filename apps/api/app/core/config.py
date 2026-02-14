@@ -54,6 +54,10 @@ class Settings(BaseSettings):
         "http://localhost:3000",
         "http://localhost:5173",
     ]
+    cors_origins_production: list[str] = [
+        "https://pathforge.eu",
+        "https://www.pathforge.eu",
+    ]
 
     # ── AI / LLM Providers ─────────────────────────────────────
     anthropic_api_key: str = ""
@@ -91,6 +95,13 @@ class Settings(BaseSettings):
     @property
     def is_production(self) -> bool:
         return self.environment == "production"
+
+    @property
+    def effective_cors_origins(self) -> list[str]:
+        """Return CORS origins appropriate for the current environment."""
+        if self.is_production:
+            return self.cors_origins_production
+        return self.cors_origins
 
 
 settings = Settings()

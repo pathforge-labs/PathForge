@@ -22,6 +22,8 @@ dependencies = [
     "pgvector>=0.3.6",
     "slowapi>=0.1.9",
     "structlog>=24.4.0",
+    "arq>=0.26.0",
+    "bcrypt>=4.2.0",
 ]
 
 [project.optional-dependencies]
@@ -32,6 +34,7 @@ dev = [
     "httpx>=0.28.0",
     "mypy>=1.14.0",
     "ruff>=0.8.0",
+    "aiosqlite>=0.21.0",
 ]
 ai = [
     "litellm>=1.55.0",

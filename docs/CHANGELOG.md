@@ -5,6 +5,31 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [Sprint 7] — Production Readiness — 2026-02-14
+
+### Added
+
+- GitHub Actions CI/CD: `ci.yml` (path-filtered lint+test+build) + `deploy.yml` (Railway + Vercel)
+- Alembic migration `5d6e7f8g9h0i` — CHECK constraint on `applications.status`
+- Redis-backed JWT token blacklist (`token_blacklist.py`) with SETEX auto-TTL
+- `/auth/logout` endpoint with `jti`-based token revocation
+- `SecurityHeadersMiddleware` — OWASP-compliant security headers (7 headers)
+- ARQ async background worker with 3 task functions + cron health check
+- Production CORS origins + `effective_cors_origins` property
+- `.env.production.example` — documented production environment template
+- `railway.toml` — Railway config-as-code with health check
+- `docs/TODO-pre-production.md` — deployment checklist
+- Worker service added to `docker-compose.yml`
+
+### Changed
+
+- `security.py` — access tokens now include `jti` claim for revocation
+- `Dockerfile.worker` CMD updated from placeholder to ARQ entrypoint
+- `pyproject.toml` — added `arq`, `bcrypt`, `aiosqlite` dependencies
+- `main.py` — environment-aware CORS using `effective_cors_origins`
+
+---
+
 ## [Ad-Hoc] — Agent Customization Architecture — 2026-02-14
 
 ### Added

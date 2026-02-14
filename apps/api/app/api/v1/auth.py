@@ -1,7 +1,7 @@
 """
 PathForge API — Auth Routes
 =============================
-Registration, login, and token refresh endpoints.
+Registration, login, token refresh, and logout endpoints.
 """
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -11,7 +11,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.core.database import get_db
-from app.core.security import create_access_token, create_refresh_token
+from app.core.security import (
+    create_access_token,
+    create_refresh_token,
+    get_current_user,
+    oauth2_scheme,
+)
+from app.core.token_blacklist import token_blacklist
 from app.models.user import User
 from app.schemas.user import (
     RefreshTokenRequest,
@@ -115,3 +121,29 @@ async def refresh_token(
         access_token=create_access_token(str(user.id)),
         refresh_token=create_refresh_token(str(user.id)),
     )
+
+
+@router.post(
+    "/logout",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Revoke current access token",
+)
+async def logout(
+    token: str = Depends(oauth2_scheme),
+    _current_user: User = Depends(get_current_user),
+) -> None:
+    """Blacklist the current access token so it cannot be reused."""
+    try:
+        payload = jwt.decode(
+            token, settings.jwt_secret, algorithms=[settings.jwt_algorithm]
+        )
+        jti: str | None = payload.get("jti")
+        exp: int | None = payload.get("exp")
+
+        if jti and exp:
+            from datetime import UTC, datetime
+
+            remaining = max(int(exp - datetime.now(UTC).timestamp()), 1)
+            await token_blacklist.revoke(jti, ttl_seconds=remaining)
+    except JWTError:
+        pass  # Token already invalid — nothing to revoke

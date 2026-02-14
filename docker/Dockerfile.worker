@@ -42,6 +42,5 @@ USER pathforge
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1
 
-# Worker entrypoint — placeholder for Celery/Dramatiq when Sprint 2+ arrives.
-# For now, runs the app module's worker command or can be overridden at runtime.
-CMD ["python", "-m", "app.worker"]
+# Worker entrypoint — ARQ async task queue (Sprint 7)
+CMD ["python", "-m", "arq", "app.worker.WorkerSettings"]

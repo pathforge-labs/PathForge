@@ -1,13 +1,12 @@
 """
-PathForge API — Request ID Middleware
+PathForge API — Middleware
 =======================================
-Generates a unique request ID per request for distributed tracing.
+Request ID tracking and security headers.
 
 Features:
-- Generates UUID4 per request
+- Generates UUID4 per request (X-Request-ID)
 - Accepts incoming X-Request-ID header (preserves client/gateway IDs)
-- Returns X-Request-ID in response headers
-- Stores in contextvars for binding to logs
+- Security headers (OWASP compliance) in production
 """
 
 from __future__ import annotations
@@ -19,6 +18,8 @@ from typing import Any
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.requests import Request
 from starlette.responses import Response
+
+from app.core.config import settings
 
 # ── Context Variable ───────────────────────────────────────────
 # Accessible from any async code in the same request lifecycle.
@@ -51,6 +52,40 @@ class RequestIDMiddleware(BaseHTTPMiddleware):
             return response
         finally:
             request_id_var.reset(token)
+
+
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    """
+    OWASP-compliant security headers middleware.
+
+    Applies protective HTTP headers to all responses:
+    - Prevents MIME-type sniffing (X-Content-Type-Options)
+    - Prevents clickjacking (X-Frame-Options)
+    - Enforces HTTPS in production (Strict-Transport-Security)
+    - Controls referrer information leakage
+    - Restricts browser feature access (Permissions-Policy)
+    """
+
+    async def dispatch(
+        self, request: Request, call_next: RequestResponseEndpoint
+    ) -> Response:
+        response = await call_next(request)
+
+        # Always applied
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["X-XSS-Protection"] = "0"  # Modern: rely on CSP, disable legacy filter
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+        response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+        response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate"
+
+        # HSTS: only in production to avoid HTTPS enforcement in local dev
+        if settings.is_production:
+            response.headers["Strict-Transport-Security"] = (
+                "max-age=31536000; includeSubDomains; preload"
+            )
+
+        return response
 
 
 def get_request_id() -> str:

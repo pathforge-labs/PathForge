@@ -1,0 +1,116 @@
+# ─────────────────────────────────────────────────────────────
+# PathForge — CI Pipeline
+# ─────────────────────────────────────────────────────────────
+# Runs on: push to main, PRs to main/production
+# Jobs: api-quality (lint + test), web-quality (lint + build)
+# Uses path filters to skip irrelevant jobs.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main, production]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ── Detect Changed Paths ─────────────────────────────────
+  changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      api: ${{ steps.filter.outputs.api }}
+      web: ${{ steps.filter.outputs.web }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            api:
+              - 'apps/api/**'
+              - 'docker/Dockerfile.api'
+              - 'docker/Dockerfile.worker'
+            web:
+              - 'apps/web/**'
+              - 'packages/shared/**'
+              - 'docker/Dockerfile.web'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+
+  # ── API Quality Gate ─────────────────────────────────────
+  api-quality:
+    name: API — Lint & Test
+    needs: changes
+    if: needs.changes.outputs.api == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: apps/api/pyproject.toml
+
+      - name: Install dependencies
+        working-directory: apps/api
+        run: pip install ".[dev]"
+
+      - name: Lint (ruff)
+        working-directory: apps/api
+        run: python -m ruff check app/ tests/
+
+      - name: Type check (mypy)
+        working-directory: apps/api
+        run: python -m mypy app/ --ignore-missing-imports
+
+      - name: Test (pytest)
+        working-directory: apps/api
+        run: python -m pytest tests/ -v --tb=short -q
+        env:
+          ENVIRONMENT: testing
+          JWT_SECRET: ci-test-secret-minimum-32-characters-long
+          JWT_REFRESH_SECRET: ci-test-refresh-secret-32-chars-min
+
+  # ── Web Quality Gate ─────────────────────────────────────
+  web-quality:
+    name: Web — Lint & Build
+    needs: changes
+    if: needs.changes.outputs.web == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        working-directory: apps/web
+        run: pnpm lint
+
+      - name: Build
+        working-directory: apps/web
+        run: pnpm build
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"

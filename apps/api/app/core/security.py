@@ -42,11 +42,16 @@ def create_access_token(
     subject: str,
     expires_delta: timedelta | None = None,
 ) -> str:
-    """Create a JWT access token."""
+    """Create a JWT access token with unique jti for revocation."""
     expire = datetime.now(UTC) + (
         expires_delta or timedelta(minutes=settings.jwt_access_token_expire_minutes)
     )
-    to_encode = {"sub": subject, "exp": expire, "type": "access"}
+    to_encode = {
+        "sub": subject,
+        "exp": expire,
+        "type": "access",
+        "jti": str(_uuid.uuid4()),
+    }
     return jwt.encode(to_encode, settings.jwt_secret, algorithm=settings.jwt_algorithm)
 
 
@@ -67,7 +72,12 @@ async def get_current_user(
     db: AsyncSession = Depends(get_db),
 ):
     """Dependency: extract and validate the current user from JWT token."""
+    import logging
+
+    from app.core.token_blacklist import token_blacklist
     from app.models.user import User
+
+    logger = logging.getLogger(__name__)
 
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -78,10 +88,25 @@ async def get_current_user(
         payload = jwt.decode(token, settings.jwt_secret, algorithms=[settings.jwt_algorithm])
         user_id: str | None = payload.get("sub")
         token_type: str | None = payload.get("type")
+        jti: str | None = payload.get("jti")
         if user_id is None or token_type != "access":
             raise credentials_exception
     except JWTError as exc:
         raise credentials_exception from exc
+
+    # Check token blacklist (graceful degradation if Redis unavailable)
+    if jti:
+        try:
+            if await token_blacklist.is_revoked(jti):
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Token has been revoked",
+                    headers={"WWW-Authenticate": "Bearer"},
+                )
+        except HTTPException:
+            raise
+        except Exception:
+            logger.warning("Token blacklist check failed — allowing request (degraded mode)")
 
     result = await db.execute(select(User).where(User.id == _uuid.UUID(user_id)))
     user = result.scalar_one_or_none()

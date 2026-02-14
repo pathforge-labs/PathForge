@@ -18,7 +18,7 @@ from app.api.v1 import ai, analytics, applications, auth, blacklist, health, use
 from app.core.config import settings
 from app.core.error_handlers import register_error_handlers
 from app.core.logging_config import setup_logging
-from app.core.middleware import RequestIDMiddleware
+from app.core.middleware import RequestIDMiddleware, SecurityHeadersMiddleware
 from app.core.rate_limit import limiter
 
 
@@ -48,12 +48,13 @@ def create_app() -> FastAPI:
     # ── Middleware (order matters: outermost runs first) ────────
     application.add_middleware(
         CORSMiddleware,
-        allow_origins=settings.cors_origins,
+        allow_origins=settings.effective_cors_origins,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
     )
     application.add_middleware(RequestIDMiddleware)
+    application.add_middleware(SecurityHeadersMiddleware)
 
     # ── Error Handlers ─────────────────────────────────────────
     register_error_handlers(application)
