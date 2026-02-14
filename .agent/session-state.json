@@ -33,9 +33,9 @@
     "agents": 18,
     "commands": 32,
     "skills": 27,
-    "workflows": 12,
+    "workflows": 16,
     "checklists": 4,
-    "rules": 5
+    "rules": 8
   },
   "notes": [
     "MVP target: ≤4 months (per viability report)",

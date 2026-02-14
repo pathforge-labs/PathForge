@@ -123,13 +123,23 @@ Run `/deploy rollback` if needed.
 
 ---
 
-## Platform Support
+## Platform Support — PathForge
 
-| Platform | Command         | Auto-detect |
-| -------- | --------------- | ----------- |
-| Vercel   | `vercel --prod` | Next.js     |
-| Railway  | `railway up`    | NestJS      |
-| Expo EAS | `eas build`     | Mobile      |
+| App                   | Platform | Command         | Config                                    |
+| :-------------------- | :------- | :-------------- | :---------------------------------------- |
+| `apps/web` (Frontend) | Vercel   | `vercel --prod` | `vercel.json`, env: `NEXT_PUBLIC_API_URL` |
+| `apps/api` (Backend)  | Railway  | `railway up`    | `railway.toml`, env: see `.env.example`   |
+
+### Required Environment Variables
+
+| Variable              | App | Purpose                      |
+| :-------------------- | :-- | :--------------------------- |
+| `DATABASE_URL`        | API | PostgreSQL connection string |
+| `JWT_SECRET`          | API | Access token signing         |
+| `JWT_REFRESH_SECRET`  | API | Refresh token signing        |
+| `VOYAGE_API_KEY`      | API | Voyage AI embeddings         |
+| `OPENAI_API_KEY`      | API | LLM for CV tailoring         |
+| `NEXT_PUBLIC_API_URL` | Web | Backend API base URL         |
 
 ---
 
