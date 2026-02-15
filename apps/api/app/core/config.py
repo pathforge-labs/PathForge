@@ -85,6 +85,7 @@ class Settings(BaseSettings):
     rate_limit_embed: str = "20/minute"
     rate_limit_match: str = "30/minute"
     rate_limit_tailor: str = "10/minute"
+    rate_limit_career_dna: str = "3/minute"
     ratelimit_storage_uri: str = "memory://"
 
     # ── Job Aggregation Providers ────────────────────────────────

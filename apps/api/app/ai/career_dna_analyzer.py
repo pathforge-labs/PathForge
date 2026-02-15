@@ -26,6 +26,7 @@ from app.ai.career_dna_prompts import (
     VALUES_PROFILE_USER_PROMPT,
 )
 from app.core.llm import LLMError, LLMTier, complete_json
+from app.core.prompt_sanitizer import sanitize_user_text
 
 logger = logging.getLogger(__name__)
 
@@ -62,12 +63,17 @@ class CareerDNAAnalyzer:
             logger.warning("Empty experience text for hidden skills discovery")
             return []
 
+        # Sanitize user-provided text before LLM prompt
+        clean_exp, _ = sanitize_user_text(
+            experience_text, max_length=6000, context="hidden_skills_exp",
+        )
+
         start = time.monotonic()
         try:
             data: dict[str, Any] = await complete_json(
                 prompt=HIDDEN_SKILLS_USER_PROMPT.format(
                     explicit_skills=", ".join(explicit_skills) or "None listed",
-                    experience_text=experience_text[:6000],
+                    experience_text=clean_exp,
                 ),
                 system_prompt=HIDDEN_SKILLS_SYSTEM_PROMPT,
                 tier=LLMTier.PRIMARY,
@@ -115,11 +121,16 @@ class CareerDNAAnalyzer:
             logger.warning("Empty experience text for blueprint analysis")
             return _default_blueprint()
 
+        # Sanitize user-provided text before LLM prompt
+        clean_exp, _ = sanitize_user_text(
+            experience_text, max_length=6000, context="blueprint_exp",
+        )
+
         start = time.monotonic()
         try:
             data: dict[str, Any] = await complete_json(
                 prompt=EXPERIENCE_BLUEPRINT_USER_PROMPT.format(
-                    experience_text=experience_text[:6000],
+                    experience_text=clean_exp,
                 ),
                 system_prompt=CAREER_DNA_SYSTEM_PROMPT,
                 tier=LLMTier.FAST,
@@ -163,13 +174,26 @@ class CareerDNAAnalyzer:
             logger.warning("Empty data for growth vector computation")
             return _default_growth_vector()
 
+        # Sanitize user-provided text before LLM prompt
+        clean_exp, _ = sanitize_user_text(
+            experience_text, max_length=4000, context="growth_exp",
+        )
+        clean_skills, _ = sanitize_user_text(
+            skills_text, max_length=2000, context="growth_skills",
+        )
+        clean_prefs, _ = sanitize_user_text(
+            preferences_text or "Not specified",
+            max_length=2000,
+            context="growth_prefs",
+        )
+
         start = time.monotonic()
         try:
             data: dict[str, Any] = await complete_json(
                 prompt=GROWTH_VECTOR_USER_PROMPT.format(
-                    experience_text=experience_text[:4000],
-                    skills_text=skills_text[:2000],
-                    preferences_text=preferences_text or "Not specified",
+                    experience_text=clean_exp,
+                    skills_text=clean_skills,
+                    preferences_text=clean_prefs,
                 ),
                 system_prompt=CAREER_DNA_SYSTEM_PROMPT,
                 tier=LLMTier.PRIMARY,
@@ -216,12 +240,22 @@ class CareerDNAAnalyzer:
             logger.warning("Empty data for values profile extraction")
             return _default_values_profile()
 
+        # Sanitize user-provided text before LLM prompt
+        clean_exp, _ = sanitize_user_text(
+            experience_text, max_length=4000, context="values_exp",
+        )
+        clean_prefs, _ = sanitize_user_text(
+            preferences_text or "Not specified",
+            max_length=2000,
+            context="values_prefs",
+        )
+
         start = time.monotonic()
         try:
             data: dict[str, Any] = await complete_json(
                 prompt=VALUES_PROFILE_USER_PROMPT.format(
-                    experience_text=experience_text[:4000],
-                    preferences_text=preferences_text or "Not specified",
+                    experience_text=clean_exp,
+                    preferences_text=clean_prefs,
                 ),
                 system_prompt=CAREER_DNA_SYSTEM_PROMPT,
                 tier=LLMTier.PRIMARY,

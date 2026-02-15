@@ -16,8 +16,11 @@ from typing import TYPE_CHECKING
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette.requests import Request
 
+from app.core.config import settings
 from app.core.database import get_db
+from app.core.rate_limit import limiter
 from app.core.security import get_current_user
 from app.models.user import User
 from app.schemas.career_dna import (
@@ -103,7 +106,9 @@ async def get_career_dna_summary(
     status_code=status.HTTP_201_CREATED,
     summary="Generate or refresh Career DNA profile",
 )
+@limiter.limit(settings.rate_limit_career_dna)
 async def generate_career_dna(
+    request: Request,
     payload: CareerDNAGenerateRequest | None = None,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
