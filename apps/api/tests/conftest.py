@@ -54,6 +54,8 @@ from app.models.base import Base
 from app.models import (
     User, Resume, Skill, Preference, BlacklistEntry, JobListing, MatchResult,
     Application, CVVersion, FunnelEvent, MarketInsight, CVExperiment,
+    CareerDNA, SkillGenomeEntry, HiddenSkill, ExperienceBlueprint,
+    GrowthVector, ValuesProfile, MarketPosition,
 )
 
 

@@ -1,0 +1,430 @@
+"""
+PathForge — Career DNA Models
+================================
+Career DNA™ domain models representing the 6 dimensions
+of career intelligence.
+
+Dimensions:
+    1. SkillGenome — Comprehensive skill map (explicit + hidden)
+    2. ExperienceBlueprint — Career experience pattern analysis
+    3. GrowthVector — Career trajectory projection
+    4. ValuesProfile — Career values and alignment
+    5. MarketPosition — Real-time market standing
+    6. HiddenSkill — AI-discovered transferable competency
+"""
+
+import enum
+import uuid
+from datetime import datetime
+
+from sqlalchemy import (
+    Boolean,
+    DateTime,
+    Float,
+    ForeignKey,
+    Integer,
+    String,
+    Text,
+    func,
+)
+from sqlalchemy.dialects.postgresql import JSON, UUID
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.models.base import Base, TimestampMixin, UUIDMixin
+
+# ── Enums ──────────────────────────────────────────────────────
+
+
+class SkillSource(enum.StrEnum):
+    """How a skill was identified."""
+
+    EXPLICIT = "explicit"
+    INFERRED = "inferred"
+    MARKET_VALIDATED = "market_validated"
+
+
+class SkillCategory(enum.StrEnum):
+    """High-level skill classification."""
+
+    TECHNICAL = "technical"
+    SOFT = "soft"
+    LANGUAGE = "language"
+    TOOL = "tool"
+    DOMAIN = "domain"
+
+
+class ProficiencyLevel(enum.StrEnum):
+    """Standardized proficiency rating."""
+
+    BEGINNER = "beginner"
+    INTERMEDIATE = "intermediate"
+    ADVANCED = "advanced"
+    EXPERT = "expert"
+
+
+class CareerDirection(enum.StrEnum):
+    """Career trajectory direction classification."""
+
+    ASCENDING = "ascending"
+    LATERAL = "lateral"
+    TRANSITIONING = "transitioning"
+    EXPLORING = "exploring"
+
+
+class TrajectoryStatus(enum.StrEnum):
+    """Growth trajectory status."""
+
+    ACCELERATING = "accelerating"
+    STEADY = "steady"
+    PLATEAUING = "plateauing"
+    PIVOTING = "pivoting"
+
+
+class WorkStyle(enum.StrEnum):
+    """Work style preference."""
+
+    AUTONOMOUS = "autonomous"
+    COLLABORATIVE = "collaborative"
+    STRUCTURED = "structured"
+    FLEXIBLE = "flexible"
+
+
+class ImpactPreference(enum.StrEnum):
+    """Preferred scope of impact."""
+
+    INDIVIDUAL = "individual"
+    TEAM = "team"
+    ORGANIZATIONAL = "organizational"
+    SOCIETAL = "societal"
+
+
+class MarketTrend(enum.StrEnum):
+    """Market demand trend direction."""
+
+    RISING = "rising"
+    STABLE = "stable"
+    DECLINING = "declining"
+
+
+class DiscoveryMethod(enum.StrEnum):
+    """How a hidden skill was discovered."""
+
+    RESUME_INFERENCE = "resume_inference"
+    MARKET_CROSSREF = "market_crossref"
+
+
+# ── Career DNA Hub ─────────────────────────────────────────────
+
+
+class CareerDNA(UUIDMixin, TimestampMixin, Base):
+    """
+    Hub entity linking a user to their living Career DNA™ profile.
+
+    One profile per user. Auto-recomputed on data changes.
+    Version-tracked for diff history.
+    """
+
+    __tablename__ = "career_dna"
+
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+        unique=True,
+        index=True,
+    )
+    completeness_score: Mapped[float] = mapped_column(
+        Float, default=0.0, nullable=False
+    )
+    last_analysis_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    version: Mapped[int] = mapped_column(Integer, default=1, nullable=False)
+    summary: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+    # Relationships
+    user: Mapped["User"] = relationship(
+        "User", back_populates="career_dna"
+    )
+    skill_genome: Mapped[list["SkillGenomeEntry"]] = relationship(
+        "SkillGenomeEntry", back_populates="career_dna", cascade="all, delete-orphan"
+    )
+    hidden_skills: Mapped[list["HiddenSkill"]] = relationship(
+        "HiddenSkill", back_populates="career_dna", cascade="all, delete-orphan"
+    )
+    experience_blueprint: Mapped["ExperienceBlueprint | None"] = relationship(
+        "ExperienceBlueprint",
+        back_populates="career_dna",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
+    growth_vector: Mapped["GrowthVector | None"] = relationship(
+        "GrowthVector",
+        back_populates="career_dna",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
+    values_profile: Mapped["ValuesProfile | None"] = relationship(
+        "ValuesProfile",
+        back_populates="career_dna",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
+    market_position: Mapped["MarketPosition | None"] = relationship(
+        "MarketPosition",
+        back_populates="career_dna",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
+
+    def __repr__(self) -> str:
+        return f"<CareerDNA user={self.user_id} v{self.version}>"
+
+
+# ── Dimension 1: Skill Genome ──────────────────────────────────
+
+
+class SkillGenomeEntry(UUIDMixin, TimestampMixin, Base):
+    """
+    Individual skill within the Career DNA genome.
+
+    Richer than the base Skill model — includes source tracking,
+    confidence scoring, and evidence chains for explainability.
+    """
+
+    __tablename__ = "skill_genome_entries"
+
+    career_dna_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("career_dna.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    skill_name: Mapped[str] = mapped_column(String(255), nullable=False)
+    category: Mapped[str] = mapped_column(
+        String(50), default=SkillCategory.TECHNICAL.value, nullable=False
+    )
+    proficiency_level: Mapped[str] = mapped_column(
+        String(50), default=ProficiencyLevel.INTERMEDIATE.value, nullable=False
+    )
+    source: Mapped[str] = mapped_column(
+        String(50), default=SkillSource.EXPLICIT.value, nullable=False
+    )
+    confidence: Mapped[float] = mapped_column(Float, default=1.0, nullable=False)
+    evidence: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    years_experience: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    last_used_date: Mapped[str | None] = mapped_column(String(50), nullable=True)
+
+    # Relationships
+    career_dna: Mapped["CareerDNA"] = relationship(
+        "CareerDNA", back_populates="skill_genome"
+    )
+
+    def __repr__(self) -> str:
+        return f"<SkillGenomeEntry {self.skill_name} ({self.source})>"
+
+
+# ── Dimension 6: Hidden Skills ─────────────────────────────────
+
+
+class HiddenSkill(UUIDMixin, TimestampMixin, Base):
+    """
+    AI-discovered transferable skill not explicitly listed by the user.
+
+    Dual-source discovery:
+        A) LLM semantic inference from experience descriptions
+        B) Market cross-reference from job listing skill frequency
+
+    User can confirm or reject (human-in-the-loop).
+    """
+
+    __tablename__ = "hidden_skills"
+
+    career_dna_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("career_dna.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    skill_name: Mapped[str] = mapped_column(String(255), nullable=False)
+    discovery_method: Mapped[str] = mapped_column(
+        String(50), default=DiscoveryMethod.RESUME_INFERENCE.value, nullable=False
+    )
+    confidence: Mapped[float] = mapped_column(Float, default=0.5, nullable=False)
+    evidence: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    user_confirmed: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
+    source_text: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+    # Relationships
+    career_dna: Mapped["CareerDNA"] = relationship(
+        "CareerDNA", back_populates="hidden_skills"
+    )
+
+    def __repr__(self) -> str:
+        return f"<HiddenSkill {self.skill_name} ({self.discovery_method})>"
+
+
+# ── Dimension 2: Experience Blueprint ──────────────────────────
+
+
+class ExperienceBlueprint(UUIDMixin, TimestampMixin, Base):
+    """
+    Analyzed career experience pattern.
+
+    Examines career timeline, role transitions, tenure patterns,
+    and industry diversity to classify career direction.
+    """
+
+    __tablename__ = "experience_blueprints"
+
+    career_dna_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("career_dna.id", ondelete="CASCADE"),
+        nullable=False,
+        unique=True,
+        index=True,
+    )
+    total_years: Mapped[float] = mapped_column(Float, default=0.0, nullable=False)
+    role_count: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    avg_tenure_months: Mapped[float] = mapped_column(
+        Float, default=0.0, nullable=False
+    )
+    career_direction: Mapped[str] = mapped_column(
+        String(50), default=CareerDirection.EXPLORING.value, nullable=False
+    )
+    industry_diversity: Mapped[float] = mapped_column(
+        Float, default=0.0, nullable=False
+    )
+    seniority_trajectory: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    pattern_analysis: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+    # Relationships
+    career_dna: Mapped["CareerDNA"] = relationship(
+        "CareerDNA", back_populates="experience_blueprint"
+    )
+
+    def __repr__(self) -> str:
+        return f"<ExperienceBlueprint dir={self.career_direction}>"
+
+
+# ── Dimension 3: Growth Vector ─────────────────────────────────
+
+
+class GrowthVector(UUIDMixin, TimestampMixin, Base):
+    """
+    Career trajectory projection.
+
+    Multi-signal computation combining:
+        - Skill trajectory (demand vs. proficiency)
+        - Market demand curves
+        - Experience velocity and progression pattern
+    """
+
+    __tablename__ = "growth_vectors"
+
+    career_dna_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("career_dna.id", ondelete="CASCADE"),
+        nullable=False,
+        unique=True,
+        index=True,
+    )
+    current_trajectory: Mapped[str] = mapped_column(
+        String(50), default=TrajectoryStatus.STEADY.value, nullable=False
+    )
+    projected_roles: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    skill_velocity: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    growth_score: Mapped[float] = mapped_column(Float, default=50.0, nullable=False)
+    analysis_reasoning: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+    # Relationships
+    career_dna: Mapped["CareerDNA"] = relationship(
+        "CareerDNA", back_populates="growth_vector"
+    )
+
+    def __repr__(self) -> str:
+        return f"<GrowthVector trajectory={self.current_trajectory}>"
+
+
+# ── Dimension 4: Values Profile ────────────────────────────────
+
+
+class ValuesProfile(UUIDMixin, TimestampMixin, Base):
+    """
+    Career values and alignment preferences.
+
+    4-dimensional model derived from experience patterns
+    and stated preferences — never from demographic data.
+    Based on Theory of Work Adjustment (TWA) framework.
+    """
+
+    __tablename__ = "values_profiles"
+
+    career_dna_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("career_dna.id", ondelete="CASCADE"),
+        nullable=False,
+        unique=True,
+        index=True,
+    )
+    work_style: Mapped[str] = mapped_column(
+        String(50), default=WorkStyle.FLEXIBLE.value, nullable=False
+    )
+    impact_preference: Mapped[str] = mapped_column(
+        String(50), default=ImpactPreference.TEAM.value, nullable=False
+    )
+    environment_fit: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    derived_values: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    confidence: Mapped[float] = mapped_column(Float, default=0.5, nullable=False)
+
+    # Relationships
+    career_dna: Mapped["CareerDNA"] = relationship(
+        "CareerDNA", back_populates="values_profile"
+    )
+
+    def __repr__(self) -> str:
+        return f"<ValuesProfile style={self.work_style}>"
+
+
+# ── Dimension 5: Market Position ───────────────────────────────
+
+
+class MarketPosition(UUIDMixin, TimestampMixin, Base):
+    """
+    Real-time market standing snapshot.
+
+    Computed from PathForge's own job listing data —
+    skill demand frequency, matching job count, trend direction.
+    """
+
+    __tablename__ = "market_positions"
+
+    career_dna_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("career_dna.id", ondelete="CASCADE"),
+        nullable=False,
+        unique=True,
+        index=True,
+    )
+    percentile_overall: Mapped[float] = mapped_column(
+        Float, default=50.0, nullable=False
+    )
+    skill_demand_scores: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    matching_job_count: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    market_trend: Mapped[str] = mapped_column(
+        String(50), default=MarketTrend.STABLE.value, nullable=False
+    )
+    computed_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        default=func.now(),
+        server_default=func.now(),
+        nullable=False,
+    )
+
+    # Relationships
+    career_dna: Mapped["CareerDNA"] = relationship(
+        "CareerDNA", back_populates="market_position"
+    )
+
+    def __repr__(self) -> str:
+        return f"<MarketPosition pct={self.percentile_overall}>"

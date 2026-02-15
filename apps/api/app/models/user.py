@@ -34,6 +34,9 @@ class User(UUIDMixin, TimestampMixin, Base):
     applications: Mapped[list["Application"]] = relationship(
         "Application", back_populates="user", cascade="all, delete-orphan"
     )
+    career_dna: Mapped["CareerDNA | None"] = relationship(
+        "CareerDNA", back_populates="user", uselist=False, cascade="all, delete-orphan"
+    )
 
     def __repr__(self) -> str:
         return f"<User {self.email}>"
