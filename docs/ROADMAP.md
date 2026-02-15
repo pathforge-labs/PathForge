@@ -130,14 +130,24 @@
 
 > Sprint definitions from ARCHITECTURE.md Section 7, Phase B.
 
-### Sprint 8 — Career DNA Activation (⏳)
+### Sprint 8 — Career DNA Activation (✅ Complete)
 
-- [ ] Living Career DNA profiles
-- [ ] Hidden skills discovery
-- [ ] Growth vector calculation
+- [x] 7 SQLAlchemy models (CareerDNA hub + 6 dimensions) with 10 StrEnums
+- [x] 12 Pydantic request/response schemas
+- [x] Versioned AI prompt templates (6 dimensions)
+- [x] CareerDNAAnalyzer (5 LLM methods + 1 data-driven)
+- [x] CareerDNAService lifecycle orchestration
+- [x] 10 REST API endpoints with auth enforcement
+- [x] Alembic migration for 7 Career DNA tables
+- [x] 22 tests (168/168 total suite passing)
+- [x] Tier-1 retrospective audit — 12 lint fixes applied
 
 ### Sprint 9 — Career Threat Radar™ (⏳)
 
+> **Hardening carry-over from Sprint 8 audit:**
+
+- [ ] ⚠️ Prompt injection sanitization (user text → LLM unsanitized)
+- [ ] ⚠️ Rate limiting on `/career-dna/generate` (5+ LLM calls per request, no cap)
 - [ ] Industry trend monitoring
 - [ ] Layoff signal detection
 - [ ] Automation risk scoring
@@ -193,3 +203,4 @@
 | 6a.1   | 6             | 6         | 0            | 1        |
 | 6b     | 3             | 3         | 2            | 1        |
 | 7      | 6             | 7         | 1            | 1        |
+| 8      | 3             | 9         | 1            | 2        |
