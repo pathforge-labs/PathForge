@@ -1,5 +1,3 @@
-import Link from "next/link";
-import Image from "next/image";
 import dynamic from "next/dynamic";
 import { WaitlistForm } from "@/components/waitlist-form";
 import { AnimatedSection, HeroDashboard } from "@/components/animated-sections";

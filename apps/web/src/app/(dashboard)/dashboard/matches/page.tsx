@@ -10,8 +10,9 @@ import { ai, type MatchCandidate, type TailorCVResponse } from "@/lib/api";
 
 export default function MatchesPage() {
   const router = useRouter();
-  const [matches, setMatches] = useState<MatchCandidate[]>([]);
-  const [loading, setLoading] = useState(false);
+  // TODO: Connect to API — will be upgraded to useState when API is integrated
+  const matches: MatchCandidate[] = [];
+  const loading = false;
   const [error, setError] = useState<string | null>(null);
   const [tailoringId, setTailoringId] = useState<string | null>(null);
   const [tailorResult, setTailorResult] = useState<TailorCVResponse | null>(null);
