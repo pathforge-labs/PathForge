@@ -152,3 +152,21 @@ cd apps/web && pnpm build
 /review tests
 /review security
 ```
+
+---
+
+## Standalone Script (CI Mirror)
+
+> For **push-gating without agent**, run the local CI mirror directly:
+
+// turbo
+
+```bash
+.\scripts\ci-local.ps1           # All gates (API + Web)
+.\scripts\ci-local.ps1 -Scope api # API only (ruff, mypy, pytest)
+.\scripts\ci-local.ps1 -Scope web # Web only (lint, build)
+```
+
+> [!TIP]
+> Activate automatic pre-push gating:
+> `git config core.hooksPath .githooks`

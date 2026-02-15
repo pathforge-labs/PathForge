@@ -1,0 +1,31 @@
+#!/bin/sh
+# ─────────────────────────────────────────────────────────────
+# PathForge — Git Pre-Push Hook
+# ─────────────────────────────────────────────────────────────
+# Runs the local CI gate before every push.
+#
+# Activation (one-time):
+#   git config core.hooksPath .githooks
+#
+# Bypass (emergency only):
+#   git push --no-verify
+# ─────────────────────────────────────────────────────────────
+
+echo ""
+echo "╔══════════════════════════════════════════╗"
+echo "║  Pre-Push Hook — Running Local CI Gate   ║"
+echo "╚══════════════════════════════════════════╝"
+echo ""
+
+# Detect OS and run appropriate script
+if command -v pwsh &> /dev/null; then
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "$(git rev-parse --show-toplevel)/scripts/ci-local.ps1" -Scope all
+elif command -v powershell &> /dev/null; then
+    powershell -NoProfile -ExecutionPolicy Bypass -File "$(git rev-parse --show-toplevel)/scripts/ci-local.ps1" -Scope all
+else
+    echo "⚠ PowerShell not found — skipping local CI gate."
+    echo "  Run manually: ./scripts/ci-local.ps1"
+    exit 0
+fi
+
+exit $?
