@@ -1,7 +1,7 @@
 # PathForge Professional Project Tracking System
 
-> **Version**: 1.0.0 | **Established**: 2026-02-14 | **Authority**: Emre Dursun — Product Owner
-> **Classification**: Reference Architecture — Archived Resource
+> **Version**: 1.1.0 | **Established**: 2026-02-14 | **Authority**: Emre Dursun — Product Owner
+> **Classification**: Reference Architecture — Active Protocol
 
 ---
 
@@ -61,10 +61,10 @@ pathforge/
 │   ├── rules/
 │   │   └── sprint-tracking.md     # Agent enforcement rules (7 mandatory rules)
 │   ├── checklists/
-│   │   ├── session-start.md       # Sprint State Validation (Auto)
-│   │   └── session-end.md         # Sprint State Sync (Auto)
-│   ├── session-context.md         # Handoff notes only → links to ROADMAP.md
-│   └── session-state.json         # Metadata only → links to ROADMAP.md
+│   │   ├── session-start.md       # Sprint State Validation + Staleness Check
+│   │   └── session-end.md         # Sprint State Sync + Verification
+│   ├── session-context.md         # Working context pointers + handoff notes (~40 lines)
+│   └── session-state.json         # Volatile-only metadata (v2.1.0 schema)
 ```
 
 ### 3.2 Data Flow
@@ -95,13 +95,13 @@ graph TD
 
 ### 3.3 Single Source of Truth Principle
 
-| File                   | Tracks                                              | Does NOT Track                          |
-| :--------------------- | :-------------------------------------------------- | :-------------------------------------- |
-| **ROADMAP.md**         | Task status, sprint identity, velocity, ad-hoc work | Session handoff notes, machine metadata |
-| **CHANGELOG.md**       | What shipped per sprint                             | Task status                             |
-| **session-context.md** | Session handoff notes, blockers, working context    | ❌ Task lists, ❌ Sprint status         |
-| **session-state.json** | Commit, branch, test count, capabilities            | ❌ Task arrays, ❌ Sprint status        |
-| **ARCHITECTURE.md**    | Sprint definitions (scope, deliverables)            | Task status (that's ROADMAP.md's job)   |
+| File                   | Tracks                                              | Does NOT Track                                |
+| :--------------------- | :-------------------------------------------------- | :-------------------------------------------- |
+| **ROADMAP.md**         | Task status, sprint identity, velocity, ad-hoc work | Session handoff notes, machine metadata       |
+| **CHANGELOG.md**       | What shipped per sprint                             | Task status                                   |
+| **session-context.md** | Working context pointers, handoff notes             | ❌ Task lists, ❌ Sprint status, ❌ File maps |
+| **session-state.json** | Last commit, branch, test count (volatile only)     | ❌ Task arrays, ❌ Static project metadata    |
+| **ARCHITECTURE.md**    | Sprint definitions (scope, deliverables)            | Task status (that's ROADMAP.md's job)         |
 
 ---
 
@@ -174,32 +174,29 @@ Format follows [Keep a Changelog](https://keepachangelog.com/):
 
 ## 6. Agent Enforcement Rules
 
-### 6.1 The 7 Mandatory Rules
+> **Single Enforcement Point**: The 7 Mandatory Rules and Reject & Escalate matrix are defined in
+> [sprint-tracking.md](file:///d:/ProfesionalDevelopment/AntigravityProjects/pathforge/.agent/rules/sprint-tracking.md).
+> That file is the authoritative source. This section provides a summary for reference.
 
-| #   | Rule                                                                                                                          | Rationale                                       |
-| :-- | :---------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------- |
-| 1   | **ROADMAP.md is the ONLY sprint tracking file**                                                                               | Prevents duplicate tracking across files        |
-| 2   | **Sprint numbers come from ARCHITECTURE.md only**                                                                             | Prevents agent from inventing sprint identities |
-| 3   | **Session-start must load ROADMAP.md** and present current sprint state                                                       | Ensures consistent context at every session     |
-| 4   | **Session-end must sync ROADMAP.md** — mark completed tasks, log ad-hoc work                                                  | Prevents task loss between sessions             |
-| 5   | **Unplanned work gets a suffix** (6a, 6b) — never renumber existing sprints                                                   | Preserves roadmap integrity and auditability    |
-| 6   | **When answering sprint questions, read ROADMAP.md first** — never guess from memory                                          | Prevents contradictory answers                  |
-| 7   | **Session-end must verify no duplicate tracking** — no task arrays in session-state.json, no task lists in session-context.md | Enforces SSOT continuously                      |
+### 6.1 Summary of the 7 Mandatory Rules
 
-### 6.2 Reject & Escalate Matrix
+1. **ROADMAP.md is the ONLY sprint tracking file** — prevents duplicate tracking
+2. **Sprint numbers come from ARCHITECTURE.md only** — prevents invented sprint identities
+3. **Session-start must load ROADMAP.md** and present current sprint state
+4. **Session-end must sync ROADMAP.md** — mark completed tasks, log ad-hoc work
+5. **Unplanned work gets a suffix** (6a, 6b) — never renumber existing sprints
+6. **When answering sprint questions, read ROADMAP.md first** — never guess from memory
+7. **Session-end must verify no duplicate tracking** across session files
 
-| Condition                                                   | Action                                    |
-| :---------------------------------------------------------- | :---------------------------------------- |
-| Task tracked in `session-state.json` tasks array            | ❌ Remove immediately, move to ROADMAP.md |
-| Sprint number not in ARCHITECTURE.md                        | ❌ Reject — use suffix notation           |
-| Task status answered from memory without reading ROADMAP.md | ❌ Self-correct — read file first         |
-| Session ends without ROADMAP.md update                      | ❌ Block — must sync before commit        |
+> For the full Reject & Escalate matrix, see [sprint-tracking.md § Reject & Escalate](file:///d:/ProfesionalDevelopment/AntigravityProjects/pathforge/.agent/rules/sprint-tracking.md).
 
 ---
 
-## 7. Session Hook Automation
+## 7. Session Hook Protocol
 
 ### 7.1 Session Start Flow
+
+> Defined in [session-start.md](file:///d:/ProfesionalDevelopment/AntigravityProjects/pathforge/.agent/checklists/session-start.md).
 
 ```
 ┌─────────────────────────────────────────┐
@@ -231,6 +228,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/):
 ```
 
 ### 7.2 Session End Flow
+
+> Defined in [session-end.md](file:///d:/ProfesionalDevelopment/AntigravityProjects/pathforge/.agent/checklists/session-end.md).
 
 ```
 ┌─────────────────────────────────────────┐
@@ -286,17 +285,18 @@ Format follows [Keep a Changelog](https://keepachangelog.com/):
 | :------------------- | :--------------------------------------------------------------------------------------------------------------------- | :------------------------------------- |
 | SSOT Sprint Board    | [ROADMAP.md](file:///d:/ProfesionalDevelopment/AntigravityProjects/pathforge/docs/ROADMAP.md)                          | Task status, sprint identity, velocity |
 | Per-Sprint Changelog | [CHANGELOG.md](file:///d:/ProfesionalDevelopment/AntigravityProjects/pathforge/docs/CHANGELOG.md)                      | What shipped each sprint               |
-| Agent Enforcement    | [sprint-tracking.md](file:///d:/ProfesionalDevelopment/AntigravityProjects/pathforge/.agent/rules/sprint-tracking.md)  | 7 mandatory rules                      |
-| Session Start Hook   | [session-start.md](file:///d:/ProfesionalDevelopment/AntigravityProjects/pathforge/.agent/checklists/session-start.md) | Sprint State Validation (Auto)         |
-| Session End Hook     | [session-end.md](file:///d:/ProfesionalDevelopment/AntigravityProjects/pathforge/.agent/checklists/session-end.md)     | Sprint State Sync (Auto)               |
+| Agent Enforcement    | [sprint-tracking.md](file:///d:/ProfesionalDevelopment/AntigravityProjects/pathforge/.agent/rules/sprint-tracking.md)  | 7 mandatory rules (single enforcement) |
+| Session Start        | [session-start.md](file:///d:/ProfesionalDevelopment/AntigravityProjects/pathforge/.agent/checklists/session-start.md) | Validation + staleness detection       |
+| Session End          | [session-end.md](file:///d:/ProfesionalDevelopment/AntigravityProjects/pathforge/.agent/checklists/session-end.md)     | Sync + verification                    |
 | Sprint Definitions   | [ARCHITECTURE.md](file:///d:/ProfesionalDevelopment/AntigravityProjects/pathforge/docs/architecture/ARCHITECTURE.md)   | Master roadmap (Section 7)             |
-| Session Handoff      | [session-context.md](file:///d:/ProfesionalDevelopment/AntigravityProjects/pathforge/.agent/session-context.md)        | Handoff notes only                     |
-| Machine Metadata     | [session-state.json](file:///d:/ProfesionalDevelopment/AntigravityProjects/pathforge/.agent/session-state.json)        | Commit, branch, test count             |
+| Session Handoff      | [session-context.md](file:///d:/ProfesionalDevelopment/AntigravityProjects/pathforge/.agent/session-context.md)        | Working context + handoff notes        |
+| Volatile Metadata    | [session-state.json](file:///d:/ProfesionalDevelopment/AntigravityProjects/pathforge/.agent/session-state.json)        | Volatile-only (v2.1.0 schema)          |
 
 ---
 
 ## 10. Version History
 
-| Date       | Version | Change                                                                                                                 |
-| :--------- | :------ | :--------------------------------------------------------------------------------------------------------------------- |
-| 2026-02-14 | 1.0.0   | Initial system establishment — 7-company research, SSOT architecture, session hook automation, agent enforcement rules |
+| Date       | Version | Change                                                                                                               |
+| :--------- | :------ | :------------------------------------------------------------------------------------------------------------------- |
+| 2026-02-15 | 1.1.0   | Resolved 8 audit findings — slimmed session files, deduped rules, added staleness detection, honest labeling         |
+| 2026-02-14 | 1.0.0   | Initial system establishment — 7-company research, SSOT architecture, session hook protocol, agent enforcement rules |

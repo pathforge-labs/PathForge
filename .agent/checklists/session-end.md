@@ -14,8 +14,8 @@
   - Any blockers discovered
   - ⚠️ NO task lists — use ROADMAP.md instead
 - [ ] **session-state.json** updated:
-  - Last commit, branch, test count
-  - ⚠️ NO task arrays — use ROADMAP.md instead
+  - Last commit (must match HEAD), branch, test count
+  - ⚠️ Volatile-only fields (v2.1.0 schema) — NO task arrays, NO static project metadata
 
 ---
 
@@ -33,6 +33,11 @@
 - [ ] **Verify no duplicate tracking**:
   - No task arrays in `session-state.json`
   - No task lists in `session-context.md`
+  - No completed items list in `session-context.md`
+- [ ] **Sync verification**:
+  - `session-state.json → repository.lastCommit` matches `git log --oneline -1`
+  - `session-context.md → Last Session Summary` references work done THIS session
+  - `session-state.json → session.focus` matches what was actually worked on
 
 ---
 

@@ -13,7 +13,11 @@
   - ⚠️ This file contains handoff context ONLY — not task tracking
 - [ ] **session-state.json** loaded
   - Last commit, branch, test count verified
-  - ⚠️ This file contains metadata ONLY — not task tracking
+  - ⚠️ Volatile-only metadata (v2.1.0 schema) — not task tracking
+- [ ] **Staleness check**
+  - Compare `session-state.json → repository.lastCommit` with `git log --oneline -1`
+  - If mismatch → alert user: "Session files are stale (synced at X, HEAD is Y)"
+  - Continue with `docs/ROADMAP.md` as authoritative source regardless
 - [ ] **rules.md** loaded (if project has one)
   - Project-specific rules acknowledged
 
@@ -36,7 +40,7 @@
 - [ ] **Validate against ARCHITECTURE.md**
   - Sprint numbers match Section 7
   - No drift between roadmap and board
-- [ ] **docs/CHANGELOG.md** reviewed for recent entries
+- [ ] **docs/CHANGELOG.md** reviewed for entries since last session
 
 ---
 

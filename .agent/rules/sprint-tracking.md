@@ -1,6 +1,6 @@
 # Sprint Tracking Protocol
 
-> **Version**: 1.0.0
+> **Version**: 1.1.0
 > **Effective**: 2026-02-14
 > **Authority**: Emre Dursun — Product Owner
 > **Enforcement**: MANDATORY — No exceptions
@@ -27,7 +27,7 @@ No task status may be tracked in any other file. This rule is inspired by:
 - **ROADMAP.md** is the ONLY file where task status (`[ ]`, `[/]`, `[x]`, `[-]`) is tracked
 - **NEVER** duplicate task lists in `session-context.md`, `session-state.json`, or conversation artifacts
 - `session-context.md` → session-level handoff notes only
-- `session-state.json` → machine-readable metadata only (commit, branch, test count)
+- `session-state.json` → volatile-only metadata (v2.1.0 schema — NO task arrays, NO static project data)
 
 ### 2. Sprint Identity
 
@@ -113,4 +113,5 @@ When the user asks about sprint status, timeline, or next steps:
 
 | Date       | Version | Change                                                                |
 | :--------- | :------ | :-------------------------------------------------------------------- |
+| 2026-02-15 | 1.1.0   | Aligned with PPTS v1.1.0 — volatile-only schema, staleness detection  |
 | 2026-02-14 | 1.0.0   | Initial protocol — Professional Project Tracking System establishment |
