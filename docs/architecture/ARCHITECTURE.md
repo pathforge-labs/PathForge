@@ -336,6 +336,14 @@ graph LR
         TRANSITIONPATH["TransitionPath"]
     end
 
+    subgraph "Career Threat Radar™ Context"
+        AUTOMATIONRISK["AutomationRisk"]
+        INDUSTRYTREND["IndustryTrend"]
+        SKILLSHIELDENTRY["SkillShieldEntry"]
+        CAREERRESILIENCE["CareerResilienceSnapshot"]
+        ALERTPREFERENCE["AlertPreference"]
+    end
+
     subgraph "Career Intelligence Engine (Revolutionary)"
         SKILLHEALTH["SkillHealth"]
         SALARYESTIMATE["SalaryEstimate"]
@@ -361,37 +369,47 @@ graph LR
     CAREERDNA --> SKILLHEALTH
     CAREERDNA --> SALARYESTIMATE
     CAREERDNA --> CAREERSIM
+    CAREERDNA --> AUTOMATIONRISK
+    CAREERDNA --> INDUSTRYTREND
+    CAREERDNA --> SKILLSHIELDENTRY
+    CAREERDNA --> CAREERRESILIENCE
+    CAREERDNA --> ALERTPREFERENCE
     COMPANYSIGNAL --> JOBLISTING
     SKILL --> CREDENTIALMAP
 ```
 
 ### 3.2 Core Entity Definitions
 
-| Entity              | Description                          | Key Fields                                                                  |
-| :------------------ | :----------------------------------- | :-------------------------------------------------------------------------- |
-| `User`              | Platform user account                | id, email, name, auth_provider, created_at                                  |
-| `Resume`            | Parsed, structured CV data           | id, user_id, raw_text, structured_data, embedding, version                  |
-| `Skill`             | Individual competency                | id, name, category, proficiency_level, verified                             |
-| `Blacklist`         | Company exclusion list               | id, user_id, company_name, reason, is_current_employer                      |
-| `Preference`        | Job search preferences               | id, user_id, locations, salary_range, work_type, sectors                    |
-| `JobListing`        | Aggregated job posting (via API)     | id, title, company, description, embedding, source_url, source, posted_at   |
-| `MatchResult`       | Semantic match between user and job  | id, user_id, job_id, overall_score, explanation, created_at                 |
-| `MatchScore`        | Dimensional scoring breakdown        | id, match_id, dimension, score, rationale                                   |
-| `Application`       | Tracked job application              | id, user_id, job_id, cv_version_id, status, submitted_at                    |
-| `CVVersion`         | Tailored CV for specific application | id, resume_id, job_id, content, diff_from_base, generation_log              |
-| `CoverLetter`       | Generated cover letter               | id, application_id, content, tone, generation_log                           |
-| `DiffLog`           | CV customization changelog           | id, cv_version_id, field, original, modified, reason                        |
-| `InterviewPrep`     | Interview preparation bundle         | id, application_id, company_brief, questions, star_examples                 |
-| `FunnelEvent`       | Application lifecycle event          | id, application_id, stage, timestamp, metadata                              |
-| `MarketInsight`     | Aggregated market intelligence       | id, user_id, insight_type, data, period, generated_at                       |
-| `CareerDNA`         | Living multi-dimensional profile     | id, user_id, skills_genome, growth_vector, market_position, updated_at      |
-| `ThreatAlert`       | Proactive career threat detection    | id, user_id, alert_type, severity, message, action_items                    |
-| `TransitionPath`    | Proven career transition pathway     | id, from_role, to_role, success_rate, avg_duration, required_skills         |
-| `SkillHealth`       | 🔥 Skill decay & growth tracking     | id, skill_id, user_id, freshness_score, market_demand, velocity, updated_at |
-| `SalaryEstimate`    | 🔥 Personalized salary intelligence  | id, user_id, estimated_range, confidence, factors, skill_impact_map         |
-| `CareerSimulation`  | 🔥 "What-if" scenario result         | id, user_id, scenario_type, inputs, projected_outcome, confidence           |
-| `CompanySignal`     | 🔥 Hidden job market signal          | id, company_name, signal_type, strength, source, detected_at                |
-| `CredentialMapping` | 🔥 Cross-border qualification map    | id, source_credential, source_country, target_equivalents, confidence       |
+| Entity                     | Description                            | Key Fields                                                                                            |
+| :------------------------- | :------------------------------------- | :---------------------------------------------------------------------------------------------------- |
+| `User`                     | Platform user account                  | id, email, name, auth_provider, created_at                                                            |
+| `Resume`                   | Parsed, structured CV data             | id, user_id, raw_text, structured_data, embedding, version                                            |
+| `Skill`                    | Individual competency                  | id, name, category, proficiency_level, verified                                                       |
+| `Blacklist`                | Company exclusion list                 | id, user_id, company_name, reason, is_current_employer                                                |
+| `Preference`               | Job search preferences                 | id, user_id, locations, salary_range, work_type, sectors                                              |
+| `JobListing`               | Aggregated job posting (via API)       | id, title, company, description, embedding, source_url, source, posted_at                             |
+| `MatchResult`              | Semantic match between user and job    | id, user_id, job_id, overall_score, explanation, created_at                                           |
+| `MatchScore`               | Dimensional scoring breakdown          | id, match_id, dimension, score, rationale                                                             |
+| `Application`              | Tracked job application                | id, user_id, job_id, cv_version_id, status, submitted_at                                              |
+| `CVVersion`                | Tailored CV for specific application   | id, resume_id, job_id, content, diff_from_base, generation_log                                        |
+| `CoverLetter`              | Generated cover letter                 | id, application_id, content, tone, generation_log                                                     |
+| `DiffLog`                  | CV customization changelog             | id, cv_version_id, field, original, modified, reason                                                  |
+| `InterviewPrep`            | Interview preparation bundle           | id, application_id, company_brief, questions, star_examples                                           |
+| `FunnelEvent`              | Application lifecycle event            | id, application_id, stage, timestamp, metadata                                                        |
+| `MarketInsight`            | Aggregated market intelligence         | id, user_id, insight_type, data, period, generated_at                                                 |
+| `CareerDNA`                | Living multi-dimensional profile       | id, user_id, skills_genome, growth_vector, market_position, updated_at                                |
+| `ThreatAlert`              | Proactive career threat detection      | id, career_dna_id, category, severity, title, description, opportunity, evidence, channel, status     |
+| `AutomationRisk`           | 🔥 ONET + LLM hybrid risk scoring      | id, career_dna_id, onet_soc_code, base_probability, contextual_score, vulnerable/resilient_tasks      |
+| `IndustryTrend`            | 🔥 Personalized industry monitoring    | id, career_dna_id, industry_name, trend_direction, confidence, key_signals, impact_on_user            |
+| `SkillShieldEntry`         | 🔥 Skills Shield™ classification       | id, career_dna_id, skill_name, classification (shield/exposure), automation_resistance, reasoning     |
+| `CareerResilienceSnapshot` | 🔥 Career Resilience Score™ (5-factor) | id, career_dna_id, overall_score, skill_diversity, automation_resistance, growth_velocity, moat_score |
+| `AlertPreference`          | User alert preferences                 | id, career_dna_id, enabled_categories, min_severity, enabled_channels, quiet_hours                    |
+| `TransitionPath`           | Proven career transition pathway       | id, from_role, to_role, success_rate, avg_duration, required_skills                                   |
+| `SkillHealth`              | 🔥 Skill decay & growth tracking       | id, skill_id, user_id, freshness_score, market_demand, velocity, updated_at                           |
+| `SalaryEstimate`           | 🔥 Personalized salary intelligence    | id, user_id, estimated_range, confidence, factors, skill_impact_map                                   |
+| `CareerSimulation`         | 🔥 "What-if" scenario result           | id, user_id, scenario_type, inputs, projected_outcome, confidence                                     |
+| `CompanySignal`            | 🔥 Hidden job market signal            | id, company_name, signal_type, strength, source, detected_at                                          |
+| `CredentialMapping`        | 🔥 Cross-border qualification map      | id, source_credential, source_country, target_equivalents, confidence                                 |
 
 ---
 
@@ -600,13 +618,13 @@ pathforge/
 
 ### Phase B: Career Intelligence — Tier 1 Revolutionary Features (Post-MVP)
 
-| Sprint | Focus                           | Duration     | Key Deliverables                                                                                 |
-| :----- | :------------------------------ | :----------- | :----------------------------------------------------------------------------------------------- |
-| **8**  | Career DNA Activation           | 2-3 sessions | Living Career DNA profiles, hidden skills discovery, growth vector                               |
-| **9**  | 🔥 Career Threat Radar™         | 3-4 sessions | Industry trend monitoring, layoff signal detection, automation risk scoring, preemptive alerts   |
-| **10** | 🔥 Skill Decay & Growth Tracker | 2-3 sessions | Skill freshness scoring, market demand curves, Skill Velocity Map, personalized reskilling paths |
-| **11** | 🔥 Salary Intelligence Engine™  | 2-3 sessions | Personalized salary calculation, skill→salary impact modeling, historical trajectory tracking    |
-| **12** | Transition Pathways             | 2-3 sessions | Anonymized career movement patterns, proven pivot paths, success probability                     |
+| Sprint | Focus                           | Duration     | Key Deliverables                                                                                                                                                             |
+| :----- | :------------------------------ | :----------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **8**  | Career DNA Activation           | 2-3 sessions | Living Career DNA profiles, hidden skills discovery, growth vector                                                                                                           |
+| **9**  | 🔥 Career Threat Radar™         | 3-4 sessions | Career Resilience Score™, Skills Shield™ Matrix, Threat→Opportunity Inversion, Career Moat Score, automation risk (ONET+LLM hybrid), industry trend monitoring, alert engine |
+| **10** | 🔥 Skill Decay & Growth Tracker | 2-3 sessions | Skill freshness scoring, market demand curves, Skill Velocity Map, personalized reskilling paths                                                                             |
+| **11** | 🔥 Salary Intelligence Engine™  | 2-3 sessions | Personalized salary calculation, skill→salary impact modeling, historical trajectory tracking                                                                                |
+| **12** | Transition Pathways             | 2-3 sessions | Anonymized career movement patterns, proven pivot paths, success probability                                                                                                 |
 
 ### Phase C: Network Intelligence — Tier 2 Revolutionary Features
 
@@ -638,22 +656,26 @@ pathforge/
 
 ### 8.2 Feature-Level Differentiation
 
-| What exists today                  | What PathForge does differently                                  |
-| :--------------------------------- | :--------------------------------------------------------------- |
-| Keyword matching (Jobscan, Rezi)   | Semantic vector similarity + LLM reasoning                       |
-| Static CV (everywhere)             | Living Career DNA™ — evolves continuously                        |
-| Reactive job search (event-driven) | Proactive Career Radar — opportunities find you                  |
-| No career threat alerts            | 🔥 **Career Threat Radar™** — warns before job is at risk        |
-| No skill depreciation tracking     | 🔥 **Skill Decay Tracker** — shows which skills lose value       |
-| Average salary data (Glassdoor)    | 🔥 **Salary Intelligence** — YOUR personalized number            |
-| No career simulation               | 🔥 **Career Simulation** — "what-if" scenarios with real data    |
-| Generic interview prep             | 🔥 **Interview Intelligence** — company-specific negotiation AI  |
-| Only posted jobs visible           | 🔥 **Hidden Job Market Detector** — finds unposted opportunities |
-| No credential translation          | 🔥 **Cross-Border Passport** — global qualification mapping      |
-| No proven career paths             | Transition Pathways — evidence-based pivot routes                |
-| Mass auto-apply (LazyApply)        | Human-approved semi-automation                                   |
-| No ethics layer                    | Blacklists, consent management, GDPR, audit trails               |
-| Opaque AI decisions                | Full explainability on every match and CV change                 |
+| What exists today                  | What PathForge does differently                                   |
+| :--------------------------------- | :---------------------------------------------------------------- |
+| Keyword matching (Jobscan, Rezi)   | Semantic vector similarity + LLM reasoning                        |
+| Static CV (everywhere)             | Living Career DNA™ — evolves continuously                         |
+| Reactive job search (event-driven) | Proactive Career Radar — opportunities find you                   |
+| No career threat alerts            | 🔥 **Career Threat Radar™** — warns before job is at risk         |
+| No career resilience metric        | 🔥 **Career Resilience Score™** — 5-factor composite adaptability |
+| No skill defensibility view        | 🔥 **Skills Shield™ Matrix** — shields vs. exposures per skill    |
+| Threats without actionable paths   | 🔥 **Threat→Opportunity Inversion** — every threat → opportunity  |
+| No career defensibility metric     | 🔥 **Career Moat Score** — Buffett-style moat for individuals     |
+| No skill depreciation tracking     | 🔥 **Skill Decay Tracker** — shows which skills lose value        |
+| Average salary data (Glassdoor)    | 🔥 **Salary Intelligence** — YOUR personalized number             |
+| No career simulation               | 🔥 **Career Simulation** — "what-if" scenarios with real data     |
+| Generic interview prep             | 🔥 **Interview Intelligence** — company-specific negotiation AI   |
+| Only posted jobs visible           | 🔥 **Hidden Job Market Detector** — finds unposted opportunities  |
+| No credential translation          | 🔥 **Cross-Border Passport** — global qualification mapping       |
+| No proven career paths             | Transition Pathways — evidence-based pivot routes                 |
+| Mass auto-apply (LazyApply)        | Human-approved semi-automation                                    |
+| No ethics layer                    | Blacklists, consent management, GDPR, audit trails                |
+| Opaque AI decisions                | Full explainability on every match and CV change                  |
 
 ---
 

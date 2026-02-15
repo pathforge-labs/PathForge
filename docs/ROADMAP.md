@@ -148,10 +148,18 @@
 
 - [x] ⚠️ Prompt injection sanitization — 8-layer OWASP LLM01 defense
 - [x] ⚠️ Rate limiting on `/career-dna/generate` — 3/min per user (slowapi)
-- [ ] Industry trend monitoring
-- [ ] Layoff signal detection
-- [ ] Automation risk scoring
-- [ ] Preemptive career alerts
+- [x] Quality Gate Research — 8 competitors, 4 proprietary innovations defined
+
+> **Career Threat Radar™ features (approved):**
+
+- [ ] 🔥 Career Resilience Score™ — 5-factor composite adaptability metric (0–100)
+- [ ] 🔥 Skills Shield™ Matrix — skills classified as shields (protective) vs exposures (vulnerable)
+- [ ] 🔥 Threat→Opportunity Inversion Engine — every threat auto-paired with actionable opportunity
+- [ ] 🔥 Career Moat Score — 4-dimension career defensibility metric (0–100)
+- [ ] Automation risk scoring — hybrid ONET Frey-Osborne + LLM contextual analysis
+- [ ] Industry trend monitoring — LLM-powered personalized trend analysis
+- [ ] Alert engine — severity-tiered, event-driven, user preference-filtered
+- [ ] 6 data models, 10 API endpoints, Signal Fusion Engine
 
 ### Sprint 10 — Skill Decay & Growth Tracker (⏳)
 

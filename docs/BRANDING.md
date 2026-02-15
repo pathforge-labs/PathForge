@@ -46,6 +46,18 @@
 >
 > This concept is central to PathForge's competitive differentiation and must be treated as protected intellectual property in all communications.
 
+### Career Threat Radar™ — Intellectual Property Notice
+
+> **Career Threat Radar™** is a proprietary concept and pending trademark of PathForge.
+> It is the industry's first consumer-grade career threat intelligence system, comprising four proprietary innovations:
+>
+> 1. **Career Resilience Score™** — 5-factor composite metric measuring career adaptability (0–100)
+> 2. **Skills Shield™ Matrix** — classification of skills as protective shields or vulnerability exposures
+> 3. **Threat→Opportunity Inversion Engine** — automatic pairing of every threat signal with actionable opportunities
+> 4. **Career Moat Score** — 4-dimension career defensibility metric inspired by Warren Buffett's competitive moat theory
+>
+> No competitor — enterprise or consumer — offers any of these four innovations. They represent PathForge's strongest competitive differentiation and must be treated as protected intellectual property.
+
 ---
 
 ## 1. Environment Variables (`.env`)
@@ -66,7 +78,7 @@ APP_API_URL=https://api.pathforge.eu
 APP_DOCS_URL=https://docs.pathforge.eu
 
 # Metadata
-APP_DESCRIPTION=PathForge is a Career Intelligence Platform that democratizes enterprise-grade career intelligence — Skills Graphs, Market Signals, Predictive Analytics — for every professional. Powered by Career DNA™ technology.
+APP_DESCRIPTION=PathForge is a Career Intelligence Platform that democratizes enterprise-grade career intelligence — Skills Graphs, Market Signals, Predictive Analytics — for every professional. Powered by Career DNA™ and Career Threat Radar™ technology.
 APP_AUTHOR=PathForge
 APP_AUTHOR_EMAIL=hello@pathforge.eu
 ```
@@ -103,7 +115,7 @@ APP_DESCRIPTION = os.getenv(
     "APP_DESCRIPTION",
     f"{APP_NAME} is a platform that democratizes enterprise-grade career intelligence — "
     "Skills Graphs, Market Signals, Predictive Analytics — for every "
-    "professional. Powered by Career DNA™ technology."
+    "professional. Powered by Career DNA™ and Career Threat Radar™ technology."
 )
 APP_AUTHOR = os.getenv("APP_AUTHOR", APP_NAME)
 APP_AUTHOR_EMAIL = os.getenv("APP_AUTHOR_EMAIL", f"hello@{APP_DOMAIN}")
@@ -147,7 +159,7 @@ export const APP_API_URL =
 // Metadata
 export const APP_DESCRIPTION =
   process.env.NEXT_PUBLIC_APP_DESCRIPTION ??
-  `${APP_NAME} is a platform that democratizes enterprise-grade career intelligence — Skills Graphs, Market Signals, Predictive Analytics — for every professional. Powered by Career DNA™ technology.`;
+  `${APP_NAME} is a platform that democratizes enterprise-grade career intelligence — Skills Graphs, Market Signals, Predictive Analytics — for every professional. Powered by Career DNA™ and Career Threat Radar™ technology.`;
 
 // SEO
 export const APP_OG_IMAGE = `${APP_URL}/og-image.png`;

@@ -177,6 +177,40 @@ class CareerDNA(UUIDMixin, TimestampMixin, Base):
         cascade="all, delete-orphan",
     )
 
+    # Career Threat Radar™ relationships
+    automation_risk: Mapped["AutomationRisk | None"] = relationship(
+        "AutomationRisk",
+        back_populates="career_dna",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
+    industry_trends: Mapped[list["IndustryTrend"]] = relationship(
+        "IndustryTrend",
+        back_populates="career_dna",
+        cascade="all, delete-orphan",
+    )
+    skill_shield_entries: Mapped[list["SkillShieldEntry"]] = relationship(
+        "SkillShieldEntry",
+        back_populates="career_dna",
+        cascade="all, delete-orphan",
+    )
+    resilience_snapshots: Mapped[list["CareerResilienceSnapshot"]] = relationship(
+        "CareerResilienceSnapshot",
+        back_populates="career_dna",
+        cascade="all, delete-orphan",
+    )
+    threat_alerts: Mapped[list["ThreatAlert"]] = relationship(
+        "ThreatAlert",
+        back_populates="career_dna",
+        cascade="all, delete-orphan",
+    )
+    alert_preference: Mapped["AlertPreference | None"] = relationship(
+        "AlertPreference",
+        back_populates="career_dna",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
+
     def __repr__(self) -> str:
         return f"<CareerDNA user={self.user_id} v{self.version}>"
 

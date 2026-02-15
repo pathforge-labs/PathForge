@@ -14,7 +14,17 @@ from fastapi.middleware.cors import CORSMiddleware
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
-from app.api.v1 import ai, analytics, applications, auth, blacklist, career_dna, health, users
+from app.api.v1 import (
+    ai,
+    analytics,
+    applications,
+    auth,
+    blacklist,
+    career_dna,
+    health,
+    threat_radar,
+    users,
+)
 from app.core.config import settings
 from app.core.error_handlers import register_error_handlers
 from app.core.logging_config import setup_logging
@@ -70,6 +80,7 @@ def create_app() -> FastAPI:
     application.include_router(blacklist.router, prefix="/api/v1")
     application.include_router(analytics.router, prefix="/api/v1")
     application.include_router(career_dna.router, prefix="/api/v1")
+    application.include_router(threat_radar.router, prefix="/api/v1")
 
     return application
 

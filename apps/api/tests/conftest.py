@@ -56,6 +56,8 @@ from app.models import (
     Application, CVVersion, FunnelEvent, MarketInsight, CVExperiment,
     CareerDNA, SkillGenomeEntry, HiddenSkill, ExperienceBlueprint,
     GrowthVector, ValuesProfile, MarketPosition,
+    AutomationRisk, IndustryTrend, SkillShieldEntry,
+    CareerResilienceSnapshot, ThreatAlert, AlertPreference,
 )
 
 
