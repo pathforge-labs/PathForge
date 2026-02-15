@@ -1,7 +1,7 @@
 # PathForge — Live Sprint Board
 
 > **Single Source of Truth** for all sprint tracking and task management.
-> **Last Updated**: 2026-02-15 | **Current Phase**: A (MVP)
+> **Last Updated**: 2026-02-15 | **Current Phase**: B (Career Intelligence)
 
 ---
 
@@ -142,7 +142,7 @@
 - [x] 22 tests (168/168 total suite passing)
 - [x] Tier-1 retrospective audit — 12 lint fixes applied
 
-### Sprint 9 — Career Threat Radar™ (⏳)
+### Sprint 9 — Career Threat Radar™ (✅ Complete)
 
 > **Hardening carry-over from Sprint 8 audit:**
 
@@ -150,16 +150,18 @@
 - [x] ⚠️ Rate limiting on `/career-dna/generate` — 3/min per user (slowapi)
 - [x] Quality Gate Research — 8 competitors, 4 proprietary innovations defined
 
-> **Career Threat Radar™ features (approved):**
+> **Career Threat Radar™ features:**
 
-- [ ] 🔥 Career Resilience Score™ — 5-factor composite adaptability metric (0–100)
-- [ ] 🔥 Skills Shield™ Matrix — skills classified as shields (protective) vs exposures (vulnerable)
-- [ ] 🔥 Threat→Opportunity Inversion Engine — every threat auto-paired with actionable opportunity
-- [ ] 🔥 Career Moat Score — 4-dimension career defensibility metric (0–100)
-- [ ] Automation risk scoring — hybrid ONET Frey-Osborne + LLM contextual analysis
-- [ ] Industry trend monitoring — LLM-powered personalized trend analysis
-- [ ] Alert engine — severity-tiered, event-driven, user preference-filtered
-- [ ] 6 data models, 10 API endpoints, Signal Fusion Engine
+- [x] 🔥 Career Resilience Score™ — 5-factor composite adaptability metric (0–100)
+- [x] 🔥 Skills Shield™ Matrix — skills classified as shields (protective) vs exposures (vulnerable)
+- [x] 🔥 Threat→Opportunity Inversion Engine — every threat auto-paired with actionable opportunity
+- [x] 🔥 Career Moat Score — 4-dimension career defensibility metric (0–100)
+- [x] Automation risk scoring — hybrid ONET Frey-Osborne + LLM contextual analysis
+- [x] Industry trend monitoring — LLM-powered personalized trend analysis
+- [x] Alert engine — severity-tiered, event-driven, user preference-filtered
+- [x] 6 data models, 10 API endpoints, Signal Fusion Engine
+- [x] 25 new tests (202/202 total passing)
+- [x] Tier-1 retrospective audit — 2 lint fixes applied
 
 ### Sprint 10 — Skill Decay & Growth Tracker (⏳)
 
@@ -212,3 +214,4 @@
 | 6b     | 3             | 3         | 2            | 1        |
 | 7      | 6             | 7         | 1            | 1        |
 | 8      | 3             | 9         | 1            | 2        |
+| 9      | 8             | 11        | 3            | 1        |

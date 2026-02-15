@@ -5,6 +5,36 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [Sprint 9] — Career Threat Radar™ — 2026-02-15
+
+### Added
+
+- **Career Threat Radar™** — full threat intelligence system:
+  - 6 SQLAlchemy models (`AutomationRisk`, `IndustryTrend`, `SkillShieldEntry`, `CareerResilienceSnapshot`, `ThreatAlert`, `AlertPreference`) + 7 StrEnums
+  - 14 Pydantic schemas for request/response validation
+  - Alembic migration `7f8g9h0i1j2k` — 6 tables with FK CASCADE + indexes
+  - ONET Frey-Osborne dataset (130 SOC codes, 20 categories) + cached data loader
+  - AI analyzer: 4 LLM methods with versioned prompt templates
+  - Signal Fusion Engine: CRS™ (5-factor composite) + Career Moat Score (4-dimension)
+  - 10 REST endpoints at `/api/v1/threat-radar`
+  - 25 new tests (202/202 total passing)
+- **Ethics safeguards**: confidence cap (0.85), HIGH alert evidence gate (≥2 sources), mandatory Threat→Opportunity pairing, anti-catastrophizing prompts
+
+---
+
+## [Sprint 8] — Career DNA Activation — 2026-02-15
+
+### Added
+
+- **Career DNA™** — 7 SQLAlchemy models, 12 Pydantic schemas, 5 LLM methods + 1 data-driven
+- CareerDNAService lifecycle orchestration + 10 REST endpoints
+- Alembic migration for 7 Career DNA tables
+- 22 tests (168/168 total passing)
+- Prompt injection sanitization (8-layer OWASP LLM01 defense)
+- Rate limiting on `/career-dna/generate` (3/min per user)
+
+---
+
 ## [Ad-Hoc] — PPTS v1.1 & Code Quality — 2026-02-15
 
 ### Changed
