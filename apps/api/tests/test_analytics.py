@@ -9,7 +9,6 @@ Sprint 6b — Analytics
 import pytest
 from httpx import AsyncClient
 
-
 # ── Funnel Pipeline Tests ─────────────────────────────────────────
 
 

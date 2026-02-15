@@ -57,7 +57,15 @@ line-length = 100
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "W", "UP", "B", "SIM", "RUF"]
-ignore = ["E501", "B008", "F821"]
+ignore = [
+    "E501",   # line too long — handled by formatter
+    "B008",   # function call in default argument — FastAPI Depends()
+    "F821",   # undefined name — SQLAlchemy string forward refs
+    "RUF002", # ambiguous unicode in docstring — intentional (™, →)
+    "RUF003", # ambiguous unicode in comment — intentional (×)
+    "E402",   # module-level import not at top — conftest.py design
+    "N818",   # exception Error suffix — our naming convention
+]
 
 [tool.ruff.lint.isort]
 known-first-party = ["app"]

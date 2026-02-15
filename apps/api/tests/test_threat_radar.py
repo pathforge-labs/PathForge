@@ -10,11 +10,9 @@ Test suite for:
     - API endpoint auth gates
 """
 
-import uuid
 
 import pytest
 from httpx import AsyncClient
-
 
 # ── Model Tests ────────────────────────────────────────────────
 

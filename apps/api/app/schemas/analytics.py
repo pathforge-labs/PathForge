@@ -11,7 +11,6 @@ from pydantic import BaseModel, Field
 
 from app.models.analytics import ExperimentStatus, FunnelStage, InsightType
 
-
 # ---------------------------------------------------------------------------
 # Funnel Events
 # ---------------------------------------------------------------------------

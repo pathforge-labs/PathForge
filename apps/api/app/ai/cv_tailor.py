@@ -15,7 +15,7 @@ from typing import Any
 
 from app.ai.prompts import CV_TAILOR_SYSTEM_PROMPT, CV_TAILOR_USER_PROMPT
 from app.ai.schemas import ParsedResume, TailoredCV
-from app.core.llm import LLMTier, LLMError, complete_json
+from app.core.llm import LLMError, LLMTier, complete_json
 
 logger = logging.getLogger(__name__)
 

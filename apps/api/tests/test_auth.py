@@ -7,7 +7,6 @@ Tests for /api/v1/auth (register, login, refresh).
 import pytest
 from httpx import AsyncClient
 
-
 # ── Registration ────────────────────────────────────────────────
 
 

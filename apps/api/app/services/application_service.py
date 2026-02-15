@@ -14,7 +14,7 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
-from app.models.application import Application, ApplicationStatus, CVVersion, VALID_TRANSITIONS
+from app.models.application import VALID_TRANSITIONS, Application, ApplicationStatus
 from app.models.matching import JobListing
 from app.models.preference import BlacklistEntry
 

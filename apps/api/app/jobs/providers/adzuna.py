@@ -16,7 +16,7 @@ from typing import Any
 import httpx
 
 from app.core.config import settings
-from app.jobs.providers.base import JobProvider, RawJobListing
+from app.jobs.providers.base import RawJobListing
 
 logger = logging.getLogger(__name__)
 

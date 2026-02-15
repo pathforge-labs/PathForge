@@ -19,7 +19,7 @@ from __future__ import annotations
 
 import logging
 from datetime import timedelta
-from typing import Any
+from typing import Any, ClassVar
 
 from arq import cron
 from arq.connections import RedisSettings
@@ -128,8 +128,8 @@ def _parse_redis_settings() -> RedisSettings:
 class WorkerSettings:
     """ARQ worker configuration."""
 
-    functions = [generate_embeddings, process_resume, run_matching_pipeline]
-    cron_jobs = [cron(worker_health_check, minute={0, 15, 30, 45})]
+    functions: ClassVar[list] = [generate_embeddings, process_resume, run_matching_pipeline]
+    cron_jobs: ClassVar[list] = [cron(worker_health_check, minute={0, 15, 30, 45})]
 
     on_startup = startup
     on_shutdown = shutdown

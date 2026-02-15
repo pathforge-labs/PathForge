@@ -5,13 +5,12 @@ Tests for canonical text generation, embedding service, and batch logic.
 All tests use mocked Voyage AI client — no API keys needed.
 """
 
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
 
 from app.ai.embeddings import EmbeddingService
-from app.ai.schemas import ParsedResume, ParsedSkill, ParsedExperience, ParsedEducation
-
+from app.ai.schemas import ParsedEducation, ParsedExperience, ParsedResume, ParsedSkill
 
 # ── Canonical Text Generation Tests ────────────────────────────
 
@@ -166,7 +165,7 @@ class TestEmbeddingService:
         service._batch_size = 2  # Small batch for testing
 
         texts = ["text1", "text2", "text3", "text4", "text5"]
-        results = await service.embed_batch(texts)
+        await service.embed_batch(texts)
 
         # With batch_size=2, 5 texts should produce 3 API calls
         assert mock_client.embed.call_count == 3

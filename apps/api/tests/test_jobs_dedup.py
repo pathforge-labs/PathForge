@@ -4,7 +4,6 @@ PathForge — Job Deduplication Tests
 Tests for fingerprint computation and text normalization.
 """
 
-import pytest
 
 from app.jobs.dedup import compute_fingerprint, normalize_text
 

@@ -7,8 +7,8 @@ Usage:
     from app.core.security import create_access_token, get_current_user
 """
 
-from datetime import UTC, datetime, timedelta
 import uuid as _uuid
+from datetime import UTC, datetime, timedelta
 
 import bcrypt
 from fastapi import Depends, HTTPException, status

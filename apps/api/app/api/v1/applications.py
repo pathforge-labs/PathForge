@@ -12,8 +12,8 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.security import get_current_user
 from app.core.database import get_db
+from app.core.security import get_current_user
 from app.models.application import ApplicationStatus
 from app.models.user import User
 from app.services.application_service import (
@@ -136,7 +136,7 @@ async def create_app_endpoint(
         return _to_response(app)
     except (BlacklistViolation, RateLimitViolation, InvalidTransition, ApplicationError) as exc:
         await db.rollback()
-        raise _handle_service_error(exc)
+        raise _handle_service_error(exc) from exc
 
 
 @router.get("", response_model=ApplicationListResponse)
@@ -197,7 +197,7 @@ async def update_app_status_endpoint(
         return _to_response(app)
     except (InvalidTransition, RateLimitViolation, ApplicationError) as exc:
         await db.rollback()
-        raise _handle_service_error(exc)
+        raise _handle_service_error(exc) from exc
 
 
 @router.delete("/{application_id}", status_code=204)

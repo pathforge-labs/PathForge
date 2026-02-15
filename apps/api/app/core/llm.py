@@ -33,7 +33,7 @@ if not settings.debug:
     litellm.set_verbose = False
 
 
-class LLMTier(str, enum.Enum):
+class LLMTier(enum.StrEnum):
     """Model selection tier — maps to config model names."""
 
     PRIMARY = "primary"

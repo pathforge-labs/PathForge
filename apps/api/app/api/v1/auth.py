@@ -6,7 +6,6 @@ Registration, login, token refresh, and logout endpoints.
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from jose import JWTError, jwt
-from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings

@@ -21,8 +21,8 @@ from app.core.middleware import get_request_id
 
 
 def _add_request_id(
-    logger: logging.Logger,  # noqa: ARG001
-    method_name: str,  # noqa: ARG001
+    logger: logging.Logger,
+    method_name: str,
     event_dict: dict,
 ) -> dict:
     """Inject request ID into every log entry."""

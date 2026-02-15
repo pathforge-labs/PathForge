@@ -134,7 +134,7 @@ async def parse_resume(
         experience=[e.model_dump() for e in parsed.experience],
         education=[e.model_dump() for e in parsed.education],
         certifications=[c.model_dump() for c in parsed.certifications],
-        languages=[l.model_dump() for l in parsed.languages],
+        languages=[lang.model_dump() for lang in parsed.languages],
     )
 
 

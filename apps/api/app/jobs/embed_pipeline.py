@@ -93,7 +93,7 @@ async def embed_new_jobs(
             continue
 
         # Update each job with its embedding
-        for job, emb in zip(batch, embeddings):
+        for job, emb in zip(batch, embeddings, strict=False):
             await session.execute(
                 update(JobListing)
                 .where(JobListing.id == job.id)

@@ -20,9 +20,8 @@ from app.models.analytics import (
     InsightType,
     MarketInsight,
 )
-from app.models.application import Application, ApplicationStatus
+from app.models.application import Application
 from app.models.matching import JobListing, MatchResult
-
 
 # ---------------------------------------------------------------------------
 # Funnel pipeline

@@ -14,8 +14,7 @@ from app.ai.prompts import (
     RESUME_PARSE_USER_PROMPT,
     RESUME_PARSE_VERSION,
 )
-from app.ai.schemas import ParsedResume, ParsedSkill, ParsedExperience, ParsedEducation
-
+from app.ai.schemas import ParsedEducation, ParsedExperience, ParsedResume, ParsedSkill
 
 # ── Schema Validation Tests ────────────────────────────────────
 

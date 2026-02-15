@@ -14,7 +14,6 @@ from httpx import AsyncClient
 from app.jobs.dedup import compute_fingerprint
 from app.jobs.providers.base import RawJobListing
 
-
 # ── Fixtures ───────────────────────────────────────────────────
 
 
@@ -52,7 +51,7 @@ class TestIngestionPipeline:
     @pytest.mark.asyncio
     async def test_ingest_new_listings(self, mock_provider) -> None:
         """New listings should be inserted into DB."""
-        from app.jobs.ingestion import ingest_jobs, IngestionResult
+        from app.jobs.ingestion import ingest_jobs
 
         listings = [
             _make_raw_listing(title="Job A", external_id="a"),

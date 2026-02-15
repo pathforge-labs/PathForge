@@ -8,10 +8,8 @@ Covers: embedding vector validation, matching service, CV tailor output structur
 
 import math
 import uuid
-from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
-
 
 # ── Embedding Vector Validation Tests ──────────────────────────
 
@@ -21,7 +19,6 @@ class TestEmbeddingVectorValidation:
 
     def test_valid_embedding_produces_string(self):
         """A normal embedding should produce a valid bracket-delimited string."""
-        from app.ai.matching import math as _math  # noqa: ensure math is importable
 
         embedding = [0.1, 0.2, 0.3, -0.5, 1.0]
         validated = []
@@ -71,7 +68,7 @@ class TestResumeTextSizeValidation:
         from app.api.v1.ai import ParseResumeRequest
 
         oversized = "A" * 100_001  # Just over the limit
-        with pytest.raises(Exception):  # ValidationError
+        with pytest.raises(ValueError):  # ValidationError
             ParseResumeRequest(raw_text=oversized)
 
     def test_request_accepts_normal_text(self):
@@ -86,7 +83,7 @@ class TestResumeTextSizeValidation:
         """Resume text under 50 chars should be rejected."""
         from app.api.v1.ai import ParseResumeRequest
 
-        with pytest.raises(Exception):
+        with pytest.raises(ValueError):
             ParseResumeRequest(raw_text="short")
 
 
@@ -108,7 +105,7 @@ class TestUUIDSchemaValidation:
         """Invalid UUID strings should be rejected at the schema level."""
         from app.api.v1.ai import TailorCVRequest
 
-        with pytest.raises(Exception):
+        with pytest.raises(ValueError):
             TailorCVRequest(resume_id="not-a-uuid", job_id="also-not-valid")
 
 
@@ -134,7 +131,8 @@ class TestJWTSecretSeparation:
 
     def test_refresh_token_uses_refresh_secret(self):
         """Refresh tokens should decode with jwt_refresh_secret, not jwt_secret."""
-        from jose import JWTError, jwt as jose_jwt
+        from jose import JWTError
+        from jose import jwt as jose_jwt
 
         from app.core.config import settings
         from app.core.security import create_refresh_token
@@ -158,9 +156,10 @@ class TestJWTSecretSeparation:
 
     def test_refresh_token_has_unique_jti(self):
         """Each refresh token should have a unique jti claim."""
-        from app.core.security import create_refresh_token
         from jose import jwt as jose_jwt
+
         from app.core.config import settings
+        from app.core.security import create_refresh_token
 
         token1 = create_refresh_token("test-user-id")
         token2 = create_refresh_token("test-user-id")

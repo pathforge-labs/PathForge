@@ -14,7 +14,6 @@ import pytest
 from app.jobs.providers.adzuna import AdzunaProvider, _format_salary
 from app.jobs.providers.jooble import JoobleProvider
 
-
 # ── Helper ─────────────────────────────────────────────────────
 
 

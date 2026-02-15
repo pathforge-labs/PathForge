@@ -13,22 +13,18 @@ from collections.abc import AsyncGenerator
 
 import pytest
 from httpx import ASGITransport, AsyncClient
-from sqlalchemy import event, String, Text
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
-from app.core.security import create_access_token
-
+# pgvector's Vector type
+from pgvector.sqlalchemy import Vector
+from sqlalchemy import event
+from sqlalchemy.dialects.postgresql import ARRAY, JSON
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 
 # ── SQLite ↔ PostgreSQL Type Compatibility ────────────────────
 #
 # We need to register compilation hooks BEFORE importing models,
 # so that when Base.metadata.create_all runs, the types are known.
-
 from sqlalchemy.ext.compiler import compiles
-from sqlalchemy.dialects.postgresql import ARRAY, JSON
-
-# pgvector's Vector type
-from pgvector.sqlalchemy import Vector
 
 
 # ARRAY → TEXT (SQLite stores serialized representation)
@@ -51,15 +47,6 @@ def _compile_json_sqlite(type_, compiler, **kw):
 
 # ── Now import models (which triggers Base.metadata population) ──
 from app.models.base import Base
-from app.models import (
-    User, Resume, Skill, Preference, BlacklistEntry, JobListing, MatchResult,
-    Application, CVVersion, FunnelEvent, MarketInsight, CVExperiment,
-    CareerDNA, SkillGenomeEntry, HiddenSkill, ExperienceBlueprint,
-    GrowthVector, ValuesProfile, MarketPosition,
-    AutomationRisk, IndustryTrend, SkillShieldEntry,
-    CareerResilienceSnapshot, ThreatAlert, AlertPreference,
-)
-
 
 # ── Test Database ─────────────────────────────────────────────
 

@@ -15,7 +15,6 @@ from httpx import AsyncClient
 from app.core.llm import LLMError
 from app.core.middleware import get_request_id, request_id_var
 
-
 # ── Request ID Middleware Tests ────────────────────────────────
 
 

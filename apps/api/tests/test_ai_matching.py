@@ -12,11 +12,10 @@ import pytest
 from app.ai.schemas import (
     MatchCandidate,
     MatchExplanation,
+    ParsedExperience,
     ParsedResume,
     ParsedSkill,
-    ParsedExperience,
 )
-
 
 # ── MatchCandidate Schema Tests ────────────────────────────────
 
@@ -44,9 +43,9 @@ class TestMatchCandidateSchema:
 
     def test_score_out_of_bounds(self):
         """Scores outside 0-1 should fail validation."""
-        with pytest.raises(Exception):
+        with pytest.raises(ValueError):
             MatchCandidate(job_id="test-id", score=1.5)
-        with pytest.raises(Exception):
+        with pytest.raises(ValueError):
             MatchCandidate(job_id="test-id", score=-0.1)
 
 
