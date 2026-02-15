@@ -312,11 +312,11 @@ def test_crs_computation_high_resilience():
     )
 
     assert result["overall_score"] > 70.0
-    assert result["skill_diversity_index"] == 100.0  # 20 × 5 = 100
+    assert result["skill_diversity_index"] == 100.0  # 20 x 5 = 100
     assert result["automation_resistance"] == 90.0    # 100 - 10
     assert result["growth_velocity"] == 85.0
     assert result["industry_stability"] == 85.0       # growing
-    assert result["adaptability_signal"] == 75.0      # 15/20 × 100
+    assert result["adaptability_signal"] == 75.0      # 15/20 x 100
 
 
 def test_crs_computation_low_resilience():
@@ -339,7 +339,7 @@ def test_crs_computation_low_resilience():
     )
 
     assert result["overall_score"] < 30.0
-    assert result["skill_diversity_index"] == 15.0  # 3 × 5
+    assert result["skill_diversity_index"] == 15.0  # 3 x 5
     assert result["automation_resistance"] == 15.0   # 100 - 85
     assert result["growth_velocity"] == 50.0         # default
     assert result["industry_stability"] == 25.0      # declining
