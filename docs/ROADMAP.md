@@ -146,8 +146,8 @@
 
 > **Hardening carry-over from Sprint 8 audit:**
 
-- [ ] ⚠️ Prompt injection sanitization (user text → LLM unsanitized)
-- [ ] ⚠️ Rate limiting on `/career-dna/generate` (5+ LLM calls per request, no cap)
+- [x] ⚠️ Prompt injection sanitization — 8-layer OWASP LLM01 defense
+- [x] ⚠️ Rate limiting on `/career-dna/generate` — 3/min per user (slowapi)
 - [ ] Industry trend monitoring
 - [ ] Layoff signal detection
 - [ ] Automation risk scoring
