@@ -1,7 +1,7 @@
 # PathForge — Live Sprint Board
 
 > **Single Source of Truth** for all sprint tracking and task management.
-> **Last Updated**: 2026-02-14 | **Current Phase**: A (MVP)
+> **Last Updated**: 2026-02-15 | **Current Phase**: A (MVP)
 
 ---
 
@@ -176,6 +176,8 @@
 | 2026-02-14 | Professional Project Tracking System | 6b            | ✅ Done | This system itself                    |
 | 2026-02-14 | Sprint 6b Analytics implementation   | 6b            | ✅ Done | 3 models, 8 endpoints, 17 tests       |
 | 2026-02-14 | Agent Customization Architecture     | Post-6b       | ✅ Done | GEMINI.md, 8 rules, 16 workflows      |
+| 2026-02-15 | PPTS v1.1 — 8 audit findings         | Post-7        | ✅ Done | Volatile-only state, staleness detect |
+| 2026-02-15 | ESLint cleanup — 7 issues resolved   | Post-7        | ✅ Done | 0 errors, 0 warnings achieved         |
 
 ---
 

@@ -5,6 +5,20 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [Ad-Hoc] — PPTS v1.1 & Code Quality — 2026-02-15
+
+### Changed
+
+- **PPTS v1.1**: Resolved 8 audit findings — volatile-only `session-state.json` (v2.1.0), slimmed `session-context.md` (102→51 lines), staleness detection, sync verification, honest labeling, rule deduplication
+- **ESLint cleanup**: Resolved all 7 lint issues (2 errors, 5 warnings → 0 problems)
+  - Replaced impure `Math.random()` with `useId`-based deterministic hash (`sidebar.tsx`)
+  - Moved reduced-motion check from effect to lazy `useState` initializer (`use-scroll-animation.ts`)
+  - Removed unused imports (`Link`, `Image`, `useState`) and unused state setters
+- Updated `sprint-tracking.md` to v1.1.0
+- Updated `GEMINI.md` session file paths to `.agent/` prefix
+
+---
+
 ## [Sprint 7] — Production Readiness — 2026-02-14
 
 ### Added
