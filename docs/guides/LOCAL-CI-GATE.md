@@ -71,7 +71,7 @@ git push --no-verify
 # API environment
 cd apps/api
 python -m venv .venv
-.venv\Scripts\pip install ".[dev]"
+.venv\Scripts\pip install ".[dev,ai]"
 
 # Web environment
 cd apps/web

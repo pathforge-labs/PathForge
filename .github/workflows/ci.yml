@@ -64,7 +64,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: apps/api
-        run: pip install ".[dev]"
+        run: pip install ".[dev,ai]"
 
       - name: Lint (ruff)
         working-directory: apps/api
