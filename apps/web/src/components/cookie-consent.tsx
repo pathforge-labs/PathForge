@@ -24,14 +24,26 @@ export function CookieConsent() {
     }
   }, []);
 
-  function accept() {
+  function accept(): void {
     localStorage.setItem(CONSENT_KEY, "accepted");
     setVisible(false);
+    // Update GA4 consent in same tab (StorageEvent only fires cross-tab)
+    if (typeof window.gtag === "function") {
+      window.gtag("consent", "update", {
+        analytics_storage: "granted",
+      });
+    }
   }
 
-  function decline() {
+  function decline(): void {
     localStorage.setItem(CONSENT_KEY, "declined");
     setVisible(false);
+    // Ensure GA4 stays denied in same tab
+    if (typeof window.gtag === "function") {
+      window.gtag("consent", "update", {
+        analytics_storage: "denied",
+      });
+    }
   }
 
   if (!visible) return null;

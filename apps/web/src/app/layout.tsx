@@ -7,6 +7,7 @@ import {
   APP_URL,
 } from "@/config/brand";
 import { ThemeProvider } from "next-themes";
+import { GoogleAnalytics } from "@/components/google-analytics";
 import "./globals.css";
 
 const inter = Inter({
@@ -86,6 +87,13 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  ...(process.env.NEXT_PUBLIC_GSC_VERIFICATION
+    ? {
+        verification: {
+          google: process.env.NEXT_PUBLIC_GSC_VERIFICATION,
+        },
+      }
+    : {}),
 };
 
 export default function RootLayout({
@@ -99,6 +107,7 @@ export default function RootLayout({
         className={`${inter.variable} ${plusJakartaSans.variable} font-sans antialiased`}
       >
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+          <GoogleAnalytics />
           {children}
         </ThemeProvider>
       </body>

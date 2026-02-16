@@ -2,7 +2,7 @@
 
 > **Status**: Pending — Complete before first production deployment
 > **Sprint**: 7 (Production Readiness)
-> **Created**: 2026-02-14
+> **Created**: 2026-02-14 | **Updated**: 2026-02-16
 
 ---
 
@@ -49,3 +49,32 @@ Store the following in **GitHub → Settings → Secrets and variables → Actio
 - [ ] Point `pathforge.eu` → Vercel
 - [ ] Point `api.pathforge.eu` → Railway (if using custom domain)
 - [ ] Verify SSL certificates are active
+
+## 7. Email (Resend)
+
+- [ ] Verify `pathforge.eu` domain in Resend → DNS records (SPF, DKIM, DMARC)
+- [ ] Set `RESEND_API_KEY` in Vercel environment
+- [ ] Set `RESEND_FROM_EMAIL` in Vercel environment
+- [ ] Set `RESEND_AUDIENCE_ID` in Vercel environment
+- [ ] Test contact form auto-reply email delivery
+- [ ] Test waitlist signup confirmation
+- [ ] Add DMARC DNS record for `pathforge.eu`
+
+## 8. Analytics (GA4)
+
+- [ ] Create GA4 property at https://analytics.google.com
+- [ ] Create Web data stream for `pathforge.eu`
+- [ ] Copy Measurement ID (`G-XXXXXXXXXX`)
+- [ ] Set `NEXT_PUBLIC_GA_MEASUREMENT_ID` in Vercel environment
+- [ ] Verify Consent Mode v2 is active (denied by default)
+- [ ] Verify GA4 activates only after user accepts cookie banner
+- [ ] Verify GA4 is blocked when user declines cookies
+
+## 9. SEO (Google Search Console)
+
+- [ ] Create GSC property for `pathforge.eu`
+- [ ] Choose HTML tag verification method
+- [ ] Copy content value from verification meta tag
+- [ ] Set `NEXT_PUBLIC_GSC_VERIFICATION` in Vercel environment
+- [ ] Verify ownership in GSC
+- [ ] Submit sitemap: `https://pathforge.eu/sitemap.xml`
