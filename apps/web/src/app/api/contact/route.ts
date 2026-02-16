@@ -158,46 +158,11 @@ export async function POST(request: Request): Promise<NextResponse> {
       `,
     });
 
-    // Send branded auto-reply confirmation to the sender
-    await resend.emails.send({
-      from: fromAddress,
-      to: email,
-      subject: `Thanks for reaching out, ${escapeHtml(name)}! — PathForge`,
-      html: `
-        <div style="font-family: 'Inter', 'Segoe UI', sans-serif; max-width: 560px; margin: 0 auto; padding: 40px 24px; color: #e2e8f0; background: #0a0a12;">
-          <div style="text-align: center; margin-bottom: 32px;">
-            <h1 style="font-size: 24px; font-weight: 700; margin: 0 0 8px; color: #f1f5f9;">
-              We got your message! ✨
-            </h1>
-            <p style="font-size: 14px; color: #64748b; margin: 0;">
-              Thanks for contacting PathForge
-            </p>
-          </div>
-
-          <div style="padding: 20px; border-radius: 12px; background: rgba(124, 58, 237, 0.08); border: 1px solid rgba(124, 58, 237, 0.15); margin-bottom: 24px;">
-            <p style="font-size: 14px; line-height: 1.7; color: #94a3b8; margin: 0;">
-              Hi <strong style="color: #e2e8f0;">${escapeHtml(name)}</strong>,<br><br>
-              We received your message regarding <strong style="color: #c4b5fd;">"${escapeHtml(subject)}"</strong>
-              and will get back to you as soon as possible — typically within 24 hours.
-            </p>
-          </div>
-
-          <div style="padding: 16px; border-radius: 12px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); margin-bottom: 24px;">
-            <p style="font-size: 12px; color: #64748b; margin: 0 0 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Your message</p>
-            <p style="font-size: 13px; line-height: 1.6; color: #64748b; margin: 0; white-space: pre-wrap;">${escapeHtml(message.length > 300 ? message.slice(0, 300) + "..." : message)}</p>
-          </div>
-
-          <div style="text-align: center; padding-top: 24px; border-top: 1px solid rgba(255, 255, 255, 0.06);">
-            <p style="font-size: 13px; color: #475569; margin: 0 0 4px;">
-              PathForge — AI-Powered Career Intelligence
-            </p>
-            <p style="font-size: 12px; color: #334155; margin: 0;">
-              Built in Amsterdam, NL 🇳🇱 · GDPR Native
-            </p>
-          </div>
-        </div>
-      `,
-    });
+    // NOTE: Auto-reply to sender intentionally omitted to prevent email bombing.
+    // The contact form could be abused to send PathForge-branded emails to arbitrary
+    // addresses. Auto-reply should only be re-enabled after adding CAPTCHA (e.g.,
+    // Cloudflare Turnstile) or email verification.
+    // TODO(production): Add Turnstile CAPTCHA, then re-enable auto-reply.
 
     return NextResponse.json(
       { message: "Message sent successfully! We'll be in touch soon." },

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, type ReactElement } from "react";
 import Link from "next/link";
 import { Cookie, X } from "lucide-react";
 
@@ -11,7 +11,7 @@ const CONSENT_KEY = "pathforge-cookie-consent";
  * Glassmorphism design with Accept/Decline.
  * Persists choice to localStorage to avoid repeat prompts.
  */
-export function CookieConsent() {
+export function CookieConsent(): ReactElement | null {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -77,8 +77,8 @@ export function CookieConsent() {
           </div>
           <div className="space-y-3">
             <p className="pr-4 text-sm leading-relaxed text-muted-foreground">
-              We use essential cookies to make PathForge work. No tracking, no
-              ads.{" "}
+              We use cookies to improve PathForge. Accept to enable
+              analytics, or decline — PathForge works either way.{" "}
               <Link
                 href="/cookies"
                 className="text-primary underline underline-offset-4 transition-colors hover:text-primary/80"
