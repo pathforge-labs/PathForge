@@ -4,7 +4,10 @@ PathForge — JobListing & MatchResult Models
 Aggregated job postings (via API) and semantic match results.
 """
 
+from __future__ import annotations
+
 import uuid
+from typing import Any
 
 from pgvector.sqlalchemy import Vector
 from sqlalchemy import Float, ForeignKey, String, Text
@@ -30,11 +33,11 @@ class JobListing(UUIDMixin, TimestampMixin, Base):
         String(64), nullable=True, unique=True, index=True,
         comment="SHA256 of normalized(title+company+location) for dedup",
     )
-    structured_data: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    structured_data: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
     embedding = mapped_column(Vector(3072), nullable=True)
 
     # Relationships
-    match_results: Mapped[list["MatchResult"]] = relationship(
+    match_results: Mapped[list[MatchResult]] = relationship(
         "MatchResult", back_populates="job_listing", cascade="all, delete-orphan"
     )
 
@@ -56,11 +59,11 @@ class MatchResult(UUIDMixin, TimestampMixin, Base):
     )
     overall_score: Mapped[float] = mapped_column(Float, nullable=False)
     explanation: Mapped[str | None] = mapped_column(Text, nullable=True)
-    dimensional_scores: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    dimensional_scores: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
     is_dismissed: Mapped[bool] = mapped_column(default=False, nullable=False)
 
     # Relationships
-    job_listing: Mapped["JobListing"] = relationship("JobListing", back_populates="match_results")
+    job_listing: Mapped[JobListing] = relationship("JobListing", back_populates="match_results")
 
     def __repr__(self) -> str:
         return f"<MatchResult score={self.overall_score:.2f}>"

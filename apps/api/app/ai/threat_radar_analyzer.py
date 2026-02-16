@@ -263,7 +263,7 @@ class ThreatRadarAnalyzer:
                 max_tokens=3072,
             )
 
-            classifications = data.get("classifications", [])
+            classifications: list[dict[str, Any]] = data.get("classifications", [])
 
             # Validate and clamp automation_resistance
             for entry in classifications:
@@ -361,7 +361,7 @@ class ThreatRadarAnalyzer:
                 max_tokens=2048,
             )
 
-            alerts = data.get("alerts", [])
+            alerts: list[dict[str, Any]] = data.get("alerts", [])
 
             # Validate: HIGH severity requires ≥2 evidence sources
             for alert in alerts:

@@ -7,15 +7,24 @@ and CV A/B experiment tracking.
 Sprint 6b — Analytics (ARCHITECTURE.md §3.2 / §7)
 """
 
+from __future__ import annotations
+
 import uuid
 from datetime import UTC, datetime
 from enum import StrEnum
+from typing import TYPE_CHECKING, Any
 
 from sqlalchemy import DateTime, ForeignKey, String, Text
 from sqlalchemy.dialects.postgresql import JSON, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base import Base, TimestampMixin, UUIDMixin
+
+if TYPE_CHECKING:
+    from app.models.application import Application
+    from app.models.cv_tailor import CVVersion
+    from app.models.job_listing import JobListing
+    from app.models.user import User
 
 # ---------------------------------------------------------------------------
 # Enums
@@ -85,7 +94,7 @@ class FunnelEvent(UUIDMixin, Base):
     stage: Mapped[str] = mapped_column(
         String(30), nullable=False, index=True,
     )
-    metadata_: Mapped[dict | None] = mapped_column(
+    metadata_: Mapped[dict[str, Any] | None] = mapped_column(
         "metadata", JSON, nullable=True,
     )
     created_at: Mapped[datetime] = mapped_column(
@@ -96,8 +105,8 @@ class FunnelEvent(UUIDMixin, Base):
     )
 
     # Relationships
-    user: Mapped["User"] = relationship("User")
-    application: Mapped["Application | None"] = relationship("Application")
+    user: Mapped[User] = relationship("User")
+    application: Mapped[Application | None] = relationship("Application")
 
     def __repr__(self) -> str:
         return f"<FunnelEvent {self.stage} user={self.user_id}>"
@@ -123,7 +132,7 @@ class MarketInsight(UUIDMixin, Base):
     insight_type: Mapped[str] = mapped_column(
         String(30), nullable=False, index=True,
     )
-    data: Mapped[dict] = mapped_column(
+    data: Mapped[dict[str, Any]] = mapped_column(
         JSON, nullable=False,
     )
     period: Mapped[str] = mapped_column(
@@ -137,7 +146,7 @@ class MarketInsight(UUIDMixin, Base):
     )
 
     # Relationships
-    user: Mapped["User"] = relationship("User")
+    user: Mapped[User] = relationship("User")
 
     def __repr__(self) -> str:
         return f"<MarketInsight {self.insight_type} period={self.period}>"
@@ -184,7 +193,7 @@ class CVExperiment(UUIDMixin, TimestampMixin, Base):
     status: Mapped[str] = mapped_column(
         String(20), default=ExperimentStatus.RUNNING, nullable=False, index=True,
     )
-    metrics: Mapped[dict | None] = mapped_column(
+    metrics: Mapped[dict[str, Any] | None] = mapped_column(
         JSON, nullable=True,
     )
     hypothesis: Mapped[str | None] = mapped_column(
@@ -195,11 +204,11 @@ class CVExperiment(UUIDMixin, TimestampMixin, Base):
     )
 
     # Relationships
-    user: Mapped["User"] = relationship("User")
-    job_listing: Mapped["JobListing"] = relationship("JobListing")
-    variant_a: Mapped["CVVersion"] = relationship("CVVersion", foreign_keys=[variant_a_id])
-    variant_b: Mapped["CVVersion"] = relationship("CVVersion", foreign_keys=[variant_b_id])
-    winner: Mapped["CVVersion | None"] = relationship(
+    user: Mapped[User] = relationship("User")
+    job_listing: Mapped[JobListing] = relationship("JobListing")
+    variant_a: Mapped[CVVersion] = relationship("CVVersion", foreign_keys=[variant_a_id])
+    variant_b: Mapped[CVVersion] = relationship("CVVersion", foreign_keys=[variant_b_id])
+    winner: Mapped[CVVersion | None] = relationship(
         "CVVersion", foreign_keys=[winner_id],
     )
 

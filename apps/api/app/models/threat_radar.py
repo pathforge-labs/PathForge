@@ -19,9 +19,12 @@ Proprietary Innovations:
     - Career Moat Score (4-dimension defensibility, 0–100)
 """
 
+from __future__ import annotations
+
 import enum
 import uuid
 from datetime import datetime, time
+from typing import TYPE_CHECKING, Any
 
 from sqlalchemy import (
     DateTime,
@@ -36,6 +39,9 @@ from sqlalchemy.dialects.postgresql import JSON, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base import Base, TimestampMixin, UUIDMixin
+
+if TYPE_CHECKING:
+    from app.models.career_dna import CareerDNA
 
 # ── Enums ──────────────────────────────────────────────────────
 
@@ -141,11 +147,11 @@ class AutomationRisk(UUIDMixin, TimestampMixin, Base):
     risk_level: Mapped[str] = mapped_column(
         String(20), default=AlertSeverity.MEDIUM.value, nullable=False
     )
-    vulnerable_tasks: Mapped[dict | None] = mapped_column(JSON, nullable=True)
-    resilient_tasks: Mapped[dict | None] = mapped_column(JSON, nullable=True)
-    recommended_skills: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    vulnerable_tasks: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
+    resilient_tasks: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
+    recommended_skills: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
     analysis_reasoning: Mapped[str | None] = mapped_column(Text, nullable=True)
-    opportunity_inversions: Mapped[dict | None] = mapped_column(
+    opportunity_inversions: Mapped[dict[str, Any] | None] = mapped_column(
         JSON, nullable=True
     )
     analyzed_at: Mapped[datetime] = mapped_column(
@@ -156,7 +162,7 @@ class AutomationRisk(UUIDMixin, TimestampMixin, Base):
     )
 
     # Relationships
-    career_dna: Mapped["CareerDNA"] = relationship(
+    career_dna: Mapped[CareerDNA] = relationship(
         "CareerDNA", back_populates="automation_risk"
     )
 
@@ -194,12 +200,12 @@ class IndustryTrend(UUIDMixin, TimestampMixin, Base):
     confidence: Mapped[float] = mapped_column(
         Float, default=0.5, nullable=False
     )
-    key_signals: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    key_signals: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
     impact_on_user: Mapped[str | None] = mapped_column(Text, nullable=True)
-    recommended_actions: Mapped[dict | None] = mapped_column(
+    recommended_actions: Mapped[dict[str, Any] | None] = mapped_column(
         JSON, nullable=True
     )
-    data_sources: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    data_sources: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
     analyzed_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         default=func.now(),
@@ -208,7 +214,7 @@ class IndustryTrend(UUIDMixin, TimestampMixin, Base):
     )
 
     # Relationships
-    career_dna: Mapped["CareerDNA"] = relationship(
+    career_dna: Mapped[CareerDNA] = relationship(
         "CareerDNA", back_populates="industry_trends"
     )
 
@@ -257,7 +263,7 @@ class SkillShieldEntry(UUIDMixin, TimestampMixin, Base):
     improvement_path: Mapped[str | None] = mapped_column(Text, nullable=True)
 
     # Relationships
-    career_dna: Mapped["CareerDNA"] = relationship(
+    career_dna: Mapped[CareerDNA] = relationship(
         "CareerDNA", back_populates="skill_shield_entries"
     )
 
@@ -327,7 +333,7 @@ class CareerResilienceSnapshot(UUIDMixin, TimestampMixin, Base):
 
     # Explainability
     explanation: Mapped[str | None] = mapped_column(Text, nullable=True)
-    improvement_actions: Mapped[dict | None] = mapped_column(
+    improvement_actions: Mapped[dict[str, Any] | None] = mapped_column(
         JSON, nullable=True
     )
     computed_at: Mapped[datetime] = mapped_column(
@@ -338,7 +344,7 @@ class CareerResilienceSnapshot(UUIDMixin, TimestampMixin, Base):
     )
 
     # Relationships
-    career_dna: Mapped["CareerDNA"] = relationship(
+    career_dna: Mapped[CareerDNA] = relationship(
         "CareerDNA", back_populates="resilience_snapshots"
     )
 
@@ -380,7 +386,7 @@ class ThreatAlert(UUIDMixin, TimestampMixin, Base):
     title: Mapped[str] = mapped_column(String(500), nullable=False)
     description: Mapped[str] = mapped_column(Text, nullable=False)
     opportunity: Mapped[str] = mapped_column(Text, nullable=False)
-    evidence: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    evidence: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
     channel: Mapped[str] = mapped_column(
         String(20), default=AlertChannel.IN_APP.value, nullable=False
     )
@@ -395,7 +401,7 @@ class ThreatAlert(UUIDMixin, TimestampMixin, Base):
     )
 
     # Relationships
-    career_dna: Mapped["CareerDNA"] = relationship(
+    career_dna: Mapped[CareerDNA] = relationship(
         "CareerDNA", back_populates="threat_alerts"
     )
 
@@ -427,7 +433,7 @@ class AlertPreference(UUIDMixin, TimestampMixin, Base):
         unique=True,
         index=True,
     )
-    enabled_categories: Mapped[dict] = mapped_column(
+    enabled_categories: Mapped[list[str]] = mapped_column(
         JSON,
         default=lambda: [category.value for category in AlertCategory],
         nullable=False,
@@ -435,7 +441,7 @@ class AlertPreference(UUIDMixin, TimestampMixin, Base):
     min_severity: Mapped[str] = mapped_column(
         String(20), default=AlertSeverity.LOW.value, nullable=False
     )
-    enabled_channels: Mapped[dict] = mapped_column(
+    enabled_channels: Mapped[list[str]] = mapped_column(
         JSON,
         default=lambda: [AlertChannel.IN_APP.value],
         nullable=False,
@@ -448,7 +454,7 @@ class AlertPreference(UUIDMixin, TimestampMixin, Base):
     )
 
     # Relationships
-    career_dna: Mapped["CareerDNA"] = relationship(
+    career_dna: Mapped[CareerDNA] = relationship(
         "CareerDNA", back_populates="alert_preference"
     )
 

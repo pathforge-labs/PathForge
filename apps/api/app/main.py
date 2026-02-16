@@ -69,7 +69,7 @@ def create_app() -> FastAPI:
     # ── Error Handlers ─────────────────────────────────────────
     register_error_handlers(application)
     application.state.limiter = limiter
-    application.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+    application.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)  # type: ignore[arg-type]
 
     # ── Routes ─────────────────────────────────────────────────
     application.include_router(health.router, prefix="/api/v1")

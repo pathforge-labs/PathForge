@@ -8,6 +8,7 @@ and CV A/B experimentation.
 import uuid
 from collections import Counter
 from datetime import UTC, datetime, timedelta
+from typing import Any
 
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -34,7 +35,7 @@ async def record_funnel_event(
     user_id: uuid.UUID,
     application_id: uuid.UUID | None,
     stage: FunnelStage,
-    metadata: dict | None = None,
+    metadata: dict[str, Any] | None = None,
 ) -> FunnelEvent:
     """Insert a new funnel event."""
     event = FunnelEvent(
@@ -66,7 +67,7 @@ async def get_funnel_metrics(
     *,
     user_id: uuid.UUID,
     period: str = "30d",
-) -> dict:
+) -> dict[str, Any]:
     """
     Aggregate funnel conversion rates per stage.
 
@@ -84,7 +85,7 @@ async def get_funnel_metrics(
         )
         .group_by(FunnelEvent.stage)
     )
-    counts: dict[str, int] = dict(result.all())
+    counts: dict[str, int] = dict(result.all())  # type: ignore[arg-type]
 
     total = sum(counts.values())
     top_count = counts.get(FunnelStage.VIEWED, total) or 1
@@ -108,7 +109,7 @@ async def get_funnel_timeline(
     *,
     user_id: uuid.UUID,
     days: int = 30,
-) -> dict:
+) -> dict[str, Any]:
     """
     Time-series event counts grouped by day and stage.
 
@@ -163,7 +164,7 @@ async def generate_market_insight(
     days = _parse_period(period)
     cutoff = datetime.now(UTC) - timedelta(days=days)
 
-    data: dict
+    data: dict[str, Any]
     match insight_type:
         case InsightType.SKILL_DEMAND:
             data = await _compute_skill_demand(db, user_id, cutoff)
@@ -239,7 +240,7 @@ async def record_experiment_result(
     *,
     experiment_id: uuid.UUID,
     winner_id: uuid.UUID,
-    metrics: dict | None = None,
+    metrics: dict[str, Any] | None = None,
 ) -> CVExperiment:
     """Complete an experiment by recording the winner."""
     result = await db.execute(
@@ -294,7 +295,7 @@ def _parse_period(period: str) -> int:
 
 async def _compute_skill_demand(
     db: AsyncSession, user_id: uuid.UUID, cutoff: datetime,
-) -> dict:
+) -> dict[str, Any]:
     """Top skills appearing in matched job listings."""
     result = await db.execute(
         select(JobListing.description)
@@ -331,7 +332,7 @@ async def _compute_skill_demand(
 
 async def _compute_salary_trend(
     db: AsyncSession, user_id: uuid.UUID, cutoff: datetime,
-) -> dict:
+) -> dict[str, Any]:
     """Salary data from matched listings (placeholder — Adzuna provides salary)."""
     result = await db.execute(
         select(func.count())
@@ -352,7 +353,7 @@ async def _compute_salary_trend(
 
 async def _compute_market_heat(
     db: AsyncSession, user_id: uuid.UUID, cutoff: datetime,
-) -> dict:
+) -> dict[str, Any]:
     """New listings per day in user's matched domain."""
     result = await db.execute(
         select(
@@ -377,7 +378,7 @@ async def _compute_market_heat(
 
 async def _compute_competition_level(
     db: AsyncSession, user_id: uuid.UUID, cutoff: datetime,
-) -> dict:
+) -> dict[str, Any]:
     """Estimated competition level from application counts per listing."""
     result = await db.execute(
         select(func.count(Application.id))
@@ -397,7 +398,7 @@ async def _compute_competition_level(
 
 async def _compute_application_velocity(
     db: AsyncSession, user_id: uuid.UUID, cutoff: datetime,
-) -> dict:
+) -> dict[str, Any]:
     """User's application rate over time."""
     result = await db.execute(
         select(

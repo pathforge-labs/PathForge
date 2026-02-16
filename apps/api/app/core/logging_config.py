@@ -14,6 +14,8 @@ from __future__ import annotations
 
 import logging
 import sys
+from collections.abc import MutableMapping
+from typing import Any
 
 import structlog
 
@@ -23,8 +25,8 @@ from app.core.middleware import get_request_id
 def _add_request_id(
     logger: logging.Logger,
     method_name: str,
-    event_dict: dict,
-) -> dict:
+    event_dict: MutableMapping[str, Any],
+) -> MutableMapping[str, Any]:
     """Inject request ID into every log entry."""
     rid = get_request_id()
     if rid:

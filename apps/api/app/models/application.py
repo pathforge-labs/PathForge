@@ -4,14 +4,22 @@ PathForge — Application & CVVersion Models
 Job application lifecycle tracking and tailored CV versioning.
 """
 
+from __future__ import annotations
+
 import uuid
 from enum import StrEnum
+from typing import TYPE_CHECKING, Any
 
 from sqlalchemy import CheckConstraint, ForeignKey, Integer, String, Text, UniqueConstraint
 from sqlalchemy.dialects.postgresql import JSON, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base import Base, TimestampMixin, UUIDMixin
+
+if TYPE_CHECKING:
+    from app.models.job_listing import JobListing
+    from app.models.resume import Resume
+    from app.models.user import User
 
 
 class ApplicationStatus(StrEnum):
@@ -83,9 +91,9 @@ class Application(UUIDMixin, TimestampMixin, Base):
     source_url: Mapped[str | None] = mapped_column(Text, nullable=True)
 
     # Relationships
-    user: Mapped["User"] = relationship("User", back_populates="applications")
-    job_listing: Mapped["JobListing"] = relationship("JobListing")
-    cv_version: Mapped["CVVersion | None"] = relationship(
+    user: Mapped[User] = relationship("User", back_populates="applications")
+    job_listing: Mapped[JobListing] = relationship("JobListing")
+    cv_version: Mapped[CVVersion | None] = relationship(
         "CVVersion", back_populates="application",
     )
 
@@ -108,16 +116,16 @@ class CVVersion(UUIDMixin, TimestampMixin, Base):
         nullable=False,
         index=True,
     )
-    tailored_content: Mapped[dict | None] = mapped_column(JSON, nullable=True)
-    diff_from_base: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    tailored_content: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
+    diff_from_base: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
     ats_score: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
-    generation_log: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    generation_log: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
     version: Mapped[int] = mapped_column(Integer, default=1, nullable=False)
 
     # Relationships
-    resume: Mapped["Resume"] = relationship("Resume")
-    job_listing: Mapped["JobListing"] = relationship("JobListing")
-    application: Mapped["Application | None"] = relationship(
+    resume: Mapped[Resume] = relationship("Resume")
+    job_listing: Mapped[JobListing] = relationship("JobListing")
+    application: Mapped[Application | None] = relationship(
         "Application", back_populates="cv_version", uselist=False,
     )
 

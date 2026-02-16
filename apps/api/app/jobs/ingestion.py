@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass, field
+from typing import Any
 
 from sqlalchemy import select
 from sqlalchemy.dialects.postgresql import insert as pg_insert
@@ -41,7 +42,7 @@ class IngestionStats:
     duplicates: int = 0
     errors: int = 0
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "provider": self.provider,
             "fetched": self.fetched,
@@ -69,7 +70,7 @@ class IngestionResult:
     def total_duplicates(self) -> int:
         return sum(s.duplicates for s in self.providers)
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "total_fetched": self.total_fetched,
             "total_new": self.total_new,

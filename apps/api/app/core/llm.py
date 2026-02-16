@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 # ── Suppress noisy LiteLLM logs in non-debug mode ──────────────
 litellm.suppress_debug_info = True
 if not settings.debug:
-    litellm.set_verbose = False
+    litellm.set_verbose = False  # type: ignore[attr-defined]
 
 
 class LLMTier(enum.StrEnum):
@@ -166,7 +166,8 @@ async def complete_json(
         cleaned = "\n".join(lines[1:-1]).strip()
 
     try:
-        return json.loads(cleaned)
+        result: dict[str, Any] = json.loads(cleaned)
+        return result
     except json.JSONDecodeError as exc:
         raise LLMError(
             f"LLM returned invalid JSON: {str(exc)[:200]}"

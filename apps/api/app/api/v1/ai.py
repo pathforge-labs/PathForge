@@ -9,6 +9,7 @@ All endpoints are JWT-protected.
 from __future__ import annotations
 
 import uuid
+from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from pydantic import BaseModel, Field
@@ -45,11 +46,11 @@ class ParseResumeResponse(BaseModel):
     phone: str = ""
     location: str = ""
     summary: str = ""
-    skills: list[dict] = Field(default_factory=list)
-    experience: list[dict] = Field(default_factory=list)
-    education: list[dict] = Field(default_factory=list)
-    certifications: list[dict] = Field(default_factory=list)
-    languages: list[dict] = Field(default_factory=list)
+    skills: list[dict[str, Any]] = Field(default_factory=list)
+    experience: list[dict[str, Any]] = Field(default_factory=list)
+    education: list[dict[str, Any]] = Field(default_factory=list)
+    certifications: list[dict[str, Any]] = Field(default_factory=list)
+    languages: list[dict[str, Any]] = Field(default_factory=list)
 
 
 class EmbedResumeResponse(BaseModel):
@@ -96,7 +97,7 @@ class TailorCVResponse(BaseModel):
     tailored_summary: str = ""
     tailored_skills: list[str] = Field(default_factory=list)
     tailored_experience: list[str] = Field(default_factory=list)
-    diffs: list[dict] = Field(default_factory=list)
+    diffs: list[dict[str, Any]] = Field(default_factory=list)
     ats_score: int = 0
     ats_suggestions: list[str] = Field(default_factory=list)
 
@@ -160,7 +161,7 @@ async def embed_resume(
     from app.ai.resume_parser import ResumeParser
     from app.services.resume_service import ResumeService
 
-    resume = await ResumeService.get_by_id(db, resume_id)
+    resume = await ResumeService.get_by_id(db, resume_id, current_user.id)
     if not resume:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -215,7 +216,7 @@ async def match_resume(
     from app.ai.matching import MatchingService
     from app.services.resume_service import ResumeService
 
-    resume = await ResumeService.get_by_id(db, resume_id)
+    resume = await ResumeService.get_by_id(db, resume_id, current_user.id)
     if not resume:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -279,7 +280,7 @@ async def tailor_cv(
     resume_id = payload.resume_id
     job_id = payload.job_id
 
-    resume = await ResumeService.get_by_id(db, resume_id)
+    resume = await ResumeService.get_by_id(db, resume_id, current_user.id)
     if not resume:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -341,7 +342,7 @@ class IngestJobsResponse(BaseModel):
     total_fetched: int
     total_new: int
     total_duplicates: int
-    providers: list[dict]
+    providers: list[dict[str, Any]]
     embedded: int = 0
 
 
@@ -366,10 +367,11 @@ async def ingest_jobs(
     """
     from app.jobs.ingestion import ingest_jobs as run_ingestion
     from app.jobs.providers.adzuna import AdzunaProvider
+    from app.jobs.providers.base import JobProvider
     from app.jobs.providers.jooble import JoobleProvider
 
     # Build list of configured providers
-    providers = []
+    providers: list[JobProvider] = []
     if settings.adzuna_app_id and settings.adzuna_app_key:
         providers.append(AdzunaProvider())
     if settings.jooble_api_key:

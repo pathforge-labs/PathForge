@@ -10,7 +10,7 @@ sources (Reed, Indeed, etc.) without changing the ingestion pipeline.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Protocol, runtime_checkable
+from typing import Any, Protocol, runtime_checkable
 
 
 @dataclass(frozen=True)
@@ -31,7 +31,7 @@ class RawJobListing:
     source_url: str = ""
     source_platform: str = ""
     external_id: str = ""
-    extra: dict = field(default_factory=dict)
+    extra: dict[str, Any] = field(default_factory=dict)
 
 
 @runtime_checkable

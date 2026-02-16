@@ -19,13 +19,13 @@
 
 The script mirrors the exact gates from the GitHub Actions pipeline:
 
-| Gate                | CI Step                                        | Scope | Blocking        |
-| ------------------- | ---------------------------------------------- | ----- | --------------- |
-| **Ruff Lint**       | `python -m ruff check app/ tests/`             | `api` | ✅ Yes          |
-| **MyPy Type Check** | `python -m mypy app/ --ignore-missing-imports` | `api` | ⚠️ Warning only |
-| **Pytest**          | `python -m pytest tests/ -q --tb=short`        | `api` | ✅ Yes          |
-| **Next.js Lint**    | `pnpm lint`                                    | `web` | ✅ Yes          |
-| **Next.js Build**   | `pnpm build`                                   | `web` | ✅ Yes          |
+| Gate                | CI Step                                       | Scope | Blocking        |
+| ------------------- | --------------------------------------------- | ----- | --------------- |
+| **Ruff Lint**       | `python -m ruff check app/ tests/`            | `api` | ✅ Yes          |
+| **MyPy Type Check** | `python -m mypy app --ignore-missing-imports` | `api` | ⚠️ Warning only |
+| **Pytest**          | `python -m pytest tests/ -q --tb=short`       | `api` | ✅ Yes          |
+| **Next.js Lint**    | `pnpm lint`                                   | `web` | ✅ Yes          |
+| **Next.js Build**   | `pnpm build`                                  | `web` | ✅ Yes          |
 
 ### Fail-Fast Behavior
 
@@ -93,31 +93,31 @@ pnpm install
   [PASS] Ruff Lint (0.1s) - 0 errors
 
 >> MyPy Type Check (warning only)
-  [WARN] MyPy Type Check (148.4s) - 165 errors (non-blocking)
+  [PASS] MyPy Type Check (2.4s)
 
 >> Pytest
-  [PASS] Pytest (40.3s) - 202 passed
+  [PASS] Pytest (38.6s) - 202 passed
 
 --- Web: Lint & Build ---
 
 >> Next.js Lint
-  [PASS] Next.js Lint (2.1s)
+  [PASS] Next.js Lint (6.2s)
 
 >> Next.js Build
-  [PASS] Next.js Build (15.7s)
+  [PASS] Next.js Build (12.2s)
 
 --- Summary ---
 
   [PASS] Ruff Lint             0.1s  (0 errors)
-  [WARN] MyPy Type Check       148.4s  (165 errors (non-blocking))
-  [PASS] Pytest                40.3s  (202 passed)
-  [PASS] Next.js Lint          2.1s
-  [PASS] Next.js Build         15.7s
+  [PASS] MyPy Type Check       2.4s  (0 errors)
+  [PASS] Pytest                38.6s  (202 passed)
+  [PASS] Next.js Lint          6.2s
+  [PASS] Next.js Build         12.2s
 
 ==========================================
   ALL GATES PASSED - Safe to push
 ==========================================
-  Total: 206.6s
+  Total: 59.8s
 ```
 
 ## File Map
@@ -134,7 +134,8 @@ pnpm install
 
 1. **Mirrors CI 1:1** — same commands, same order, same working directories
 2. **Fail-fast** — stops at first blocking failure to save time
-3. **MyPy is non-blocking** — pre-existing type errors exist; Ruff + Pytest are the real blockers
+3. **MyPy is non-blocking** — runs as a warning gate so future type regressions don't block the push pipeline
 4. **PowerShell 5.1 compatible** — uses native `Write-Host -ForegroundColor` instead of ANSI escapes
 5. **Opt-in hook** — activated via `git config`, bypassable with `--no-verify`
 6. **Test env vars auto-managed** — sets and cleans up `ENVIRONMENT`, `JWT_SECRET`, `JWT_REFRESH_SECRET`
+7. **Telemetry disabled** — sets `NEXT_TELEMETRY_DISABLED=1` during Next.js build, cleans up after

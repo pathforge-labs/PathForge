@@ -80,7 +80,7 @@ class CareerDNAAnalyzer:
                 temperature=0.1,
                 max_tokens=2048,
             )
-            skills = data.get("hidden_skills", [])
+            skills: list[dict[str, Any]] = data.get("hidden_skills", [])
             # Cap confidence at 0.9 for inferred skills
             for skill in skills:
                 if skill.get("confidence", 0) > 0.9:

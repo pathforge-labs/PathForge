@@ -57,7 +57,7 @@ async def add_to_blacklist(
     payload: AddBlacklistRequest,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> BlacklistResponse:
     """
     Add a company to the user's blacklist.
 
@@ -103,7 +103,7 @@ async def list_blacklist(
     per_page: int = Query(50, ge=1, le=200),
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> BlacklistListResponse:
     """List all companies on the user's blacklist with pagination."""
     base = select(BlacklistEntry).where(BlacklistEntry.user_id == current_user.id)
 
@@ -139,7 +139,7 @@ async def remove_from_blacklist(
     entry_id: uuid.UUID,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> None:
     """Remove a company from the user's blacklist."""
     result = await db.execute(
         select(BlacklistEntry).where(

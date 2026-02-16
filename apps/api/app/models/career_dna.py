@@ -13,9 +13,12 @@ Dimensions:
     6. HiddenSkill — AI-discovered transferable competency
 """
 
+from __future__ import annotations
+
 import enum
 import uuid
 from datetime import datetime
+from typing import TYPE_CHECKING, Any
 
 from sqlalchemy import (
     Boolean,
@@ -31,6 +34,17 @@ from sqlalchemy.dialects.postgresql import JSON, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base import Base, TimestampMixin, UUIDMixin
+
+if TYPE_CHECKING:
+    from app.models.threat_radar import (
+        AlertPreference,
+        AutomationRisk,
+        CareerResilienceSnapshot,
+        IndustryTrend,
+        SkillShieldEntry,
+        ThreatAlert,
+    )
+    from app.models.user import User
 
 # ── Enums ──────────────────────────────────────────────────────
 
@@ -143,34 +157,34 @@ class CareerDNA(UUIDMixin, TimestampMixin, Base):
     summary: Mapped[str | None] = mapped_column(Text, nullable=True)
 
     # Relationships
-    user: Mapped["User"] = relationship(
+    user: Mapped[User] = relationship(
         "User", back_populates="career_dna"
     )
-    skill_genome: Mapped[list["SkillGenomeEntry"]] = relationship(
+    skill_genome: Mapped[list[SkillGenomeEntry]] = relationship(
         "SkillGenomeEntry", back_populates="career_dna", cascade="all, delete-orphan"
     )
-    hidden_skills: Mapped[list["HiddenSkill"]] = relationship(
+    hidden_skills: Mapped[list[HiddenSkill]] = relationship(
         "HiddenSkill", back_populates="career_dna", cascade="all, delete-orphan"
     )
-    experience_blueprint: Mapped["ExperienceBlueprint | None"] = relationship(
+    experience_blueprint: Mapped[ExperienceBlueprint | None] = relationship(
         "ExperienceBlueprint",
         back_populates="career_dna",
         uselist=False,
         cascade="all, delete-orphan",
     )
-    growth_vector: Mapped["GrowthVector | None"] = relationship(
+    growth_vector: Mapped[GrowthVector | None] = relationship(
         "GrowthVector",
         back_populates="career_dna",
         uselist=False,
         cascade="all, delete-orphan",
     )
-    values_profile: Mapped["ValuesProfile | None"] = relationship(
+    values_profile: Mapped[ValuesProfile | None] = relationship(
         "ValuesProfile",
         back_populates="career_dna",
         uselist=False,
         cascade="all, delete-orphan",
     )
-    market_position: Mapped["MarketPosition | None"] = relationship(
+    market_position: Mapped[MarketPosition | None] = relationship(
         "MarketPosition",
         back_populates="career_dna",
         uselist=False,
@@ -178,33 +192,33 @@ class CareerDNA(UUIDMixin, TimestampMixin, Base):
     )
 
     # Career Threat Radar™ relationships
-    automation_risk: Mapped["AutomationRisk | None"] = relationship(
+    automation_risk: Mapped[AutomationRisk | None] = relationship(
         "AutomationRisk",
         back_populates="career_dna",
         uselist=False,
         cascade="all, delete-orphan",
     )
-    industry_trends: Mapped[list["IndustryTrend"]] = relationship(
+    industry_trends: Mapped[list[IndustryTrend]] = relationship(
         "IndustryTrend",
         back_populates="career_dna",
         cascade="all, delete-orphan",
     )
-    skill_shield_entries: Mapped[list["SkillShieldEntry"]] = relationship(
+    skill_shield_entries: Mapped[list[SkillShieldEntry]] = relationship(
         "SkillShieldEntry",
         back_populates="career_dna",
         cascade="all, delete-orphan",
     )
-    resilience_snapshots: Mapped[list["CareerResilienceSnapshot"]] = relationship(
+    resilience_snapshots: Mapped[list[CareerResilienceSnapshot]] = relationship(
         "CareerResilienceSnapshot",
         back_populates="career_dna",
         cascade="all, delete-orphan",
     )
-    threat_alerts: Mapped[list["ThreatAlert"]] = relationship(
+    threat_alerts: Mapped[list[ThreatAlert]] = relationship(
         "ThreatAlert",
         back_populates="career_dna",
         cascade="all, delete-orphan",
     )
-    alert_preference: Mapped["AlertPreference | None"] = relationship(
+    alert_preference: Mapped[AlertPreference | None] = relationship(
         "AlertPreference",
         back_populates="career_dna",
         uselist=False,
@@ -245,12 +259,12 @@ class SkillGenomeEntry(UUIDMixin, TimestampMixin, Base):
         String(50), default=SkillSource.EXPLICIT.value, nullable=False
     )
     confidence: Mapped[float] = mapped_column(Float, default=1.0, nullable=False)
-    evidence: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    evidence: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
     years_experience: Mapped[int | None] = mapped_column(Integer, nullable=True)
     last_used_date: Mapped[str | None] = mapped_column(String(50), nullable=True)
 
     # Relationships
-    career_dna: Mapped["CareerDNA"] = relationship(
+    career_dna: Mapped[CareerDNA] = relationship(
         "CareerDNA", back_populates="skill_genome"
     )
 
@@ -285,12 +299,12 @@ class HiddenSkill(UUIDMixin, TimestampMixin, Base):
         String(50), default=DiscoveryMethod.RESUME_INFERENCE.value, nullable=False
     )
     confidence: Mapped[float] = mapped_column(Float, default=0.5, nullable=False)
-    evidence: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    evidence: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
     user_confirmed: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
     source_text: Mapped[str | None] = mapped_column(Text, nullable=True)
 
     # Relationships
-    career_dna: Mapped["CareerDNA"] = relationship(
+    career_dna: Mapped[CareerDNA] = relationship(
         "CareerDNA", back_populates="hidden_skills"
     )
 
@@ -329,11 +343,11 @@ class ExperienceBlueprint(UUIDMixin, TimestampMixin, Base):
     industry_diversity: Mapped[float] = mapped_column(
         Float, default=0.0, nullable=False
     )
-    seniority_trajectory: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    seniority_trajectory: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
     pattern_analysis: Mapped[str | None] = mapped_column(Text, nullable=True)
 
     # Relationships
-    career_dna: Mapped["CareerDNA"] = relationship(
+    career_dna: Mapped[CareerDNA] = relationship(
         "CareerDNA", back_populates="experience_blueprint"
     )
 
@@ -366,13 +380,13 @@ class GrowthVector(UUIDMixin, TimestampMixin, Base):
     current_trajectory: Mapped[str] = mapped_column(
         String(50), default=TrajectoryStatus.STEADY.value, nullable=False
     )
-    projected_roles: Mapped[dict | None] = mapped_column(JSON, nullable=True)
-    skill_velocity: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    projected_roles: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
+    skill_velocity: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
     growth_score: Mapped[float] = mapped_column(Float, default=50.0, nullable=False)
     analysis_reasoning: Mapped[str | None] = mapped_column(Text, nullable=True)
 
     # Relationships
-    career_dna: Mapped["CareerDNA"] = relationship(
+    career_dna: Mapped[CareerDNA] = relationship(
         "CareerDNA", back_populates="growth_vector"
     )
 
@@ -407,12 +421,12 @@ class ValuesProfile(UUIDMixin, TimestampMixin, Base):
     impact_preference: Mapped[str] = mapped_column(
         String(50), default=ImpactPreference.TEAM.value, nullable=False
     )
-    environment_fit: Mapped[dict | None] = mapped_column(JSON, nullable=True)
-    derived_values: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    environment_fit: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
+    derived_values: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
     confidence: Mapped[float] = mapped_column(Float, default=0.5, nullable=False)
 
     # Relationships
-    career_dna: Mapped["CareerDNA"] = relationship(
+    career_dna: Mapped[CareerDNA] = relationship(
         "CareerDNA", back_populates="values_profile"
     )
 
@@ -443,7 +457,7 @@ class MarketPosition(UUIDMixin, TimestampMixin, Base):
     percentile_overall: Mapped[float] = mapped_column(
         Float, default=50.0, nullable=False
     )
-    skill_demand_scores: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    skill_demand_scores: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
     matching_job_count: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
     market_trend: Mapped[str] = mapped_column(
         String(50), default=MarketTrend.STABLE.value, nullable=False
@@ -456,7 +470,7 @@ class MarketPosition(UUIDMixin, TimestampMixin, Base):
     )
 
     # Relationships
-    career_dna: Mapped["CareerDNA"] = relationship(
+    career_dna: Mapped[CareerDNA] = relationship(
         "CareerDNA", back_populates="market_position"
     )
 

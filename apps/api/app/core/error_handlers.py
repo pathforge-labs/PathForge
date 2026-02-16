@@ -100,4 +100,4 @@ def register_error_handlers(app: FastAPI) -> None:
     """Register all exception handlers on the FastAPI app."""
     app.add_exception_handler(LLMError, llm_error_handler)  # type: ignore[arg-type]
     app.add_exception_handler(ValueError, value_error_handler)  # type: ignore[arg-type]
-    app.add_exception_handler(Exception, generic_error_handler)  # type: ignore[arg-type]
+    app.add_exception_handler(Exception, generic_error_handler)

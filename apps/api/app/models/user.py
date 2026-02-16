@@ -4,10 +4,21 @@ PathForge — User Model
 Platform user account with authentication fields.
 """
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from sqlalchemy import Boolean, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base import Base, TimestampMixin, UUIDMixin
+
+if TYPE_CHECKING:
+    from app.models.application import Application
+    from app.models.career_dna import CareerDNA
+    from app.models.preference import Preference
+    from app.models.resume import Resume
+    from app.models.token_blacklist import BlacklistEntry
 
 
 class User(UUIDMixin, TimestampMixin, Base):
@@ -22,19 +33,19 @@ class User(UUIDMixin, TimestampMixin, Base):
     avatar_url: Mapped[str | None] = mapped_column(Text, nullable=True)
 
     # Relationships
-    resumes: Mapped[list["Resume"]] = relationship(
+    resumes: Mapped[list[Resume]] = relationship(
         "Resume", back_populates="user", cascade="all, delete-orphan"
     )
-    preferences: Mapped[list["Preference"]] = relationship(
+    preferences: Mapped[list[Preference]] = relationship(
         "Preference", back_populates="user", cascade="all, delete-orphan"
     )
-    blacklist_entries: Mapped[list["BlacklistEntry"]] = relationship(
+    blacklist_entries: Mapped[list[BlacklistEntry]] = relationship(
         "BlacklistEntry", back_populates="user", cascade="all, delete-orphan"
     )
-    applications: Mapped[list["Application"]] = relationship(
+    applications: Mapped[list[Application]] = relationship(
         "Application", back_populates="user", cascade="all, delete-orphan"
     )
-    career_dna: Mapped["CareerDNA | None"] = relationship(
+    career_dna: Mapped[CareerDNA | None] = relationship(
         "CareerDNA", back_populates="user", uselist=False, cascade="all, delete-orphan"
     )
 

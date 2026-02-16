@@ -296,7 +296,7 @@ def test_crs_computation_high_resilience():
     career_dna.skill_genome = [MagicMock() for _ in range(20)]
     growth_mock = MagicMock()
     growth_mock.growth_score = 85.0
-    career_dna.growth_vector = [growth_mock]
+    career_dna.growth_vector = growth_mock
 
     result = _compute_crs(
         risk_data={"contextual_risk_score": 10.0},
@@ -357,7 +357,7 @@ def test_moat_score_wide():
     blueprint = MagicMock()
     blueprint.total_years = 15
     blueprint.industry_diversity = 0.8
-    career_dna.experience_blueprint = [blueprint]
+    career_dna.experience_blueprint = blueprint
     career_dna.skill_genome = [MagicMock() for _ in range(25)]
 
     result = _compute_moat_score(

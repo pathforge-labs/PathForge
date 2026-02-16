@@ -63,7 +63,7 @@ class TokenBlacklist:
         """Check whether a token JTI has been revoked."""
         redis = await cls.get_redis()
         key = f"{_PREFIX}{jti}"
-        return await redis.exists(key) > 0
+        return bool(await redis.exists(key))
 
     @classmethod
     async def close(cls) -> None:

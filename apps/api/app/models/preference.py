@@ -4,13 +4,19 @@ PathForge — Preference & BlacklistEntry Models
 User's job search preferences and company exclusion list.
 """
 
+from __future__ import annotations
+
 import uuid
+from typing import TYPE_CHECKING, Any
 
 from sqlalchemy import Boolean, ForeignKey, Integer, String, Text
 from sqlalchemy.dialects.postgresql import ARRAY, JSON, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base import Base, TimestampMixin, UUIDMixin
+
+if TYPE_CHECKING:
+    from app.models.user import User
 
 
 class Preference(UUIDMixin, TimestampMixin, Base):
@@ -27,10 +33,10 @@ class Preference(UUIDMixin, TimestampMixin, Base):
     sectors: Mapped[list[str] | None] = mapped_column(ARRAY(String), nullable=True)
     job_titles: Mapped[list[str] | None] = mapped_column(ARRAY(String), nullable=True)
     experience_level: Mapped[str | None] = mapped_column(String(50), nullable=True)
-    extra: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    extra: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
 
     # Relationships
-    user: Mapped["User"] = relationship("User", back_populates="preferences")
+    user: Mapped[User] = relationship("User", back_populates="preferences")
 
     def __repr__(self) -> str:
         return f"<Preference user={self.user_id}>"
@@ -47,7 +53,7 @@ class BlacklistEntry(UUIDMixin, TimestampMixin, Base):
     is_current_employer: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
     # Relationships
-    user: Mapped["User"] = relationship("User", back_populates="blacklist_entries")
+    user: Mapped[User] = relationship("User", back_populates="blacklist_entries")
 
     def __repr__(self) -> str:
         return f"<BlacklistEntry {self.company_name}>"

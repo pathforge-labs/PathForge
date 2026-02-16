@@ -42,7 +42,7 @@ async def record_funnel_event(
     payload: FunnelEventCreate,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> FunnelEventResponse:
     """
     Record a funnel event for the current user.
 
@@ -64,7 +64,7 @@ async def get_funnel_metrics(
     period: str = Query("30d", description="Time period (e.g. 7d, 30d, 90d)"),
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> FunnelMetricsResponse:
     """
     Get aggregated funnel conversion metrics.
 
@@ -82,7 +82,7 @@ async def get_funnel_timeline(
     days: int = Query(30, ge=1, le=365, description="Number of days"),
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> FunnelTimelineResponse:
     """
     Get time-series funnel event data for charts.
 
@@ -102,7 +102,7 @@ async def get_funnel_timeline(
 async def get_market_insights(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> MarketInsightsListResponse:
     """
     Get latest market intelligence insights for the current user.
 
@@ -128,7 +128,7 @@ async def generate_market_insight(
     payload: InsightGenerateRequest,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> MarketInsightResponse:
     """
     Trigger generation of a new market insight.
 
@@ -151,7 +151,7 @@ async def generate_market_insight(
 async def list_experiments(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> CVExperimentsListResponse:
     """
     List current user's CV A/B experiments.
 
@@ -173,7 +173,7 @@ async def create_experiment(
     payload: CVExperimentCreate,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> CVExperimentResponse:
     """
     Create a new CV A/B experiment.
 
@@ -200,7 +200,7 @@ async def record_experiment_result(
     payload: ExperimentResultUpdate,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> CVExperimentResponse:
     """
     Record the result of a CV A/B experiment.
 

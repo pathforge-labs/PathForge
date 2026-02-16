@@ -7,6 +7,7 @@ All schemas use strict typing with no `Any` fields.
 
 import uuid
 from datetime import datetime
+from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -22,7 +23,7 @@ class SkillGenomeEntryResponse(BaseModel):
     proficiency_level: str
     source: str
     confidence: float = Field(ge=0.0, le=1.0)
-    evidence: dict | None = None
+    evidence: dict[str, Any] | None = None
     years_experience: int | None = None
     last_used_date: str | None = None
 
@@ -36,7 +37,7 @@ class HiddenSkillResponse(BaseModel):
     skill_name: str
     discovery_method: str
     confidence: float = Field(ge=0.0, le=1.0)
-    evidence: dict | None = None
+    evidence: dict[str, Any] | None = None
     user_confirmed: bool | None = None
     source_text: str | None = None
 
@@ -69,7 +70,7 @@ class ExperienceBlueprintResponse(BaseModel):
     avg_tenure_months: float
     career_direction: str
     industry_diversity: float = Field(ge=0.0, le=1.0)
-    seniority_trajectory: dict | None = None
+    seniority_trajectory: dict[str, Any] | None = None
     pattern_analysis: str | None = None
 
     model_config = {"from_attributes": True}
@@ -83,8 +84,8 @@ class GrowthVectorResponse(BaseModel):
 
     id: uuid.UUID
     current_trajectory: str
-    projected_roles: dict | None = None
-    skill_velocity: dict | None = None
+    projected_roles: dict[str, Any] | None = None
+    skill_velocity: dict[str, Any] | None = None
     growth_score: float = Field(ge=0.0, le=100.0)
     analysis_reasoning: str | None = None
 
@@ -100,8 +101,8 @@ class ValuesProfileResponse(BaseModel):
     id: uuid.UUID
     work_style: str
     impact_preference: str
-    environment_fit: dict | None = None
-    derived_values: dict | None = None
+    environment_fit: dict[str, Any] | None = None
+    derived_values: dict[str, Any] | None = None
     confidence: float = Field(ge=0.0, le=1.0)
 
     model_config = {"from_attributes": True}
@@ -115,7 +116,7 @@ class MarketPositionResponse(BaseModel):
 
     id: uuid.UUID
     percentile_overall: float = Field(ge=0.0, le=100.0)
-    skill_demand_scores: dict | None = None
+    skill_demand_scores: dict[str, Any] | None = None
     matching_job_count: int
     market_trend: str
     computed_at: datetime

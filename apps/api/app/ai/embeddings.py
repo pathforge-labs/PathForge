@@ -12,6 +12,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import time
+from typing import Any
 
 import voyageai
 
@@ -46,12 +47,12 @@ class EmbeddingService:
                 "Voyage AI API key not configured. "
                 "Set VOYAGE_API_KEY env var to enable embeddings."
             )
-        self._client: voyageai.Client | None = None
+        self._client: Any = None
 
-    def _get_client(self) -> voyageai.Client:
+    def _get_client(self) -> Any:
         """Lazy-initialize the Voyage AI client."""
         if self._client is None:
-            self._client = voyageai.Client(api_key=self._api_key)
+            self._client = voyageai.Client(api_key=self._api_key)  # type: ignore[attr-defined]
         return self._client
 
     async def embed_text(self, text: str) -> list[float]:
@@ -79,7 +80,7 @@ class EmbeddingService:
         elapsed = time.monotonic() - start
         dim = len(result.embeddings[0])
         logger.info("Embedded 1 text (%d dims) in %.2fs", dim, elapsed)
-        return result.embeddings[0]
+        return list(result.embeddings[0])
 
     async def embed_batch(self, texts: list[str]) -> list[list[float]]:
         """

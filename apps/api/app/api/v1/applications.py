@@ -14,7 +14,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
 from app.core.security import get_current_user
-from app.models.application import ApplicationStatus
+from app.models.application import Application, ApplicationStatus
 from app.models.user import User
 from app.services.application_service import (
     ApplicationError,
@@ -77,7 +77,7 @@ class ApplicationListResponse(BaseModel):
 # ── Helpers ────────────────────────────────────────────────────
 
 
-def _to_response(app) -> ApplicationResponse:
+def _to_response(app: Application) -> ApplicationResponse:
     """Convert Application ORM object to response schema."""
     job = getattr(app, "job_listing", None)
     return ApplicationResponse(
@@ -115,7 +115,7 @@ async def create_app_endpoint(
     payload: CreateApplicationRequest,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> ApplicationResponse:
     """
     Create a new application for a job listing.
 
@@ -132,8 +132,10 @@ async def create_app_endpoint(
         )
         await db.commit()
         # Re-fetch to load relationships
-        app = await get_application(db, app.id, current_user.id)
-        return _to_response(app)
+        refetched = await get_application(db, app.id, current_user.id)
+        if refetched is None:
+            raise HTTPException(status_code=404, detail="Application not found after creation")
+        return _to_response(refetched)
     except (BlacklistViolation, RateLimitViolation, InvalidTransition, ApplicationError) as exc:
         await db.rollback()
         raise _handle_service_error(exc) from exc
@@ -146,7 +148,7 @@ async def list_apps_endpoint(
     per_page: int = Query(20, ge=1, le=100),
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> ApplicationListResponse:
     """List current user's applications with optional status filter."""
     apps, total = await list_applications(
         db, current_user.id, status_filter=status, page=page, per_page=per_page,
@@ -164,7 +166,7 @@ async def get_app_endpoint(
     application_id: uuid.UUID,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> ApplicationResponse:
     """Get a specific application by ID."""
     app = await get_application(db, application_id, current_user.id)
     if not app:
@@ -178,7 +180,7 @@ async def update_app_status_endpoint(
     payload: UpdateStatusRequest,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> ApplicationResponse:
     """
     Update application status. Enforces state machine transitions.
 
@@ -193,8 +195,10 @@ async def update_app_status_endpoint(
             db, application_id, current_user.id, payload.status,
         )
         await db.commit()
-        app = await get_application(db, app.id, current_user.id)
-        return _to_response(app)
+        refetched = await get_application(db, app.id, current_user.id)
+        if refetched is None:
+            raise HTTPException(status_code=404, detail="Application not found after update")
+        return _to_response(refetched)
     except (InvalidTransition, RateLimitViolation, ApplicationError) as exc:
         await db.rollback()
         raise _handle_service_error(exc) from exc
@@ -205,7 +209,7 @@ async def delete_app_endpoint(
     application_id: uuid.UUID,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
-):
+) -> None:
     """Delete an application."""
     deleted = await delete_application(db, application_id, current_user.id)
     if not deleted:

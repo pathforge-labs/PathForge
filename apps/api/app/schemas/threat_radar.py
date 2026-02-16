@@ -7,6 +7,7 @@ All schemas use strict typing with no `Any` fields.
 
 import uuid
 from datetime import datetime, time
+from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -22,11 +23,11 @@ class AutomationRiskResponse(BaseModel):
     base_automation_probability: float = Field(ge=0.0, le=1.0)
     contextual_risk_score: float = Field(ge=0.0, le=100.0)
     risk_level: str
-    vulnerable_tasks: dict | None = None
-    resilient_tasks: dict | None = None
-    recommended_skills: dict | None = None
+    vulnerable_tasks: dict[str, Any] | None = None
+    resilient_tasks: dict[str, Any] | None = None
+    recommended_skills: dict[str, Any] | None = None
     analysis_reasoning: str | None = None
-    opportunity_inversions: dict | None = None
+    opportunity_inversions: dict[str, Any] | None = None
     analyzed_at: datetime
 
     model_config = {"from_attributes": True}
@@ -42,10 +43,10 @@ class IndustryTrendResponse(BaseModel):
     industry_name: str
     trend_direction: str
     confidence: float = Field(ge=0.0, le=1.0)
-    key_signals: dict | None = None
+    key_signals: dict[str, Any] | None = None
     impact_on_user: str | None = None
-    recommended_actions: dict | None = None
-    data_sources: dict | None = None
+    recommended_actions: dict[str, Any] | None = None
+    data_sources: dict[str, Any] | None = None
     analyzed_at: datetime
 
     model_config = {"from_attributes": True}
@@ -97,7 +98,7 @@ class CareerResilienceResponse(BaseModel):
     moat_score: float = Field(ge=0.0, le=100.0)
     moat_strength: str
     explanation: str | None = None
-    improvement_actions: dict | None = None
+    improvement_actions: dict[str, Any] | None = None
     computed_at: datetime
 
     model_config = {"from_attributes": True}
@@ -115,7 +116,7 @@ class ThreatAlertResponse(BaseModel):
     title: str
     description: str
     opportunity: str
-    evidence: dict | None = None
+    evidence: dict[str, Any] | None = None
     channel: str
     status: str
     snoozed_until: datetime | None = None

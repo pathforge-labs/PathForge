@@ -128,8 +128,8 @@ def _parse_redis_settings() -> RedisSettings:
 class WorkerSettings:
     """ARQ worker configuration."""
 
-    functions: ClassVar[list] = [generate_embeddings, process_resume, run_matching_pipeline]
-    cron_jobs: ClassVar[list] = [cron(worker_health_check, minute={0, 15, 30, 45})]
+    functions: ClassVar[list[Any]] = [generate_embeddings, process_resume, run_matching_pipeline]
+    cron_jobs: ClassVar[list[Any]] = [cron(worker_health_check, minute={0, 15, 30, 45})]
 
     on_startup = startup
     on_shutdown = shutdown

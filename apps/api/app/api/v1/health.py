@@ -4,6 +4,8 @@ PathForge API — Health Check Routes
 System health and readiness checks.
 """
 
+from __future__ import annotations
+
 from fastapi import APIRouter, Depends
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -15,7 +17,7 @@ router = APIRouter(tags=["Health"])
 
 
 @router.get("/health", summary="Basic health check")
-async def health_check():
+async def health_check() -> dict[str, str]:
     return {
         "status": "ok",
         "app": settings.app_name,
@@ -25,7 +27,7 @@ async def health_check():
 
 
 @router.get("/health/ready", summary="Readiness check (includes DB connectivity)")
-async def readiness_check(db: AsyncSession = Depends(get_db)):
+async def readiness_check(db: AsyncSession = Depends(get_db)) -> dict[str, str]:
     try:
         await db.execute(text("SELECT 1"))
         db_status = "connected"

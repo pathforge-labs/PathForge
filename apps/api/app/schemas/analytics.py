@@ -6,6 +6,7 @@ Pydantic validation schemas for the analytics API.
 
 import uuid
 from datetime import datetime
+from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -21,7 +22,7 @@ class FunnelEventCreate(BaseModel):
 
     application_id: uuid.UUID | None = None
     stage: FunnelStage
-    metadata: dict | None = None
+    metadata: dict[str, Any] | None = None
 
 
 class FunnelEventResponse(BaseModel):
@@ -31,7 +32,7 @@ class FunnelEventResponse(BaseModel):
     user_id: uuid.UUID
     application_id: uuid.UUID | None
     stage: FunnelStage
-    metadata: dict | None = Field(None, validation_alias="metadata_")
+    metadata: dict[str, Any] | None = Field(None, validation_alias="metadata_")
     created_at: datetime
 
     model_config = {"from_attributes": True, "populate_by_name": True}
@@ -94,7 +95,7 @@ class MarketInsightResponse(BaseModel):
     id: uuid.UUID
     user_id: uuid.UUID
     insight_type: InsightType
-    data: dict
+    data: dict[str, Any]
     period: str
     generated_at: datetime
 
@@ -127,7 +128,7 @@ class ExperimentResultUpdate(BaseModel):
     """Record the result of a CV experiment."""
 
     winner_id: uuid.UUID
-    metrics: dict = Field(
+    metrics: dict[str, Any] = Field(
         default_factory=dict,
         description="Performance metrics (e.g. ats_score_a, ats_score_b, response_rate)",
     )
@@ -143,7 +144,7 @@ class CVExperimentResponse(BaseModel):
     variant_b_id: uuid.UUID
     winner_id: uuid.UUID | None
     status: ExperimentStatus
-    metrics: dict | None
+    metrics: dict[str, Any] | None
     hypothesis: str | None
     created_at: datetime
     completed_at: datetime | None

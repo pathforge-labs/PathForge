@@ -37,6 +37,9 @@ from app.models.threat_radar import (
     ThreatAlert,
 )
 
+# Type alias for threat radar models that share career_dna_id + created_at
+CareerDNAChildModel = AutomationRisk | IndustryTrend | SkillShieldEntry | CareerResilienceSnapshot
+
 logger = logging.getLogger(__name__)
 
 
@@ -396,8 +399,8 @@ def _compute_crs(
     growth_vector = career_dna.growth_vector
     if growth_vector:
         growth_velocity = float(
-            growth_vector[0].growth_score
-            if growth_vector[0].growth_score is not None
+            growth_vector.growth_score
+            if growth_vector.growth_score is not None
             else 50.0
         )
     else:
@@ -470,8 +473,8 @@ def _compute_moat_score(
     blueprint = career_dna.experience_blueprint
     if blueprint:
         diversity = float(
-            blueprint[0].industry_diversity
-            if blueprint[0].industry_diversity is not None
+            blueprint.industry_diversity
+            if blueprint.industry_diversity is not None
             else 0.3
         )
         network_effect = min(100.0, diversity * 100)
@@ -537,7 +540,7 @@ def _format_experience_summary(career_dna: CareerDNA) -> str:
     """Format experience blueprint into text."""
     if not career_dna.experience_blueprint:
         return "No experience data available"
-    blueprint = career_dna.experience_blueprint[0]
+    blueprint = career_dna.experience_blueprint
     return str(blueprint.pattern_analysis or "Experience data available")
 
 
@@ -551,7 +554,7 @@ def _extract_skill_names(career_dna: CareerDNA) -> list[str]:
 def _estimate_years(career_dna: CareerDNA) -> float:
     """Estimate years of experience from blueprint."""
     if career_dna.experience_blueprint:
-        total = career_dna.experience_blueprint[0].total_years
+        total = career_dna.experience_blueprint.total_years
         return float(total) if total else 5.0
     return 5.0
 
@@ -698,7 +701,7 @@ async def _persist_threat_alerts(
 
 async def _get_latest(
     db: AsyncSession,
-    model_class: type,
+    model_class: type[CareerDNAChildModel],
     career_dna_id: uuid.UUID,
 ) -> Any:
     """Get the most recent record of a model type."""
@@ -713,7 +716,7 @@ async def _get_latest(
 
 async def _get_all(
     db: AsyncSession,
-    model_class: type,
+    model_class: type[CareerDNAChildModel],
     career_dna_id: uuid.UUID,
 ) -> list[Any]:
     """Get all records of a model type for a career DNA."""
@@ -723,3 +726,4 @@ async def _get_all(
         .order_by(model_class.created_at.desc())
     )
     return list(result.scalars().all())
+
