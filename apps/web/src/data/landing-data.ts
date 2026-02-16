@@ -186,7 +186,7 @@ export const TESTIMONIALS = [
     name: "PathForge Team",
     role: "Product Vision",
     company: "PathForge",
-    image: "/testimonials/pathforge.webp",
+    image: "/brand/logo-dark.png",
     gradient: "from-rose-500 to-pink-500",
     featured: false,
   },

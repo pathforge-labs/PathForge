@@ -42,8 +42,8 @@ export const APP_TWITTER_HANDLE = `@${APP_SLUG}`;
 
 // Social Links
 export const SOCIAL_LINKS = {
+  instagram: "https://instagram.com/pathforge",
   linkedin: "https://linkedin.com/company/pathforge",
-  github: "https://github.com/pathforge",
   x: "https://x.com/pathforge",
 } as const;
 

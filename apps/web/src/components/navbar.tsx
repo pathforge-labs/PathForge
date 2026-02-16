@@ -57,14 +57,6 @@ export function Navbar() {
               {/* Gradient pipe — matches brand gradient */}
               <div className="h-5 w-px bg-linear-to-b from-primary to-accent opacity-40" />
               <Link
-                href="/login"
-                className={`cursor-pointer rounded-full px-4 py-1.5 text-sm font-medium text-muted-foreground transition-all hover:text-foreground hover:bg-foreground/6 ${FOCUS_RING}`}
-              >
-                Sign In
-              </Link>
-              {/* Gradient pipe — matches brand gradient */}
-              <div className="h-5 w-px bg-linear-to-b from-primary to-accent opacity-40" />
-              <Link
                 href="#cta"
                 className={`cta-button cursor-pointer rounded-full bg-linear-to-r from-primary to-accent px-5 py-1.5 text-sm font-semibold text-white transition-all hover:opacity-90 hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5 ${FOCUS_RING}`}
               >

@@ -29,7 +29,7 @@ export function OrganizationJsonLd() {
       email: APP_AUTHOR_EMAIL,
       contactType: "customer service",
     },
-    sameAs: [SOCIAL_LINKS.linkedin, SOCIAL_LINKS.github, SOCIAL_LINKS.x],
+    sameAs: [SOCIAL_LINKS.instagram, SOCIAL_LINKS.linkedin, SOCIAL_LINKS.x],
   };
 
   return (

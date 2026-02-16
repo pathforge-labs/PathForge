@@ -14,7 +14,6 @@ const NAV_LINKS = [
   { href: "#features", label: "Features" },
   { href: "#pricing", label: "Pricing" },
   { href: "/about", label: "About" },
-  { href: "/login", label: "Sign In" },
 ];
 
 const SOCIAL_LINKS = [

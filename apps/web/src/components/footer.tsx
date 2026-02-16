@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Globe, Linkedin, Github, X } from "lucide-react";
+import { Globe, Linkedin, Instagram, X } from "lucide-react";
 import {
   APP_NAME,
   APP_COMPANY,
@@ -52,8 +52,8 @@ export function Footer() {
                 <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noopener noreferrer" className="flex h-12 w-12 items-center justify-center rounded-xl text-muted-foreground/70 transition-all duration-200 hover:bg-primary/5 hover:text-primary" aria-label="LinkedIn">
                   <Linkedin className="h-6 w-6" />
                 </a>
-                <a href={SOCIAL_LINKS.github} target="_blank" rel="noopener noreferrer" className="flex h-12 w-12 items-center justify-center rounded-xl text-muted-foreground/70 transition-all duration-200 hover:bg-primary/5 hover:text-primary" aria-label="GitHub">
-                  <Github className="h-6 w-6" />
+                <a href={SOCIAL_LINKS.instagram} target="_blank" rel="noopener noreferrer" className="flex h-12 w-12 items-center justify-center rounded-xl text-muted-foreground/70 transition-all duration-200 hover:bg-primary/5 hover:text-primary" aria-label="Instagram">
+                  <Instagram className="h-6 w-6" />
                 </a>
                 <a href={SOCIAL_LINKS.x} target="_blank" rel="noopener noreferrer" className="flex h-12 w-12 items-center justify-center rounded-xl text-muted-foreground/70 transition-all duration-200 hover:bg-primary/5 hover:text-primary" aria-label="X (Twitter)">
                   <X className="h-6 w-6" />
