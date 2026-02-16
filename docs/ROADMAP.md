@@ -202,6 +202,7 @@
 | 2026-02-16 | CI pipeline fix — ai extras          | Post-9        | ✅ Done | Test collection failures resolved     |
 | 2026-02-16 | Contact page redesign (Tier-1)       | Post-9        | ✅ Done | 2-col layout, dept cards, FAQ grid    |
 | 2026-02-16 | Navbar/footer/sitemap updates        | Post-9        | ✅ Done | Contact link, social links, JSON-LD   |
+| 2026-02-16 | Pricing section + Tier-1 audit       | Post-9        | ✅ Done | 3 tiers, PricingCards, 9 audit fixes  |
 
 ---
 
