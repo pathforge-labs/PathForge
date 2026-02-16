@@ -98,12 +98,14 @@ export default function AboutPage() {
                 src="/brand/logo-light.png"
                 alt="Emre Dursun"
                 fill
+                sizes="96px"
                 className="object-cover dark:hidden"
               />
               <Image
                 src="/brand/logo-dark.png"
                 alt="Emre Dursun"
                 fill
+                sizes="96px"
                 className="hidden object-cover dark:block"
               />
             </div>
