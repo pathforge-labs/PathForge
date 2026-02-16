@@ -1,7 +1,7 @@
 # PathForge — Live Sprint Board
 
 > **Single Source of Truth** for all sprint tracking and task management.
-> **Last Updated**: 2026-02-15 | **Current Phase**: B (Career Intelligence)
+> **Last Updated**: 2026-02-16 | **Current Phase**: B (Career Intelligence)
 
 ---
 
@@ -198,6 +198,8 @@
 | 2026-02-14 | Agent Customization Architecture     | Post-6b       | ✅ Done | GEMINI.md, 8 rules, 16 workflows      |
 | 2026-02-15 | PPTS v1.1 — 8 audit findings         | Post-7        | ✅ Done | Volatile-only state, staleness detect |
 | 2026-02-15 | ESLint cleanup — 7 issues resolved   | Post-7        | ✅ Done | 0 errors, 0 warnings achieved         |
+| 2026-02-16 | MyPy type annotation overhaul        | Post-9        | ✅ Done | 165→0 errors, 32 files, 3 bugs fixed  |
+| 2026-02-16 | CI pipeline fix — ai extras          | Post-9        | ✅ Done | Test collection failures resolved     |
 
 ---
 

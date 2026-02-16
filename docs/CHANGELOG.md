@@ -5,6 +5,22 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [Ad-Hoc] — MyPy Type Safety & CI Fix — 2026-02-16
+
+### Fixed
+
+- **MyPy type overhaul**: Resolved all 165 type errors → 0 across 69 source files (32 files modified)
+  - Generic type parameterization (`dict` → `dict[str, Any]`, `list` → `list[Any]`)
+  - Forward reference handling (`TYPE_CHECKING` + `from __future__ import annotations`)
+  - 3 real bugs discovered: missing `user_id` args in `ResumeService.get_by_id` calls
+  - 2 test mock fixes: `uselist=False` relationship patterns
+  - `CareerDNAChildModel` TypeAlias for type-safe generic helpers
+  - `AlertPreference` model fields aligned: `dict[str, Any]` → `list[str]`
+- **CI pipeline**: Added `.[ai]` extras to `pip install` in `ci.yml` — resolved `voyageai`/`litellm` test collection failures
+- **LOCAL-CI-GATE.md**: Updated output example, design decisions, setup instructions
+
+---
+
 ## [Sprint 9] — Career Threat Radar™ — 2026-02-15
 
 ### Added
