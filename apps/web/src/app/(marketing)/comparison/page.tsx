@@ -40,7 +40,7 @@ const WHY_PATHFORGE = [
   },
   {
     title: "Affordable for Everyone",
-    description: "Free for early adopters. Our mission is to democratize career intelligence that was previously reserved for executives.",
+    description: "Starting at €0 — forever. Pro is €19/mo and Premium is €39/mo. Career intelligence that was reserved for executives, now accessible to everyone.",
   },
 ];
 

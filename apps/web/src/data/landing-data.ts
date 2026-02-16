@@ -18,6 +18,8 @@ import {
   Upload,
   Brain,
   Rocket,
+  Sparkles,
+  type LucideIcon,
 } from "lucide-react";
 
 export const FEATURES = [
@@ -106,6 +108,93 @@ export const HOW_IT_WORKS = [
   },
 ];
 
+/* ── Pricing Tiers ────────────────────────────── */
+
+export interface PricingTier {
+  readonly name: string;
+  readonly price: string;
+  readonly period: string;
+  readonly annualPrice: string;
+  readonly annualSavings: string;
+  readonly description: string;
+  readonly popular: boolean;
+  readonly cta: string;
+  readonly features: readonly string[];
+  readonly icon: LucideIcon;
+  readonly gradient: string;
+}
+
+export const PRICING_TIERS: readonly PricingTier[] = [
+  {
+    name: "Starter",
+    price: "€0",
+    period: "forever",
+    annualPrice: "€0",
+    annualSavings: "",
+    description: "Explore your career potential with core AI features.",
+    popular: false,
+    cta: "Join Waitlist",
+    icon: Sparkles,
+    gradient: "from-emerald-500 to-teal-500",
+    features: [
+      "1 Career DNA™ profile",
+      "3 job matches per month",
+      "1 tailored CV",
+      "Basic ATS score",
+      "Skill gap overview",
+      "Community support",
+    ],
+  },
+  {
+    name: "Pro",
+    price: "€19",
+    period: "/mo",
+    annualPrice: "€149",
+    annualSavings: "Save 35%",
+    description: "Full career intelligence for active job seekers.",
+    popular: true,
+    cta: "Join Waitlist",
+    icon: Target,
+    gradient: "from-violet-500 to-purple-500",
+    features: [
+      "Full Career DNA™ analysis",
+      "25 job matches per month",
+      "10 tailored CVs per month",
+      "Full ATS optimization",
+      "Detailed skill gap + learning paths",
+      "Salary intelligence benchmarks",
+      "2 career simulations per month",
+      "Monthly AI disruption digest",
+      "Email support (24h)",
+    ],
+  },
+  {
+    name: "Premium",
+    price: "€39",
+    period: "/mo",
+    annualPrice: "€299",
+    annualSavings: "Save 36%",
+    description: "Maximum career power for career changers and power users.",
+    popular: false,
+    cta: "Join Waitlist",
+    icon: Rocket,
+    gradient: "from-amber-500 to-orange-500",
+    features: [
+      "Everything in Pro",
+      "Unlimited job matches",
+      "Unlimited tailored CVs",
+      "ATS optimization + A/B tracking",
+      "Priority skill gap alerts",
+      "Salary negotiation coach",
+      "Unlimited career simulations",
+      "Real-time AI disruption alerts",
+      "Human-in-loop application automation",
+      "Career DNA™ history & evolution",
+      "Priority support (4h)",
+    ],
+  },
+] as const;
+
 export const COMPARISON = {
   headers: ["", "Resume Builders", "Job Boards", "Career Coaches", "PathForge"],
   rows: [
@@ -118,6 +207,8 @@ export const COMPARISON = {
     { feature: "Always available", values: [true, true, false, true] },
     { feature: "Affordable", values: [true, true, false, true] },
   ],
+  /** Price labels shown beneath each column header */
+  prices: ["Free", "Free", "$200/hr+", "From €0"],
 };
 
 export const TESTIMONIALS = [
@@ -212,5 +303,13 @@ export const FAQ = [
   {
     q: "When will PathForge launch?",
     a: "We're currently in private development with early access planned for 2026. Join the waitlist to be notified the moment we open doors — and to lock in your free-forever access.",
+  },
+  {
+    q: "How much does PathForge cost?",
+    a: "PathForge offers three tiers: Starter (free forever) for career exploration, Pro (€19/mo) for active job seekers with full AI features, and Premium (€39/mo) for power users who want unlimited access and application automation. Annual plans save up to 36%.",
+  },
+  {
+    q: "Do early adopters get special pricing?",
+    a: "Yes! Early waitlist members receive lifetime access to Starter features at no cost, plus exclusive early-adopter discounts on Pro and Premium tiers. Your early feedback directly shapes the product — and we reward that.",
   },
 ];

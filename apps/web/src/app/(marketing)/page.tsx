@@ -22,6 +22,13 @@ const FaqAccordion = dynamic(
     })),
   { ssr: true }
 );
+const PricingCards = dynamic(
+  () =>
+    import("@/components/pricing-cards").then((m) => ({
+      default: m.PricingCards,
+    })),
+  { ssr: true }
+);
 import { OrganizationJsonLd, WebSiteJsonLd, FAQPageJsonLd } from "@/components/json-ld";
 import { APP_NAME } from "@/config/brand";
 import {
@@ -441,23 +448,37 @@ export default function LandingPage() {
         {/* ── Section Divider ─────────────────────────── */}
         <div className="section-divider mx-auto max-w-4xl 2xl:max-w-[1000px] 3xl:max-w-[1200px]" />
 
-        {/* ── Comparison Table ────────────────────────── */}
-        <section id="pricing" className="px-6 py-20 sm:py-28" aria-label="Feature comparison">
+        {/* ── Pricing ────────────────────────────────── */}
+        <section id="pricing" className="px-6 py-20 sm:py-28" aria-label="Pricing plans">
           <AnimatedSection className="mx-auto max-w-3xl text-center">
             <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-primary">
-              Why PathForge
+              Pricing
             </p>
             <h2 className="font-display mb-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
-              The Complete{" "}
-              <span className="gradient-text">Career Platform</span>
+              Simple,{" "}
+              <span className="gradient-text">Transparent Pricing</span>
             </h2>
             <p className="mx-auto max-w-xl text-muted-foreground lg:text-lg">
-              See how PathForge compares to existing career tools.
+              Start free. Upgrade when you&apos;re ready. No hidden fees, no surprises.
             </p>
           </AnimatedSection>
 
-          <AnimatedSection delay={200}>
-            <div className="mx-auto mt-14 max-w-4xl 2xl:max-w-[1000px] 3xl:max-w-[1200px] overflow-x-auto">
+          {/* Pricing Cards */}
+          <AnimatedSection delay={200} className="mt-14">
+            <PricingCards />
+          </AnimatedSection>
+
+          {/* Comparison Table */}
+          <AnimatedSection delay={400} className="mt-20">
+            <div className="mx-auto max-w-3xl text-center">
+              <h3 className="font-display mb-2 text-xl font-bold sm:text-2xl">
+                How We Compare
+              </h3>
+              <p className="mb-10 text-sm text-muted-foreground">
+                See how PathForge stacks up against existing career tools.
+              </p>
+            </div>
+            <div className="mx-auto max-w-4xl 2xl:max-w-[1000px] 3xl:max-w-[1200px] overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-border/30">
@@ -472,7 +493,16 @@ export default function LandingPage() {
                               : "text-center text-muted-foreground/70"
                         }`}
                       >
-                        {header}
+                        <span>{header}</span>
+                        {i > 0 && (
+                          <span
+                            className={`mt-1 block text-xs font-normal ${
+                              i === 4 ? "text-primary/70" : "text-muted-foreground/50"
+                            }`}
+                          >
+                            {COMPARISON.prices[i - 1]}
+                          </span>
+                        )}
                       </th>
                     ))}
                   </tr>
