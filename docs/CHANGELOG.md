@@ -5,6 +5,28 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [Ad-Hoc] — Contact Page Redesign & Navigation — 2026-02-16
+
+### Added
+
+- **Contact page redesign** — premium Tier-1 2-column layout inspired by BeSync:
+  - Department cards (General Inquiries, Business & Press with COMING SOON badge, Location)
+  - Subject `<select>` dropdown with ChevronDown indicator (6 categories)
+  - 2×2 FAQ grid, enhanced social cards with brand-color hover effects
+  - Ambient radial gradient blobs, glassmorphism card styling
+  - Response time trust badge (24–48 hours), GDPR + data safety badges
+- **Contact API route** — `POST /api/contact` with Resend email, XSS prevention, rate limiting, subject allowlist validation
+- **Navigation updates** — Contact link added to navbar, mobile nav, and footer
+- `/contact` added to `sitemap.ts` and JSON-LD breadcrumbs
+- `brand.ts` updated with social links (`linkedin`, `instagram`, `x`) and company constants
+
+### Changed
+
+- Removed "Sign In" from navbar (pre-launch)
+- Frontend form inputs now include `maxLength` to match backend validation limits
+
+---
+
 ## [Ad-Hoc] — MyPy Type Safety & CI Fix — 2026-02-16
 
 ### Fixed

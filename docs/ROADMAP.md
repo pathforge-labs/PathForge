@@ -200,6 +200,8 @@
 | 2026-02-15 | ESLint cleanup — 7 issues resolved   | Post-7        | ✅ Done | 0 errors, 0 warnings achieved         |
 | 2026-02-16 | MyPy type annotation overhaul        | Post-9        | ✅ Done | 165→0 errors, 32 files, 3 bugs fixed  |
 | 2026-02-16 | CI pipeline fix — ai extras          | Post-9        | ✅ Done | Test collection failures resolved     |
+| 2026-02-16 | Contact page redesign (Tier-1)       | Post-9        | ✅ Done | 2-col layout, dept cards, FAQ grid    |
+| 2026-02-16 | Navbar/footer/sitemap updates        | Post-9        | ✅ Done | Contact link, social links, JSON-LD   |
 
 ---
 
