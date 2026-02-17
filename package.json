@@ -5,6 +5,7 @@
   "description": "PathForge — Career Intelligence for Everyone",
   "author": "PathForge <hello@pathforge.eu>",
   "license": "UNLICENSED",
+  "packageManager": "pnpm@10.28.2",
   "engines": {
     "node": ">=22.0.0",
     "pnpm": ">=10.0.0"

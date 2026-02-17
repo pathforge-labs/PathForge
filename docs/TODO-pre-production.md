@@ -1,8 +1,8 @@
 # Pre-Production Deployment Checklist
 
-> **Status**: Pending — Complete before first production deployment
+> **Status**: In Progress — Complete before first production deployment
 > **Sprint**: 7 (Production Readiness)
-> **Created**: 2026-02-14 | **Updated**: 2026-02-16
+> **Created**: 2026-02-14 | **Updated**: 2026-02-17
 
 ---
 
@@ -46,35 +46,75 @@ Store the following in **GitHub → Settings → Secrets and variables → Actio
 
 ## 6. DNS & Domain
 
-- [ ] Point `pathforge.eu` → Vercel
+- [x] SPF DNS record (via DomainConnect chain → Google)
+- [x] DMARC DNS record (`v=DMARC1; p=none; rua=mailto:emre@pathforge.eu`)
+- [x] Google site verification TXT record
+- [x] DNS cleanup (removed duplicate SPF + GoDaddy default DMARC)
+- [ ] Point `pathforge.eu` A record → Vercel (replace WebsiteBuilder parking)
 - [ ] Point `api.pathforge.eu` → Railway (if using custom domain)
 - [ ] Verify SSL certificates are active
+- [ ] DKIM (Google Workspace) — wait 24-72 hours, then activate via Admin Console
 
-## 7. Email (Resend)
+## 7. Email — Google Workspace
 
-- [ ] Verify `pathforge.eu` domain in Resend → DNS records (SPF, DKIM, DMARC)
+- [x] Google Workspace Business Starter activated (`emre@pathforge.eu`)
+- [x] MX records configured (5 Google MX entries)
+- [x] Email aliases added:
+  - [x] `hello@pathforge.eu` (primary contact / Resend sender)
+  - [x] `support@pathforge.eu` (customer support)
+  - [x] `no-reply@pathforge.eu` (transactional emails)
+- [x] All aliases route to `emre@pathforge.eu` inbox
+- [ ] DKIM authentication — generate key after 24-72h, add TXT record, start verification
+
+## 8. Email — Resend (Transactional)
+
+- [x] Resend account created (Google login)
+- [x] `pathforge.eu` domain added (Region: Ireland, eu-west-1)
+- [x] Domain verified (DKIM + SPF + MX all Verified)
+- [x] API Key created (`pathforge-production`)
+- [x] Audience created (`PathForge Waitlist`)
 - [ ] Set `RESEND_API_KEY` in Vercel environment
-- [ ] Set `RESEND_FROM_EMAIL` in Vercel environment
+- [ ] Set `RESEND_FROM_EMAIL=PathForge <hello@pathforge.eu>` in Vercel environment
 - [ ] Set `RESEND_AUDIENCE_ID` in Vercel environment
-- [ ] Test contact form auto-reply email delivery
-- [ ] Test waitlist signup confirmation
-- [ ] Add DMARC DNS record for `pathforge.eu`
+- [ ] Test contact form email delivery (post-deploy)
+- [ ] Test waitlist signup flow (post-deploy)
 
-## 8. Analytics (GA4)
+## 9. Analytics — GA4
 
-- [ ] Create GA4 property at https://analytics.google.com
-- [ ] Create Web data stream for `pathforge.eu`
-- [ ] Copy Measurement ID (`G-XXXXXXXXXX`)
-- [ ] Set `NEXT_PUBLIC_GA_MEASUREMENT_ID` in Vercel environment
-- [ ] Verify Consent Mode v2 is active (denied by default)
-- [ ] Verify GA4 activates only after user accepts cookie banner
-- [ ] Verify GA4 is blocked when user declines cookies
+- [x] GA4 property created (`PathForge` → `PathForge Web`)
+- [x] Web stream configured (`https://pathforge.eu`)
+- [x] Measurement ID obtained (`G-PJHB43EFLP`)
+- [ ] Set `NEXT_PUBLIC_GA_MEASUREMENT_ID=G-PJHB43EFLP` in Vercel environment
+- [ ] Verify Consent Mode v2 is active (denied by default) — post-deploy
+- [ ] Verify GA4 activates only after user accepts cookie banner — post-deploy
+- [ ] Verify GA4 is blocked when user declines cookies — post-deploy
 
-## 9. SEO (Google Search Console)
+## 10. SEO — Google Search Console
 
-- [ ] Create GSC property for `pathforge.eu`
-- [ ] Choose HTML tag verification method
-- [ ] Copy content value from verification meta tag
-- [ ] Set `NEXT_PUBLIC_GSC_VERIFICATION` in Vercel environment
-- [ ] Verify ownership in GSC
-- [ ] Submit sitemap: `https://pathforge.eu/sitemap.xml`
+- [x] GSC property created (`https://pathforge.eu/`)
+- [x] Domain verified via DNS TXT record (no meta tag needed)
+- [ ] Submit sitemap to GSC: `https://pathforge.eu/sitemap.xml` — post-deploy
+- [ ] Verify sitemap is indexed — check after 48 hours
+
+## 11. Final Pre-Launch Checks
+
+- [ ] `robots.ts` created with proper crawl rules
+- [ ] Smoke test: visit all public pages, verify no errors
+- [ ] Test contact form end-to-end
+- [ ] Test waitlist signup end-to-end
+- [ ] Verify cookie banner appears and GA4 consent works
+- [ ] Check Lighthouse score (aim for 90+ on all metrics)
+- [ ] Review Open Graph / social sharing preview
+
+## 12. Post-Launch — GitHub Organization Migration
+
+> **When**: After production is stable and running for 1-2 weeks
+
+- [ ] Create GitHub Organization: `pathforge-eu` (using `emre@pathforge.eu`)
+- [ ] Transfer repo from `besync-labs/PathForge` → `pathforge-eu/PathForge`
+- [ ] Update Git remote URLs locally
+- [ ] Update Vercel GitHub integration (reconnect to new org)
+- [ ] Update Railway GitHub integration
+- [ ] Update GitHub Secrets in new org
+- [ ] Verify CI/CD pipelines work with new org
+- [ ] Update `brand.ts` repo references if any
