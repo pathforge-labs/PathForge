@@ -1,27 +1,153 @@
 #!/bin/sh
 # ─────────────────────────────────────────────────────────────
-# PathForge — Git Pre-Push Hook
+# PathForge — Smart Pre-Push Hook
 # ─────────────────────────────────────────────────────────────
-# Runs the local CI gate before every push.
+# Runs the local CI gate with intelligent scope detection.
+#
+# Optimizations:
+#   1. Fast-forward merges: skip CI (commits already tested)
+#   2. Docs-only changes: skip CI entirely
+#   3. Auto-scope: detect api/web/all from changed files
 #
 # Activation (one-time):
 #   git config core.hooksPath .githooks
 #
 # Bypass (emergency only):
 #   git push --no-verify
+#
+# Quick skip (trusted pushes):
+#   SKIP_CI=1 git push
 # ─────────────────────────────────────────────────────────────
 
+ROOT="$(git rev-parse --show-toplevel)"
+
+# ── Quick skip via env var ─────────────────────────────────
+if [ "$SKIP_CI" = "1" ]; then
+    echo ""
+    echo "╔══════════════════════════════════════════╗"
+    echo "║  Pre-Push Hook — SKIP_CI=1, skipping     ║"
+    echo "╚══════════════════════════════════════════╝"
+    echo ""
+    exit 0
+fi
+
+# ── Parse stdin for push refs ──────────────────────────────
+# Git passes: <local ref> <local sha> <remote ref> <remote sha>
+LOCAL_SHA=""
+REMOTE_SHA=""
+while read local_ref local_sha remote_ref remote_sha; do
+    LOCAL_SHA="$local_sha"
+    REMOTE_SHA="$remote_sha"
+done
+
+# Handle empty/zero SHA (new branch or delete)
+ZERO="0000000000000000000000000000000000000000"
+if [ "$LOCAL_SHA" = "$ZERO" ]; then
+    # Deleting branch — nothing to check
+    exit 0
+fi
+
+# ── Determine diff range ──────────────────────────────────
+if [ "$REMOTE_SHA" = "$ZERO" ]; then
+    # New branch push — compare against main
+    DIFF_RANGE="origin/main...$LOCAL_SHA"
+else
+    DIFF_RANGE="$REMOTE_SHA..$LOCAL_SHA"
+fi
+
+# ── Check if all commits already exist on another branch ──
+# (Fast-forward merge detection: main → production)
+BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+if [ "$BRANCH_NAME" = "production" ] && [ "$REMOTE_SHA" != "$ZERO" ]; then
+    # Check if LOCAL_SHA is an ancestor of origin/main
+    # If so, all commits were already pushed & tested on main
+    if git merge-base --is-ancestor "$LOCAL_SHA" "origin/main" 2>/dev/null; then
+        echo ""
+        echo "╔══════════════════════════════════════════╗"
+        echo "║  Pre-Push Hook — Fast-Forward Detected    ║"
+        echo "╠══════════════════════════════════════════╣"
+        echo "║  All commits already tested on main.      ║"
+        echo "║  Skipping CI gate.                        ║"
+        echo "╚══════════════════════════════════════════╝"
+        echo ""
+        exit 0
+    fi
+fi
+
+# ── Detect changed files ──────────────────────────────────
+CHANGED_FILES=$(git diff --name-only "$DIFF_RANGE" 2>/dev/null)
+
+if [ -z "$CHANGED_FILES" ]; then
+    echo ""
+    echo "╔══════════════════════════════════════════╗"
+    echo "║  Pre-Push Hook — No changes detected     ║"
+    echo "╚══════════════════════════════════════════╝"
+    echo ""
+    exit 0
+fi
+
+# ── Classify changes ──────────────────────────────────────
+HAS_API=false
+HAS_WEB=false
+HAS_ROOT=false
+ONLY_DOCS=true
+
+echo "$CHANGED_FILES" | while IFS= read -r file; do
+    # Check if file is docs-only (markdown, txt, or in docs/)
+    case "$file" in
+        *.md|docs/*|*.txt|LICENSE*|.agent/*) ;;
+        *) ONLY_DOCS=false; break ;;
+    esac
+done
+
+# Re-check ONLY_DOCS (subshell issue — use grep instead)
+NON_DOC_FILES=$(echo "$CHANGED_FILES" | grep -v -E '\.md$|^docs/|\.txt$|^LICENSE|^\.agent/' || true)
+
+if [ -z "$NON_DOC_FILES" ]; then
+    echo ""
+    echo "╔══════════════════════════════════════════╗"
+    echo "║  Pre-Push Hook — Docs-Only Change         ║"
+    echo "╠══════════════════════════════════════════╣"
+    echo "║  Only documentation files changed.        ║"
+    echo "║  Skipping CI gate.                        ║"
+    echo "╚══════════════════════════════════════════╝"
+    echo ""
+    exit 0
+fi
+
+# Determine scope from changed files
+API_FILES=$(echo "$NON_DOC_FILES" | grep -c '^apps/api/' || true)
+WEB_FILES=$(echo "$NON_DOC_FILES" | grep -c '^apps/web/' || true)
+ROOT_FILES=$(echo "$NON_DOC_FILES" | grep -v -E '^apps/(api|web)/' || true)
+
+# Decide scope
+SCOPE="all"
+if [ -n "$ROOT_FILES" ]; then
+    # Root files changed (package.json, configs, etc.) — run all
+    SCOPE="all"
+elif [ "$API_FILES" -gt 0 ] && [ "$WEB_FILES" -eq 0 ]; then
+    SCOPE="api"
+elif [ "$WEB_FILES" -gt 0 ] && [ "$API_FILES" -eq 0 ]; then
+    SCOPE="web"
+else
+    SCOPE="all"
+fi
+
+# ── Run CI gate with detected scope ───────────────────────
 echo ""
 echo "╔══════════════════════════════════════════╗"
 echo "║  Pre-Push Hook — Running Local CI Gate   ║"
+echo "╠══════════════════════════════════════════╣"
+echo "║  Scope: $SCOPE                               ║"
+echo "║  Changed: $API_FILES api, $WEB_FILES web, $(echo "$ROOT_FILES" | grep -c '.' || echo 0) root  ║"
 echo "╚══════════════════════════════════════════╝"
 echo ""
 
 # Detect OS and run appropriate script
 if command -v pwsh &> /dev/null; then
-    pwsh -NoProfile -ExecutionPolicy Bypass -File "$(git rev-parse --show-toplevel)/scripts/ci-local.ps1" -Scope all
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "$ROOT/scripts/ci-local.ps1" -Scope "$SCOPE"
 elif command -v powershell &> /dev/null; then
-    powershell -NoProfile -ExecutionPolicy Bypass -File "$(git rev-parse --show-toplevel)/scripts/ci-local.ps1" -Scope all
+    powershell -NoProfile -ExecutionPolicy Bypass -File "$ROOT/scripts/ci-local.ps1" -Scope "$SCOPE"
 else
     echo "⚠ PowerShell not found — skipping local CI gate."
     echo "  Run manually: ./scripts/ci-local.ps1"
