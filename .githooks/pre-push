@@ -101,14 +101,22 @@ echo "$CHANGED_FILES" | while IFS= read -r file; do
 done
 
 # Re-check ONLY_DOCS (subshell issue — use grep instead)
-NON_DOC_FILES=$(echo "$CHANGED_FILES" | grep -v -E '\.md$|^docs/|\.txt$|^LICENSE|^\.agent/' || true)
+# Patterns that don't affect API or Web build output:
+#   - Documentation: *.md, docs/, *.txt, LICENSE
+#   - Agent/IDE config: .agent/, .vscode/, .githooks/
+#   - CI/CD config: .github/, scripts/
+#   - Docker infra: docker/
+#   - Shared types: packages/shared/ (no build step)
+#   - Root config: .gitignore, .editorconfig, .prettierrc
+NON_CODE_FILES_PATTERN='\.md$|^docs/|\.txt$|^LICENSE|^\.agent/|^\.vscode/|^\.githooks/|^\.github/|^scripts/|^docker/|^packages/shared/|^\.gitignore$|^\.editorconfig$|^\.prettierrc'
+NON_DOC_FILES=$(echo "$CHANGED_FILES" | grep -v -E "$NON_CODE_FILES_PATTERN" || true)
 
 if [ -z "$NON_DOC_FILES" ]; then
     echo ""
     echo "╔══════════════════════════════════════════╗"
-    echo "║  Pre-Push Hook — Docs-Only Change         ║"
+    echo "║  Pre-Push Hook — Non-Code Change          ║"
     echo "╠══════════════════════════════════════════╣"
-    echo "║  Only documentation files changed.        ║"
+    echo "║  Only docs/config/infra files changed.    ║"
     echo "║  Skipping CI gate.                        ║"
     echo "╚══════════════════════════════════════════╝"
     echo ""
@@ -138,7 +146,7 @@ echo ""
 echo "╔══════════════════════════════════════════╗"
 echo "║  Pre-Push Hook — Running Local CI Gate   ║"
 echo "╠══════════════════════════════════════════╣"
-echo "║  Scope: $SCOPE                               ║"
+echo "║  Scope: $SCOPE                           ║"
 echo "║  Changed: $API_FILES api, $WEB_FILES web, $(echo "$ROOT_FILES" | grep -c '.' || echo 0) root  ║"
 echo "╚══════════════════════════════════════════╝"
 echo ""
