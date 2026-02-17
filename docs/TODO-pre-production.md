@@ -2,7 +2,7 @@
 
 > **Status**: In Progress — Complete before first production deployment
 > **Sprint**: 7 (Production Readiness)
-> **Created**: 2026-02-14 | **Updated**: 2026-02-17
+> **Created**: 2026-02-14 | **Updated**: 2026-02-18
 
 ---
 
@@ -15,21 +15,25 @@
 
 ## 2. Vercel Setup
 
-- [ ] Create Vercel project for PathForge Web
-- [ ] Connect to GitHub repository (`pathforge-labs/PathForge`)
-- [ ] Configure build settings (Next.js, `apps/web` root)
-- [ ] Add environment variables (API URL, etc.)
+- [x] Create Vercel project for PathForge Web
+- [x] Connect to GitHub repository (`pathforge-labs/PathForge`)
+- [x] Configure build settings (Next.js, `apps/web` root, pnpm)
+- [x] Set Production Branch to `production`
+- [x] Configure Ignored Build Step (only `production` deploys)
+- [x] Add `ENABLE_EXPERIMENTAL_COREPACK=1` env var
+- [x] Whitelist pnpm `onlyBuiltDependencies` (msw, sharp, unrs-resolver)
+- [ ] Add environment variables (API URL, Resend keys, GA4 ID)
 
 ## 3. GitHub Secrets
 
 Store the following in **GitHub → Settings → Secrets and variables → Actions**:
 
-| Secret              | Source                                |
-| :------------------ | :------------------------------------ |
-| `RAILWAY_TOKEN`     | Railway → Account Settings → Tokens   |
-| `VERCEL_TOKEN`      | Vercel → Account Settings → Tokens    |
-| `VERCEL_ORG_ID`     | Vercel → Settings → General → Team ID |
-| `VERCEL_PROJECT_ID` | Vercel → Project → Settings → General |
+| Secret              | Source                                | Status     |
+| :------------------ | :------------------------------------ | :--------- |
+| `RAILWAY_TOKEN`     | Railway → Account Settings → Tokens   | ⬜ Pending |
+| `VERCEL_TOKEN`      | Vercel → Account Settings → Tokens    | ✅ Done    |
+| `VERCEL_ORG_ID`     | Vercel → Settings → General → Team ID | ✅ Done    |
+| `VERCEL_PROJECT_ID` | Vercel → Project → Settings → General | ✅ Done    |
 
 ## 4. Database
 

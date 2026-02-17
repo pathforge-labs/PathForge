@@ -1,7 +1,7 @@
 # PathForge — Development Process & Workflow
 
 > **Document Status**: Living document — updated as processes evolve.
-> **Last Updated**: 2026-02-13
+> **Last Updated**: 2026-02-18
 > **Owner**: Emre Dursun (Founder & Lead Engineer)
 
 ---
@@ -219,48 +219,77 @@ A feature is **Done** when ALL criteria are met:
 
 ### GitHub Actions Workflows
 
+#### CI Pipeline (`ci.yml`) — Triggers on push to `main`
+
 ```
 ┌─────────────────────────────────────────────────┐
-│              PR to main (ci.yml)                │
+│           Push to main (ci.yml)                 │
 ├─────────────────────────────────────────────────┤
 │  ✅ Install dependencies (pnpm)                 │
-│  ✅ Lint (ESLint)                                │
-│  ✅ Type check (TypeScript)                      │
-│  ✅ Build (Next.js production build)             │
-│  ✅ Unit tests (Vitest)                          │
-│  ✅ Lighthouse CI (performance audit)            │
-└─────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────┐
-│          Push to production (deploy.yml)         │
-├─────────────────────────────────────────────────┤
-│  ✅ All CI checks from above                     │
-│  ✅ Build Docker image                           │
-│  ✅ Push to container registry                   │
-│  ✅ Deploy to Vercel / Cloud Run                 │
-│  ✅ Smoke test (health check)                    │
-│  ✅ Notify (success/failure)                     │
+│  ✅ API: Ruff Lint                               │
+│  ✅ API: MyPy Type Check                         │
+│  ✅ API: Pytest (202 tests)                      │
+│  ✅ Web: ESLint                                  │
+│  ✅ Web: Next.js production build                │
 └─────────────────────────────────────────────────┘
 ```
+
+#### Deploy Pipeline (`deploy.yml`) — Triggers on push to `production`
+
+```
+┌─────────────────────────────────────────────────┐
+│       Push to production (deploy.yml)           │
+├─────────────────────────────────────────────────┤
+│  ✅ Deploy API → Railway (via CLI)               │
+└─────────────────────────────────────────────────┘
+```
+
+### Deployment Strategy
+
+| Component | Deploy Mechanism              | Trigger              | Platform |
+| :-------- | :---------------------------- | :------------------- | :------- |
+| **Web**   | Vercel Git Integration (auto) | Push to `production` | Vercel   |
+| **API**   | GitHub Actions `deploy.yml`   | Push to `production` | Railway  |
+
+> [!IMPORTANT]
+> Web deployments are **NOT** handled by GitHub Actions. Vercel's native Git integration
+> automatically deploys on push to the `production` branch. The `deploy.yml` workflow
+> only handles Railway API deployment.
+
+### Vercel Configuration
+
+| Setting            | Value                                      |
+| :----------------- | :----------------------------------------- |
+| Production Branch  | `production`                               |
+| Root Directory     | `apps/web`                                 |
+| Install Command    | `pnpm install`                             |
+| Build Command      | `pnpm build`                               |
+| Ignored Build Step | Only `production` branch triggers builds   |
+| Node.js Version    | 22.x                                       |
+| Corepack           | Enabled (`ENABLE_EXPERIMENTAL_COREPACK=1`) |
+
+### Local Pre-Push Gate
+
+A smart pre-push hook runs automatically before every `git push`. See [LOCAL-CI-GATE.md](guides/LOCAL-CI-GATE.md) for full documentation.
+
+Key optimizations:
+
+- **Non-code changes** (docs, config, hooks) → CI skipped entirely
+- **Fast-forward merges** (`main` → `production`) → CI skipped
+- **Scope detection** → Only relevant gates run (api/web/all)
 
 ### Preview Deployments
 
-Every PR to `main` gets an auto-deployed preview URL via Vercel, enabling:
-
-- Visual regression testing
-- Stakeholder review before merge
-- Mobile device testing on real URLs
+Pushes to non-production branches are ignored by Vercel (via Ignored Build Step). Preview deployments are not enabled on the Hobby plan.
 
 ---
 
 ## 7. Environment Strategy
 
-| Environment     | Branch       | URL                    | Purpose             |
-| :-------------- | :----------- | :--------------------- | :------------------ |
-| **Development** | `feature/*`  | `localhost:3000`       | Local development   |
-| **Preview**     | PR branches  | `*.vercel.app`         | PR review           |
-| **Staging**     | `main`       | `staging.pathforge.eu` | Integration testing |
-| **Production**  | `production` | `pathforge.eu`         | Live site           |
+| Environment     | Branch       | URL              | Purpose           |
+| :-------------- | :----------- | :--------------- | :---------------- |
+| **Development** | `feature/*`  | `localhost:3000` | Local development |
+| **Production**  | `production` | `pathforge.eu`   | Live site         |
 
 ---
 
