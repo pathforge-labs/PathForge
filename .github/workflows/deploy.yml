@@ -2,14 +2,17 @@
 # PathForge — Production Deployment
 # ─────────────────────────────────────────────────────────────
 # Triggers: push to production branch only
-# Deploys API to Railway, Web to Vercel.
-# Both deploy jobs depend on CI passing first.
+#
+# Deployment strategy:
+#   API  → Railway (via this workflow)
+#   Web  → Vercel Git Integration (automatic, NOT this workflow)
+#
+# Web deploys are handled by Vercel's native Git integration,
+# which auto-deploys on push to the production branch.
+# See: Vercel Project Settings → Git → Production Branch
 #
 # Required GitHub Secrets:
-#   RAILWAY_TOKEN        — Railway API token
-#   VERCEL_TOKEN         — Vercel API token
-#   VERCEL_ORG_ID        — Vercel organization ID
-#   VERCEL_PROJECT_ID    — Vercel project ID
+#   RAILWAY_TOKEN — Railway API token
 
 name: Deploy
 
@@ -38,42 +41,3 @@ jobs:
         run: railway up --service pathforge-api --detach
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-
-  # ── Deploy Web to Vercel ─────────────────────────────────
-  deploy-web:
-    name: Deploy Web → Vercel
-    runs-on: ubuntu-latest
-    environment: production
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Set up Node.js 22
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-          cache: pnpm
-
-      - name: Install Vercel CLI
-        run: pnpm add -g vercel@latest
-
-      - name: Pull Vercel Environment
-        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
-      - name: Build for Production
-        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
-      - name: Deploy to Production
-        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
