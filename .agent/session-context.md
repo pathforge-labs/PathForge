@@ -1,24 +1,27 @@
 # Session Context — PathForge
 
 > **Framework**: Antigravity AI Kit v2.0.0
-> **Last Updated**: 2026-02-16T15:02:00+01:00
+> **Last Updated**: 2026-02-17T04:31:00+01:00
 
 ---
 
 ## 📋 Last Session Summary
 
-**Date**: 2026-02-16
-**Focus**: Contact Page Redesign & Navigation Updates
+**Date**: 2026-02-17
+**Focus**: Production Infrastructure — Vercel, Email, Analytics & SEO Setup
 
-- Redesigned contact page with premium Tier-1 2-column layout (BeSync-inspired)
-- Added department cards, FAQ grid, social cards, ambient glows
-- Created `ContactForm` component with subject dropdown + trust badges
-- Created `POST /api/contact` API route with Resend, XSS protection, rate limiting, subject allowlist
-- Added Contact link to navbar, mobile nav, footer, sitemap, JSON-LD
-- Updated `brand.ts` with social links and company constants
-- Removed "Sign In" from navbar (pre-launch)
-- Tier-1 retrospective audit: all findings resolved, all gates passed
-- Commit: `bececa3` → pushed to `origin/main` (202/202 tests, 0 lint errors)
+- Configured Google Workspace (emre@pathforge.eu) with 4 email aliases
+- Set up Resend with verified pathforge.eu domain (SPF, DKIM, DMARC DNS records)
+- Configured GA4 (G-EKGQR1ZWH3) with Consent Mode v2 implementation
+- Verified Google Search Console via DNS TXT record
+- Created `robots.ts` with Googlebot crawl rules + sitemap reference
+- Set up Vercel project (path-forge-web) with correct monorepo build config
+- Added `packageManager: pnpm@10.28.2` to root package.json for Corepack
+- Configured Vercel: production branch = `production`, auto-deploy disabled (exit 0)
+- Fixed CI/CD pnpm version conflict (removed explicit `version: 10` from workflows)
+- Added 3 GitHub Secrets: VERCEL_ORG_ID, VERCEL_PROJECT_ID, VERCEL_TOKEN
+- Successfully tested Vercel deploy pipeline via GitHub Actions (Deploy #3 ✅)
+- Commit: `8e8c4f0` → pushed to both `main` and `production`
 
 ---
 
@@ -35,13 +38,15 @@
 
 ## 📝 Handoff Notes
 
-- Phase A (MVP) is COMPLETE — all 7 sprints shipped
+- Phase A (MVP) COMPLETE — all 7 sprints shipped
 - Sprint 8 (Career DNA™) COMPLETE — 9 tasks, 168 tests
 - Sprint 9 (Career Threat Radar™) COMPLETE — 11 tasks, 202 tests
-- Contact page redesign COMPLETE — Tier-1 audit passed
-- CI pipeline fully green: Ruff 0, MyPy 0, Pytest 202/202, ESLint 0, Build OK
-- Next: Sprint 10 — Skill Decay & Growth Tracker
-- Gitflow is live: `main` for dev, `production` for releases
+- **Vercel deploy pipeline WORKING** — deploy.yml tested successfully
+- Railway deploy still needs RAILWAY_TOKEN → setup pending
+- DKIM verification pending (24-72 hours from 2026-02-17)
+- Custom domain (pathforge.eu) not yet connected to Vercel
+- GSC sitemap not yet submitted
+- Next: Railway setup, custom domain, smoke tests, Sprint 10
 - Pre-production checklist at `docs/TODO-pre-production.md`
 - Follow `docs/DEVELOPMENT_WORKFLOW.md` for all Git operations
 

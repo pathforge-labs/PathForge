@@ -203,6 +203,13 @@
 | 2026-02-16 | Contact page redesign (Tier-1)       | Post-9        | ✅ Done | 2-col layout, dept cards, FAQ grid    |
 | 2026-02-16 | Navbar/footer/sitemap updates        | Post-9        | ✅ Done | Contact link, social links, JSON-LD   |
 | 2026-02-16 | Pricing section + Tier-1 audit       | Post-9        | ✅ Done | 3 tiers, PricingCards, 9 audit fixes  |
+| 2026-02-17 | Google Workspace + email aliases     | Post-9        | ✅ Done | emre@pathforge.eu + 4 aliases         |
+| 2026-02-17 | Resend email integration             | Post-9        | ✅ Done | SPF/DKIM/DMARC DNS verified           |
+| 2026-02-17 | GA4 + Consent Mode v2                | Post-9        | ✅ Done | G-EKGQR1ZWH3, consent-aware tracking  |
+| 2026-02-17 | Google Search Console verified       | Post-9        | ✅ Done | DNS TXT record, robots.ts created     |
+| 2026-02-17 | Vercel deploy pipeline setup         | Post-9        | ✅ Done | Monorepo config, auto-deploy disabled |
+| 2026-02-17 | CI/CD pnpm version fix               | Post-9        | ✅ Done | Removed explicit version from actions |
+| 2026-02-17 | GitHub Secrets (Vercel)              | Post-9        | ✅ Done | 3 secrets, deploy pipeline tested ✅  |
 
 ---
 

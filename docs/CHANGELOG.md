@@ -5,6 +5,29 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [Ad-Hoc] — Production Infrastructure Setup — 2026-02-17
+
+### Added
+
+- **Google Workspace** — `emre@pathforge.eu` with 4 aliases (hello, support, privacy, info)
+- **Resend integration** — SPF, DKIM, DMARC DNS records verified, API key configured
+- **GA4 analytics** — `G-EKGQR1ZWH3` with Consent Mode v2 implementation
+- **Google Search Console** — DNS TXT verification, `robots.ts` with Googlebot rules
+- **Vercel deploy pipeline** — monorepo build config, auto-deploy disabled (`exit 0`)
+- **GitHub Secrets** — `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`, `VERCEL_TOKEN` configured
+- **Vercel project** linked via CLI (`.vercel/project.json`)
+
+### Fixed
+
+- **pnpm version conflict** — removed explicit `version: 10` from `pnpm/action-setup` in `deploy.yml` and `ci.yml` (conflicts with `packageManager` field in `package.json`)
+
+### Changed
+
+- Root `package.json` — added `packageManager: "pnpm@10.28.2"` for Vercel Corepack
+- Vercel production branch set to `production`, Node.js version set to `22.x`
+
+---
+
 ## [Ad-Hoc] — Contact Page Redesign & Navigation — 2026-02-16
 
 ### Added
