@@ -15,5 +15,12 @@
     "build:web": "pnpm --filter pathforge-web build",
     "lint": "pnpm -r lint",
     "typecheck": "pnpm -r typecheck"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "msw",
+      "sharp",
+      "unrs-resolver"
+    ]
   }
 }
