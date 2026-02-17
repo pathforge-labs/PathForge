@@ -218,7 +218,7 @@ pathforge-shared       # Shared types/utils
 
 | Item            | Convention                            |
 | :-------------- | :------------------------------------ |
-| GitHub org      | `besync-labs`                         |
+| GitHub org      | `pathforge-labs`                      |
 | Repo name       | `pathforge`                           |
 | Branch strategy | `main` → `develop` → feature branches |
 | Commit prefix   | Standard conventional commits         |

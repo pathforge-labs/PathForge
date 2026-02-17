@@ -446,7 +446,7 @@ pathforge/
 
 ```bash
 # Clone
-git clone https://github.com/besync-labs/PathForge.git
+git clone https://github.com/pathforge-labs/PathForge.git
 cd pathforge
 
 # Install

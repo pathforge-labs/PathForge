@@ -27,7 +27,7 @@
 
 ## 🔧 Working Context
 
-- **Repository**: https://github.com/besync-labs/PathForge.git
+- **Repository**: https://github.com/pathforge-labs/PathForge.git
 - **Branches**: `main` (development), `production` (releases)
 - **Framework**: Next.js 15 + TailwindCSS v4 (Turborepo monorepo)
 - **Backend**: FastAPI + PostgreSQL + pgvector + Alembic

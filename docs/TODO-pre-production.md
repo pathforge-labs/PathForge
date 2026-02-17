@@ -16,7 +16,7 @@
 ## 2. Vercel Setup
 
 - [ ] Create Vercel project for PathForge Web
-- [ ] Connect to GitHub repository (`besync-labs/PathForge`)
+- [ ] Connect to GitHub repository (`pathforge-labs/PathForge`)
 - [ ] Configure build settings (Next.js, `apps/web` root)
 - [ ] Add environment variables (API URL, etc.)
 
@@ -111,7 +111,7 @@ Store the following in **GitHub → Settings → Secrets and variables → Actio
 > **When**: After production is stable and running for 1-2 weeks
 
 - [ ] Create GitHub Organization: `pathforge-eu` (using `emre@pathforge.eu`)
-- [ ] Transfer repo from `besync-labs/PathForge` → `pathforge-eu/PathForge`
+- [ ] Transfer repo from `pathforge-labs/PathForge` → `pathforge-eu/PathForge`
 - [ ] Update Git remote URLs locally
 - [ ] Update Vercel GitHub integration (reconnect to new org)
 - [ ] Update Railway GitHub integration
