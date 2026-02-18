@@ -1,20 +1,19 @@
 # Session Context — PathForge
 
 > **Framework**: Antigravity AI Kit v2.0.0
-> **Last Updated**: 2026-02-18T14:32:00+01:00
+> **Last Updated**: 2026-02-18T17:40:00+01:00
 
 ---
 
 ## 📋 Last Session Summary
 
 **Date**: 2026-02-18
-**Focus**: Production Infrastructure — Custom Domain SSL & Verification
+**Focus**: API Security Hardening, Deploy Fix, Pre-Push Optimization
 
-- `api.pathforge.eu` custom domain added on Railway
-- Railway TXT verification record (`_railway-verify.api`) added to GoDaddy DNS
-- SSL certificate auto-provisioned, API accessible via HTTPS
-- Health check verified: `https://api.pathforge.eu/api/v1/health` → `{"status":"ok"}`
-- Swagger UI live at `https://api.pathforge.eu/docs`
+- API security hardening deployed: `security.txt`, `robots.txt`, bot trap, docs protection
+- Railway deploy conflict resolved: removed redundant `deploy.yml`, native integration active
+- Pre-push hook optimized: fast mode (~12s), production merge skip, `FULL_CI=1` override
+- 208/208 tests passing, all security endpoints verified live
 
 ---
 
@@ -34,12 +33,13 @@
 - Phase A (MVP) COMPLETE — all 7 sprints shipped
 - Sprint 8 (Career DNA™) COMPLETE — 9 tasks, 168 tests
 - Sprint 9 (Career Threat Radar™) COMPLETE — 11 tasks, 202 tests
-- **Railway API LIVE** at `api.pathforge.eu` (SSL active)
+- **Railway API LIVE** at `api.pathforge.eu` (security hardening active)
 - **pathforge.eu LIVE** — landing page serving from Vercel
 - All DNS records verified and propagated
-- Next: Smoke tests (email, API, GA4 consent) → post-deploy verification
+- `deploy.yml` removed — Railway native GitHub integration handles production deploys
+- Pre-push hook: fast mode default (~12s), `FULL_CI=1` for full local CI
+- Next: Post-deploy verification items at `docs/TODO-pre-production.md`
 - Next: Sprint 10 (Skill Decay & Growth Tracker)
-- Pre-production checklist at `docs/TODO-pre-production.md`
 
 ---
 
