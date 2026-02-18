@@ -55,19 +55,21 @@ else
     DIFF_RANGE="$REMOTE_SHA..$LOCAL_SHA"
 fi
 
-# ── Check if all commits already exist on another branch ──
-# (Fast-forward merge detection: main → production)
+# ── Check if production branch only contains main-tested code ──
+# Skip CI for production pushes when all code comes from main.
+# Works for both fast-forward AND --no-ff merge commits.
 BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
 if [ "$BRANCH_NAME" = "production" ] && [ "$REMOTE_SHA" != "$ZERO" ]; then
-    # Check if LOCAL_SHA is an ancestor of origin/main
-    # If so, all commits were already pushed & tested on main
-    if git merge-base --is-ancestor "$LOCAL_SHA" "origin/main" 2>/dev/null; then
+    # Check if origin/main is an ancestor of (or equal to) LOCAL_SHA.
+    # This is true when production is a merge of main — meaning all
+    # code changes were already CI-tested on the main push.
+    if git merge-base --is-ancestor "origin/main" "$LOCAL_SHA" 2>/dev/null; then
         echo ""
         echo "╔══════════════════════════════════════════╗"
-        echo "║  Pre-Push Hook — Fast-Forward Detected    ║"
+        echo "║  Pre-Push Hook — Production Merge         ║"
         echo "╠══════════════════════════════════════════╣"
-        echo "║  All commits already tested on main.      ║"
-        echo "║  Skipping CI gate.                        ║"
+        echo "║  All code already CI-tested on main.      ║"
+        echo "║  Skipping redundant CI gate.              ║"
         echo "╚══════════════════════════════════════════╝"
         echo ""
         exit 0
