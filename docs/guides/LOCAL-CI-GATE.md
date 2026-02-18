@@ -17,7 +17,7 @@
 .\scripts\ci-local.ps1 -Scope api          # Full API gates
 ```
 
-## Two-Tier Quality Strategy
+## Tier-1 Quality Strategy
 
 | Tier         | Where             | What Runs                                | Time     |
 | :----------- | :---------------- | :--------------------------------------- | :------- |
@@ -26,7 +26,7 @@
 | **Audit**    | Local (manual)    | `/retrospective` + `/review` + `/verify` | ~10 min  |
 
 > [!TIP]
-> Pre-push catches syntax, import, and type errors instantly. Tests and builds run in parallel on GitHub Actions after push. Tier-1 audits catch deeper issues before committing.
+> Pre-push catches syntax, import, and type errors instantly. Tests and builds run in GitHub Actions CI after push. Tier-1 audits (`/retrospective`, `/review`, `/verify`) catch deeper issues before committing.
 
 ## Gate Architecture
 
@@ -199,7 +199,7 @@ pnpm install
 ## Design Decisions
 
 1. **Fast by default** — pre-push runs lint + types only (~12s), full tests deferred to GitHub Actions CI
-2. **Two-tier quality** — fast local checks + thorough remote CI + manual Tier-1 audits
+2. **Tier-1 quality strategy** — fast local checks + GitHub Actions CI + manual Tier-1 audits
 3. **Fail-fast** — stops at first blocking failure to save time
 4. **MyPy is non-blocking** — runs as a warning gate so type regressions don't block pushes
 5. **PowerShell 5.1 compatible** — uses native `Write-Host -ForegroundColor` instead of ANSI escapes
