@@ -3,6 +3,7 @@ PathForge API — Application Entry Point
 =========================================
 FastAPI application factory with CORS, routing, and OpenAPI configuration.
 
+Includes: security hardening (RFC 9116, bot trap, docs protection).
 Run with: uvicorn app.main:app --reload
 """
 
