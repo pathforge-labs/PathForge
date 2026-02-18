@@ -7,9 +7,9 @@
     "status": "completed"
   },
   "repository": {
-    "lastCommit": "",
+    "lastCommit": "05f41e6",
     "branch": "main",
-    "clean": false
+    "clean": true
   },
   "testSuite": {
     "total": 202,
