@@ -144,20 +144,32 @@ else
 fi
 
 # ── Run CI gate with detected scope ───────────────────────
+# Default: Fast mode (lint + types only, ~12s)
+# Full mode: FULL_CI=1 git push (lint + types + tests + build)
+FAST_FLAG="-Fast"
+if [ "$FULL_CI" = "1" ]; then
+    FAST_FLAG=""
+fi
+
 echo ""
 echo "╔══════════════════════════════════════════╗"
 echo "║  Pre-Push Hook — Running Local CI Gate   ║"
 echo "╠══════════════════════════════════════════╣"
 echo "║  Scope: $SCOPE                           ║"
 echo "║  Changed: $API_FILES api, $WEB_FILES web, $(echo "$ROOT_FILES" | grep -c '.' || echo 0) root  ║"
+if [ -z "$FAST_FLAG" ]; then
+echo "║  Mode: FULL (lint + types + tests)       ║"
+else
+echo "║  Mode: FAST (lint + types only)          ║"
+fi
 echo "╚══════════════════════════════════════════╝"
 echo ""
 
 # Detect OS and run appropriate script
 if command -v pwsh &> /dev/null; then
-    pwsh -NoProfile -ExecutionPolicy Bypass -File "$ROOT/scripts/ci-local.ps1" -Scope "$SCOPE"
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "$ROOT/scripts/ci-local.ps1" -Scope "$SCOPE" $FAST_FLAG
 elif command -v powershell &> /dev/null; then
-    powershell -NoProfile -ExecutionPolicy Bypass -File "$ROOT/scripts/ci-local.ps1" -Scope "$SCOPE"
+    powershell -NoProfile -ExecutionPolicy Bypass -File "$ROOT/scripts/ci-local.ps1" -Scope "$SCOPE" $FAST_FLAG
 else
     echo "⚠ PowerShell not found — skipping local CI gate."
     echo "  Run manually: ./scripts/ci-local.ps1"

@@ -1,31 +1,42 @@
 # Local CI Pre-Push Gate
 
-> Mirrors `.github/workflows/ci.yml` locally to catch failures before push.
+> Catches lint and type errors before push. Full tests run in GitHub Actions CI.
 
 ## Quick Start
 
 ```powershell
-# Run all gates (API + Web)
+# Fast mode — lint + types only (~12s) — DEFAULT for pre-push hook
+.\scripts\ci-local.ps1 -Fast
+
+# Full mode — lint + types + tests + build (mirrors ci.yml)
 .\scripts\ci-local.ps1
 
-# Run API gates only (Ruff, MyPy, Pytest)
-.\scripts\ci-local.ps1 -Scope api
-
-# Run Web gates only (ESLint, Next.js Build)
-.\scripts\ci-local.ps1 -Scope web
+# Scoped fast mode
+.\scripts\ci-local.ps1 -Fast -Scope api    # API lint + types only
+.\scripts\ci-local.ps1 -Fast -Scope web    # Web lint only
+.\scripts\ci-local.ps1 -Scope api          # Full API gates
 ```
+
+## Two-Tier Quality Strategy
+
+| Tier         | Where             | What Runs                                | Time     |
+| :----------- | :---------------- | :--------------------------------------- | :------- |
+| **Pre-Push** | Local (fast mode) | Ruff lint + MyPy type check              | **~12s** |
+| **CI/CD**    | GitHub Actions    | Ruff + MyPy + Pytest + ESLint + Build    | ~3 min   |
+| **Audit**    | Local (manual)    | `/retrospective` + `/review` + `/verify` | ~10 min  |
+
+> [!TIP]
+> Pre-push catches syntax, import, and type errors instantly. Tests and builds run in parallel on GitHub Actions after push. Tier-1 audits catch deeper issues before committing.
 
 ## Gate Architecture
 
-The script mirrors the exact gates from the GitHub Actions pipeline:
-
-| Gate                | CI Step                                       | Scope | Blocking        |
-| ------------------- | --------------------------------------------- | ----- | --------------- |
-| **Ruff Lint**       | `python -m ruff check app/ tests/`            | `api` | ✅ Yes          |
-| **MyPy Type Check** | `python -m mypy app --ignore-missing-imports` | `api` | ⚠️ Warning only |
-| **Pytest**          | `python -m pytest tests/ -q --tb=short`       | `api` | ✅ Yes          |
-| **Next.js Lint**    | `pnpm lint`                                   | `web` | ✅ Yes          |
-| **Next.js Build**   | `pnpm build`                                  | `web` | ✅ Yes          |
+| Gate                | CI Step                                       | Scope | Pre-Push (Fast) | Full Mode |
+| ------------------- | --------------------------------------------- | ----- | --------------- | --------- |
+| **Ruff Lint**       | `python -m ruff check app/ tests/`            | `api` | ✅ Runs         | ✅ Runs   |
+| **MyPy Type Check** | `python -m mypy app --ignore-missing-imports` | `api` | ✅ Runs         | ✅ Runs   |
+| **Pytest**          | `python -m pytest tests/ -q --tb=short`       | `api` | ⏭️ Skipped      | ✅ Runs   |
+| **Next.js Lint**    | `pnpm lint`                                   | `web` | ✅ Runs         | ✅ Runs   |
+| **Next.js Build**   | `pnpm build`                                  | `web` | ⏭️ Skipped      | ✅ Runs   |
 
 ### Fail-Fast Behavior
 
@@ -33,30 +44,28 @@ Gates run sequentially. If a **blocking** gate fails, subsequent gates are skipp
 
 ## Smart Pre-Push Hook
 
-A git pre-push hook at `.githooks/pre-push` automatically runs the CI gate before every `git push`, with **intelligent optimizations** to minimize unnecessary build times.
+A git pre-push hook at `.githooks/pre-push` automatically runs the CI gate before every `git push` in **fast mode**, with intelligent optimizations to minimize unnecessary build times.
 
 ### Activation
-
-The hook is activated via:
 
 ```powershell
 git config core.hooksPath .githooks
 ```
 
 > [!NOTE]
-> This is already activated in the repository. No further setup is needed for developers who clone this repo.
+> This is already activated in the repository. No further setup needed.
 
 ### Smart Optimizations
 
 The hook analyzes each push and automatically decides what to run:
 
-| Scenario                                                | Behavior                            | Time Saved |
-| :------------------------------------------------------ | :---------------------------------- | :--------- |
-| **Non-code changes** (docs, config, hooks, scripts, CI) | Skips CI entirely                   | ~8 min     |
-| **Fast-forward merge** (`main` → `production`)          | Skips CI (already tested on `main`) | ~8 min     |
-| **API-only changes** (`apps/api/`)                      | Runs with `-Scope api` only         | ~15s       |
-| **Web-only changes** (`apps/web/`)                      | Runs with `-Scope web` only         | ~7 min     |
-| **Mixed changes**                                       | Runs with `-Scope all`              | —          |
+| Scenario                                                | Behavior                            | Time     |
+| :------------------------------------------------------ | :---------------------------------- | :------- |
+| **Non-code changes** (docs, config, hooks, scripts, CI) | Skips CI entirely                   | **0s**   |
+| **Production merge** (`main` → `production`)            | Skips CI (already tested on `main`) | **0s**   |
+| **API-only changes** (`apps/api/`)                      | Fast mode: Ruff + MyPy              | **~12s** |
+| **Web-only changes** (`apps/web/`)                      | Fast mode: ESLint                   | **~5s**  |
+| **Mixed changes**                                       | Fast mode: all lint + types         | **~15s** |
 
 #### Non-Code File Patterns (Auto-Skip)
 
@@ -69,19 +78,23 @@ Changes to these paths are classified as non-code and skip CI:
 - `packages/shared/` — Shared types (no build step)
 - `.gitignore`, `.editorconfig`, `.prettierrc` — Root configs
 
-#### Fast-Forward Merge Detection
+#### Production Merge Detection
 
-When pushing the `production` branch, the hook checks if all commits are already present on `origin/main`. If so, it skips CI because those commits were already tested when they were pushed to `main`.
+When pushing the `production` branch, the hook checks if `origin/main` is an ancestor of the push target. This works for both fast-forward merges AND `--no-ff` merge commits. If all code comes from main (which already passed CI), the hook skips redundant CI.
 
-### Bypassing
-
-Two ways to skip the hook:
+### Overrides
 
 ```powershell
-# Method 1: Git native bypass (emergency only)
+# Default: Fast mode (lint + types only)
+git push
+
+# Full CI locally (lint + types + tests + build)
+$env:FULL_CI=1; git push; Remove-Item Env:FULL_CI
+
+# Skip hook entirely (emergency only)
 git push --no-verify
 
-# Method 2: Environment variable (trusted pushes)
+# Skip via env var (trusted pushes)
 $env:SKIP_CI=1; git push; Remove-Item Env:SKIP_CI
 ```
 
@@ -92,7 +105,7 @@ $env:SKIP_CI=1; git push; Remove-Item Env:SKIP_CI
 | Python 3.12+ venv | `apps/api/.venv/`                | API gates       |
 | Ruff              | `pip install ruff` (in venv)     | Ruff Lint       |
 | MyPy              | `pip install mypy` (in venv)     | MyPy (optional) |
-| Pytest            | `pip install '.[dev]'` (in venv) | Pytest          |
+| Pytest            | `pip install '.[dev]'` (in venv) | Pytest (full)   |
 | Node.js 22+       | System                           | Web gates       |
 | pnpm              | System (via corepack)            | Web gates       |
 
@@ -111,40 +124,55 @@ pnpm install
 
 ## Output Examples
 
-### Full CI Run (Scope: all)
+### Fast Mode (Default Pre-Push)
 
 ```
 ╔══════════════════════════════════════════╗
 ║  Pre-Push Hook — Running Local CI Gate   ║
 ╠══════════════════════════════════════════╣
-║  Scope: all                               ║
-║  Changed: 3 api, 2 web, 0 root            ║
+║  Scope: api                              ║
+║  Changed: 2 api, 0 web, 0 root          ║
+║  Mode: FAST (lint + types only)          ║
 ╚══════════════════════════════════════════╝
+
+==========================================
+  PathForge - Local CI Gate
+  Mode: FAST (lint + types only)
+==========================================
+  Scope: api
 
 --- API: Lint & Test ---
 
 >> Ruff Lint
-  [PASS] Ruff Lint (0.1s) - 0 errors
+  [PASS] Ruff Lint (0.2s) - 0 errors
 
 >> MyPy Type Check (warning only)
-  [PASS] MyPy Type Check (2.4s)
+  [PASS] MyPy Type Check (10.9s) - 0 errors
 
 >> Pytest
-  [PASS] Pytest (38.6s) - 202 passed
-
---- Web: Lint & Build ---
-
->> Next.js Lint
-  [PASS] Next.js Lint (6.2s)
-
->> Next.js Build
-  [PASS] Next.js Build (12.2s)
+  [SKIP] Pytest (fast mode — tests run in GitHub Actions CI)
 
 --- Summary ---
+
+  [PASS] Ruff Lint             0.2s  (0 errors)
+  [PASS] MyPy Type Check       10.9s  (0 errors)
+  [SKIP] Pytest                0.0s  (fast mode)
+
 ==========================================
   ALL GATES PASSED - Safe to push
 ==========================================
-  Total: 59.8s
+  Total: 11.2s
+```
+
+### Production Merge (Skipped)
+
+```
+╔══════════════════════════════════════════╗
+║  Pre-Push Hook — Production Merge         ║
+╠══════════════════════════════════════════╣
+║  All code already CI-tested on main.      ║
+║  Skipping redundant CI gate.              ║
+╚══════════════════════════════════════════╝
 ```
 
 ### Non-Code Change (Skipped)
@@ -158,36 +186,27 @@ pnpm install
 ╚══════════════════════════════════════════╝
 ```
 
-### Fast-Forward Merge (Skipped)
-
-```
-╔══════════════════════════════════════════╗
-║  Pre-Push Hook — Fast-Forward Detected    ║
-╠══════════════════════════════════════════╣
-║  All commits already tested on main.      ║
-║  Skipping CI gate.                        ║
-╚══════════════════════════════════════════╝
-```
-
 ## File Map
 
 | File                                              | Purpose                                   |
 | ------------------------------------------------- | ----------------------------------------- |
 | [`ci-local.ps1`](../../scripts/ci-local.ps1)      | Standalone CI gate script                 |
-| [`pre-push`](../../.githooks/pre-push)            | Git pre-push hook                         |
+| [`pre-push`](../../.githooks/pre-push)            | Git pre-push hook (calls ci-local.ps1)    |
 | [`ci.yml`](../../.github/workflows/ci.yml)        | GitHub Actions pipeline (source of truth) |
 | [`review.md`](../../.agent/workflows/review.md)   | `/review` workflow (links to script)      |
 | [`pyproject.toml`](../../apps/api/pyproject.toml) | Ruff/MyPy/Pytest configuration            |
 
 ## Design Decisions
 
-1. **Mirrors CI 1:1** — same commands, same order, same working directories
-2. **Fail-fast** — stops at first blocking failure to save time
-3. **MyPy is non-blocking** — runs as a warning gate so future type regressions don't block the push pipeline
-4. **PowerShell 5.1 compatible** — uses native `Write-Host -ForegroundColor` instead of ANSI escapes
-5. **Opt-in hook** — activated via `git config`, bypassable with `--no-verify`
-6. **Test env vars auto-managed** — sets and cleans up `ENVIRONMENT`, `JWT_SECRET`, `JWT_REFRESH_SECRET`
-7. **Telemetry disabled** — sets `NEXT_TELEMETRY_DISABLED=1` during Next.js build, cleans up after
-8. **Smart scope detection** — analyzes `git diff` to run only relevant gates (api/web/all)
-9. **Fast-forward skip** — detects `main` → `production` merges and skips redundant CI
-10. **Non-code skip** — changes to docs, config, and infra files bypass CI entirely
+1. **Fast by default** — pre-push runs lint + types only (~12s), full tests deferred to GitHub Actions CI
+2. **Two-tier quality** — fast local checks + thorough remote CI + manual Tier-1 audits
+3. **Fail-fast** — stops at first blocking failure to save time
+4. **MyPy is non-blocking** — runs as a warning gate so type regressions don't block pushes
+5. **PowerShell 5.1 compatible** — uses native `Write-Host -ForegroundColor` instead of ANSI escapes
+6. **Opt-in hook** — activated via `git config`, bypassable with `--no-verify` or `SKIP_CI=1`
+7. **FULL_CI escape hatch** — `FULL_CI=1 git push` runs the complete pipeline locally when needed
+8. **Test env vars auto-managed** — sets and cleans up `ENVIRONMENT`, `JWT_SECRET`, `JWT_REFRESH_SECRET`
+9. **Telemetry disabled** — sets `NEXT_TELEMETRY_DISABLED=1` during Next.js build, cleans up after
+10. **Smart scope detection** — analyzes `git diff` to run only relevant gates (api/web/all)
+11. **Production merge skip** — detects `main` → `production` merges (ff + no-ff) and skips redundant CI
+12. **Non-code skip** — changes to docs, config, and infra files bypass CI entirely

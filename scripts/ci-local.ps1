@@ -3,21 +3,29 @@
     PathForge Local CI Gate — mirrors GitHub Actions ci.yml pipeline.
 
 .DESCRIPTION
-    Runs the exact same quality gates as the CI pipeline locally before pushing.
-    Catches lint, type, test, and build failures before they reach GitHub Actions.
+    Runs quality gates locally before pushing.
+    -Fast mode: Lint + type checks only (~12s) — used by pre-push hook.
+    Full mode: Lint + types + tests + build — mirrors ci.yml exactly.
 
 .PARAMETER Scope
     Which gates to run: 'all' (default), 'api', or 'web'.
 
+.PARAMETER Fast
+    Skip tests and builds. Only run lint + type checks (~12s).
+    Used by default in pre-push hook. Full tests run in GitHub Actions CI.
+
 .EXAMPLE
-    .\scripts\ci-local.ps1           # Run all gates
-    .\scripts\ci-local.ps1 -Scope api # API gates only
-    .\scripts\ci-local.ps1 -Scope web # Web gates only
+    .\scripts\ci-local.ps1                # Full gates (lint + types + tests + build)
+    .\scripts\ci-local.ps1 -Fast          # Fast mode (lint + types only)
+    .\scripts\ci-local.ps1 -Scope api     # API gates only
+    .\scripts\ci-local.ps1 -Fast -Scope api  # Fast API gates only
 #>
 
 param(
     [ValidateSet("all", "api", "web")]
-    [string]$Scope = "all"
+    [string]$Scope = "all",
+
+    [switch]$Fast
 )
 
 # ── Configuration ──────────────────────────────────────────────
@@ -117,7 +125,11 @@ function Invoke-Gate {
 Write-Host ""
 Write-Host "==========================================" -ForegroundColor White
 Write-Host "  PathForge - Local CI Gate" -ForegroundColor White
-Write-Host "  Mirrors: .github/workflows/ci.yml" -ForegroundColor DarkGray
+if ($Fast) {
+    Write-Host "  Mode: FAST (lint + types only)" -ForegroundColor Magenta
+} else {
+    Write-Host "  Mirrors: .github/workflows/ci.yml" -ForegroundColor DarkGray
+}
 Write-Host "==========================================" -ForegroundColor White
 Write-Host "  Scope: $Scope" -ForegroundColor Yellow
 
@@ -201,7 +213,8 @@ if ($Scope -eq "all" -or $Scope -eq "api") {
     }
 
     # Gate 3: Pytest (mirrors: python -m pytest tests/ -v --tb=short -q)
-    if (-not $script:failed) {
+    # Skipped in -Fast mode — tests run in GitHub Actions CI
+    if (-not $script:failed -and -not $Fast) {
         $env:ENVIRONMENT = "testing"
         $env:JWT_SECRET = "ci-local-test-secret-minimum-32-characters-long"
         $env:JWT_REFRESH_SECRET = "ci-local-test-refresh-secret-32-chars-min"
@@ -214,6 +227,18 @@ if ($Scope -eq "all" -or $Scope -eq "api") {
         Remove-Item Env:\ENVIRONMENT -ErrorAction SilentlyContinue
         Remove-Item Env:\JWT_SECRET -ErrorAction SilentlyContinue
         Remove-Item Env:\JWT_REFRESH_SECRET -ErrorAction SilentlyContinue
+    } elseif ($Fast -and -not $script:failed) {
+        Write-Host ""
+        Write-Host ">> Pytest" -ForegroundColor Cyan
+        Write-Host "  [SKIP] " -ForegroundColor Yellow -NoNewline
+        Write-Host "Pytest " -NoNewline
+        Write-Host "(fast mode — tests run in GitHub Actions CI)" -ForegroundColor DarkGray
+        $script:results += [PSCustomObject]@{
+            Name     = "Pytest"
+            Status   = "SKIP"
+            Duration = "0.0s"
+            Detail   = "fast mode"
+        }
     }
 }
 
@@ -230,7 +255,8 @@ if ($Scope -eq "all" -or $Scope -eq "web") {
     }
 
     # Gate 5: Next.js build (mirrors: pnpm build)
-    if (-not $script:failed) {
+    # Skipped in -Fast mode — build runs in GitHub Actions CI
+    if (-not $script:failed -and -not $Fast) {
         $env:NEXT_TELEMETRY_DISABLED = "1"
 
         Invoke-Gate -Name "Next.js Build" -WorkDir $WEB_DIR `
@@ -238,6 +264,18 @@ if ($Scope -eq "all" -or $Scope -eq "web") {
             -Arguments @("build") | Out-Null
 
         Remove-Item Env:\NEXT_TELEMETRY_DISABLED -ErrorAction SilentlyContinue
+    } elseif ($Fast -and -not $script:failed) {
+        Write-Host ""
+        Write-Host ">> Next.js Build" -ForegroundColor Cyan
+        Write-Host "  [SKIP] " -ForegroundColor Yellow -NoNewline
+        Write-Host "Next.js Build " -NoNewline
+        Write-Host "(fast mode — build runs in GitHub Actions CI)" -ForegroundColor DarkGray
+        $script:results += [PSCustomObject]@{
+            Name     = "Next.js Build"
+            Status   = "SKIP"
+            Duration = "0.0s"
+            Detail   = "fast mode"
+        }
     }
 }
 
