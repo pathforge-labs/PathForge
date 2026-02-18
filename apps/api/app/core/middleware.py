@@ -87,6 +87,69 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         return response
 
 
+# ── Bot Trap Paths ─────────────────────────────────────────────
+# Common paths probed by vulnerability scanners and bots.
+# Matching requests are short-circuited with 404 before route resolution.
+BOT_TRAP_PREFIXES: tuple[str, ...] = (
+    "/.env",
+    "/.git",
+    "/.aws",
+    "/.docker",
+    "/.vscode",
+    "/.DS_Store",
+    "/wp-admin",
+    "/wp-login",
+    "/wp-content",
+    "/wp-includes",
+    "/wordpress",
+    "/actuator",
+    "/graphql",
+    "/graphiql",
+    "/server-status",
+    "/server-info",
+    "/info.php",
+    "/phpinfo",
+    "/phpmyadmin",
+    "/login.action",
+    "/debug",
+    "/console",
+    "/v2/_catalog",
+    "/config.json",
+)
+
+# Paths we explicitly handle (not trapped)
+BOT_TRAP_EXCLUDES: frozenset[str] = frozenset({
+    "/.well-known/security.txt",
+})
+
+
+class BotTrapMiddleware(BaseHTTPMiddleware):
+    """
+    Short-circuit known vulnerability scanner probe paths.
+
+    Returns 404 immediately without running route resolution for paths
+    commonly probed by automated scanners. Only active in production
+    to keep development open.
+    """
+
+    async def dispatch(
+        self, request: Request, call_next: RequestResponseEndpoint
+    ) -> Response:
+        path = request.url.path.lower()
+
+        # Only trap in production
+        if settings.is_production and path not in BOT_TRAP_EXCLUDES:
+            for prefix in BOT_TRAP_PREFIXES:
+                if path.startswith(prefix):
+                    return Response(
+                        content="Not Found",
+                        status_code=404,
+                        media_type="text/plain",
+                    )
+
+        return await call_next(request)
+
+
 def get_request_id() -> str:
     """Get the current request ID from contextvars."""
     return request_id_var.get("")

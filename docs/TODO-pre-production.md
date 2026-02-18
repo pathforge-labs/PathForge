@@ -2,7 +2,7 @@
 
 > **Status**: In Progress — Complete before first production deployment
 > **Sprint**: 7 (Production Readiness)
-> **Created**: 2026-02-14 | **Updated**: 2026-02-18
+> **Created**: 2026-02-14 | **Updated**: 2026-02-18 14:32
 
 ---
 
@@ -55,8 +55,9 @@ Store the following in **GitHub → Settings → Secrets and variables → Actio
 - [x] Google site verification TXT record
 - [x] DNS cleanup (removed duplicate SPF + GoDaddy default DMARC)
 - [x] Point `pathforge.eu` A record → Vercel (216.198.79.1)
-- [x] Point `api.pathforge.eu` → Railway (CNAME)
-- [x] Verify SSL certificates are active (Valid Configuration on Vercel)
+- [x] Point `api.pathforge.eu` → Railway (CNAME: `roclmng4.up.railway.app`)
+- [x] Railway domain verification TXT record (`_railway-verify.api`)
+- [x] Verify SSL certificates are active (Vercel + Railway — both Valid)
 - [x] DKIM (Google Workspace) — key generated, TXT record added, authentication active
 
 ## 7. Email — Google Workspace

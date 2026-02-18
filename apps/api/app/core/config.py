@@ -88,6 +88,10 @@ class Settings(BaseSettings):
     rate_limit_career_dna: str = "3/minute"
     ratelimit_storage_uri: str = "memory://"
 
+    # ── Security Disclosure ──────────────────────────────────────
+    security_contact_email: str = "security@pathforge.eu"
+    security_txt_expires_days: int = 365
+
     # ── Job Aggregation Providers ────────────────────────────────
     adzuna_app_id: str = ""
     adzuna_app_key: str = ""

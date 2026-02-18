@@ -24,11 +24,12 @@ from app.api.v1 import (
     health,
     threat_radar,
     users,
+    well_known,
 )
 from app.core.config import settings
 from app.core.error_handlers import register_error_handlers
 from app.core.logging_config import setup_logging
-from app.core.middleware import RequestIDMiddleware, SecurityHeadersMiddleware
+from app.core.middleware import BotTrapMiddleware, RequestIDMiddleware, SecurityHeadersMiddleware
 from app.core.rate_limit import limiter
 
 
@@ -43,15 +44,20 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
 def create_app() -> FastAPI:
     """Application factory."""
+    # Production: disable interactive docs to reduce attack surface
+    docs_url = None if settings.is_production else "/docs"
+    redoc_url = None if settings.is_production else "/redoc"
+    openapi_url = None if settings.is_production else "/openapi.json"
+
     application = FastAPI(
         title=f"{settings.app_name} API",
         description=f"{settings.app_name} — {settings.app_tagline}. "
         "AI-powered Career Intelligence Platform with Career DNA™ technology, "
         "semantic job matching, CV tailoring, and skill gap analysis.",
         version=settings.app_version,
-        docs_url="/docs",
-        redoc_url="/redoc",
-        openapi_url="/openapi.json",
+        docs_url=docs_url,
+        redoc_url=redoc_url,
+        openapi_url=openapi_url,
         lifespan=lifespan,
     )
 
@@ -65,6 +71,7 @@ def create_app() -> FastAPI:
     )
     application.add_middleware(RequestIDMiddleware)
     application.add_middleware(SecurityHeadersMiddleware)
+    application.add_middleware(BotTrapMiddleware)
 
     # ── Error Handlers ─────────────────────────────────────────
     register_error_handlers(application)
@@ -72,6 +79,10 @@ def create_app() -> FastAPI:
     application.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)  # type: ignore[arg-type]
 
     # ── Routes ─────────────────────────────────────────────────
+    # Well-known endpoints at root level (no /api/v1 prefix)
+    application.include_router(well_known.router)
+
+    # API routes
     application.include_router(health.router, prefix="/api/v1")
     application.include_router(auth.router, prefix="/api/v1")
     application.include_router(users.router, prefix="/api/v1")
