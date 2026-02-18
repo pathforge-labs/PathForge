@@ -1,27 +1,23 @@
 # Session Context — PathForge
 
 > **Framework**: Antigravity AI Kit v2.0.0
-> **Last Updated**: 2026-02-17T04:31:00+01:00
+> **Last Updated**: 2026-02-18T04:44:00+01:00
 
 ---
 
 ## 📋 Last Session Summary
 
-**Date**: 2026-02-17
-**Focus**: Production Infrastructure — Vercel, Email, Analytics & SEO Setup
+**Date**: 2026-02-18
+**Focus**: Production Infrastructure — Railway Deploy, DNS, DKIM
 
-- Configured Google Workspace (emre@pathforge.eu) with 4 email aliases
-- Set up Resend with verified pathforge.eu domain (SPF, DKIM, DMARC DNS records)
-- Configured GA4 (G-EKGQR1ZWH3) with Consent Mode v2 implementation
-- Verified Google Search Console via DNS TXT record
-- Created `robots.ts` with Googlebot crawl rules + sitemap reference
-- Set up Vercel project (path-forge-web) with correct monorepo build config
-- Added `packageManager: pnpm@10.28.2` to root package.json for Corepack
-- Configured Vercel: production branch = `production`, auto-deploy disabled (exit 0)
-- Fixed CI/CD pnpm version conflict (removed explicit `version: 10` from workflows)
-- Added 3 GitHub Secrets: VERCEL_ORG_ID, VERCEL_PROJECT_ID, VERCEL_TOKEN
-- Successfully tested Vercel deploy pipeline via GitHub Actions (Deploy #3 ✅)
-- Commit: `8e8c4f0` → pushed to both `main` and `production`
+- Railway API deployed successfully (3 fixes: port, watchPatterns, AI deps)
+- Redis service added + 13 environment variables configured
+- RAILWAY_TOKEN generated + added to GitHub Secrets
+- 6 Vercel environment variables set (Production-only)
+- DNS configured: pathforge.eu → Vercel, api.pathforge.eu → Railway, www redirect
+- All Vercel domains showing "Valid Configuration"
+- DKIM authentication activated via Google Admin Console
+- pathforge.nl kept on GoDaddy forwarding (301 → pathforge.eu)
 
 ---
 
@@ -41,14 +37,14 @@
 - Phase A (MVP) COMPLETE — all 7 sprints shipped
 - Sprint 8 (Career DNA™) COMPLETE — 9 tasks, 168 tests
 - Sprint 9 (Career Threat Radar™) COMPLETE — 11 tasks, 202 tests
-- **Vercel deploy pipeline WORKING** — deploy.yml tested successfully
-- Railway deploy still needs RAILWAY_TOKEN → setup pending
-- DKIM verification pending (24-72 hours from 2026-02-17)
-- Custom domain (pathforge.eu) not yet connected to Vercel
-- GSC sitemap not yet submitted
-- Next: Railway setup, custom domain, smoke tests, Sprint 10
+- **Railway API LIVE** at `pathforge-api-production.up.railway.app`
+- **pathforge.eu LIVE** — landing page serving from Vercel
+- Railway incident paused builds → 3 pending env var changes need deploy
+- `api.pathforge.eu` custom domain → blocked by Railway incident, needs Hobby plan
+- Next: Railway incident resolves → deploy pending changes + add custom domain
+- Next: Smoke tests (email, API, GA4 consent) → post-deploy verification
+- Next: Sprint 10 (Skill Decay & Growth Tracker)
 - Pre-production checklist at `docs/TODO-pre-production.md`
-- Follow `docs/DEVELOPMENT_WORKFLOW.md` for all Git operations
 
 ---
 

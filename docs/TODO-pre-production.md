@@ -8,10 +8,10 @@
 
 ## 1. Railway Setup
 
-- [ ] Create Railway project for PathForge API
-- [ ] Add Redis service (or connect external Redis)
-- [ ] Configure environment variables from `.env.production.example`
-- [ ] Verify health check endpoint (`/api/v1/health`) responds
+- [x] Create Railway project for PathForge API
+- [x] Add Redis service (Railway internal Redis)
+- [x] Configure environment variables (13 service vars)
+- [x] Verify health check endpoint (`/api/v1/health`) responds
 
 ## 2. Vercel Setup
 
@@ -22,18 +22,18 @@
 - [x] Configure Ignored Build Step (only `production` deploys)
 - [x] Add `ENABLE_EXPERIMENTAL_COREPACK=1` env var
 - [x] Whitelist pnpm `onlyBuiltDependencies` (msw, sharp, unrs-resolver)
-- [ ] Add environment variables (API URL, Resend keys, GA4 ID)
+- [x] Add environment variables (API URL, Resend keys, GA4 ID)
 
 ## 3. GitHub Secrets
 
 Store the following in **GitHub → Settings → Secrets and variables → Actions**:
 
-| Secret              | Source                                | Status     |
-| :------------------ | :------------------------------------ | :--------- |
-| `RAILWAY_TOKEN`     | Railway → Account Settings → Tokens   | ⬜ Pending |
-| `VERCEL_TOKEN`      | Vercel → Account Settings → Tokens    | ✅ Done    |
-| `VERCEL_ORG_ID`     | Vercel → Settings → General → Team ID | ✅ Done    |
-| `VERCEL_PROJECT_ID` | Vercel → Project → Settings → General | ✅ Done    |
+| Secret              | Source                                | Status  |
+| :------------------ | :------------------------------------ | :------ |
+| `RAILWAY_TOKEN`     | Railway → Account Settings → Tokens   | ✅ Done |
+| `VERCEL_TOKEN`      | Vercel → Account Settings → Tokens    | ✅ Done |
+| `VERCEL_ORG_ID`     | Vercel → Settings → General → Team ID | ✅ Done |
+| `VERCEL_PROJECT_ID` | Vercel → Project → Settings → General | ✅ Done |
 
 ## 4. Database
 
@@ -54,10 +54,10 @@ Store the following in **GitHub → Settings → Secrets and variables → Actio
 - [x] DMARC DNS record (`v=DMARC1; p=none; rua=mailto:emre@pathforge.eu`)
 - [x] Google site verification TXT record
 - [x] DNS cleanup (removed duplicate SPF + GoDaddy default DMARC)
-- [ ] Point `pathforge.eu` A record → Vercel (replace WebsiteBuilder parking)
-- [ ] Point `api.pathforge.eu` → Railway (if using custom domain)
-- [ ] Verify SSL certificates are active
-- [ ] DKIM (Google Workspace) — wait 24-72 hours, then activate via Admin Console
+- [x] Point `pathforge.eu` A record → Vercel (216.198.79.1)
+- [x] Point `api.pathforge.eu` → Railway (CNAME)
+- [x] Verify SSL certificates are active (Valid Configuration on Vercel)
+- [x] DKIM (Google Workspace) — key generated, TXT record added, authentication active
 
 ## 7. Email — Google Workspace
 
@@ -68,7 +68,7 @@ Store the following in **GitHub → Settings → Secrets and variables → Actio
   - [x] `support@pathforge.eu` (customer support)
   - [x] `no-reply@pathforge.eu` (transactional emails)
 - [x] All aliases route to `emre@pathforge.eu` inbox
-- [ ] DKIM authentication — generate key after 24-72h, add TXT record, start verification
+- [x] DKIM authentication — key generated, `google._domainkey` TXT record in GoDaddy, verification started
 
 ## 8. Email — Resend (Transactional)
 
@@ -77,9 +77,9 @@ Store the following in **GitHub → Settings → Secrets and variables → Actio
 - [x] Domain verified (DKIM + SPF + MX all Verified)
 - [x] API Key created (`pathforge-production`)
 - [x] Audience created (`PathForge Waitlist`)
-- [ ] Set `RESEND_API_KEY` in Vercel environment
-- [ ] Set `RESEND_FROM_EMAIL=PathForge <hello@pathforge.eu>` in Vercel environment
-- [ ] Set `RESEND_AUDIENCE_ID` in Vercel environment
+- [x] Set `RESEND_API_KEY` in Vercel environment
+- [x] Set `RESEND_FROM_EMAIL=PathForge <hello@pathforge.eu>` in Vercel environment
+- [x] Set `RESEND_AUDIENCE_ID` in Vercel environment
 - [ ] Test contact form email delivery (post-deploy)
 - [ ] Test waitlist signup flow (post-deploy)
 
@@ -88,7 +88,7 @@ Store the following in **GitHub → Settings → Secrets and variables → Actio
 - [x] GA4 property created (`PathForge` → `PathForge Web`)
 - [x] Web stream configured (`https://pathforge.eu`)
 - [x] Measurement ID obtained (`G-PJHB43EFLP`)
-- [ ] Set `NEXT_PUBLIC_GA_MEASUREMENT_ID=G-PJHB43EFLP` in Vercel environment
+- [x] Set `NEXT_PUBLIC_GA_MEASUREMENT_ID=G-PJHB43EFLP` in Vercel environment
 - [ ] Verify Consent Mode v2 is active (denied by default) — post-deploy
 - [ ] Verify GA4 activates only after user accepts cookie banner — post-deploy
 - [ ] Verify GA4 is blocked when user declines cookies — post-deploy

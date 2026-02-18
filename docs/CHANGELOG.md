@@ -5,6 +5,25 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [Ad-Hoc] — Railway Deploy, DNS & DKIM — 2026-02-18
+
+### Added
+
+- **Railway API deployment** — 3 fixes applied (port binding, watchPatterns, `.[ai]` deps), health check verified
+- **Redis service** — added to Railway, `REDIS_URL` + `RATELIMIT_STORAGE_URI` configured
+- **DNS configuration** — `pathforge.eu` A record → Vercel, `www` CNAME → Vercel, `api` CNAME → Railway
+- **DKIM authentication** — Google Workspace key generated, `google._domainkey` TXT record added, verification active
+- **13 Railway env vars** — JWT secrets, DB, Redis, CORS, port configured
+- **6 Vercel env vars** — Resend keys, GA4 ID, API URL, Corepack (Production-only)
+- **RAILWAY_TOKEN** — generated and added to GitHub Secrets
+
+### Changed
+
+- `Dockerfile.api` — `pip install .` → `pip install ".[ai]"` (litellm/langchain/voyageai)
+- `railway.toml` — hardcoded `--port 8000`, expanded `watchPatterns`
+
+---
+
 ## [Ad-Hoc] — Production Infrastructure Setup — 2026-02-17
 
 ### Added
