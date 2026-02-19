@@ -27,7 +27,7 @@ export function WaitlistForm({
   const [email, setEmail] = useState("");
   const [state, setState] = useState<WaitlistState>("idle");
   const [message, setMessage] = useState("");
-  const { containerRef: turnstileContainerRef, token: turnstileToken, reset: resetTurnstile } = useTurnstile();
+  const { containerRef: turnstileContainerRef, execute: executeTurnstile, reset: resetTurnstile } = useTurnstile();
 
   async function handleSubmit(e: FormEvent): Promise<void> {
     e.preventDefault();
@@ -37,6 +37,9 @@ export function WaitlistForm({
     setState("loading");
 
     try {
+      // Run Turnstile challenge at submit time (execute-on-demand mode)
+      const turnstileToken = await executeTurnstile();
+
       const response = await fetch("/api/waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
