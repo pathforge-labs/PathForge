@@ -1,11 +1,20 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, useRef, useEffect, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowRight, CheckCircle2, Loader2, Shield, Lock } from "lucide-react";
+import {
+  ArrowRight,
+  CheckCircle2,
+  Loader2,
+  Shield,
+  Lock,
+  PartyPopper,
+} from "lucide-react";
 
-type WaitlistState = "idle" | "loading" | "success" | "error";
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
+
+type WaitlistState = "idle" | "loading" | "success" | "returning" | "error";
 
 interface WaitlistFormProps {
   className?: string;
@@ -19,8 +28,58 @@ export function WaitlistForm({
   const [email, setEmail] = useState("");
   const [state, setState] = useState<WaitlistState>("idle");
   const [message, setMessage] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const turnstileContainerRef = useRef<HTMLDivElement>(null);
+  const widgetIdRef = useRef<string | null>(null);
 
-  async function handleSubmit(e: FormEvent) {
+  // Load Turnstile widget
+  useEffect(() => {
+    if (!TURNSTILE_SITE_KEY) return;
+    if (widgetIdRef.current !== null) return;
+
+    function renderWidget(): void {
+      if (
+        !window.turnstile ||
+        !turnstileContainerRef.current ||
+        widgetIdRef.current !== null
+      )
+        return;
+
+      widgetIdRef.current = window.turnstile.render(
+        turnstileContainerRef.current,
+        {
+          sitekey: TURNSTILE_SITE_KEY,
+          callback: (token: string) => setTurnstileToken(token),
+          "expired-callback": () => setTurnstileToken(""),
+          size: "invisible",
+          theme: "dark",
+        }
+      );
+    }
+
+    if (window.turnstile) {
+      renderWidget();
+      return;
+    }
+
+    const existingScript = document.querySelector(
+      'script[src*="turnstile"]'
+    );
+    if (existingScript) {
+      existingScript.addEventListener("load", renderWidget);
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src =
+      "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+    script.async = true;
+    script.defer = true;
+    script.onload = renderWidget;
+    document.head.appendChild(script);
+  }, []);
+
+  async function handleSubmit(e: FormEvent): Promise<void> {
     e.preventDefault();
 
     if (!email.trim()) return;
@@ -31,14 +90,28 @@ export function WaitlistForm({
       const response = await fetch("/api/waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim() }),
+        body: JSON.stringify({
+          email: email.trim(),
+          turnstileToken: turnstileToken || undefined,
+        }),
       });
 
-      const data = await response.json();
+      const data = (await response.json()) as {
+        message?: string;
+        error?: string;
+        isReturning?: boolean;
+      };
 
       if (response.ok) {
-        setState("success");
-        setMessage(data.message || "You're on the list!");
+        if (data.isReturning) {
+          setState("returning");
+          setMessage(
+            data.message || "You're already on the waitlist!"
+          );
+        } else {
+          setState("success");
+          setMessage(data.message || "You're on the list!");
+        }
         setEmail("");
       } else {
         setState("error");
@@ -48,8 +121,15 @@ export function WaitlistForm({
       setState("error");
       setMessage("Network error. Please try again.");
     }
+
+    // Reset Turnstile for potential retry
+    if (widgetIdRef.current && window.turnstile) {
+      window.turnstile.reset(widgetIdRef.current);
+      setTurnstileToken("");
+    }
   }
 
+  // ── Success state: new subscriber ────────────────────────────
   if (state === "success") {
     return (
       <div
@@ -61,6 +141,24 @@ export function WaitlistForm({
     );
   }
 
+  // ── Returning subscriber state ───────────────────────────────
+  if (state === "returning") {
+    return (
+      <div
+        className={`flex items-center gap-3 rounded-xl border border-cyan-500/20 bg-cyan-500/5 px-6 py-4 ${className}`}
+      >
+        <PartyPopper className="h-5 w-5 shrink-0 text-cyan-400" />
+        <div>
+          <p className="text-sm font-medium text-foreground">{message}</p>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            We sent you a confirmation -- check your inbox!
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Compact variant ──────────────────────────────────────────
   if (variant === "compact") {
     return (
       <form
@@ -93,10 +191,12 @@ export function WaitlistForm({
             </>
           )}
         </Button>
+        <div ref={turnstileContainerRef} />
       </form>
     );
   }
 
+  // ── Hero variant (default) ───────────────────────────────────
   return (
     <div className={className}>
       <div className="relative overflow-hidden rounded-2xl border border-border/30 bg-card/60 p-5 backdrop-blur-md sm:p-6">
@@ -136,6 +236,8 @@ export function WaitlistForm({
         {state === "error" && (
           <p className="mt-2 text-sm text-destructive">{message}</p>
         )}
+        {/* Invisible Turnstile container */}
+        <div ref={turnstileContainerRef} />
       </div>
       <div className="mt-3 flex items-center justify-center gap-4 text-[11px] text-muted-foreground/60">
         <span className="flex items-center gap-1"><Shield className="h-3 w-3" />GDPR compliant</span>

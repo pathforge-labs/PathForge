@@ -266,22 +266,3 @@ export function ContactForm({ className = "" }: ContactFormProps): ReactElement 
     </div>
   );
 }
-
-// ── Cloudflare Turnstile type declarations ──────────────────────
-declare global {
-  interface Window {
-    turnstile: {
-      render: (
-        container: HTMLElement,
-        options: {
-          sitekey: string;
-          theme?: "light" | "dark" | "auto";
-          size?: "normal" | "compact" | "invisible";
-          callback?: (token: string) => void;
-        }
-      ) => string;
-      reset: (container: HTMLElement) => void;
-      remove: (widgetId: string) => void;
-    };
-  }
-}
