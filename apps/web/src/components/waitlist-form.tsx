@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -11,8 +11,7 @@ import {
   Lock,
   PartyPopper,
 } from "lucide-react";
-
-const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
+import { useTurnstile } from "@/hooks/use-turnstile";
 
 type WaitlistState = "idle" | "loading" | "success" | "returning" | "error";
 
@@ -28,56 +27,7 @@ export function WaitlistForm({
   const [email, setEmail] = useState("");
   const [state, setState] = useState<WaitlistState>("idle");
   const [message, setMessage] = useState("");
-  const [turnstileToken, setTurnstileToken] = useState("");
-  const turnstileContainerRef = useRef<HTMLDivElement>(null);
-  const widgetIdRef = useRef<string | null>(null);
-
-  // Load Turnstile widget
-  useEffect(() => {
-    if (!TURNSTILE_SITE_KEY) return;
-    if (widgetIdRef.current !== null) return;
-
-    function renderWidget(): void {
-      if (
-        !window.turnstile ||
-        !turnstileContainerRef.current ||
-        widgetIdRef.current !== null
-      )
-        return;
-
-      widgetIdRef.current = window.turnstile.render(
-        turnstileContainerRef.current,
-        {
-          sitekey: TURNSTILE_SITE_KEY,
-          callback: (token: string) => setTurnstileToken(token),
-          "expired-callback": () => setTurnstileToken(""),
-          size: "invisible",
-          theme: "dark",
-        }
-      );
-    }
-
-    if (window.turnstile) {
-      renderWidget();
-      return;
-    }
-
-    const existingScript = document.querySelector(
-      'script[src*="turnstile"]'
-    );
-    if (existingScript) {
-      existingScript.addEventListener("load", renderWidget);
-      return;
-    }
-
-    const script = document.createElement("script");
-    script.src =
-      "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
-    script.async = true;
-    script.defer = true;
-    script.onload = renderWidget;
-    document.head.appendChild(script);
-  }, []);
+  const { containerRef: turnstileContainerRef, token: turnstileToken, reset: resetTurnstile } = useTurnstile();
 
   async function handleSubmit(e: FormEvent): Promise<void> {
     e.preventDefault();
@@ -123,10 +73,7 @@ export function WaitlistForm({
     }
 
     // Reset Turnstile for potential retry
-    if (widgetIdRef.current && window.turnstile) {
-      window.turnstile.reset(widgetIdRef.current);
-      setTurnstileToken("");
-    }
+    resetTurnstile();
   }
 
   // ── Success state: new subscriber ────────────────────────────
@@ -166,6 +113,8 @@ export function WaitlistForm({
         className={`flex items-center gap-2 ${className}`}
       >
         <Input
+          id="waitlist-email-compact"
+          name="email"
           type="email"
           placeholder="Enter your email"
           value={email}
@@ -207,6 +156,8 @@ export function WaitlistForm({
           className="flex flex-col gap-3"
         >
           <input
+            id="waitlist-email-hero"
+            name="email"
             type="email"
             placeholder="your@email.com"
             value={email}

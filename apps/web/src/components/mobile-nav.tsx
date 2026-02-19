@@ -10,9 +10,9 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { Instagram, Linkedin, Twitter, X } from "lucide-react";
 
 const NAV_LINKS = [
-  { href: "#process", label: "The Process" },
-  { href: "#features", label: "Features" },
-  { href: "#pricing", label: "Pricing" },
+  { href: "/#process", label: "The Process" },
+  { href: "/features", label: "Features" },
+  { href: "/#pricing", label: "Pricing" },
   { href: "/about", label: "About" },
 ];
 
@@ -184,7 +184,7 @@ export function MobileNav() {
                   }}
                 >
                   <Link
-                    href="#cta"
+                    href="/#cta"
                     onClick={() => setOpen(false)}
                     className="cta-button flex items-center justify-center gap-2 rounded-2xl bg-linear-to-r from-primary to-accent px-6 py-4 text-base font-semibold text-white transition-all hover:opacity-90 hover:shadow-lg hover:shadow-primary/20"
                   >

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type ReactElement } from "react";
+import Link from "next/link";
 import { Check } from "lucide-react";
 import { PRICING_TIERS } from "@/data/landing-data";
 
@@ -120,8 +121,8 @@ export function PricingCards(): ReactElement {
               </ul>
 
               {/* CTA */}
-              <a
-                href="#waitlist"
+              <Link
+                href="/#waitlist"
                 className={`inline-flex w-full cursor-pointer items-center justify-center rounded-xl px-6 py-3 text-sm font-semibold transition-all duration-300 ${
                   tier.popular
                     ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:brightness-110"
@@ -129,7 +130,7 @@ export function PricingCards(): ReactElement {
                 }`}
               >
                 {tier.cta}
-              </a>
+              </Link>
             </div>
           );
         })}
