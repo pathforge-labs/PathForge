@@ -188,35 +188,36 @@
 
 > Unplanned tasks that emerged during development. These are logged here and attributed to the sprint during which they occurred.
 
-| Date       | Task                                 | During Sprint | Status  | Notes                                        |
-| :--------- | :----------------------------------- | :------------ | :------ | :------------------------------------------- |
-| 2026-02-13 | Production branch setup & gitflow    | 6a            | ✅ Done | Documented in DEVELOPMENT_WORKFLOW.md        |
-| 2026-02-13 | Retrospective audit remediation      | 5→6a          | ✅ Done | 11 findings across 12 files                  |
-| 2026-02-14 | Performance optimization (Tier 1-4)  | 6a.1          | ✅ Done | Image, scroll, bundle optimizations          |
-| 2026-02-14 | Professional Project Tracking System | 6b            | ✅ Done | This system itself                           |
-| 2026-02-14 | Sprint 6b Analytics implementation   | 6b            | ✅ Done | 3 models, 8 endpoints, 17 tests              |
-| 2026-02-14 | Agent Customization Architecture     | Post-6b       | ✅ Done | GEMINI.md, 8 rules, 16 workflows             |
-| 2026-02-15 | PPTS v1.1 — 8 audit findings         | Post-7        | ✅ Done | Volatile-only state, staleness detect        |
-| 2026-02-15 | ESLint cleanup — 7 issues resolved   | Post-7        | ✅ Done | 0 errors, 0 warnings achieved                |
-| 2026-02-16 | MyPy type annotation overhaul        | Post-9        | ✅ Done | 165→0 errors, 32 files, 3 bugs fixed         |
-| 2026-02-16 | CI pipeline fix — ai extras          | Post-9        | ✅ Done | Test collection failures resolved            |
-| 2026-02-16 | Contact page redesign (Tier-1)       | Post-9        | ✅ Done | 2-col layout, dept cards, FAQ grid           |
-| 2026-02-16 | Navbar/footer/sitemap updates        | Post-9        | ✅ Done | Contact link, social links, JSON-LD          |
-| 2026-02-16 | Pricing section + Tier-1 audit       | Post-9        | ✅ Done | 3 tiers, PricingCards, 9 audit fixes         |
-| 2026-02-17 | Google Workspace + email aliases     | Post-9        | ✅ Done | emre@pathforge.eu + 4 aliases                |
-| 2026-02-17 | Resend email integration             | Post-9        | ✅ Done | SPF/DKIM/DMARC DNS verified                  |
-| 2026-02-17 | GA4 + Consent Mode v2                | Post-9        | ✅ Done | G-EKGQR1ZWH3, consent-aware tracking         |
-| 2026-02-17 | Google Search Console verified       | Post-9        | ✅ Done | DNS TXT record, robots.ts created            |
-| 2026-02-17 | Vercel deploy pipeline setup         | Post-9        | ✅ Done | Monorepo config, auto-deploy disabled        |
-| 2026-02-17 | CI/CD pnpm version fix               | Post-9        | ✅ Done | Removed explicit version from actions        |
-| 2026-02-17 | GitHub Secrets (Vercel)              | Post-9        | ✅ Done | 3 secrets, deploy pipeline tested ✅         |
-| 2026-02-18 | Railway API deployment               | Post-9        | ✅ Done | 3 fixes, health check verified ✅            |
-| 2026-02-18 | DNS configuration (GoDaddy→Vercel)   | Post-9        | ✅ Done | pathforge.eu live, Valid Configuration       |
-| 2026-02-18 | DKIM Google Workspace                | Post-9        | ✅ Done | google.\_domainkey TXT, auth active          |
-| 2026-02-18 | Vercel + Railway env vars            | Post-9        | ✅ Done | 13 Railway + 6 Vercel vars configured        |
-| 2026-02-19 | Turnstile error resolution           | Post-9        | ✅ Done | useTurnstile hook, 300030/preload fix        |
-| 2026-02-19 | Waitlist duplicate handling          | Post-9        | ✅ Done | Duplicate detection, diff emails, rate limit |
-| 2026-02-19 | UI/UX polish session                 | Post-9        | ✅ Done | 6 issues + drag/swipe, deployed to prod      |
+| Date       | Task                                  | During Sprint | Status  | Notes                                        |
+| :--------- | :------------------------------------ | :------------ | :------ | :------------------------------------------- |
+| 2026-02-13 | Production branch setup & gitflow     | 6a            | ✅ Done | Documented in DEVELOPMENT_WORKFLOW.md        |
+| 2026-02-13 | Retrospective audit remediation       | 5→6a          | ✅ Done | 11 findings across 12 files                  |
+| 2026-02-14 | Performance optimization (Tier 1-4)   | 6a.1          | ✅ Done | Image, scroll, bundle optimizations          |
+| 2026-02-14 | Professional Project Tracking System  | 6b            | ✅ Done | This system itself                           |
+| 2026-02-14 | Sprint 6b Analytics implementation    | 6b            | ✅ Done | 3 models, 8 endpoints, 17 tests              |
+| 2026-02-14 | Agent Customization Architecture      | Post-6b       | ✅ Done | GEMINI.md, 8 rules, 16 workflows             |
+| 2026-02-15 | PPTS v1.1 — 8 audit findings          | Post-7        | ✅ Done | Volatile-only state, staleness detect        |
+| 2026-02-15 | ESLint cleanup — 7 issues resolved    | Post-7        | ✅ Done | 0 errors, 0 warnings achieved                |
+| 2026-02-16 | MyPy type annotation overhaul         | Post-9        | ✅ Done | 165→0 errors, 32 files, 3 bugs fixed         |
+| 2026-02-16 | CI pipeline fix — ai extras           | Post-9        | ✅ Done | Test collection failures resolved            |
+| 2026-02-16 | Contact page redesign (Tier-1)        | Post-9        | ✅ Done | 2-col layout, dept cards, FAQ grid           |
+| 2026-02-16 | Navbar/footer/sitemap updates         | Post-9        | ✅ Done | Contact link, social links, JSON-LD          |
+| 2026-02-16 | Pricing section + Tier-1 audit        | Post-9        | ✅ Done | 3 tiers, PricingCards, 9 audit fixes         |
+| 2026-02-17 | Google Workspace + email aliases      | Post-9        | ✅ Done | emre@pathforge.eu + 4 aliases                |
+| 2026-02-17 | Resend email integration              | Post-9        | ✅ Done | SPF/DKIM/DMARC DNS verified                  |
+| 2026-02-17 | GA4 + Consent Mode v2                 | Post-9        | ✅ Done | G-EKGQR1ZWH3, consent-aware tracking         |
+| 2026-02-17 | Google Search Console verified        | Post-9        | ✅ Done | DNS TXT record, robots.ts created            |
+| 2026-02-17 | Vercel deploy pipeline setup          | Post-9        | ✅ Done | Monorepo config, auto-deploy disabled        |
+| 2026-02-17 | CI/CD pnpm version fix                | Post-9        | ✅ Done | Removed explicit version from actions        |
+| 2026-02-17 | GitHub Secrets (Vercel)               | Post-9        | ✅ Done | 3 secrets, deploy pipeline tested ✅         |
+| 2026-02-18 | Railway API deployment                | Post-9        | ✅ Done | 3 fixes, health check verified ✅            |
+| 2026-02-18 | DNS configuration (GoDaddy→Vercel)    | Post-9        | ✅ Done | pathforge.eu live, Valid Configuration       |
+| 2026-02-18 | DKIM Google Workspace                 | Post-9        | ✅ Done | google.\_domainkey TXT, auth active          |
+| 2026-02-18 | Vercel + Railway env vars             | Post-9        | ✅ Done | 13 Railway + 6 Vercel vars configured        |
+| 2026-02-19 | Turnstile error resolution            | Post-9        | ✅ Done | useTurnstile hook, 300030/preload fix        |
+| 2026-02-19 | Waitlist duplicate handling           | Post-9        | ✅ Done | Duplicate detection, diff emails, rate limit |
+| 2026-02-19 | UI/UX polish session                  | Post-9        | ✅ Done | 6 issues + drag/swipe, deployed to prod      |
+| 2026-02-19 | Turnstile CSP fix (execute-on-demand) | Post-9        | ✅ Done | execution: execute mode, Tier-1 audit ✅     |
 
 ---
 

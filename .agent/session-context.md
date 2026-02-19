@@ -1,20 +1,22 @@
 # Session Context — PathForge
 
 > **Framework**: Antigravity AI Kit v2.0.0
-> **Last Updated**: 2026-02-19T16:59:00+01:00
+> **Last Updated**: 2026-02-19T17:24:00+01:00
 
 ---
 
 ## 📋 Last Session Summary
 
 **Date**: 2026-02-19
-**Focus**: UI/UX Polish, Turnstile Fix, Waitlist Duplicate Handling
+**Focus**: Turnstile CSP Fix, UI/UX Polish, Waitlist Duplicate Handling
 
-- Turnstile error resolution: `useTurnstile` hook, global script, dev skip
-- Waitlist duplicate handling: duplicate detection, diff emails, rate limiting, Turnstile CAPTCHA
-- UI/UX polish: 6 issues + drag/swipe enhancement, deployed to production
-- Tier-1 retrospective audit + review pipeline: all 4 gates passed
-- Committed `520018e`, merged main → production, pushed both
+- Turnstile CSP fix: switched to `execution: 'execute'` mode (challenge on submit only)
+- Added Promise-based `execute()` API to `useTurnstile` hook
+- Turnstile script deferred to `lazyOnload` strategy
+- Tier-1 retrospective audit: all 4 gates passed (lint, types, security, build)
+- UI/UX polish: 6 issues + drag/swipe enhancement
+- Waitlist duplicate handling: detection, diff emails, rate limiting, Turnstile CAPTCHA
+- Committed `bc6e71e`, merged main → production, pushed both
 
 ---
 
@@ -37,7 +39,7 @@
 - **Railway API LIVE** at `api.pathforge.eu` (security hardening active)
 - **pathforge.eu LIVE** — landing page serving from Vercel
 - UI/UX polish deployed: testimonials drag/swipe, footer, navbar, scroll-to-top
-- Turnstile CAPTCHA integrated on waitlist + contact forms
+- Turnstile CAPTCHA: execute-on-demand mode, zero console warnings
 - Waitlist duplicate handling with differentiated emails
 - Next: Sprint 10 (Skill Decay & Growth Tracker)
 

@@ -5,6 +5,22 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [Ad-Hoc] — Turnstile CSP Console Fix — 2026-02-19
+
+### Changed
+
+- **Turnstile execution mode** — switched from implicit (challenge on page load) to `execution: 'execute'` (challenge on form submit only)
+- **Script loading strategy** — changed from `afterInteractive` to `lazyOnload` for deferred loading
+- **Form components** — both `waitlist-form` and `contact-form` now call `execute()` on submit
+
+### Fixed
+
+- **CSP fallback warnings** — eliminated `script-src not explicitly set` console errors
+- **Private Access Token 401s** — no longer triggered on idle page load
+- **Preload timing warnings** — Cloudflare challenge resources no longer preloaded unnecessarily
+
+---
+
 ## [Ad-Hoc] — UI/UX Polish & Testimonials — 2026-02-19
 
 ### Added
