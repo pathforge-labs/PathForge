@@ -5,11 +5,49 @@ import { APP_AUTHOR_EMAIL } from "@/config/brand";
 // Force dynamic rendering — this route should never be statically analyzed
 export const dynamic = "force-dynamic";
 
+const LOGO_URL = "https://pathforge.eu/brand/logo-primary.png";
+const TURNSTILE_SECRET = process.env.TURNSTILE_SECRET_KEY ?? "";
+
 interface ContactPayload {
   name: string;
   email: string;
   subject: string;
   message: string;
+  turnstileToken?: string;
+}
+
+interface TurnstileVerifyResponse {
+  success: boolean;
+  "error-codes"?: string[];
+}
+
+/**
+ * Verify Cloudflare Turnstile token server-side.
+ * Returns true if verified, false if failed.
+ * Gracefully skips if no secret key is configured.
+ */
+async function verifyTurnstile(token: string): Promise<boolean> {
+  if (!TURNSTILE_SECRET) return true; // Skip if not configured
+  if (!token) return false;
+
+  try {
+    const response = await fetch(
+      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+          secret: TURNSTILE_SECRET,
+          response: token,
+        }),
+      }
+    );
+    const result = (await response.json()) as TurnstileVerifyResponse;
+    return result.success;
+  } catch {
+    console.error("Turnstile verification failed");
+    return false;
+  }
 }
 
 // Simple in-memory rate limiting (resets on cold start)
@@ -58,7 +96,7 @@ export async function POST(request: Request): Promise<NextResponse> {
     const resend = new Resend(apiKey);
     const body = (await request.json()) as ContactPayload;
 
-    const { name, email, subject, message } = body;
+    const { name, email, subject, message, turnstileToken } = body;
 
     // Validate required fields
     if (
@@ -104,6 +142,16 @@ export async function POST(request: Request): Promise<NextResponse> {
       return NextResponse.json(
         { error: "Invalid subject selection." },
         { status: 400 }
+      );
+    }
+
+    // ── Turnstile CAPTCHA verification ──────────────────────────
+    const captchaVerified = await verifyTurnstile(turnstileToken ?? "");
+
+    if (TURNSTILE_SECRET && !captchaVerified) {
+      return NextResponse.json(
+        { error: "CAPTCHA verification failed. Please try again." },
+        { status: 422 }
       );
     }
 
@@ -158,11 +206,16 @@ export async function POST(request: Request): Promise<NextResponse> {
       `,
     });
 
-    // NOTE: Auto-reply to sender intentionally omitted to prevent email bombing.
-    // The contact form could be abused to send PathForge-branded emails to arbitrary
-    // addresses. Auto-reply should only be re-enabled after adding CAPTCHA (e.g.,
-    // Cloudflare Turnstile) or email verification.
-    // TODO(production): Add Turnstile CAPTCHA, then re-enable auto-reply.
+    // ── Auto-reply to sender (CAPTCHA-protected) ──────────────────
+    // Only send auto-reply when CAPTCHA is verified to prevent email bombing
+    if (captchaVerified) {
+      await resend.emails.send({
+        from: fromAddress,
+        to: email,
+        subject: `Thanks for reaching out — PathForge`,
+        html: buildAutoReplyEmail(escapeHtml(name)),
+      });
+    }
 
     return NextResponse.json(
       { message: "Message sent successfully! We'll be in touch soon." },
@@ -185,4 +238,120 @@ function escapeHtml(text: string): string {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+}
+
+/**
+ * Build a premium Tier-1 auto-reply email for contact form submissions.
+ * Matches the PathForge design system used in the waitlist email.
+ */
+function buildAutoReplyEmail(senderName: string): string {
+  const year = new Date().getFullYear();
+
+  return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <meta name="supported-color-schemes" content="dark">
+  <title>Thanks for reaching out — PathForge</title>
+  <style>
+    body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+    table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+    body { margin: 0; padding: 0; width: 100% !important; }
+    a { color: #a78bfa; text-decoration: none; }
+  </style>
+</head>
+<body style="margin: 0; padding: 0; background-color: #050510; font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+
+  <!-- Preheader -->
+  <div style="display: none; max-height: 0; overflow: hidden; mso-hide: all;">
+    Thanks for reaching out! We'll get back to you within 24-48 hours.
+  </div>
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #050510;">
+    <tr>
+      <td align="center" style="padding: 40px 16px;">
+        <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width: 560px; width: 100%; background-color: #0c0c1a; border-radius: 16px; overflow: hidden; border: 1px solid rgba(124, 58, 237, 0.15);">
+
+          <!-- Gradient bar -->
+          <tr>
+            <td style="height: 3px; background: linear-gradient(90deg, #7c3aed, #06b6d4, #7c3aed); font-size: 0; line-height: 0;">&nbsp;</td>
+          </tr>
+
+          <!-- Logo + Header -->
+          <tr>
+            <td style="padding: 40px 40px 0 40px; text-align: center;">
+              <img src="${LOGO_URL}" alt="PathForge" width="48" height="48" style="display: inline-block; width: 48px; height: 48px; border-radius: 12px; margin-bottom: 24px;">
+              <h1 style="margin: 0 0 8px 0; font-size: 24px; font-weight: 700; color: #f1f5f9; letter-spacing: -0.02em;">
+                Thanks, ${senderName}!
+              </h1>
+              <p style="margin: 0; font-size: 15px; color: #64748b; line-height: 1.5;">
+                We received your message
+              </p>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding: 32px 40px 0 40px;">
+              <p style="margin: 0 0 20px 0; font-size: 15px; line-height: 1.7; color: #94a3b8;">
+                Thanks for getting in touch with PathForge. We appreciate you taking the time to write to us.
+              </p>
+              <p style="margin: 0; font-size: 15px; line-height: 1.7; color: #94a3b8;">
+                Our team will review your message and respond within
+                <strong style="color: #c4b5fd;">24–48 hours</strong>.
+                If your matter is urgent, feel free to follow up.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Divider -->
+          <tr>
+            <td style="padding: 32px 40px 0 40px;">
+              <div style="height: 1px; background: linear-gradient(90deg, transparent, rgba(100, 116, 139, 0.2), transparent);"></div>
+            </td>
+          </tr>
+
+          <!-- Social Links -->
+          <tr>
+            <td style="padding: 24px 40px 0 40px; text-align: center;">
+              <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 0 auto;">
+                <tr>
+                  <td style="padding: 0 8px;">
+                    <a href="https://linkedin.com/company/pathforge" target="_blank" style="font-size: 13px; color: #64748b;">LinkedIn</a>
+                  </td>
+                  <td style="color: #334155; font-size: 13px;">&bull;</td>
+                  <td style="padding: 0 8px;">
+                    <a href="https://x.com/pathforge" target="_blank" style="font-size: 13px; color: #64748b;">X (Twitter)</a>
+                  </td>
+                  <td style="color: #334155; font-size: 13px;">&bull;</td>
+                  <td style="padding: 0 8px;">
+                    <a href="https://instagram.com/pathforge" target="_blank" style="font-size: 13px; color: #64748b;">Instagram</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding: 24px 40px 32px 40px; text-align: center;">
+              <p style="margin: 0 0 8px 0; font-size: 12px; color: #475569; line-height: 1.6;">
+                &copy; ${year} PathForge &mdash; Career Intelligence, Intelligently Forged.
+              </p>
+              <p style="margin: 0; font-size: 11px; color: #334155; line-height: 1.6;">
+                <a href="https://pathforge.eu/privacy" style="color: #64748b;">Privacy Policy</a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>`;
 }

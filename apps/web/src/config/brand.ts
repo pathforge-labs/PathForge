@@ -37,7 +37,7 @@ export const APP_COUNTRY = "Netherlands";
 export const APP_COUNTRY_FLAG = "🇳🇱";
 
 // SEO
-export const APP_OG_IMAGE = `${APP_URL}/og-image.png`;
+export const APP_OG_IMAGE = `${APP_URL}/og-image.jpg`;
 export const APP_TWITTER_HANDLE = `@${APP_SLUG}`;
 
 // Social Links

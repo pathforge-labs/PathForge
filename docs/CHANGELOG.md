@@ -5,6 +5,34 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [Ad-Hoc] — Security Hardening & Deploy Optimization — 2026-02-18
+
+### Added
+
+- **API security hardening** — RFC 9116 `security.txt`, `robots.txt`, bot trap middleware, favicon 204 handler
+- **BotTrapMiddleware** — 23 exploit paths blocked in production
+- **SECURITY.md** — GitHub Security Policy for responsible disclosure
+- **Production docs protection** — `/docs`, `/redoc`, `/openapi.json` disabled in production
+- 6 new tests (208/208 total passing)
+
+### Changed
+
+- **Pre-push hook** — fast mode default (lint + types only, ~12s vs ~7min)
+- **`ci-local.ps1`** — added `-Fast` switch, skips Pytest + Next.js build
+- **Production merge detection** — fixed `--no-ff` merge skip (ancestor check direction)
+- **LOCAL-CI-GATE.md** — rewritten with Tier-1 Quality Strategy documentation
+
+### Removed
+
+- **`deploy.yml`** — removed redundant GitHub Actions deploy workflow (Railway native integration handles deploys)
+
+### Fixed
+
+- **Railway deploy conflict** — `railway up` CLI blocked by native GitHub integration (403 Forbidden)
+- **Security endpoints not deployed** — Railway watchPatterns skipped merge commits, forced rebuild via trigger commit
+
+---
+
 ## [Ad-Hoc] — Railway Deploy, DNS & DKIM — 2026-02-18
 
 ### Added

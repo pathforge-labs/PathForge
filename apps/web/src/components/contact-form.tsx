@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, type FormEvent, type ReactElement } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight, CheckCircle2, ChevronDown, Loader2, Shield, Lock } from "lucide-react";
+import { useTurnstile } from "@/hooks/use-turnstile";
 
 type ContactState = "idle" | "loading" | "success" | "error";
 
@@ -11,13 +12,14 @@ interface ContactFormProps {
   className?: string;
 }
 
-export function ContactForm({ className = "" }: ContactFormProps) {
+export function ContactForm({ className = "" }: ContactFormProps): ReactElement {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [state, setState] = useState<ContactState>("idle");
   const [feedback, setFeedback] = useState("");
+  const { containerRef: turnstileRef, token: turnstileToken, reset: resetTurnstile, isEnabled: isTurnstileEnabled } = useTurnstile();
 
   async function handleSubmit(event: FormEvent): Promise<void> {
     event.preventDefault();
@@ -37,6 +39,7 @@ export function ContactForm({ className = "" }: ContactFormProps) {
           email: email.trim(),
           subject: subject.trim(),
           message: message.trim(),
+          turnstileToken: turnstileToken || undefined,
         }),
       });
 
@@ -56,6 +59,7 @@ export function ContactForm({ className = "" }: ContactFormProps) {
     } catch {
       setState("error");
       setFeedback("Network error. Please try again.");
+      resetTurnstile();
     }
   }
 
@@ -203,6 +207,11 @@ export function ContactForm({ className = "" }: ContactFormProps) {
             </>
           )}
         </Button>
+
+        {/* Cloudflare Turnstile invisible widget */}
+        {isTurnstileEnabled && (
+          <div ref={turnstileRef} className="hidden" />
+        )}
       </form>
 
       {state === "error" && (
@@ -214,6 +223,7 @@ export function ContactForm({ className = "" }: ContactFormProps) {
         <span className="h-3 w-px bg-border/30" />
         <span className="flex items-center gap-1"><Lock className="h-3 w-3" />Your data is safe</span>
       </div>
+
     </div>
   );
 }

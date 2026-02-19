@@ -1,8 +1,12 @@
+import Script from "next/script";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { BackToTop } from "@/components/back-to-top";
 import { ScrollProgress } from "@/components/scroll-progress";
 import { CookieConsent } from "@/components/cookie-consent";
+
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
+const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
 export default function MarketingLayout({
   children,
@@ -29,6 +33,15 @@ export default function MarketingLayout({
       <Footer />
       <BackToTop />
       <CookieConsent />
+
+      {/* Turnstile script — loaded once globally, production only */}
+      {TURNSTILE_SITE_KEY && IS_PRODUCTION && (
+        <Script
+          id="cf-turnstile-script"
+          src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+          strategy="afterInteractive"
+        />
+      )}
     </div>
   );
 }

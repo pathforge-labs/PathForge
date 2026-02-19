@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    PathForge Local CI Gate — mirrors GitHub Actions ci.yml pipeline.
+    PathForge Local CI Gate - mirrors GitHub Actions ci.yml pipeline.
 
 .DESCRIPTION
     Runs quality gates locally before pushing.
@@ -232,7 +232,7 @@ if ($Scope -eq "all" -or $Scope -eq "api") {
         Write-Host ">> Pytest" -ForegroundColor Cyan
         Write-Host "  [SKIP] " -ForegroundColor Yellow -NoNewline
         Write-Host "Pytest " -NoNewline
-        Write-Host "(fast mode — tests run in GitHub Actions CI)" -ForegroundColor DarkGray
+        Write-Host "(fast mode -- tests run in GitHub Actions CI)" -ForegroundColor DarkGray
         $script:results += [PSCustomObject]@{
             Name     = "Pytest"
             Status   = "SKIP"
@@ -269,7 +269,7 @@ if ($Scope -eq "all" -or $Scope -eq "web") {
         Write-Host ">> Next.js Build" -ForegroundColor Cyan
         Write-Host "  [SKIP] " -ForegroundColor Yellow -NoNewline
         Write-Host "Next.js Build " -NoNewline
-        Write-Host "(fast mode — build runs in GitHub Actions CI)" -ForegroundColor DarkGray
+        Write-Host "(fast mode -- build runs in GitHub Actions CI)" -ForegroundColor DarkGray
         $script:results += [PSCustomObject]@{
             Name     = "Next.js Build"
             Status   = "SKIP"

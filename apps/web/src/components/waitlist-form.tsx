@@ -3,9 +3,17 @@
 import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowRight, CheckCircle2, Loader2, Shield, Lock } from "lucide-react";
+import {
+  ArrowRight,
+  CheckCircle2,
+  Loader2,
+  Shield,
+  Lock,
+  PartyPopper,
+} from "lucide-react";
+import { useTurnstile } from "@/hooks/use-turnstile";
 
-type WaitlistState = "idle" | "loading" | "success" | "error";
+type WaitlistState = "idle" | "loading" | "success" | "returning" | "error";
 
 interface WaitlistFormProps {
   className?: string;
@@ -19,8 +27,9 @@ export function WaitlistForm({
   const [email, setEmail] = useState("");
   const [state, setState] = useState<WaitlistState>("idle");
   const [message, setMessage] = useState("");
+  const { containerRef: turnstileContainerRef, token: turnstileToken, reset: resetTurnstile } = useTurnstile();
 
-  async function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent): Promise<void> {
     e.preventDefault();
 
     if (!email.trim()) return;
@@ -31,14 +40,28 @@ export function WaitlistForm({
       const response = await fetch("/api/waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim() }),
+        body: JSON.stringify({
+          email: email.trim(),
+          turnstileToken: turnstileToken || undefined,
+        }),
       });
 
-      const data = await response.json();
+      const data = (await response.json()) as {
+        message?: string;
+        error?: string;
+        isReturning?: boolean;
+      };
 
       if (response.ok) {
-        setState("success");
-        setMessage(data.message || "You're on the list!");
+        if (data.isReturning) {
+          setState("returning");
+          setMessage(
+            data.message || "You're already on the waitlist!"
+          );
+        } else {
+          setState("success");
+          setMessage(data.message || "You're on the list!");
+        }
         setEmail("");
       } else {
         setState("error");
@@ -48,8 +71,12 @@ export function WaitlistForm({
       setState("error");
       setMessage("Network error. Please try again.");
     }
+
+    // Reset Turnstile for potential retry
+    resetTurnstile();
   }
 
+  // ── Success state: new subscriber ────────────────────────────
   if (state === "success") {
     return (
       <div
@@ -61,6 +88,24 @@ export function WaitlistForm({
     );
   }
 
+  // ── Returning subscriber state ───────────────────────────────
+  if (state === "returning") {
+    return (
+      <div
+        className={`flex items-center gap-3 rounded-xl border border-cyan-500/20 bg-cyan-500/5 px-6 py-4 ${className}`}
+      >
+        <PartyPopper className="h-5 w-5 shrink-0 text-cyan-400" />
+        <div>
+          <p className="text-sm font-medium text-foreground">{message}</p>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            We sent you a confirmation -- check your inbox!
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Compact variant ──────────────────────────────────────────
   if (variant === "compact") {
     return (
       <form
@@ -68,6 +113,8 @@ export function WaitlistForm({
         className={`flex items-center gap-2 ${className}`}
       >
         <Input
+          id="waitlist-email-compact"
+          name="email"
           type="email"
           placeholder="Enter your email"
           value={email}
@@ -93,10 +140,12 @@ export function WaitlistForm({
             </>
           )}
         </Button>
+        <div ref={turnstileContainerRef} />
       </form>
     );
   }
 
+  // ── Hero variant (default) ───────────────────────────────────
   return (
     <div className={className}>
       <div className="relative overflow-hidden rounded-2xl border border-border/30 bg-card/60 p-5 backdrop-blur-md sm:p-6">
@@ -107,6 +156,8 @@ export function WaitlistForm({
           className="flex flex-col gap-3"
         >
           <input
+            id="waitlist-email-hero"
+            name="email"
             type="email"
             placeholder="your@email.com"
             value={email}
@@ -136,6 +187,8 @@ export function WaitlistForm({
         {state === "error" && (
           <p className="mt-2 text-sm text-destructive">{message}</p>
         )}
+        {/* Invisible Turnstile container */}
+        <div ref={turnstileContainerRef} />
       </div>
       <div className="mt-3 flex items-center justify-center gap-4 text-[11px] text-muted-foreground/60">
         <span className="flex items-center gap-1"><Shield className="h-3 w-3" />GDPR compliant</span>

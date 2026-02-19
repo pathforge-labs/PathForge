@@ -3,7 +3,6 @@ import Image from "next/image";
 import { Globe, Linkedin, Instagram, X } from "lucide-react";
 import {
   APP_NAME,
-  APP_COMPANY,
   APP_COUNTRY,
   APP_COUNTRY_FLAG,
   SOCIAL_LINKS,
@@ -109,7 +108,7 @@ export function Footer() {
               <span>Made in {APP_COUNTRY}</span>
             </div>
             <p>
-              © {new Date().getFullYear()} {APP_NAME} by {APP_COMPANY}
+              © {new Date().getFullYear()} {APP_NAME}. All rights reserved.
             </p>
             <div className="flex items-center gap-1.5 text-muted-foreground/40 transition-colors hover:text-muted-foreground/60">
               <Globe className="h-3 w-3" />

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { WaitlistForm } from "@/components/waitlist-form";
+import { PricingCards } from "@/components/pricing-cards";
 import { AnimatedSection } from "@/components/animated-sections";
 import { APP_NAME } from "@/config/brand";
 import { COMPARISON } from "@/data/landing-data";
@@ -148,14 +149,31 @@ export default function ComparisonPage() {
         </AnimatedSection>
       </section>
 
+      {/* Pricing */}
+      <section className="px-6 pb-16">
+        <AnimatedSection className="mx-auto max-w-5xl text-center">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-medium text-primary">
+            PRICING
+          </div>
+          <h2 className="font-display mb-4 text-3xl font-bold tracking-tight sm:text-4xl">
+            Simple,{" "}
+            <span className="gradient-text">Transparent Pricing</span>
+          </h2>
+          <p className="mx-auto mb-12 max-w-2xl text-muted-foreground">
+            Start free. Upgrade when you&apos;re ready. No hidden fees, no surprises.
+          </p>
+          <PricingCards />
+        </AnimatedSection>
+      </section>
+
       {/* CTA */}
       <section className="px-6 pb-24">
         <AnimatedSection className="mx-auto max-w-2xl text-center">
           <h2 className="font-display mb-4 text-3xl font-bold tracking-tight">
-            Ready to Switch?
+            Ready to Get Started?
           </h2>
           <p className="mb-8 text-muted-foreground">
-            Join the waitlist and see for yourself. Free for early adopters.
+            Join the waitlist today and be among the first to experience the future of career intelligence.
           </p>
           <WaitlistForm variant="hero" className="mx-auto max-w-md" />
         </AnimatedSection>

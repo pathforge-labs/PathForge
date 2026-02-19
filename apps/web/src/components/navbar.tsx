@@ -54,10 +54,8 @@ export function Navbar() {
           <div className="hidden rounded-full bg-linear-to-r from-primary/25 to-accent/25 p-px nav:block">
             <div className="flex items-center gap-1 rounded-full bg-background/80 p-1 backdrop-blur-sm">
               <ThemeToggle />
-              {/* Gradient pipe — matches brand gradient */}
-              <div className="h-5 w-px bg-linear-to-b from-primary to-accent opacity-40" />
               <Link
-                href="#cta"
+                href="/#cta"
                 className={`cta-button cursor-pointer rounded-full bg-linear-to-r from-primary to-accent px-5 py-1.5 text-sm font-semibold text-white transition-all hover:opacity-90 hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5 ${FOCUS_RING}`}
               >
                 Join Waitlist

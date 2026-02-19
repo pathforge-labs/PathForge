@@ -234,27 +234,28 @@ A feature is **Done** when ALL criteria are met:
 └─────────────────────────────────────────────────┘
 ```
 
-#### Deploy Pipeline (`deploy.yml`) — Triggers on push to `production`
+#### Deploy Pipeline — Native Platform Integration
 
 ```
 ┌─────────────────────────────────────────────────┐
-│       Push to production (deploy.yml)           │
+│       Push to production (auto-deploy)          │
 ├─────────────────────────────────────────────────┤
-│  ✅ Deploy API → Railway (via CLI)               │
+│  ✅ Web  → Vercel auto-deploy (native integration) │
+│  ✅ API  → Railway auto-deploy (native integration)│
 └─────────────────────────────────────────────────┘
 ```
 
 ### Deployment Strategy
 
-| Component | Deploy Mechanism              | Trigger              | Platform |
-| :-------- | :---------------------------- | :------------------- | :------- |
-| **Web**   | Vercel Git Integration (auto) | Push to `production` | Vercel   |
-| **API**   | GitHub Actions `deploy.yml`   | Push to `production` | Railway  |
+| Component | Deploy Mechanism                  | Trigger              | Platform |
+| :-------- | :-------------------------------- | :------------------- | :------- |
+| **Web**   | Vercel native Git integration     | Push to `production` | Vercel   |
+| **API**   | Railway native GitHub integration | Push to `production` | Railway  |
 
 > [!IMPORTANT]
-> Web deployments are **NOT** handled by GitHub Actions. Vercel's native Git integration
-> automatically deploys on push to the `production` branch. The `deploy.yml` workflow
-> only handles Railway API deployment.
+> Both Web and API deployments use **native platform integrations** (no GitHub Actions deploy workflow).
+> Every push to `production` triggers **both** Vercel and Railway builds.
+> This means unnecessary production pushes waste deployment credits.
 
 ### Vercel Configuration
 
@@ -270,13 +271,15 @@ A feature is **Done** when ALL criteria are met:
 
 ### Local Pre-Push Gate
 
-A smart pre-push hook runs automatically before every `git push`. See [LOCAL-CI-GATE.md](guides/LOCAL-CI-GATE.md) for full documentation.
+A smart pre-push hook runs automatically before every `git push` in **fast mode** (lint + types only, ~12s). See [LOCAL-CI-GATE.md](guides/LOCAL-CI-GATE.md) for full documentation.
 
 Key optimizations:
 
+- **Fast mode default** — Ruff + MyPy only (~12s), full tests in GitHub Actions CI
 - **Non-code changes** (docs, config, hooks) → CI skipped entirely
-- **Fast-forward merges** (`main` → `production`) → CI skipped
+- **Production merges** (`main` → `production`) → CI skipped (already tested on main)
 - **Scope detection** → Only relevant gates run (api/web/all)
+- **`FULL_CI=1`** → Override to run full local CI when needed
 
 ### Preview Deployments
 
@@ -298,6 +301,26 @@ Pushes to non-production branches are ignored by Vercel (via Ignored Build Step)
 > [!IMPORTANT]
 > `production` is the **live deployment branch**. All development happens on `main`.
 > Merges to `production` are **deliberate releases**, never ad-hoc pushes.
+
+> [!CAUTION]
+> Every push to `production` triggers a **Vercel build** and a **Railway deploy**.
+> These platforms have **limited credits** on starter/hobby plans.
+> Unnecessary deploys waste credits and create noise in deploy history.
+
+### Production-Impact Filter
+
+Only merge `main` → `production` when changes affect **deployed artifacts**:
+
+| Change Type                  | Affects Production? | Merge to `production`? |
+| :--------------------------- | :------------------ | :--------------------- |
+| `apps/api/**`                | ✅ Yes (Railway)    | ✅ Yes                 |
+| `apps/web/**`                | ✅ Yes (Vercel)     | ✅ Yes                 |
+| `docker/**`, `railway.toml`  | ✅ Yes (infra)      | ✅ Yes                 |
+| `docs/**`, `*.md`            | ❌ No               | ❌ Never               |
+| `.agent/**`, `.vscode/**`    | ❌ No               | ❌ Never               |
+| `.githooks/**`, `scripts/**` | ❌ No               | ❌ Never               |
+| `.github/**`                 | ⚠️ Only CI changes  | ⚠️ Case-by-case        |
+| `packages/shared/**`         | ⚠️ Only if consumed | ⚠️ Case-by-case        |
 
 ### When to Merge
 
