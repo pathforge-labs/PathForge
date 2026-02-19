@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import {
   APP_NAME,
@@ -20,6 +20,13 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
   weight: ["500", "600", "700", "800"],
 });
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a12" },
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+  ],
+};
 
 export const metadata: Metadata = {
   title: {
@@ -49,6 +56,7 @@ export const metadata: Metadata = {
     icon: "/brand/logo-primary.png",
     apple: "/apple-touch-icon.png",
   },
+
   manifest: "/site.webmanifest",
   openGraph: {
     type: "website",

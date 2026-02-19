@@ -273,6 +273,16 @@ export const TESTIMONIALS = [
     featured: false,
   },
   {
+    quote: "In cybersecurity, we evaluate every tool through one lens: does it protect the user? PathForge is rare — it combines enterprise-grade intelligence with genuine respect for data sovereignty. Career DNA™ is the kind of innovation our industry needs.",
+    name: "Ali Avci",
+    role: "IT Security Manager",
+    company: "Munters",
+    linkedin: "https://www.linkedin.com/in/avcidurmusali/",
+    image: "/testimonials/ali-avci.webp",
+    gradient: "from-red-500 to-rose-500",
+    featured: false,
+  },
+  {
     quote: "The career tools market is massive but broken. Nobody connects who you are with where you should go. PathForge changes that with Career DNA™.",
     name: "PathForge Team",
     role: "Product Vision",
