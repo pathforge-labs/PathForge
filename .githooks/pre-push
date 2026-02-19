@@ -166,10 +166,20 @@ echo "╚═══════════════════════�
 echo ""
 
 # Detect OS and run appropriate script
+# Note: Git Bash on Windows mangles -Fast when passed via -File mode.
+# Using -Command with explicit string avoids all quoting/escaping issues.
+SCRIPT_PATH="$ROOT/scripts/ci-local.ps1"
+
+if [ -n "$FAST_FLAG" ]; then
+    PS_CMD="& '${SCRIPT_PATH}' -Scope '${SCOPE}' -Fast"
+else
+    PS_CMD="& '${SCRIPT_PATH}' -Scope '${SCOPE}'"
+fi
+
 if command -v pwsh &> /dev/null; then
-    pwsh -NoProfile -ExecutionPolicy Bypass -File "$ROOT/scripts/ci-local.ps1" -Scope "$SCOPE" $FAST_FLAG
+    pwsh -NoProfile -ExecutionPolicy Bypass -Command "$PS_CMD"
 elif command -v powershell &> /dev/null; then
-    powershell -NoProfile -ExecutionPolicy Bypass -File "$ROOT/scripts/ci-local.ps1" -Scope "$SCOPE" $FAST_FLAG
+    powershell -NoProfile -ExecutionPolicy Bypass -Command "$PS_CMD"
 else
     echo "⚠ PowerShell not found — skipping local CI gate."
     echo "  Run manually: ./scripts/ci-local.ps1"
