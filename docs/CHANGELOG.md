@@ -5,6 +5,52 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [Ad-Hoc] — UI/UX Polish & Testimonials — 2026-02-19
+
+### Added
+
+- **Ali Avci testimonial** — new card with `.webp` photo, cybersecurity/enterprise perspective
+- **Testimonial drag-to-scroll** — desktop Pointer Events API with grab cursor, drag threshold, click prevention
+- **Testimonial touch swipe** — mobile horizontal gesture detection (doesn't hijack vertical scroll)
+- **Testimonial arrow controls** — left/right chevron buttons with brand gradient styling
+
+### Changed
+
+- **Scroll-to-top button** — enlarged to 50×50px, brand gradient bg, white icon, rounded-full
+- **Footer copyright** — `"PathForge by PathForge"` → `"PathForge. All rights reserved."`
+- **Navbar** — removed gradient pipe divider between theme toggle and CTA
+- **PWA theme-color** — moved to `viewport` export with dark/light media queries (Next.js 16)
+- **Müslüm Gezgin photo** — updated to clean version (no "Open To Work" banner)
+
+---
+
+## [Ad-Hoc] — Waitlist Duplicate Handling — 2026-02-19
+
+### Added
+
+- **Duplicate detection** — proactive check before Resend contact creation
+- **Differentiated emails** — new subscribers get welcome email, returning subscribers get acknowledgment
+- **Rate limiting** — IP-based throttle on waitlist endpoint
+- **Turnstile CAPTCHA** — bot protection via Cloudflare Turnstile integration
+
+---
+
+## [Ad-Hoc] — Turnstile Error Resolution — 2026-02-19
+
+### Added
+
+- **`useTurnstile` hook** — centralized Turnstile widget lifecycle management
+- **Global script loading** — Turnstile script loaded once in marketing layout
+- **Dev environment skip** — Turnstile disabled in development to prevent preload warnings
+
+### Fixed
+
+- **Error 300030** — resolved by proper widget cleanup and re-render handling
+- **Preload warnings** — eliminated by loading script at layout level
+- **Widget hang** — fixed with explicit reset/remove lifecycle in hook
+
+---
+
 ## [Ad-Hoc] — Security Hardening & Deploy Optimization — 2026-02-18
 
 ### Added

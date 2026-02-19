@@ -19,7 +19,7 @@ export function ContactForm({ className = "" }: ContactFormProps): ReactElement 
   const [message, setMessage] = useState("");
   const [state, setState] = useState<ContactState>("idle");
   const [feedback, setFeedback] = useState("");
-  const { containerRef: turnstileRef, token: turnstileToken, reset: resetTurnstile, isEnabled: isTurnstileEnabled } = useTurnstile();
+  const { containerRef: turnstileRef, execute: executeTurnstile, reset: resetTurnstile } = useTurnstile();
 
   async function handleSubmit(event: FormEvent): Promise<void> {
     event.preventDefault();
@@ -31,6 +31,9 @@ export function ContactForm({ className = "" }: ContactFormProps): ReactElement 
     setState("loading");
 
     try {
+      // Run Turnstile challenge at submit time (execute-on-demand mode)
+      const turnstileToken = await executeTurnstile();
+
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -209,9 +212,7 @@ export function ContactForm({ className = "" }: ContactFormProps): ReactElement 
         </Button>
 
         {/* Cloudflare Turnstile invisible widget */}
-        {isTurnstileEnabled && (
-          <div ref={turnstileRef} className="hidden" />
-        )}
+        <div ref={turnstileRef} className="hidden" />
       </form>
 
       {state === "error" && (

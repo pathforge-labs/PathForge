@@ -1,19 +1,20 @@
 # Session Context — PathForge
 
 > **Framework**: Antigravity AI Kit v2.0.0
-> **Last Updated**: 2026-02-18T17:40:00+01:00
+> **Last Updated**: 2026-02-19T16:59:00+01:00
 
 ---
 
 ## 📋 Last Session Summary
 
-**Date**: 2026-02-18
-**Focus**: API Security Hardening, Deploy Fix, Pre-Push Optimization
+**Date**: 2026-02-19
+**Focus**: UI/UX Polish, Turnstile Fix, Waitlist Duplicate Handling
 
-- API security hardening deployed: `security.txt`, `robots.txt`, bot trap, docs protection
-- Railway deploy conflict resolved: removed redundant `deploy.yml`, native integration active
-- Pre-push hook optimized: fast mode (~12s), production merge skip, `FULL_CI=1` override
-- 208/208 tests passing, all security endpoints verified live
+- Turnstile error resolution: `useTurnstile` hook, global script, dev skip
+- Waitlist duplicate handling: duplicate detection, diff emails, rate limiting, Turnstile CAPTCHA
+- UI/UX polish: 6 issues + drag/swipe enhancement, deployed to production
+- Tier-1 retrospective audit + review pipeline: all 4 gates passed
+- Committed `520018e`, merged main → production, pushed both
 
 ---
 
@@ -21,7 +22,7 @@
 
 - **Repository**: https://github.com/pathforge-labs/PathForge.git
 - **Branches**: `main` (development), `production` (releases)
-- **Framework**: Next.js 15 + TailwindCSS v4 (Turborepo monorepo)
+- **Framework**: Next.js 16 + TailwindCSS v4 (Turborepo monorepo)
 - **Backend**: FastAPI + PostgreSQL + pgvector + Alembic
 - **Sprint Tracking**: → `docs/ROADMAP.md` (SSOT)
 - **Workflow**: → `docs/DEVELOPMENT_WORKFLOW.md`
@@ -35,10 +36,9 @@
 - Sprint 9 (Career Threat Radar™) COMPLETE — 11 tasks, 202 tests
 - **Railway API LIVE** at `api.pathforge.eu` (security hardening active)
 - **pathforge.eu LIVE** — landing page serving from Vercel
-- All DNS records verified and propagated
-- `deploy.yml` removed — Railway native GitHub integration handles production deploys
-- Pre-push hook: fast mode default (~12s), `FULL_CI=1` for full local CI
-- Next: Post-deploy verification items at `docs/TODO-pre-production.md`
+- UI/UX polish deployed: testimonials drag/swipe, footer, navbar, scroll-to-top
+- Turnstile CAPTCHA integrated on waitlist + contact forms
+- Waitlist duplicate handling with differentiated emails
 - Next: Sprint 10 (Skill Decay & Growth Tracker)
 
 ---

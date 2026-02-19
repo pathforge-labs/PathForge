@@ -11,6 +11,7 @@ declare global {
         container: string | HTMLElement,
         options: {
           sitekey: string;
+          execution?: "render" | "execute";
           callback?: (token: string) => void;
           "expired-callback"?: () => void;
           "error-callback"?: () => void;
@@ -19,6 +20,7 @@ declare global {
           action?: string;
         }
       ) => string;
+      execute: (widgetIdOrContainer?: string | HTMLElement) => void;
       reset: (widgetIdOrContainer?: string | HTMLElement) => void;
       remove: (widgetIdOrContainer?: string | HTMLElement) => void;
       getResponse: (widgetIdOrContainer?: string | HTMLElement) => string | undefined;
@@ -27,3 +29,4 @@ declare global {
 }
 
 export {};
+
