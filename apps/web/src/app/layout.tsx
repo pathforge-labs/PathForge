@@ -61,7 +61,7 @@ export const metadata: Metadata = {
       `CV tailoring, and career strategy. Built in the EU.`,
     images: [
       {
-        url: "/og-image.png",
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
         alt: `${APP_NAME} — ${APP_TAGLINE}`,
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
     description:
       `Your Career, Intelligently Forged. Career DNA™ technology for semantic job matching, ` +
       `CV tailoring, and career strategy.`,
-    images: ["/og-image.png"],
+    images: ["/og-image.jpg"],
   },
   robots: {
     index: true,

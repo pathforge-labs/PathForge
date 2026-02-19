@@ -1,9 +1,12 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, useRef, useEffect, useCallback, type FormEvent, type ReactElement } from "react";
+import Script from "next/script";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight, CheckCircle2, ChevronDown, Loader2, Shield, Lock } from "lucide-react";
+
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
 
 type ContactState = "idle" | "loading" | "success" | "error";
 
@@ -11,13 +14,34 @@ interface ContactFormProps {
   className?: string;
 }
 
-export function ContactForm({ className = "" }: ContactFormProps) {
+export function ContactForm({ className = "" }: ContactFormProps): ReactElement {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [state, setState] = useState<ContactState>("idle");
   const [feedback, setFeedback] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const turnstileRef = useRef<HTMLDivElement>(null);
+
+  const resetTurnstile = useCallback((): void => {
+    if (typeof window !== "undefined" && window.turnstile && turnstileRef.current) {
+      window.turnstile.reset(turnstileRef.current);
+      setTurnstileToken("");
+    }
+  }, []);
+
+  useEffect(() => {
+    // Render Turnstile widget once the script is loaded
+    if (typeof window !== "undefined" && window.turnstile && turnstileRef.current && TURNSTILE_SITE_KEY) {
+      window.turnstile.render(turnstileRef.current, {
+        sitekey: TURNSTILE_SITE_KEY,
+        theme: "dark",
+        size: "invisible",
+        callback: (token: string) => setTurnstileToken(token),
+      });
+    }
+  }, []);
 
   async function handleSubmit(event: FormEvent): Promise<void> {
     event.preventDefault();
@@ -37,6 +61,7 @@ export function ContactForm({ className = "" }: ContactFormProps) {
           email: email.trim(),
           subject: subject.trim(),
           message: message.trim(),
+          turnstileToken: turnstileToken || undefined,
         }),
       });
 
@@ -56,6 +81,7 @@ export function ContactForm({ className = "" }: ContactFormProps) {
     } catch {
       setState("error");
       setFeedback("Network error. Please try again.");
+      resetTurnstile();
     }
   }
 
@@ -203,6 +229,11 @@ export function ContactForm({ className = "" }: ContactFormProps) {
             </>
           )}
         </Button>
+
+        {/* Cloudflare Turnstile invisible widget */}
+        {TURNSTILE_SITE_KEY && (
+          <div ref={turnstileRef} className="hidden" />
+        )}
       </form>
 
       {state === "error" && (
@@ -214,6 +245,43 @@ export function ContactForm({ className = "" }: ContactFormProps) {
         <span className="h-3 w-px bg-border/30" />
         <span className="flex items-center gap-1"><Lock className="h-3 w-3" />Your data is safe</span>
       </div>
+
+      {/* Turnstile script — loaded once */}
+      {TURNSTILE_SITE_KEY && (
+        <Script
+          src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+          strategy="afterInteractive"
+          onLoad={() => {
+            if (turnstileRef.current && window.turnstile) {
+              window.turnstile.render(turnstileRef.current, {
+                sitekey: TURNSTILE_SITE_KEY,
+                theme: "dark",
+                size: "invisible",
+                callback: (token: string) => setTurnstileToken(token),
+              });
+            }
+          }}
+        />
+      )}
     </div>
   );
+}
+
+// ── Cloudflare Turnstile type declarations ──────────────────────
+declare global {
+  interface Window {
+    turnstile: {
+      render: (
+        container: HTMLElement,
+        options: {
+          sitekey: string;
+          theme?: "light" | "dark" | "auto";
+          size?: "normal" | "compact" | "invisible";
+          callback?: (token: string) => void;
+        }
+      ) => string;
+      reset: (container: HTMLElement) => void;
+      remove: (widgetId: string) => void;
+    };
+  }
 }
