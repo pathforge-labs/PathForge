@@ -23,6 +23,7 @@ from app.api.v1 import (
     blacklist,
     career_dna,
     health,
+    salary_intelligence,
     skill_decay,
     threat_radar,
     users,
@@ -95,6 +96,7 @@ def create_app() -> FastAPI:
     application.include_router(career_dna.router, prefix="/api/v1")
     application.include_router(threat_radar.router, prefix="/api/v1")
     application.include_router(skill_decay.router, prefix="/api/v1")
+    application.include_router(salary_intelligence.router, prefix="/api/v1")
 
     return application
 

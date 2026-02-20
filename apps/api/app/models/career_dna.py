@@ -36,6 +36,13 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.models.base import Base, TimestampMixin, UUIDMixin
 
 if TYPE_CHECKING:
+    from app.models.salary_intelligence import (
+        SalaryEstimate,
+        SalaryHistoryEntry,
+        SalaryPreference,
+        SalaryScenario,
+        SkillSalaryImpact,
+    )
     from app.models.skill_decay import (
         MarketDemandSnapshot,
         ReskillingPathway,
@@ -163,6 +170,20 @@ class CareerDNA(UUIDMixin, TimestampMixin, Base):
     version: Mapped[int] = mapped_column(Integer, default=1, nullable=False)
     summary: Mapped[str | None] = mapped_column(Text, nullable=True)
 
+    # Profile context (populated during Career DNA analysis)
+    primary_industry: Mapped[str | None] = mapped_column(
+        String(255), nullable=True
+    )
+    primary_role: Mapped[str | None] = mapped_column(
+        String(255), nullable=True
+    )
+    location: Mapped[str | None] = mapped_column(
+        String(255), nullable=True
+    )
+    seniority_level: Mapped[str | None] = mapped_column(
+        String(50), nullable=True
+    )
+
     # Relationships
     user: Mapped[User] = relationship(
         "User", back_populates="career_dna"
@@ -255,6 +276,34 @@ class CareerDNA(UUIDMixin, TimestampMixin, Base):
     )
     decay_preference: Mapped[SkillDecayPreference | None] = relationship(
         "SkillDecayPreference",
+        back_populates="career_dna",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
+
+    # Salary Intelligence Engine™ relationships
+    salary_estimates: Mapped[list[SalaryEstimate]] = relationship(
+        "SalaryEstimate",
+        back_populates="career_dna",
+        cascade="all, delete-orphan",
+    )
+    skill_salary_impacts: Mapped[list[SkillSalaryImpact]] = relationship(
+        "SkillSalaryImpact",
+        back_populates="career_dna",
+        cascade="all, delete-orphan",
+    )
+    salary_history: Mapped[list[SalaryHistoryEntry]] = relationship(
+        "SalaryHistoryEntry",
+        back_populates="career_dna",
+        cascade="all, delete-orphan",
+    )
+    salary_scenarios: Mapped[list[SalaryScenario]] = relationship(
+        "SalaryScenario",
+        back_populates="career_dna",
+        cascade="all, delete-orphan",
+    )
+    salary_preference: Mapped[SalaryPreference | None] = relationship(
+        "SalaryPreference",
         back_populates="career_dna",
         uselist=False,
         cascade="all, delete-orphan",

@@ -20,6 +20,13 @@ from app.models.career_dna import (
 from app.models.matching import JobListing, MatchResult
 from app.models.preference import BlacklistEntry, Preference
 from app.models.resume import Resume, Skill
+from app.models.salary_intelligence import (
+    SalaryEstimate,
+    SalaryHistoryEntry,
+    SalaryPreference,
+    SalaryScenario,
+    SkillSalaryImpact,
+)
 from app.models.skill_decay import (
     MarketDemandSnapshot,
     ReskillingPathway,
@@ -60,10 +67,15 @@ __all__ = [
     "Preference",
     "ReskillingPathway",
     "Resume",
+    "SalaryEstimate",
+    "SalaryHistoryEntry",
+    "SalaryPreference",
+    "SalaryScenario",
     "Skill",
     "SkillDecayPreference",
     "SkillFreshness",
     "SkillGenomeEntry",
+    "SkillSalaryImpact",
     "SkillShieldEntry",
     "SkillVelocityEntry",
     "ThreatAlert",
