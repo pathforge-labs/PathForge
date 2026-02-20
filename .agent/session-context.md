@@ -1,22 +1,21 @@
 # Session Context — PathForge
 
 > **Framework**: Antigravity AI Kit v2.0.0
-> **Last Updated**: 2026-02-20T03:23:00+01:00
+> **Last Updated**: 2026-02-20T04:24:00+01:00
 
 ---
 
 ## 📋 Last Session Summary
 
 **Date**: 2026-02-20
-**Focus**: Sprint 10 — Skill Decay & Growth Tracker
+**Focus**: Sprint 10 + Sprint 11 — Skill Decay & Growth Tracker + Salary Intelligence Engine™
 
-- Implemented full Skill Decay & Growth Tracker: 5 models, 11 schemas, 4 AI prompts, analyzer, service, 9 routes
-- Alembic migration `8g9h0i1j2k3l` — 5 new tables with indexes and CASCADE FKs
-- 38 new tests (246/246 total passing)
-- Tier-1 retrospective audit: all 5 /review gates passed (lint, types, tests, security, build)
-- Fixed 4 migration-model alignment issues + 3 MyPy type errors
-- Created shell conventions skill, fixed 12 `&&` usages across 6 files
-- Commits `b884e80` (Sprint 10 feat) + `6bf733a` (MyPy fix), pushed to main
+- Completed Sprint 10: 5 models, 11 schemas, analyzer, service, 9 routes, 38 tests (246/246)
+- Completed Sprint 11: 5 models, 13 schemas, analyzer, service, 10 routes, 41 tests (287/287)
+- Alembic migrations: `8g9h0i1j2k3l` (skill decay), `9j0k1l2m3n4o` (salary tables), `0a1b2c3d4e5f` (CareerDNA columns)
+- Tier-1 retrospective audits: all /review gates passed for both sprints
+- 3 audit gaps addressed: CareerDNA columns, LLM guardrails, label fix
+- Commits `b884e80` (Sprint 10) + `6bf733a` (MyPy) + `703ce4f` (Sprint 11), pushed to main
 
 ---
 
@@ -37,9 +36,10 @@
 - Sprint 8 (Career DNA™) COMPLETE — 9 tasks, 168 tests
 - Sprint 9 (Career Threat Radar™) COMPLETE — 11 tasks, 202 tests
 - Sprint 10 (Skill Decay & Growth Tracker) COMPLETE — 10 tasks, 246 tests
+- Sprint 11 (Salary Intelligence Engine™) COMPLETE — 10 tasks, 287 tests
 - **Railway API LIVE** at `api.pathforge.eu` (security hardening active)
 - **pathforge.eu LIVE** — landing page serving from Vercel
-- Next: Sprint 11 (Salary Intelligence Engine™)
+- Next: Sprint 12 (Transition Pathways)
 
 ---
 

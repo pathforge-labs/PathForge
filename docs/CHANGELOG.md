@@ -5,6 +5,29 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [Sprint 11] — Salary Intelligence Engine™ — 2026-02-20
+
+### Added
+
+- **Salary Intelligence Engine™** — full salary intelligence system:
+  - 5 SQLAlchemy models (`SalaryEstimate`, `SkillSalaryImpact`, `SalaryHistoryEntry`, `SalaryScenario`, `SalaryPreference`) + 3 StrEnums
+  - 13 Pydantic schemas with `data_source` + `disclaimer` transparency fields
+  - Alembic migration `9j0k1l2m3n4o` — 5 tables with FK CASCADE + indexes
+  - AI analyzer: 4 LLM methods + 4 static helpers, centralized `MAX_LLM_CONFIDENCE` (0.85) cap
+  - SalaryIntelligenceService pipeline orchestration (~540 lines)
+  - 10 REST endpoints at `/api/v1/salary-intelligence` (dashboard, scan, estimate, skill-impacts, trajectory, scenarios, preferences)
+  - 41 new tests (287/287 total passing)
+- **CareerDNA profile context columns** — `primary_industry`, `primary_role`, `location`, `seniority_level` (migration `0a1b2c3d4e5f`)
+- **LLM confidence guardrails** — `SALARY_DATA_SOURCE`, `SALARY_DISCLAIMER`, `MAX_LLM_CONFIDENCE` constants for AI transparency
+- Ethics safeguards: confidence cap (0.85), "estimates not guarantees" disclaimers, anti-bias prompts
+
+### Fixed
+
+- Service helpers used `getattr` fallback for missing CareerDNA columns → now use direct attribute access
+- "Industries" label → "Industry Diversity" in LLM prompt formatting
+
+---
+
 ## [Sprint 10] — Skill Decay & Growth Tracker — 2026-02-20
 
 ### Added

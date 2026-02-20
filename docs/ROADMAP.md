@@ -176,11 +176,18 @@
 - [x] Tier-1 retrospective audit — 4 findings resolved, 3 MyPy errors fixed
 - [x] Shell conventions skill + 12 workflow `&&` fixes
 
-### Sprint 11 — Salary Intelligence Engine™ (⏳)
+### Sprint 11 — Salary Intelligence Engine™ (✅ Complete)
 
-- [ ] Personalized salary calculation
-- [ ] Skill→salary impact modeling
-- [ ] Historical trajectory tracking
+- [x] 5 SQLAlchemy models (`SalaryEstimate`, `SkillSalaryImpact`, `SalaryHistoryEntry`, `SalaryScenario`, `SalaryPreference`) + 3 StrEnums
+- [x] 13 Pydantic schemas with `data_source` + `disclaimer` transparency fields
+- [x] 4 versioned AI prompt templates (salary range, skill impacts, trajectory, scenario)
+- [x] SalaryIntelligenceAnalyzer (4 LLM methods + 4 static helpers, centralized `MAX_LLM_CONFIDENCE`)
+- [x] SalaryIntelligenceService pipeline orchestration (~540 lines)
+- [x] 10 REST endpoints at `/api/v1/salary-intelligence` with auth + rate limiting
+- [x] Alembic migrations `9j0k1l2m3n4o` (5 salary tables) + `0a1b2c3d4e5f` (4 CareerDNA profile columns)
+- [x] CareerDNA enhanced: `primary_industry`, `primary_role`, `location`, `seniority_level` columns
+- [x] 41 new tests (287/287 total suite passing)
+- [x] Tier-1 retrospective audit — 3 gaps addressed (G1: columns, G2: guardrails, G3: label)
 
 ### Sprint 12 — Transition Pathways (⏳)
 
@@ -243,3 +250,4 @@
 | 8      | 3             | 9         | 1            | 2        |
 | 9      | 8             | 11        | 3            | 1        |
 | 10     | 4             | 10        | 1            | 2        |
+| 11     | 3             | 10        | 1            | 1        |
