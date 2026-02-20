@@ -42,6 +42,13 @@ from app.models.threat_radar import (
     SkillShieldEntry,
     ThreatAlert,
 )
+from app.models.transition_pathways import (
+    SkillBridgeEntry,
+    TransitionComparison,
+    TransitionMilestone,
+    TransitionPath,
+    TransitionPreference,
+)
 from app.models.user import User
 
 __all__ = [
@@ -72,6 +79,7 @@ __all__ = [
     "SalaryPreference",
     "SalaryScenario",
     "Skill",
+    "SkillBridgeEntry",
     "SkillDecayPreference",
     "SkillFreshness",
     "SkillGenomeEntry",
@@ -79,6 +87,10 @@ __all__ = [
     "SkillShieldEntry",
     "SkillVelocityEntry",
     "ThreatAlert",
+    "TransitionComparison",
+    "TransitionMilestone",
+    "TransitionPath",
+    "TransitionPreference",
     "User",
     "ValuesProfile",
 ]

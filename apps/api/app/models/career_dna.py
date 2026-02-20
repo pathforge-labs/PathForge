@@ -58,6 +58,10 @@ if TYPE_CHECKING:
         SkillShieldEntry,
         ThreatAlert,
     )
+    from app.models.transition_pathways import (
+        TransitionPath,
+        TransitionPreference,
+    )
     from app.models.user import User
 
 # ── Enums ──────────────────────────────────────────────────────
@@ -304,6 +308,19 @@ class CareerDNA(UUIDMixin, TimestampMixin, Base):
     )
     salary_preference: Mapped[SalaryPreference | None] = relationship(
         "SalaryPreference",
+        back_populates="career_dna",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
+
+    # Transition Pathways relationships
+    transition_paths: Mapped[list[TransitionPath]] = relationship(
+        "TransitionPath",
+        back_populates="career_dna",
+        cascade="all, delete-orphan",
+    )
+    transition_preference: Mapped[TransitionPreference | None] = relationship(
+        "TransitionPreference",
         back_populates="career_dna",
         uselist=False,
         cascade="all, delete-orphan",
