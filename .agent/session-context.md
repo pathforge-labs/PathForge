@@ -47,9 +47,11 @@
 
 ## 🔄 Quick Resume
 
-```bash
+```powershell
 git status
 git log --oneline -5
-cd apps/api && .venv/Scripts/python -m pytest tests/ -q
-cd apps/web && pnpm build
+# Cwd: apps/api
+& ".venv\Scripts\python.exe" -m pytest tests/ -q
+# Cwd: apps/web
+pnpm build
 ```

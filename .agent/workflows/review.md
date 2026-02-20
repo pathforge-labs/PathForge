@@ -68,40 +68,45 @@ $ARGUMENTS
 
 // turbo
 
-```bash
-cd apps/web && npx next lint
+```powershell
+# Cwd: apps/web
+pnpm lint
 ```
 
 ### 2. Type Check (Frontend)
 
 // turbo
 
-```bash
-cd apps/web && npx tsc --noEmit
+```powershell
+# Cwd: apps/web
+npx tsc --noEmit
 ```
 
 ### 3. Backend Tests
 
 // turbo
 
-```bash
-cd apps/api && .venv/Scripts/python -m pytest tests/ -q
+```powershell
+# Cwd: apps/api
+& ".venv\Scripts\python.exe" -m pytest tests/ -q
 ```
 
 ### 4. Security Scan
 
 // turbo
 
-```bash
-cd apps/web && npm audit --audit-level=moderate
+```powershell
+# Cwd: apps/web
+npm audit --audit-level=moderate
 ```
 
 ### 5. Build Verification
 
 // turbo
 
-```bash
-cd apps/web && pnpm build
+```powershell
+# Cwd: apps/web
+pnpm build
 ```
 
 ---

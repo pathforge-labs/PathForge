@@ -20,6 +20,13 @@ from app.models.career_dna import (
 from app.models.matching import JobListing, MatchResult
 from app.models.preference import BlacklistEntry, Preference
 from app.models.resume import Resume, Skill
+from app.models.skill_decay import (
+    MarketDemandSnapshot,
+    ReskillingPathway,
+    SkillDecayPreference,
+    SkillFreshness,
+    SkillVelocityEntry,
+)
 from app.models.threat_radar import (
     AlertPreference,
     AutomationRisk,
@@ -46,14 +53,19 @@ __all__ = [
     "HiddenSkill",
     "IndustryTrend",
     "JobListing",
+    "MarketDemandSnapshot",
     "MarketInsight",
     "MarketPosition",
     "MatchResult",
     "Preference",
+    "ReskillingPathway",
     "Resume",
     "Skill",
+    "SkillDecayPreference",
+    "SkillFreshness",
     "SkillGenomeEntry",
     "SkillShieldEntry",
+    "SkillVelocityEntry",
     "ThreatAlert",
     "User",
     "ValuesProfile",

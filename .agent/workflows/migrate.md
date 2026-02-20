@@ -67,14 +67,16 @@ Run tests to verify
 
 ### 1. Generate Migration
 
-```bash
-cd apps/api && .venv/Scripts/alembic revision --autogenerate -m "description_of_change"
+```powershell
+# Cwd: apps/api
+& ".venv\Scripts\alembic.exe" revision --autogenerate -m "description_of_change"
 ```
 
 ### 2. Review Migration
 
-```bash
-cd apps/api && .venv/Scripts/alembic heads
+```powershell
+# Cwd: apps/api
+& ".venv\Scripts\alembic.exe" heads
 ```
 
 Then open the generated migration file in `apps/api/alembic/versions/` and verify:
@@ -85,16 +87,18 @@ Then open the generated migration file in `apps/api/alembic/versions/` and verif
 
 ### 3. Apply Migration
 
-```bash
-cd apps/api && .venv/Scripts/alembic upgrade head
+```powershell
+# Cwd: apps/api
+& ".venv\Scripts\alembic.exe" upgrade head
 ```
 
 ### 4. Verify
 
 // turbo
 
-```bash
-cd apps/api && .venv/Scripts/python -m pytest tests/ -q
+```powershell
+# Cwd: apps/api
+& ".venv\Scripts\python.exe" -m pytest tests/ -q
 ```
 
 ---

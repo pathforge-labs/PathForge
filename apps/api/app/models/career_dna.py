@@ -36,6 +36,13 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.models.base import Base, TimestampMixin, UUIDMixin
 
 if TYPE_CHECKING:
+    from app.models.skill_decay import (
+        MarketDemandSnapshot,
+        ReskillingPathway,
+        SkillDecayPreference,
+        SkillFreshness,
+        SkillVelocityEntry,
+    )
     from app.models.threat_radar import (
         AlertPreference,
         AutomationRisk,
@@ -220,6 +227,34 @@ class CareerDNA(UUIDMixin, TimestampMixin, Base):
     )
     alert_preference: Mapped[AlertPreference | None] = relationship(
         "AlertPreference",
+        back_populates="career_dna",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
+
+    # Skill Decay & Growth Tracker™ relationships
+    skill_freshness: Mapped[list[SkillFreshness]] = relationship(
+        "SkillFreshness",
+        back_populates="career_dna",
+        cascade="all, delete-orphan",
+    )
+    market_demand_snapshots: Mapped[list[MarketDemandSnapshot]] = relationship(
+        "MarketDemandSnapshot",
+        back_populates="career_dna",
+        cascade="all, delete-orphan",
+    )
+    skill_velocity_entries: Mapped[list[SkillVelocityEntry]] = relationship(
+        "SkillVelocityEntry",
+        back_populates="career_dna",
+        cascade="all, delete-orphan",
+    )
+    reskilling_pathways: Mapped[list[ReskillingPathway]] = relationship(
+        "ReskillingPathway",
+        back_populates="career_dna",
+        cascade="all, delete-orphan",
+    )
+    decay_preference: Mapped[SkillDecayPreference | None] = relationship(
+        "SkillDecayPreference",
         back_populates="career_dna",
         uselist=False,
         cascade="all, delete-orphan",

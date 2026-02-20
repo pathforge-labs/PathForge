@@ -335,7 +335,7 @@ Before creating a component, ask:
 
 After editing any file:
 
-1. **Run validation**: `npm run lint && npx tsc --noEmit`
+1. **Run validation**: `npm run lint; npx tsc --noEmit`
 2. **Fix all errors**: TypeScript and linting must pass
 3. **Verify functionality**: Test the change works
 4. **Report complete**: Only after quality checks pass
