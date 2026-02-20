@@ -202,11 +202,23 @@
 > - 41 new tests (287/287 total suite passing)
 > - Tier-1 retrospective audit — 3 gaps addressed (G1: columns, G2: guardrails, G3: label)
 
-### Sprint 12 — Transition Pathways (⏳)
+### Sprint 12 — Transition Pathways (✅ Complete)
 
-- [ ] Anonymized career movement patterns
-- [ ] Proven pivot paths
-- [ ] Success probability modeling
+- [x] Anonymized career movement patterns
+- [x] Proven pivot paths
+- [x] Success probability modeling
+
+> **Implementation detail:**
+>
+> - 5 SQLAlchemy models (`TransitionPath`, `SkillBridgeEntry`, `TransitionMilestone`, `TransitionComparison`, `TransitionPreference`) + 4 StrEnums
+> - 15 Pydantic request/response schemas with `data_source` + `disclaimer` transparency fields
+> - 4 versioned AI prompt templates (transition analysis, skill bridge, milestones, role comparison)
+> - TransitionPathwaysAnalyzer (4 LLM methods + 4 static helpers, `MAX_TRANSITION_CONFIDENCE` 0.85 cap)
+> - TransitionPathwaysService pipeline orchestration (~500 lines)
+> - 11 REST endpoints at `/api/v1/transition-pathways` (dashboard, explore, what-if, compare, milestones, preferences)
+> - Alembic migration `1a2b3c4d5e6f` — 5 tables with FK CASCADE + indexes
+> - 43 new tests (330/330 total suite passing)
+> - Tier-1 retrospective audit — 8 code quality fixes (ruff lint, MyPy types, model annotations)
 
 ---
 
@@ -264,3 +276,4 @@
 | 9      | 8             | 11        | 3            | 1        |
 | 10     | 4             | 10        | 1            | 2        |
 | 11     | 3             | 10        | 1            | 1        |
+| 12     | 3             | 11        | 0            | 1        |

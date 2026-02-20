@@ -5,6 +5,32 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [Sprint 12] — Transition Pathways — 2026-02-20
+
+### Added
+
+- **Transition Pathways** — full career transition intelligence system:
+  - 5 SQLAlchemy models (`TransitionPath`, `SkillBridgeEntry`, `TransitionMilestone`, `TransitionComparison`, `TransitionPreference`) + 4 StrEnums
+  - 15 Pydantic schemas with `data_source` + `disclaimer` transparency fields
+  - Alembic migration `1a2b3c4d5e6f` — 5 tables with FK CASCADE + indexes
+  - AI analyzer: 4 LLM methods + 4 static helpers, `MAX_TRANSITION_CONFIDENCE` (0.85) cap
+  - TransitionPathwaysService pipeline orchestration (~500 lines)
+  - 11 REST endpoints at `/api/v1/transition-pathways` (dashboard, explore, what-if, compare, milestones, preferences)
+  - 43 new tests (330/330 total passing)
+- **Career Velocity Corridor™** — 3-point timeline estimation (optimistic/realistic/conservative)
+- **Skill Bridge Matrix™** — per-skill gap analysis with acquisition methods + weekly estimates
+- **Transition Timeline Engine™** — 4-phase milestone planning (preparation → establishment)
+- Ethics safeguards: confidence cap (0.85), gender-neutral prompts, no demographic assumptions, conservative timeline bias
+
+### Fixed
+
+- Model type annotations: `preferred_industries`/`excluded_roles` corrected from `dict[str, Any]` to `list[str]`
+- Schema generic types: bare `dict` → `dict[str, Any]`
+- `what_if` endpoint rewritten to call service directly (MyPy `no-any-return` fix)
+- 5 ruff lint fixes: unused import, `.keys()` iteration, `__all__` sorting, import ordering
+
+---
+
 ## [Sprint 11] — Salary Intelligence Engine™ — 2026-02-20
 
 ### Added

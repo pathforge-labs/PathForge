@@ -2,18 +2,18 @@
   "schemaVersion": "2.1.0",
   "session": {
     "lastDate": "2026-02-20",
-    "lastTime": "04:24:00+01:00",
-    "focus": "Sprint 11 — Salary Intelligence Engine™",
+    "lastTime": "22:51:00+01:00",
+    "focus": "Sprint 12 — Transition Pathways",
     "status": "completed"
   },
   "repository": {
-    "lastCommit": "703ce4f",
+    "lastCommit": "231fb3e",
     "branch": "main",
-    "clean": false
+    "clean": true
   },
   "testSuite": {
-    "total": 287,
-    "passed": 287,
+    "total": 330,
+    "passed": 330,
     "failed": 0
   },
   "sprintTracking": "docs/ROADMAP.md"
