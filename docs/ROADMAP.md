@@ -165,29 +165,42 @@
 
 ### Sprint 10 — Skill Decay & Growth Tracker (✅ Complete)
 
-- [x] 5 SQLAlchemy models (SkillFreshness, MarketDemandSnapshot, SkillVelocityEntry, ReskillingPathway, SkillDecayPreference) + 4 StrEnums
-- [x] 11 Pydantic request/response schemas
-- [x] 4 versioned AI prompt templates (freshness, demand, velocity, reskilling)
-- [x] SkillDecayAnalyzer (4 LLM methods + 4 static math helpers)
-- [x] SkillDecayService pipeline orchestration (687 lines)
-- [x] 9 REST API endpoints at `/api/v1/skill-decay`
-- [x] Alembic migration `8g9h0i1j2k3l` — 5 tables with indexes
-- [x] 38 new tests (246/246 total suite passing)
-- [x] Tier-1 retrospective audit — 4 findings resolved, 3 MyPy errors fixed
-- [x] Shell conventions skill + 12 workflow `&&` fixes
+- [x] Skill freshness scoring
+- [x] Market demand curves
+- [x] Skill Velocity Map
+- [x] Personalized reskilling paths
+
+> **Implementation detail:**
+>
+> - 5 SQLAlchemy models (SkillFreshness, MarketDemandSnapshot, SkillVelocityEntry, ReskillingPathway, SkillDecayPreference) + 4 StrEnums
+> - 11 Pydantic request/response schemas
+> - 4 versioned AI prompt templates (freshness, demand, velocity, reskilling)
+> - SkillDecayAnalyzer (4 LLM methods + 4 static math helpers)
+> - SkillDecayService pipeline orchestration (687 lines)
+> - 9 REST API endpoints at `/api/v1/skill-decay`
+> - Alembic migration `8g9h0i1j2k3l` — 5 tables with indexes
+> - 38 new tests (246/246 total suite passing)
+> - Tier-1 retrospective audit — 4 findings resolved, 3 MyPy errors fixed
+> - Shell conventions skill + 12 workflow `&&` fixes
 
 ### Sprint 11 — Salary Intelligence Engine™ (✅ Complete)
 
-- [x] 5 SQLAlchemy models (`SalaryEstimate`, `SkillSalaryImpact`, `SalaryHistoryEntry`, `SalaryScenario`, `SalaryPreference`) + 3 StrEnums
-- [x] 13 Pydantic schemas with `data_source` + `disclaimer` transparency fields
-- [x] 4 versioned AI prompt templates (salary range, skill impacts, trajectory, scenario)
-- [x] SalaryIntelligenceAnalyzer (4 LLM methods + 4 static helpers, centralized `MAX_LLM_CONFIDENCE`)
-- [x] SalaryIntelligenceService pipeline orchestration (~540 lines)
-- [x] 10 REST endpoints at `/api/v1/salary-intelligence` with auth + rate limiting
-- [x] Alembic migrations `9j0k1l2m3n4o` (5 salary tables) + `0a1b2c3d4e5f` (4 CareerDNA profile columns)
-- [x] CareerDNA enhanced: `primary_industry`, `primary_role`, `location`, `seniority_level` columns
-- [x] 41 new tests (287/287 total suite passing)
-- [x] Tier-1 retrospective audit — 3 gaps addressed (G1: columns, G2: guardrails, G3: label)
+- [x] Personalized salary calculation
+- [x] Skill→salary impact modeling
+- [x] Historical trajectory tracking
+
+> **Implementation detail:**
+>
+> - 5 SQLAlchemy models (`SalaryEstimate`, `SkillSalaryImpact`, `SalaryHistoryEntry`, `SalaryScenario`, `SalaryPreference`) + 3 StrEnums
+> - 13 Pydantic schemas with `data_source` + `disclaimer` transparency fields
+> - 4 versioned AI prompt templates (salary range, skill impacts, trajectory, scenario)
+> - SalaryIntelligenceAnalyzer (4 LLM methods + 4 static helpers, centralized `MAX_LLM_CONFIDENCE`)
+> - SalaryIntelligenceService pipeline orchestration (~540 lines)
+> - 10 REST endpoints at `/api/v1/salary-intelligence` with auth + rate limiting
+> - Alembic migrations `9j0k1l2m3n4o` (5 salary tables) + `0a1b2c3d4e5f` (4 CareerDNA profile columns)
+> - CareerDNA enhanced: `primary_industry`, `primary_role`, `location`, `seniority_level` columns
+> - 41 new tests (287/287 total suite passing)
+> - Tier-1 retrospective audit — 3 gaps addressed (G1: columns, G2: guardrails, G3: label)
 
 ### Sprint 12 — Transition Pathways (⏳)
 
