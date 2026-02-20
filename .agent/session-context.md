@@ -1,22 +1,22 @@
 # Session Context — PathForge
 
 > **Framework**: Antigravity AI Kit v2.0.0
-> **Last Updated**: 2026-02-19T17:24:00+01:00
+> **Last Updated**: 2026-02-20T03:23:00+01:00
 
 ---
 
 ## 📋 Last Session Summary
 
-**Date**: 2026-02-19
-**Focus**: Turnstile CSP Fix, UI/UX Polish, Waitlist Duplicate Handling
+**Date**: 2026-02-20
+**Focus**: Sprint 10 — Skill Decay & Growth Tracker
 
-- Turnstile CSP fix: switched to `execution: 'execute'` mode (challenge on submit only)
-- Added Promise-based `execute()` API to `useTurnstile` hook
-- Turnstile script deferred to `lazyOnload` strategy
-- Tier-1 retrospective audit: all 4 gates passed (lint, types, security, build)
-- UI/UX polish: 6 issues + drag/swipe enhancement
-- Waitlist duplicate handling: detection, diff emails, rate limiting, Turnstile CAPTCHA
-- Committed `bc6e71e`, merged main → production, pushed both
+- Implemented full Skill Decay & Growth Tracker: 5 models, 11 schemas, 4 AI prompts, analyzer, service, 9 routes
+- Alembic migration `8g9h0i1j2k3l` — 5 new tables with indexes and CASCADE FKs
+- 38 new tests (246/246 total passing)
+- Tier-1 retrospective audit: all 5 /review gates passed (lint, types, tests, security, build)
+- Fixed 4 migration-model alignment issues + 3 MyPy type errors
+- Created shell conventions skill, fixed 12 `&&` usages across 6 files
+- Commits `b884e80` (Sprint 10 feat) + `6bf733a` (MyPy fix), pushed to main
 
 ---
 
@@ -36,12 +36,10 @@
 - Phase A (MVP) COMPLETE — all 7 sprints shipped
 - Sprint 8 (Career DNA™) COMPLETE — 9 tasks, 168 tests
 - Sprint 9 (Career Threat Radar™) COMPLETE — 11 tasks, 202 tests
+- Sprint 10 (Skill Decay & Growth Tracker) COMPLETE — 10 tasks, 246 tests
 - **Railway API LIVE** at `api.pathforge.eu` (security hardening active)
 - **pathforge.eu LIVE** — landing page serving from Vercel
-- UI/UX polish deployed: testimonials drag/swipe, footer, navbar, scroll-to-top
-- Turnstile CAPTCHA: execute-on-demand mode, zero console warnings
-- Waitlist duplicate handling with differentiated emails
-- Next: Sprint 10 (Skill Decay & Growth Tracker)
+- Next: Sprint 11 (Salary Intelligence Engine™)
 
 ---
 

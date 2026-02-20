@@ -1,19 +1,19 @@
 {
   "schemaVersion": "2.1.0",
   "session": {
-    "lastDate": "2026-02-19",
-    "lastTime": "17:24:00+01:00",
-    "focus": "Turnstile CSP Fix, UI/UX Polish, Waitlist Duplicate Handling",
+    "lastDate": "2026-02-20",
+    "lastTime": "03:23:00+01:00",
+    "focus": "Sprint 10 — Skill Decay & Growth Tracker",
     "status": "completed"
   },
   "repository": {
-    "lastCommit": "bc6e71e",
+    "lastCommit": "6bf733a",
     "branch": "main",
     "clean": true
   },
   "testSuite": {
-    "total": 208,
-    "passed": 208,
+    "total": 246,
+    "passed": 246,
     "failed": 0
   },
   "sprintTracking": "docs/ROADMAP.md"

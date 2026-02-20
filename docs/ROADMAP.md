@@ -1,7 +1,7 @@
 # PathForge — Live Sprint Board
 
 > **Single Source of Truth** for all sprint tracking and task management.
-> **Last Updated**: 2026-02-19 | **Current Phase**: B (Career Intelligence)
+> **Last Updated**: 2026-02-20 | **Current Phase**: B (Career Intelligence)
 
 ---
 
@@ -163,12 +163,18 @@
 - [x] 25 new tests (202/202 total passing)
 - [x] Tier-1 retrospective audit — 2 lint fixes applied
 
-### Sprint 10 — Skill Decay & Growth Tracker (⏳)
+### Sprint 10 — Skill Decay & Growth Tracker (✅ Complete)
 
-- [ ] Skill freshness scoring
-- [ ] Market demand curves
-- [ ] Skill Velocity Map
-- [ ] Personalized reskilling paths
+- [x] 5 SQLAlchemy models (SkillFreshness, MarketDemandSnapshot, SkillVelocityEntry, ReskillingPathway, SkillDecayPreference) + 4 StrEnums
+- [x] 11 Pydantic request/response schemas
+- [x] 4 versioned AI prompt templates (freshness, demand, velocity, reskilling)
+- [x] SkillDecayAnalyzer (4 LLM methods + 4 static math helpers)
+- [x] SkillDecayService pipeline orchestration (687 lines)
+- [x] 9 REST API endpoints at `/api/v1/skill-decay`
+- [x] Alembic migration `8g9h0i1j2k3l` — 5 tables with indexes
+- [x] 38 new tests (246/246 total suite passing)
+- [x] Tier-1 retrospective audit — 4 findings resolved, 3 MyPy errors fixed
+- [x] Shell conventions skill + 12 workflow `&&` fixes
 
 ### Sprint 11 — Salary Intelligence Engine™ (⏳)
 
@@ -218,6 +224,7 @@
 | 2026-02-19 | Waitlist duplicate handling           | Post-9        | ✅ Done | Duplicate detection, diff emails, rate limit |
 | 2026-02-19 | UI/UX polish session                  | Post-9        | ✅ Done | 6 issues + drag/swipe, deployed to prod      |
 | 2026-02-19 | Turnstile CSP fix (execute-on-demand) | Post-9        | ✅ Done | execution: execute mode, Tier-1 audit ✅     |
+| 2026-02-20 | PowerShell shell conventions          | 10            | ✅ Done | Skill created, 12 `&&` fixes across 6 files  |
 
 ---
 
@@ -235,3 +242,4 @@
 | 7      | 6             | 7         | 1            | 1        |
 | 8      | 3             | 9         | 1            | 2        |
 | 9      | 8             | 11        | 3            | 1        |
+| 10     | 4             | 10        | 1            | 2        |

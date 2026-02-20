@@ -5,6 +5,28 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [Sprint 10] — Skill Decay & Growth Tracker — 2026-02-20
+
+### Added
+
+- **Skill Decay & Growth Tracker** — full decay intelligence system:
+  - 5 SQLAlchemy models (`SkillFreshness`, `MarketDemandSnapshot`, `SkillVelocityEntry`, `ReskillingPathway`, `SkillDecayPreference`) + 4 StrEnums
+  - 11 Pydantic schemas for request/response validation
+  - Alembic migration `8g9h0i1j2k3l` — 5 tables with FK CASCADE + indexes
+  - AI analyzer: 4 LLM methods + 4 static math helpers (exponential decay, half-life, urgency)
+  - SkillDecayService pipeline orchestration (687 lines)
+  - 9 REST endpoints at `/api/v1/skill-decay` (dashboard, scan, freshness, demand, velocity, reskilling, refresh, preferences)
+  - 38 new tests (246/246 total passing)
+- **Shell conventions skill** — `.agent/skills/shell-conventions/SKILL.md` for PowerShell 5.x compatibility
+- 12 workflow/agent `&&` fixes across 6 files
+
+### Fixed
+
+- 4 migration-model alignment issues (column widths, nullability)
+- 3 MyPy type errors in `_get_all` generic helper
+
+---
+
 ## [Ad-Hoc] — Turnstile CSP Console Fix — 2026-02-19
 
 ### Changed
