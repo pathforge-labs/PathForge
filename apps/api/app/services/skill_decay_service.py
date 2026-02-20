@@ -634,10 +634,10 @@ async def _get_all(
     career_dna_id: uuid.UUID,
 ) -> list[Any]:
     """Get all records of a model type for a career DNA."""
-    result = await db.execute(
+    result: Any = await db.execute(
         select(model_class)
-        .where(model_class.career_dna_id == career_dna_id)
-        .order_by(model_class.created_at.desc())
+        .where(model_class.career_dna_id == career_dna_id)  # type: ignore[attr-defined]
+        .order_by(model_class.created_at.desc())  # type: ignore[attr-defined]
     )
     return list(result.scalars().all())
 
