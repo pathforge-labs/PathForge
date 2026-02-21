@@ -287,6 +287,28 @@
 > - 56 new tests (494/494 total suite passing)
 > - Tier-1 retrospective audit — 3 findings resolved (R1: import path, R2: input sanitization, R3: error handling)
 
+### Sprint 16 — Cross-Border Career Passport™ (📋 Current)
+
+- [x] EQF credential mapping
+- [x] Country comparison (CoL, salary, tax, demand)
+- [x] Visa feasibility prediction
+
+> **Implementation detail:**
+>
+> - 5 SQLAlchemy models (`CredentialMapping`, `CountryComparison`, `VisaAssessment`, `PassportScore`, `CareerPassportPreference`) + 4 StrEnums
+> - 15 Pydantic schemas with `data_source` + `disclaimer` transparency fields
+> - 4 versioned AI prompt templates (credential mapping, country comparison, visa assessment, market demand)
+> - CareerPassportAnalyzer (4 LLM methods + 4 static helpers + 4 clamping validators, `MAX_PASSPORT_CONFIDENCE` 0.85 cap)
+> - CareerPassportService pipeline orchestration (~610 lines)
+> - 11 REST endpoints at `/api/v1/career-passport` (dashboard, scan, credentials, comparison, visa, demand, score, preferences)
+> - Alembic migration `5e6f7g8h9i0j` — 5 tables with FK CASCADE + indexes + CheckConstraint (confidence ≤ 0.85)
+> - Input sanitization via `sanitize_user_text` on all LLM inputs
+> - `LLMError` try/except with safe fallbacks on all 4 LLM methods
+> - Architecture reference archived to `docs/architecture/sprint-16-career-passport.md`
+> - 54 new tests (548/548 total suite passing)
+> - Tier-1 retrospective audit — 2 optional findings (R1: getattr workaround, R2: return type widening)
+> - 3 proprietary innovations: EQF Intelligence Engine™, Purchasing Power Calculator™, Visa Eligibility Predictor™
+
 ---
 
 ## Ad-Hoc Work Log
@@ -348,3 +370,4 @@
 | 13     | 3             | 13        | 0            | 1        |
 | 14     | 3             | 12        | 1            | 1        |
 | 15     | 3             | 12        | 0            | 1        |
+| 16     | 3             | 11        | 0            | 1        |

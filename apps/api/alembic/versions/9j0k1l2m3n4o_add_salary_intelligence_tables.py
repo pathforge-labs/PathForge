@@ -6,8 +6,9 @@ Create Date: 2026-02-20 03:35:00.000000+01:00
 """
 
 import sqlalchemy as sa
-from alembic import op
 from sqlalchemy.dialects.postgresql import JSON, UUID
+
+from alembic import op
 
 # revision identifiers
 revision = "9j0k1l2m3n4o"

@@ -1,31 +1,31 @@
 {
   "version": "1.1.0",
-  "last_updated": "2026-02-21T20:32:00+01:00",
+  "last_updated": "2026-02-21T22:30:00+01:00",
   "session": {
-    "focus": "Sprint 15 — Hidden Job Market Detector™",
-    "sprint": 15,
+    "focus": "Sprint 16 — Cross-Border Career Passport™",
+    "sprint": 16,
     "sprint_status": "complete",
-    "last_commit": "pending",
+    "last_commit": "825d767",
     "branch": "main"
   },
   "quality": {
     "ruff_errors": 0,
     "mypy_errors": 0,
-    "test_total": 494,
-    "test_passed": 494,
+    "test_total": 548,
+    "test_passed": 548,
     "test_failed": 0,
     "npm_vulnerabilities": 0
   },
   "codebase": {
-    "api_endpoints": 73,
-    "models": 30,
-    "migrations": 15,
-    "total_tests": 494
+    "api_endpoints": 84,
+    "models": 35,
+    "migrations": 16,
+    "total_tests": 548
   },
   "recent_work": [
-    "Sprint 15: Hidden Job Market Detector™ — 12 files, 56 tests",
-    "Tier-1 retrospective audit — 3 findings resolved",
-    "MyPy type overhaul — 15→0 errors across 6 files",
-    "Sprint 14: Interview Intelligence™ — 12 files, 56 tests"
+    "Sprint 16: Cross-Border Career Passport™ — 9 files, 54 tests",
+    "Tier-1 retrospective audit — 2 optional findings",
+    "MyPy 4→0 type errors in career_passport files",
+    "Sprint 15: Hidden Job Market Detector™ — 12 files, 56 tests"
   ]
 }

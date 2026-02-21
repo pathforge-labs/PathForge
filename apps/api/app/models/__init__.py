@@ -17,6 +17,13 @@ from app.models.career_dna import (
     SkillGenomeEntry,
     ValuesProfile,
 )
+from app.models.career_passport import (
+    CareerPassportPreference,
+    CountryComparison,
+    CredentialMapping,
+    MarketDemandEntry,
+    VisaAssessment,
+)
 from app.models.career_simulation import (
     CareerSimulation,
     SimulationInput,
@@ -81,10 +88,13 @@ __all__ = [
     "CVExperiment",
     "CVVersion",
     "CareerDNA",
+    "CareerPassportPreference",
     "CareerResilienceSnapshot",
     "CareerSimulation",
     "CompanyInsight",
     "CompanySignal",
+    "CountryComparison",
+    "CredentialMapping",
     "ExperienceBlueprint",
     "FunnelEvent",
     "GrowthVector",
@@ -96,6 +106,7 @@ __all__ = [
     "InterviewPrep",
     "InterviewQuestion",
     "JobListing",
+    "MarketDemandEntry",
     "MarketDemandSnapshot",
     "MarketInsight",
     "MarketPosition",
@@ -129,4 +140,5 @@ __all__ = [
     "TransitionPreference",
     "User",
     "ValuesProfile",
+    "VisaAssessment",
 ]

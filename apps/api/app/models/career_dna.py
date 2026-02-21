@@ -36,6 +36,13 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.models.base import Base, TimestampMixin, UUIDMixin
 
 if TYPE_CHECKING:
+    from app.models.career_passport import (
+        CareerPassportPreference,
+        CountryComparison,
+        CredentialMapping,
+        MarketDemandEntry,
+        VisaAssessment,
+    )
     from app.models.career_simulation import (
         CareerSimulation,
         SimulationPreference,
@@ -372,6 +379,34 @@ class CareerDNA(UUIDMixin, TimestampMixin, Base):
     )
     hidden_job_market_preference: Mapped[HiddenJobMarketPreference | None] = relationship(
         "HiddenJobMarketPreference",
+        back_populates="career_dna",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
+
+    # Cross-Border Career Passport™ relationships
+    credential_mappings: Mapped[list[CredentialMapping]] = relationship(
+        "CredentialMapping",
+        back_populates="career_dna",
+        cascade="all, delete-orphan",
+    )
+    country_comparisons: Mapped[list[CountryComparison]] = relationship(
+        "CountryComparison",
+        back_populates="career_dna",
+        cascade="all, delete-orphan",
+    )
+    visa_assessments: Mapped[list[VisaAssessment]] = relationship(
+        "VisaAssessment",
+        back_populates="career_dna",
+        cascade="all, delete-orphan",
+    )
+    passport_market_demand: Mapped[list[MarketDemandEntry]] = relationship(
+        "MarketDemandEntry",
+        back_populates="career_dna",
+        cascade="all, delete-orphan",
+    )
+    career_passport_preference: Mapped[CareerPassportPreference | None] = relationship(
+        "CareerPassportPreference",
         back_populates="career_dna",
         uselist=False,
         cascade="all, delete-orphan",
