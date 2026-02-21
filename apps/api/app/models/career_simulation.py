@@ -27,7 +27,7 @@ from __future__ import annotations
 
 import enum
 from datetime import datetime
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from sqlalchemy import (
     Boolean,
@@ -140,7 +140,7 @@ class CareerSimulation(Base, UUIDMixin, TimestampMixin):
 
     # ── Context ──
     reasoning: Mapped[str | None] = mapped_column(Text, nullable=True)
-    factors: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    factors: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
 
     # ── Transparency (PathForge Manifesto) ──
     data_source: Mapped[str] = mapped_column(

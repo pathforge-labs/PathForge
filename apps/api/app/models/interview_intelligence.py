@@ -28,7 +28,7 @@ from __future__ import annotations
 
 import enum
 from datetime import datetime
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from sqlalchemy import (
     Boolean,
@@ -244,7 +244,7 @@ class CompanyInsight(Base, UUIDMixin, TimestampMixin):
     title: Mapped[str] = mapped_column(
         String(255), nullable=False,
     )
-    content: Mapped[dict | None] = mapped_column(
+    content: Mapped[dict[str, Any] | None] = mapped_column(
         JSON, nullable=True,
     )
     summary: Mapped[str | None] = mapped_column(

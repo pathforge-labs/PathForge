@@ -20,6 +20,7 @@ REST endpoints for the Transition Pathways module.
 from __future__ import annotations
 
 import uuid
+from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -60,7 +61,7 @@ router = APIRouter(
 
 
 def _build_scan_response(
-    result: dict[str, object],
+    result: dict[str, Any],
 ) -> TransitionScanResponse:
     """Build a TransitionScanResponse from service pipeline result."""
     return TransitionScanResponse(

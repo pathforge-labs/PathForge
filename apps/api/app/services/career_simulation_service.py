@@ -255,13 +255,13 @@ async def _run_simulation_pipeline(
 
     # Store outcomes
     outcome_records = _store_outcomes(simulation, outcomes_data)
-    for record in outcome_records:
-        database.add(record)
+    for outcome_record in outcome_records:
+        database.add(outcome_record)
 
     # Store recommendations
     rec_records = _store_recommendations(simulation, rec_data)
-    for record in rec_records:
-        database.add(record)
+    for rec_record in rec_records:
+        database.add(rec_record)
 
     await database.commit()
 

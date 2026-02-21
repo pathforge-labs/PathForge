@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import logging
 import uuid
+from typing import TYPE_CHECKING
 
 from fastapi import APIRouter, Depends, Query, Request
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -50,6 +51,9 @@ from app.schemas.career_simulation import (
     SkillInvestmentSimRequest,
 )
 from app.services import career_simulation_service
+
+if TYPE_CHECKING:
+    from app.models.career_simulation import CareerSimulation
 
 logger = logging.getLogger(__name__)
 
@@ -303,13 +307,7 @@ async def get_preferences(
     if not preference:
         return None
 
-    return SimulationPreferenceResponse(
-        id=preference.id,
-        career_dna_id=preference.career_dna_id,
-        default_scenario_type=preference.default_scenario_type,
-        max_scenarios=preference.max_scenarios,
-        notification_enabled=preference.notification_enabled,
-    )
+    return SimulationPreferenceResponse.model_validate(preference)
 
 
 @router.put(
@@ -331,13 +329,7 @@ async def update_preferences(
         update_data=body,
     )
 
-    return SimulationPreferenceResponse(
-        id=preference.id,
-        career_dna_id=preference.career_dna_id,
-        default_scenario_type=preference.default_scenario_type,
-        max_scenarios=preference.max_scenarios,
-        notification_enabled=preference.notification_enabled,
-    )
+    return SimulationPreferenceResponse.model_validate(preference)
 
 
 # ── Get / Delete Simulation ───────────────────────────────────
@@ -403,57 +395,5 @@ async def delete_simulation(
 
 def _build_full_response(simulation: CareerSimulation) -> CareerSimulationResponse:
     """Build a full CareerSimulationResponse from a model instance."""
-    from app.schemas.career_simulation import (
-        SimulationInputResponse,
-        SimulationOutcomeResponse,
-        SimulationRecommendationResponse,
-    )
+    return CareerSimulationResponse.model_validate(simulation)
 
-    return CareerSimulationResponse(
-        id=simulation.id,
-        career_dna_id=simulation.career_dna_id,
-        scenario_type=simulation.scenario_type,
-        status=simulation.status,
-        confidence_score=simulation.confidence_score,
-        feasibility_rating=simulation.feasibility_rating,
-        roi_score=simulation.roi_score,
-        salary_impact_percent=simulation.salary_impact_percent,
-        estimated_months=simulation.estimated_months,
-        reasoning=simulation.reasoning,
-        factors=simulation.factors,
-        data_source=simulation.data_source,
-        disclaimer=simulation.disclaimer,
-        computed_at=simulation.computed_at,
-        inputs=[
-            SimulationInputResponse(
-                id=inp.id,
-                parameter_name=inp.parameter_name,
-                parameter_value=inp.parameter_value,
-                parameter_type=inp.parameter_type,
-            )
-            for inp in (simulation.inputs or [])
-        ],
-        outcomes=[
-            SimulationOutcomeResponse(
-                id=out.id,
-                dimension=out.dimension,
-                current_value=out.current_value,
-                projected_value=out.projected_value,
-                delta=out.delta,
-                unit=out.unit,
-                reasoning=out.reasoning,
-            )
-            for out in (simulation.outcomes or [])
-        ],
-        recommendations=[
-            SimulationRecommendationResponse(
-                id=rec.id,
-                priority=rec.priority,
-                title=rec.title,
-                description=rec.description,
-                estimated_weeks=rec.estimated_weeks,
-                order_index=rec.order_index,
-            )
-            for rec in (simulation.recommendations or [])
-        ],
-    )

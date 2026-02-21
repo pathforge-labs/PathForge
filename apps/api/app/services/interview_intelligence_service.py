@@ -313,13 +313,13 @@ async def create_interview_prep(
 
     # Store questions
     question_records = _store_questions(prep, questions_data)
-    for record in question_records:
-        database.add(record)
+    for question_record in question_records:
+        database.add(question_record)
 
     # Store STAR examples
     star_records = _store_star_examples(prep, star_data)
-    for record in star_records:
-        database.add(record)
+    for star_record in star_records:
+        database.add(star_record)
 
     await database.commit()
 
@@ -663,7 +663,7 @@ async def update_preferences(
 
 async def _load_prep_with_relations(
     database: AsyncSession,
-    prep_id: str,
+    prep_id: uuid.UUID,
 ) -> InterviewPrep:
     """Reload an InterviewPrep with all eager-loaded relationships."""
     result = await database.execute(
