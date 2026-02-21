@@ -24,6 +24,13 @@ from app.models.career_simulation import (
     SimulationPreference,
     SimulationRecommendation,
 )
+from app.models.interview_intelligence import (
+    CompanyInsight,
+    InterviewPreference,
+    InterviewPrep,
+    InterviewQuestion,
+    STARExample,
+)
 from app.models.matching import JobListing, MatchResult
 from app.models.preference import BlacklistEntry, Preference
 from app.models.resume import Resume, Skill
@@ -69,11 +76,15 @@ __all__ = [
     "CareerDNA",
     "CareerResilienceSnapshot",
     "CareerSimulation",
+    "CompanyInsight",
     "ExperienceBlueprint",
     "FunnelEvent",
     "GrowthVector",
     "HiddenSkill",
     "IndustryTrend",
+    "InterviewPreference",
+    "InterviewPrep",
+    "InterviewQuestion",
     "JobListing",
     "MarketDemandSnapshot",
     "MarketInsight",
@@ -82,6 +93,7 @@ __all__ = [
     "Preference",
     "ReskillingPathway",
     "Resume",
+    "STARExample",
     "SalaryEstimate",
     "SalaryHistoryEntry",
     "SalaryPreference",

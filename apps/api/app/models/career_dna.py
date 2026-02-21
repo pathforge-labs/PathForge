@@ -40,6 +40,10 @@ if TYPE_CHECKING:
         CareerSimulation,
         SimulationPreference,
     )
+    from app.models.interview_intelligence import (
+        InterviewPreference,
+        InterviewPrep,
+    )
     from app.models.salary_intelligence import (
         SalaryEstimate,
         SalaryHistoryEntry,
@@ -338,6 +342,19 @@ class CareerDNA(UUIDMixin, TimestampMixin, Base):
     )
     simulation_preference: Mapped[SimulationPreference | None] = relationship(
         "SimulationPreference",
+        back_populates="career_dna",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
+
+    # Interview Intelligence™ relationships
+    interview_preps: Mapped[list[InterviewPrep]] = relationship(
+        "InterviewPrep",
+        back_populates="career_dna",
+        cascade="all, delete-orphan",
+    )
+    interview_preference: Mapped[InterviewPreference | None] = relationship(
+        "InterviewPreference",
         back_populates="career_dna",
         uselist=False,
         cascade="all, delete-orphan",

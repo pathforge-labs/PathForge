@@ -56,6 +56,32 @@ router = APIRouter(
 )
 
 
+# ── Private Helpers ────────────────────────────────────────────
+
+
+def _build_scan_response(
+    result: dict[str, object],
+) -> TransitionScanResponse:
+    """Build a TransitionScanResponse from service pipeline result."""
+    return TransitionScanResponse(
+        transition_path=TransitionPathResponse.model_validate(
+            result["transition_path"],
+        ),
+        skill_bridge=[
+            SkillBridgeEntryResponse.model_validate(entry)
+            for entry in result["skill_bridge"]
+        ],
+        milestones=[
+            TransitionMilestoneResponse.model_validate(milestone)
+            for milestone in result["milestones"]
+        ],
+        comparisons=[
+            TransitionComparisonResponse.model_validate(comp)
+            for comp in result["comparisons"]
+        ],
+    )
+
+
 # ── Dashboard ──────────────────────────────────────────────────
 
 
@@ -75,28 +101,11 @@ async def get_dashboard(
     )
     return TransitionDashboardResponse(
         transitions=[
-            TransitionSummaryResponse(
-                id=transition.id,
-                from_role=transition.from_role,
-                to_role=transition.to_role,
-                confidence_score=transition.confidence_score,
-                difficulty=transition.difficulty,
-                status=transition.status,
-                skill_overlap_percent=transition.skill_overlap_percent,
-                estimated_duration_months=transition.estimated_duration_months,
-                computed_at=transition.computed_at,
-            )
-            for transition in result["transitions"]
+            TransitionSummaryResponse.model_validate(t)
+            for t in result["transitions"]
         ],
         preferences=(
-            TransitionPreferenceResponse(
-                id=result["preferences"].id,
-                preferred_industries=result["preferences"].preferred_industries,
-                excluded_roles=result["preferences"].excluded_roles,
-                min_confidence=result["preferences"].min_confidence,
-                max_timeline_months=result["preferences"].max_timeline_months,
-                notification_enabled=result["preferences"].notification_enabled,
-            )
+            TransitionPreferenceResponse.model_validate(result["preferences"])
             if result["preferences"]
             else None
         ),
@@ -134,72 +143,7 @@ async def explore_transition(
             status_code=HTTP_404_NOT_FOUND, detail=str(exc),
         ) from exc
 
-    path = result["transition_path"]
-    return TransitionScanResponse(
-        transition_path=TransitionPathResponse(
-            id=path.id,
-            career_dna_id=path.career_dna_id,
-            from_role=path.from_role,
-            to_role=path.to_role,
-            confidence_score=path.confidence_score,
-            difficulty=path.difficulty,
-            status=path.status,
-            skill_overlap_percent=path.skill_overlap_percent,
-            skills_to_acquire_count=path.skills_to_acquire_count,
-            estimated_duration_months=path.estimated_duration_months,
-            optimistic_months=path.optimistic_months,
-            realistic_months=path.realistic_months,
-            conservative_months=path.conservative_months,
-            salary_impact_percent=path.salary_impact_percent,
-            success_probability=path.success_probability,
-            reasoning=path.reasoning,
-            factors=path.factors,
-            data_source=path.data_source,
-            disclaimer=path.disclaimer,
-            computed_at=path.computed_at,
-        ),
-        skill_bridge=[
-            SkillBridgeEntryResponse(
-                id=entry.id,
-                skill_name=entry.skill_name,
-                category=entry.category,
-                is_already_held=entry.is_already_held,
-                current_level=entry.current_level,
-                required_level=entry.required_level,
-                acquisition_method=entry.acquisition_method,
-                estimated_weeks=entry.estimated_weeks,
-                recommended_resources=entry.recommended_resources,
-                priority=entry.priority,
-                impact_on_confidence=entry.impact_on_confidence,
-            )
-            for entry in result["skill_bridge"]
-        ],
-        milestones=[
-            TransitionMilestoneResponse(
-                id=milestone.id,
-                phase=milestone.phase,
-                title=milestone.title,
-                description=milestone.description,
-                target_week=milestone.target_week,
-                order_index=milestone.order_index,
-                is_completed=milestone.is_completed,
-                completed_at=milestone.completed_at,
-            )
-            for milestone in result["milestones"]
-        ],
-        comparisons=[
-            TransitionComparisonResponse(
-                id=comp.id,
-                dimension=comp.dimension,
-                source_value=comp.source_value,
-                target_value=comp.target_value,
-                delta=comp.delta,
-                unit=comp.unit,
-                reasoning=comp.reasoning,
-            )
-            for comp in result["comparisons"]
-        ],
-    )
+    return _build_scan_response(result)
 
 
 # ── What-If ────────────────────────────────────────────────────
@@ -230,72 +174,7 @@ async def what_if(
             status_code=HTTP_404_NOT_FOUND, detail=str(exc),
         ) from exc
 
-    path = result["transition_path"]
-    return TransitionScanResponse(
-        transition_path=TransitionPathResponse(
-            id=path.id,
-            career_dna_id=path.career_dna_id,
-            from_role=path.from_role,
-            to_role=path.to_role,
-            confidence_score=path.confidence_score,
-            difficulty=path.difficulty,
-            status=path.status,
-            skill_overlap_percent=path.skill_overlap_percent,
-            skills_to_acquire_count=path.skills_to_acquire_count,
-            estimated_duration_months=path.estimated_duration_months,
-            optimistic_months=path.optimistic_months,
-            realistic_months=path.realistic_months,
-            conservative_months=path.conservative_months,
-            salary_impact_percent=path.salary_impact_percent,
-            success_probability=path.success_probability,
-            reasoning=path.reasoning,
-            factors=path.factors,
-            data_source=path.data_source,
-            disclaimer=path.disclaimer,
-            computed_at=path.computed_at,
-        ),
-        skill_bridge=[
-            SkillBridgeEntryResponse(
-                id=entry.id,
-                skill_name=entry.skill_name,
-                category=entry.category,
-                is_already_held=entry.is_already_held,
-                current_level=entry.current_level,
-                required_level=entry.required_level,
-                acquisition_method=entry.acquisition_method,
-                estimated_weeks=entry.estimated_weeks,
-                recommended_resources=entry.recommended_resources,
-                priority=entry.priority,
-                impact_on_confidence=entry.impact_on_confidence,
-            )
-            for entry in result["skill_bridge"]
-        ],
-        milestones=[
-            TransitionMilestoneResponse(
-                id=milestone.id,
-                phase=milestone.phase,
-                title=milestone.title,
-                description=milestone.description,
-                target_week=milestone.target_week,
-                order_index=milestone.order_index,
-                is_completed=milestone.is_completed,
-                completed_at=milestone.completed_at,
-            )
-            for milestone in result["milestones"]
-        ],
-        comparisons=[
-            TransitionComparisonResponse(
-                id=comp.id,
-                dimension=comp.dimension,
-                source_value=comp.source_value,
-                target_value=comp.target_value,
-                delta=comp.delta,
-                unit=comp.unit,
-                reasoning=comp.reasoning,
-            )
-            for comp in result["comparisons"]
-        ],
-    )
+    return _build_scan_response(result)
 
 
 # ── Preferences ────────────────────────────────────────────────
@@ -318,14 +197,7 @@ async def get_preferences(
     )
     if not pref:
         return None
-    return TransitionPreferenceResponse(
-        id=pref.id,
-        preferred_industries=pref.preferred_industries,
-        excluded_roles=pref.excluded_roles,
-        min_confidence=pref.min_confidence,
-        max_timeline_months=pref.max_timeline_months,
-        notification_enabled=pref.notification_enabled,
-    )
+    return TransitionPreferenceResponse.model_validate(pref)
 
 
 @router.put(
@@ -349,14 +221,7 @@ async def update_preferences(
             status_code=HTTP_404_NOT_FOUND, detail=str(exc),
         ) from exc
 
-    return TransitionPreferenceResponse(
-        id=pref.id,
-        preferred_industries=pref.preferred_industries,
-        excluded_roles=pref.excluded_roles,
-        min_confidence=pref.min_confidence,
-        max_timeline_months=pref.max_timeline_months,
-        notification_enabled=pref.notification_enabled,
-    )
+    return TransitionPreferenceResponse.model_validate(pref)
 
 
 # ── List Transitions ──────────────────────────────────────────
@@ -377,18 +242,8 @@ async def list_transitions(
         database, user_id=current_user.id,
     )
     return [
-        TransitionSummaryResponse(
-            id=transition.id,
-            from_role=transition.from_role,
-            to_role=transition.to_role,
-            confidence_score=transition.confidence_score,
-            difficulty=transition.difficulty,
-            status=transition.status,
-            skill_overlap_percent=transition.skill_overlap_percent,
-            estimated_duration_months=transition.estimated_duration_months,
-            computed_at=transition.computed_at,
-        )
-        for transition in transitions
+        TransitionSummaryResponse.model_validate(t)
+        for t in transitions
     ]
 
 
@@ -415,28 +270,7 @@ async def get_transition(
             status_code=HTTP_404_NOT_FOUND,
             detail="Transition path not found",
         )
-    return TransitionPathResponse(
-        id=transition.id,
-        career_dna_id=transition.career_dna_id,
-        from_role=transition.from_role,
-        to_role=transition.to_role,
-        confidence_score=transition.confidence_score,
-        difficulty=transition.difficulty,
-        status=transition.status,
-        skill_overlap_percent=transition.skill_overlap_percent,
-        skills_to_acquire_count=transition.skills_to_acquire_count,
-        estimated_duration_months=transition.estimated_duration_months,
-        optimistic_months=transition.optimistic_months,
-        realistic_months=transition.realistic_months,
-        conservative_months=transition.conservative_months,
-        salary_impact_percent=transition.salary_impact_percent,
-        success_probability=transition.success_probability,
-        reasoning=transition.reasoning,
-        factors=transition.factors,
-        data_source=transition.data_source,
-        disclaimer=transition.disclaimer,
-        computed_at=transition.computed_at,
-    )
+    return TransitionPathResponse.model_validate(transition)
 
 
 # ── Delete Transition ──────────────────────────────────────────
@@ -492,19 +326,7 @@ async def get_skill_bridge(
         database, transition_id=transition_id,
     )
     return [
-        SkillBridgeEntryResponse(
-            id=entry.id,
-            skill_name=entry.skill_name,
-            category=entry.category,
-            is_already_held=entry.is_already_held,
-            current_level=entry.current_level,
-            required_level=entry.required_level,
-            acquisition_method=entry.acquisition_method,
-            estimated_weeks=entry.estimated_weeks,
-            recommended_resources=entry.recommended_resources,
-            priority=entry.priority,
-            impact_on_confidence=entry.impact_on_confidence,
-        )
+        SkillBridgeEntryResponse.model_validate(entry)
         for entry in entries
     ]
 
@@ -537,17 +359,8 @@ async def get_milestones(
         database, transition_id=transition_id,
     )
     return [
-        TransitionMilestoneResponse(
-            id=milestone.id,
-            phase=milestone.phase,
-            title=milestone.title,
-            description=milestone.description,
-            target_week=milestone.target_week,
-            order_index=milestone.order_index,
-            is_completed=milestone.is_completed,
-            completed_at=milestone.completed_at,
-        )
-        for milestone in milestones
+        TransitionMilestoneResponse.model_validate(m)
+        for m in milestones
     ]
 
 
@@ -579,14 +392,6 @@ async def get_comparison(
         database, transition_id=transition_id,
     )
     return [
-        TransitionComparisonResponse(
-            id=comp.id,
-            dimension=comp.dimension,
-            source_value=comp.source_value,
-            target_value=comp.target_value,
-            delta=comp.delta,
-            unit=comp.unit,
-            reasoning=comp.reasoning,
-        )
+        TransitionComparisonResponse.model_validate(comp)
         for comp in comparisons
     ]

@@ -13,13 +13,15 @@ import uuid
 from datetime import datetime
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 # ── Response Schemas ───────────────────────────────────────────
 
 
 class SkillBridgeEntryResponse(BaseModel):
     """Individual skill gap entry in the Skill Bridge Matrix™."""
+
+    model_config = ConfigDict(from_attributes=True)
 
     id: uuid.UUID
     skill_name: str
@@ -37,6 +39,8 @@ class SkillBridgeEntryResponse(BaseModel):
 class TransitionMilestoneResponse(BaseModel):
     """Action plan milestone in the Transition Timeline Engine™."""
 
+    model_config = ConfigDict(from_attributes=True)
+
     id: uuid.UUID
     phase: str
     title: str
@@ -50,6 +54,8 @@ class TransitionMilestoneResponse(BaseModel):
 class TransitionComparisonResponse(BaseModel):
     """Source vs target role comparison dimension."""
 
+    model_config = ConfigDict(from_attributes=True)
+
     id: uuid.UUID
     dimension: str
     source_value: float
@@ -61,6 +67,8 @@ class TransitionComparisonResponse(BaseModel):
 
 class TransitionPathResponse(BaseModel):
     """Full transition path with Transition Confidence Score™."""
+
+    model_config = ConfigDict(from_attributes=True)
 
     id: uuid.UUID
     career_dna_id: uuid.UUID
@@ -87,6 +95,8 @@ class TransitionPathResponse(BaseModel):
 class TransitionSummaryResponse(BaseModel):
     """Lightweight transition card for list views."""
 
+    model_config = ConfigDict(from_attributes=True)
+
     id: uuid.UUID
     from_role: str
     to_role: str
@@ -100,6 +110,8 @@ class TransitionSummaryResponse(BaseModel):
 
 class TransitionPreferenceResponse(BaseModel):
     """User transition preference state."""
+
+    model_config = ConfigDict(from_attributes=True)
 
     id: uuid.UUID
     preferred_industries: list[str] | None = None
