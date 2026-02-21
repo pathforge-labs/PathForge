@@ -40,6 +40,10 @@ if TYPE_CHECKING:
         CareerSimulation,
         SimulationPreference,
     )
+    from app.models.hidden_job_market import (
+        CompanySignal,
+        HiddenJobMarketPreference,
+    )
     from app.models.interview_intelligence import (
         InterviewPreference,
         InterviewPrep,
@@ -355,6 +359,19 @@ class CareerDNA(UUIDMixin, TimestampMixin, Base):
     )
     interview_preference: Mapped[InterviewPreference | None] = relationship(
         "InterviewPreference",
+        back_populates="career_dna",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
+
+    # Hidden Job Market Detector™ relationships
+    company_signals: Mapped[list[CompanySignal]] = relationship(
+        "CompanySignal",
+        back_populates="career_dna",
+        cascade="all, delete-orphan",
+    )
+    hidden_job_market_preference: Mapped[HiddenJobMarketPreference | None] = relationship(
+        "HiddenJobMarketPreference",
         back_populates="career_dna",
         uselist=False,
         cascade="all, delete-orphan",

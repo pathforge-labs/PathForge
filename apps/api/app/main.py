@@ -24,6 +24,7 @@ from app.api.v1 import (
     career_dna,
     career_simulation,
     health,
+    hidden_job_market,
     interview_intelligence,
     salary_intelligence,
     skill_decay,
@@ -103,6 +104,7 @@ def create_app() -> FastAPI:
     application.include_router(transition_pathways.router, prefix="/api/v1")
     application.include_router(career_simulation.router, prefix="/api/v1")
     application.include_router(interview_intelligence.router, prefix="/api/v1")
+    application.include_router(hidden_job_market.router, prefix="/api/v1")
 
     return application
 

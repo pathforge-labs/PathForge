@@ -24,6 +24,13 @@ from app.models.career_simulation import (
     SimulationPreference,
     SimulationRecommendation,
 )
+from app.models.hidden_job_market import (
+    CompanySignal,
+    HiddenJobMarketPreference,
+    HiddenOpportunity,
+    OutreachTemplate,
+    SignalMatchResult,
+)
 from app.models.interview_intelligence import (
     CompanyInsight,
     InterviewPreference,
@@ -77,9 +84,12 @@ __all__ = [
     "CareerResilienceSnapshot",
     "CareerSimulation",
     "CompanyInsight",
+    "CompanySignal",
     "ExperienceBlueprint",
     "FunnelEvent",
     "GrowthVector",
+    "HiddenJobMarketPreference",
+    "HiddenOpportunity",
     "HiddenSkill",
     "IndustryTrend",
     "InterviewPreference",
@@ -90,6 +100,7 @@ __all__ = [
     "MarketInsight",
     "MarketPosition",
     "MatchResult",
+    "OutreachTemplate",
     "Preference",
     "ReskillingPathway",
     "Resume",
@@ -98,6 +109,7 @@ __all__ = [
     "SalaryHistoryEntry",
     "SalaryPreference",
     "SalaryScenario",
+    "SignalMatchResult",
     "SimulationInput",
     "SimulationOutcome",
     "SimulationPreference",

@@ -1,33 +1,31 @@
 {
-  "version": "2.1.0",
-  "lastUpdated": "2026-02-21T17:50:00+01:00",
-  "currentSprint": 14,
-  "sprintStatus": "complete",
-  "lastCommit": "df6b2fa",
-  "branch": "main",
-  "sessionFocus": "Sprint 14 — Interview Intelligence™ + DRY Refactors + MyPy Fix",
-  "testsTotal": 438,
-  "testsPassing": 438,
-  "mypyErrors": 0,
-  "ruffErrors": 0,
-  "capabilities": {
-    "rules": 8,
-    "workflows": 16,
-    "skills": 30,
-    "mcpServers": 1
+  "version": "1.1.0",
+  "last_updated": "2026-02-21T20:32:00+01:00",
+  "session": {
+    "focus": "Sprint 15 — Hidden Job Market Detector™",
+    "sprint": 15,
+    "sprint_status": "complete",
+    "last_commit": "pending",
+    "branch": "main"
   },
-  "apiEndpoints": 63,
-  "models": 33,
-  "migrations": 14,
-  "codeStats": {
-    "apiLines": "~18,000",
-    "webLines": "~12,000",
-    "totalFiles": "~250"
+  "quality": {
+    "ruff_errors": 0,
+    "mypy_errors": 0,
+    "test_total": 494,
+    "test_passed": 494,
+    "test_failed": 0,
+    "npm_vulnerabilities": 0
   },
-  "recentWork": [
-    "Interview Intelligence™ (Sprint 14): 5 models, 14 schemas, 11 endpoints, 56 tests",
-    "Transition Pathways DRY refactor: _build_scan_response + model_validate (-218 lines)",
-    "MyPy type overhaul: 15→0 errors across 6 files (+22/−81 lines)",
-    "Career Simulation DRY: _build_full_response simplified (-62 lines)"
+  "codebase": {
+    "api_endpoints": 73,
+    "models": 30,
+    "migrations": 15,
+    "total_tests": 494
+  },
+  "recent_work": [
+    "Sprint 15: Hidden Job Market Detector™ — 12 files, 56 tests",
+    "Tier-1 retrospective audit — 3 findings resolved",
+    "MyPy type overhaul — 15→0 errors across 6 files",
+    "Sprint 14: Interview Intelligence™ — 12 files, 56 tests"
   ]
 }

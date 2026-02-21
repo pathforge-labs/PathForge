@@ -1,7 +1,7 @@
 # PathForge — Live Sprint Board
 
 > **Single Source of Truth** for all sprint tracking and task management.
-> **Last Updated**: 2026-02-21 | **Current Phase**: B (Career Intelligence)
+> **Last Updated**: 2026-02-21 | **Current Phase**: C (Network Intelligence)
 
 ---
 
@@ -264,6 +264,29 @@
 > - DRY refactor: Sprint 12 routes refactored with `_build_scan_response` helper + `model_validate()` (-218 lines)
 > - MyPy type overhaul: 15→0 errors across 6 files + bonus `_build_full_response` simplification in career_simulation
 
+## Phase C: Network Intelligence
+
+### Sprint 15 — Hidden Job Market Detector™ (✅ Complete)
+
+- [x] Company growth signal monitoring
+- [x] Career DNA → signal matching
+- [x] AI-generated outreach templates
+
+> **Implementation detail:**
+>
+> - 5 SQLAlchemy models (`CompanySignal`, `SignalMatchResult`, `OutreachTemplate`, `HiddenOpportunity`, `HiddenJobMarketPreference`) + 4 StrEnums
+> - 15 Pydantic schemas with `data_source` + `disclaimer` transparency fields
+> - 4 versioned AI prompt templates (signal analysis, matching, outreach, opportunity surfacing)
+> - HiddenJobMarketAnalyzer (4 LLM methods + 4 static helpers + 4 clamping validators, `MAX_SIGNAL_CONFIDENCE` 0.85 cap)
+> - HiddenJobMarketService pipeline orchestration (~616 lines)
+> - 11 REST endpoints at `/api/v1/hidden-job-market` (dashboard, scan, preferences, compare, opportunities, signals)
+> - Alembic migration `4d5e6f7g8h9i` — 5 tables with FK CASCADE + indexes + CheckConstraint (confidence ≤ 0.85)
+> - Input sanitization via `sanitize_user_text` on all LLM inputs
+> - `LLMError` try/except with safe fallbacks on all 4 LLM methods
+> - Architecture reference archived to `docs/architecture/sprint-15-hidden-job-market.md`
+> - 56 new tests (494/494 total suite passing)
+> - Tier-1 retrospective audit — 3 findings resolved (R1: import path, R2: input sanitization, R3: error handling)
+
 ---
 
 ## Ad-Hoc Work Log
@@ -324,3 +347,4 @@
 | 12     | 3             | 11        | 0            | 1        |
 | 13     | 3             | 13        | 0            | 1        |
 | 14     | 3             | 12        | 1            | 1        |
+| 15     | 3             | 12        | 0            | 1        |
