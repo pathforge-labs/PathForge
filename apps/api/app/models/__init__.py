@@ -17,6 +17,13 @@ from app.models.career_dna import (
     SkillGenomeEntry,
     ValuesProfile,
 )
+from app.models.career_simulation import (
+    CareerSimulation,
+    SimulationInput,
+    SimulationOutcome,
+    SimulationPreference,
+    SimulationRecommendation,
+)
 from app.models.matching import JobListing, MatchResult
 from app.models.preference import BlacklistEntry, Preference
 from app.models.resume import Resume, Skill
@@ -61,6 +68,7 @@ __all__ = [
     "CVVersion",
     "CareerDNA",
     "CareerResilienceSnapshot",
+    "CareerSimulation",
     "ExperienceBlueprint",
     "FunnelEvent",
     "GrowthVector",
@@ -78,6 +86,10 @@ __all__ = [
     "SalaryHistoryEntry",
     "SalaryPreference",
     "SalaryScenario",
+    "SimulationInput",
+    "SimulationOutcome",
+    "SimulationPreference",
+    "SimulationRecommendation",
     "Skill",
     "SkillBridgeEntry",
     "SkillDecayPreference",

@@ -36,6 +36,10 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.models.base import Base, TimestampMixin, UUIDMixin
 
 if TYPE_CHECKING:
+    from app.models.career_simulation import (
+        CareerSimulation,
+        SimulationPreference,
+    )
     from app.models.salary_intelligence import (
         SalaryEstimate,
         SalaryHistoryEntry,
@@ -321,6 +325,19 @@ class CareerDNA(UUIDMixin, TimestampMixin, Base):
     )
     transition_preference: Mapped[TransitionPreference | None] = relationship(
         "TransitionPreference",
+        back_populates="career_dna",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
+
+    # Career Simulation Engine™ relationships
+    simulations: Mapped[list[CareerSimulation]] = relationship(
+        "CareerSimulation",
+        back_populates="career_dna",
+        cascade="all, delete-orphan",
+    )
+    simulation_preference: Mapped[SimulationPreference | None] = relationship(
+        "SimulationPreference",
         back_populates="career_dna",
         uselist=False,
         cascade="all, delete-orphan",
