@@ -1,19 +1,19 @@
 {
   "schemaVersion": "2.1.0",
   "session": {
-    "lastDate": "2026-02-20",
-    "lastTime": "22:51:00+01:00",
-    "focus": "Sprint 12 — Transition Pathways",
+    "lastDate": "2026-02-21",
+    "lastTime": "02:56:00+01:00",
+    "focus": "Sprint 13 — Career Simulation Engine™",
     "status": "completed"
   },
   "repository": {
-    "lastCommit": "231fb3e",
+    "lastCommit": "205da27",
     "branch": "main",
     "clean": true
   },
   "testSuite": {
-    "total": 330,
-    "passed": 330,
+    "total": 382,
+    "passed": 382,
     "failed": 0
   },
   "sprintTracking": "docs/ROADMAP.md"

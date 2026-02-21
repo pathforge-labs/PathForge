@@ -1,7 +1,7 @@
 # PathForge — Live Sprint Board
 
 > **Single Source of Truth** for all sprint tracking and task management.
-> **Last Updated**: 2026-02-20 | **Current Phase**: B (Career Intelligence)
+> **Last Updated**: 2026-02-21 | **Current Phase**: B (Career Intelligence)
 
 ---
 
@@ -220,6 +220,26 @@
 > - 43 new tests (330/330 total suite passing)
 > - Tier-1 retrospective audit — 8 code quality fixes (ruff lint, MyPy types, model annotations)
 
+### Sprint 13 — Career Simulation Engine™ (✅ Complete)
+
+- [x] "What-if" career scenario simulation
+- [x] ROI calculation & comparison
+- [x] Confidence-capped AI projections
+
+> **Implementation detail:**
+>
+> - 5 SQLAlchemy models (`CareerSimulation`, `SimulationInput`, `SimulationOutcome`, `SimulationRecommendation`, `SimulationPreference`) + 3 StrEnums
+> - 14 Pydantic schemas with `ConfigDict(from_attributes=True)` + `data_source` + `disclaimer` transparency fields
+> - 4 versioned AI prompt templates (scenario analysis, projection, recommendation, comparison)
+> - CareerSimulationAnalyzer (4 LLM methods + 4 static helpers + 3 clamping validators)
+> - CareerSimulationService pipeline orchestration (~600 lines)
+> - 11 REST endpoints at `/api/v1/career-simulation` (dashboard, 5 scenario types, comparison, preferences)
+> - Alembic migration `2b3c4d5e6f7g` — 5 tables with FK CASCADE + indexes + `CheckConstraint` (confidence ≤ 0.85)
+> - Pagination on dashboard/list endpoints (offset/limit with total count)
+> - 52 new tests (382/382 total suite passing)
+> - Tier-1 retrospective audit — 4 findings resolved (R1 docstring, R2 CHECK constraint, R3 pagination, R4 ConfigDict)
+> - 3 proprietary innovations: Career Scenario Simulator™, Scenario Confidence Metric™, ROI Calculator™
+
 ---
 
 ## Ad-Hoc Work Log
@@ -277,3 +297,4 @@
 | 10     | 4             | 10        | 1            | 2        |
 | 11     | 3             | 10        | 1            | 1        |
 | 12     | 3             | 11        | 0            | 1        |
+| 13     | 3             | 13        | 0            | 1        |

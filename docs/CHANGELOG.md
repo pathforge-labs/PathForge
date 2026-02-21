@@ -5,6 +5,30 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [Sprint 13] — Career Simulation Engine™ — 2026-02-21
+
+### Added
+
+- **Career Simulation Engine™** — full "what-if" career scenario planner:
+  - 5 SQLAlchemy models (`CareerSimulation`, `SimulationInput`, `SimulationOutcome`, `SimulationRecommendation`, `SimulationPreference`) + 3 StrEnums
+  - 14 Pydantic schemas with `ConfigDict(from_attributes=True)` + `data_source` + `disclaimer` transparency fields
+  - Alembic migration `2b3c4d5e6f7g` — 5 tables with FK CASCADE, indexes, `CheckConstraint` (confidence ≤ 0.85)
+  - AI analyzer: 4 LLM methods + 4 static helpers + 3 clamping validators
+  - CareerSimulationService pipeline orchestration (~600 lines)
+  - 11 REST endpoints at `/api/v1/career-simulation` (dashboard, 5 scenario types, comparison, preferences)
+  - 52 new tests (382/382 total passing)
+- **Career Scenario Simulator™** — scenario-type-specific "what-if" analysis (role, geo, skill, industry, seniority)
+- **Scenario Confidence Metric™** — hard-capped at 0.85 with DB-level CHECK constraint
+- **ROI Calculator™** — salary impact %, time investment, feasibility scoring
+- **Pagination** — `page`/`per_page` query params on dashboard and list endpoints
+- Ethics safeguards: confidence cap (0.85), `data_source` + `disclaimer` on every response, anti-overconfidence prompts
+
+### Fixed
+
+- Stale `SimulationStatus` docstring (old enum values → `draft | running | completed | failed`)
+
+---
+
 ## [Sprint 12] — Transition Pathways — 2026-02-20
 
 ### Added
