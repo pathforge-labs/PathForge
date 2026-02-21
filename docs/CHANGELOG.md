@@ -5,6 +5,41 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [Sprint 14] — Interview Intelligence™ — 2026-02-21
+
+### Added
+
+- **Interview Intelligence™** — full interview preparation system:
+  - 5 SQLAlchemy models (`InterviewPrep`, `CompanyInsight`, `InterviewQuestion`, `STARExample`, `InterviewPreference`) + 4 StrEnums
+  - 14 Pydantic schemas with `ConfigDict(from_attributes=True)` + `data_source` + `disclaimer` transparency fields
+  - Alembic migration `3c4d5e6f7g8h` — 5 tables with FK CASCADE, indexes, `CheckConstraint` (confidence ≤ 0.85)
+  - AI analyzer: 5 LLM methods + 4 validators, versioned prompt templates
+  - InterviewIntelligenceService pipeline orchestration (~680 lines)
+  - 11 REST endpoints at `/api/v1/interview-intelligence` (dashboard, prep, compare, preferences, questions, STAR, negotiation)
+  - 56 new tests (438/438 total passing)
+- **Career DNA Interview Mapper™** — maps Career DNA dimensions to STAR examples
+- **Negotiation Script Engine™** — generates salary negotiation strategies with Salary Intelligence cross-integration
+- **Company Culture Decoder™** — AI-powered interview culture analysis
+- `prep_depth` `Literal` type validation (`quick | standard | comprehensive`)
+- Architecture reference archived to `docs/architecture/sprint-14-interview-intelligence.md`
+
+### Changed
+
+- **Transition Pathways DRY refactor** — extracted `_build_scan_response` helper, added `ConfigDict(from_attributes=True)` to 7 schemas, replaced field-by-field mapping with `model_validate()` across 11 routes (−218 lines)
+- **Career Simulation DRY refactor** — replaced `_build_full_response` (−52 lines) and preference routes (−10 lines) with `model_validate()`
+
+### Fixed
+
+- **MyPy type overhaul** — resolved all 15 type warnings (15→0) across 6 files:
+  - Missing `dict` type parameters in `CompanyInsight.content` and `SimulationOutput.factors`
+  - Variable type reuse in service loop variables (4 fixes)
+  - `_load_prep_with_relations` param type `str` → `uuid.UUID`
+  - `_build_scan_response` param type `object` → `Any`
+  - `CareerSimulation` undefined name (added `TYPE_CHECKING` import)
+  - `career_dna_id` `str`/`UUID` mismatch (resolved via `model_validate`)
+
+---
+
 ## [Sprint 13] — Career Simulation Engine™ — 2026-02-21
 
 ### Added

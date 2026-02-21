@@ -240,6 +240,30 @@
 > - Tier-1 retrospective audit — 4 findings resolved (R1 docstring, R2 CHECK constraint, R3 pagination, R4 ConfigDict)
 > - 3 proprietary innovations: Career Scenario Simulator™, Scenario Confidence Metric™, ROI Calculator™
 
+### Sprint 14 — Interview Intelligence™ (✅ Complete)
+
+- [x] Company intelligence & interview prep
+- [x] Predicted interview questions (5 categories)
+- [x] STAR examples mapped to Career DNA
+
+> **Implementation detail:**
+>
+> - 5 SQLAlchemy models (`InterviewPrep`, `CompanyInsight`, `InterviewQuestion`, `STARExample`, `InterviewPreference`) + 4 enums
+> - 14 Pydantic schemas with `ConfigDict(from_attributes=True)` + `data_source` + `disclaimer` transparency fields
+> - 5 versioned AI prompt templates (company analysis, questions, STAR, negotiation, comparison)
+> - InterviewIntelligenceAnalyzer (5 LLM methods + 4 validators + confidence clamp)
+> - InterviewIntelligenceService (10 public + 12 private methods, 680 lines)
+> - 11 REST endpoints at `/api/v1/interview-intelligence` (dashboard, prep, compare, preferences, questions, STAR, negotiation)
+> - Alembic migration `3c4d5e6f7g8h` — 5 tables with FK CASCADE + indexes + CheckConstraint (confidence ≤ 0.85)
+> - Salary Intelligence cross-integration in negotiation scripts
+> - `prep_depth` Literal type validation (`quick | standard | comprehensive`)
+> - Architecture reference archived to `docs/architecture/sprint-14-interview-intelligence.md`
+> - 56 new tests (438/438 total suite passing)
+> - Tier-1 retrospective audit passed — 2 findings resolved (R1: Salary integration, R2: prep_depth Literal)
+> - 3 proprietary innovations: Career DNA Interview Mapper™, Negotiation Script Engine™, Company Culture Decoder™
+> - DRY refactor: Sprint 12 routes refactored with `_build_scan_response` helper + `model_validate()` (-218 lines)
+> - MyPy type overhaul: 15→0 errors across 6 files + bonus `_build_full_response` simplification in career_simulation
+
 ---
 
 ## Ad-Hoc Work Log
@@ -277,6 +301,7 @@
 | 2026-02-19 | UI/UX polish session                  | Post-9        | ✅ Done | 6 issues + drag/swipe, deployed to prod      |
 | 2026-02-19 | Turnstile CSP fix (execute-on-demand) | Post-9        | ✅ Done | execution: execute mode, Tier-1 audit ✅     |
 | 2026-02-20 | PowerShell shell conventions          | 10            | ✅ Done | Skill created, 12 `&&` fixes across 6 files  |
+| 2026-02-21 | MyPy 15→0 type warnings               | 14            | ✅ Done | 6 files, +22/−81 lines, full green CI        |
 
 ---
 
@@ -298,3 +323,4 @@
 | 11     | 3             | 10        | 1            | 1        |
 | 12     | 3             | 11        | 0            | 1        |
 | 13     | 3             | 13        | 0            | 1        |
+| 14     | 3             | 12        | 1            | 1        |
