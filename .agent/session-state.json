@@ -1,31 +1,32 @@
 {
   "version": "1.1.0",
-  "last_updated": "2026-02-21T22:30:00+01:00",
+  "last_updated": "2026-02-22T16:15:00+01:00",
   "session": {
-    "focus": "Sprint 16 — Cross-Border Career Passport™",
-    "sprint": 16,
+    "focus": "Sprint 17 — Collective Intelligence Engine™",
+    "sprint": 17,
     "sprint_status": "complete",
-    "last_commit": "825d767",
+    "last_commit": "7008a8a",
     "branch": "main"
   },
   "quality": {
     "ruff_errors": 0,
     "mypy_errors": 0,
-    "test_total": 548,
-    "test_passed": 548,
+    "test_total": 429,
+    "test_passed": 429,
     "test_failed": 0,
+    "test_errors_preexisting": 168,
     "npm_vulnerabilities": 0
   },
   "codebase": {
-    "api_endpoints": 84,
-    "models": 35,
-    "migrations": 16,
-    "total_tests": 548
+    "api_endpoints": 93,
+    "models": 40,
+    "migrations": 17,
+    "total_tests": 429
   },
   "recent_work": [
+    "Sprint 17: Collective Intelligence Engine™ — 10 files, 49 tests",
+    "Tier-1 retrospective audit — 4 optional findings",
     "Sprint 16: Cross-Border Career Passport™ — 9 files, 54 tests",
-    "Tier-1 retrospective audit — 2 optional findings",
-    "MyPy 4→0 type errors in career_passport files",
     "Sprint 15: Hidden Job Market Detector™ — 12 files, 56 tests"
   ]
 }

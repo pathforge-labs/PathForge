@@ -47,6 +47,15 @@ if TYPE_CHECKING:
         CareerSimulation,
         SimulationPreference,
     )
+    from app.models.collective_intelligence import (
+        CareerPulseEntry,
+        CollectiveIntelligencePreference,
+        IndustrySnapshot,
+        PeerCohortAnalysis,
+    )
+    from app.models.collective_intelligence import (
+        SalaryBenchmark as CISalaryBenchmark,
+    )
     from app.models.hidden_job_market import (
         CompanySignal,
         HiddenJobMarketPreference,
@@ -407,6 +416,34 @@ class CareerDNA(UUIDMixin, TimestampMixin, Base):
     )
     career_passport_preference: Mapped[CareerPassportPreference | None] = relationship(
         "CareerPassportPreference",
+        back_populates="career_dna",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
+
+    # Collective Intelligence Engine™ relationships
+    industry_snapshots: Mapped[list[IndustrySnapshot]] = relationship(
+        "IndustrySnapshot",
+        back_populates="career_dna",
+        cascade="all, delete-orphan",
+    )
+    ci_salary_benchmarks: Mapped[list[CISalaryBenchmark]] = relationship(
+        "SalaryBenchmark",
+        back_populates="career_dna",
+        cascade="all, delete-orphan",
+    )
+    peer_cohort_analyses: Mapped[list[PeerCohortAnalysis]] = relationship(
+        "PeerCohortAnalysis",
+        back_populates="career_dna",
+        cascade="all, delete-orphan",
+    )
+    career_pulse_entries: Mapped[list[CareerPulseEntry]] = relationship(
+        "CareerPulseEntry",
+        back_populates="career_dna",
+        cascade="all, delete-orphan",
+    )
+    ci_preference: Mapped[CollectiveIntelligencePreference | None] = relationship(
+        "CollectiveIntelligencePreference",
         back_populates="career_dna",
         uselist=False,
         cascade="all, delete-orphan",

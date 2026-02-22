@@ -1,7 +1,7 @@
 # PathForge — Live Sprint Board
 
 > **Single Source of Truth** for all sprint tracking and task management.
-> **Last Updated**: 2026-02-21 | **Current Phase**: C (Network Intelligence)
+> **Last Updated**: 2026-02-22 | **Current Phase**: C (Network Intelligence)
 
 ---
 
@@ -287,7 +287,7 @@
 > - 56 new tests (494/494 total suite passing)
 > - Tier-1 retrospective audit — 3 findings resolved (R1: import path, R2: input sanitization, R3: error handling)
 
-### Sprint 16 — Cross-Border Career Passport™ (📋 Current)
+### Sprint 16 — Cross-Border Career Passport™ (✅ Complete)
 
 - [x] EQF credential mapping
 - [x] Country comparison (CoL, salary, tax, demand)
@@ -308,6 +308,38 @@
 > - 54 new tests (548/548 total suite passing)
 > - Tier-1 retrospective audit — 2 optional findings (R1: getattr workaround, R2: return type widening)
 > - 3 proprietary innovations: EQF Intelligence Engine™, Purchasing Power Calculator™, Visa Eligibility Predictor™
+
+### Sprint 17 — Collective Intelligence Engine™ (📋 Current)
+
+- [x] AI-powered career market intelligence
+- [x] Salary benchmarking (personalized to Career DNA)
+- [x] Peer cohort analysis (k-anonymous)
+- [x] Career Pulse Index™ (composite health score)
+
+> **Implementation detail:**
+>
+> - 5 SQLAlchemy models (`IndustrySnapshot`, `SalaryBenchmark`, `PeerCohortAnalysis`, `CareerPulseEntry`, `CollectiveIntelligencePreference`) + 4 StrEnums
+> - 15 Pydantic schemas with `data_source` + `disclaimer` transparency fields
+> - 4 versioned AI prompt templates (industry, salary, peer cohort, career pulse)
+> - CollectiveIntelligenceAnalyzer (4 LLM methods + 3 static helpers + 4 clamping validators, `MAX_CI_CONFIDENCE` 0.85 cap)
+> - CollectiveIntelligenceService pipeline orchestration (~651 lines)
+> - 9 REST endpoints at `/api/v1/collective-intelligence` (dashboard, scan, comparison, preferences, 4 analysis endpoints)
+> - Alembic migration `6f7g8h9i0j1k` — 5 tables with FK CASCADE + indexes + CheckConstraint (confidence ≤ 0.85, cohort_size ≥ 10, pulse_score 0-100)
+> - Input sanitization via `sanitize_user_text` on all LLM inputs
+> - `LLMError` try/except with safe fallbacks on all 4 LLM methods
+> - Career Pulse clamping recomputes score from components to ensure formula integrity
+> - 49 new tests (429 unit tests passing + 168 pre-existing auth errors)
+> - Tier-1 retrospective audit passed — 4 optional findings (rate limiting, caching, integration tests, parallelism)
+> - 3 proprietary innovations: Career Pulse Index™, Peer Cohort Benchmarking™, Industry Trend Radar™
+
+### Sprint 18 — Infrastructure & Auth Integration (⏳ Upcoming)
+
+- [ ] **`app.core.auth` module implementation** — JWT `get_current_user` dependency
+  - PostgreSQL user table integration
+  - JWT token validation + refresh token flow
+  - Unblocks 168 pre-existing test errors across all integration test files
+- [ ] Rate limiting on Collective Intelligence endpoints (Sprint 17 R1)
+- [ ] Integration test fixtures (database session + authenticated user)
 
 ---
 
@@ -371,3 +403,4 @@
 | 14     | 3             | 12        | 1            | 1        |
 | 15     | 3             | 12        | 0            | 1        |
 | 16     | 3             | 11        | 0            | 1        |
+| 17     | 4             | 10        | 0            | 1        |
