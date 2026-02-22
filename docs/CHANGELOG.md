@@ -5,6 +5,31 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [Sprint 18] — Infrastructure & Auth Integration — 2026-02-22
+
+### Added
+
+- **`app/core/auth.py`** — canonical auth dependency re-export module (`get_current_user`)
+- **Rate limiting** on all 9 Collective Intelligence endpoints via `slowapi`:
+  - 5× POST analysis endpoints: `settings.rate_limit_career_dna` (3/min)
+  - POST `/scan`: `2/minute` (heaviest pipeline)
+  - GET `/dashboard`: `settings.rate_limit_embed` (20/min)
+  - GET `/preferences`: `settings.rate_limit_parse` (30/min)
+  - PUT `/preferences`: `settings.rate_limit_embed` (20/min)
+- **Auth-aware integration test fixtures**:
+  - `authenticated_user` — direct DB user creation (bypasses HTTP endpoints)
+  - `auth_client` — pre-authenticated `AsyncClient` with JWT token
+- **`test_auth_integration.py`** — 5 integration tests:
+  - Full lifecycle: register → login → protected endpoint → refresh → re-access
+  - Fixture validation (`auth_client`, `authenticated_user`)
+  - Edge cases: no-token (401), invalid-token (401)
+
+### Fixed
+
+- **168 pre-existing test errors** resolved — `ModuleNotFoundError: app.core.auth` unblocked all integration tests (429→602 total passing)
+
+---
+
 ## [Sprint 14] — Interview Intelligence™ — 2026-02-21
 
 ### Added

@@ -309,7 +309,7 @@
 > - Tier-1 retrospective audit — 2 optional findings (R1: getattr workaround, R2: return type widening)
 > - 3 proprietary innovations: EQF Intelligence Engine™, Purchasing Power Calculator™, Visa Eligibility Predictor™
 
-### Sprint 17 — Collective Intelligence Engine™ (📋 Current)
+### Sprint 17 — Collective Intelligence Engine™ (✅ Complete)
 
 - [x] AI-powered career market intelligence
 - [x] Salary benchmarking (personalized to Career DNA)
@@ -328,18 +328,25 @@
 > - Input sanitization via `sanitize_user_text` on all LLM inputs
 > - `LLMError` try/except with safe fallbacks on all 4 LLM methods
 > - Career Pulse clamping recomputes score from components to ensure formula integrity
-> - 49 new tests (429 unit tests passing + 168 pre-existing auth errors)
+> - 49 new tests (602/602 total suite passing after Sprint 18 auth fix)
 > - Tier-1 retrospective audit passed — 4 optional findings (rate limiting, caching, integration tests, parallelism)
 > - 3 proprietary innovations: Career Pulse Index™, Peer Cohort Benchmarking™, Industry Trend Radar™
 
-### Sprint 18 — Infrastructure & Auth Integration (⏳ Upcoming)
+### Sprint 18 — Infrastructure & Auth Integration (✅ Complete)
 
-- [ ] **`app.core.auth` module implementation** — JWT `get_current_user` dependency
-  - PostgreSQL user table integration
-  - JWT token validation + refresh token flow
-  - Unblocks 168 pre-existing test errors across all integration test files
-- [ ] Rate limiting on Collective Intelligence endpoints (Sprint 17 R1)
-- [ ] Integration test fixtures (database session + authenticated user)
+- [x] `app.core.auth` module — canonical import path for `get_current_user` dependency
+- [x] Rate limiting on all 9 Collective Intelligence endpoints (Sprint 17 R1)
+- [x] Auth-aware integration test fixtures (`authenticated_user`, `auth_client`)
+
+> **Implementation detail:**
+>
+> - `app/core/auth.py` (NEW) — thin re-export module, provides stable import path for auth dependencies
+> - `slowapi` rate limiting on all 9 CI endpoints: 5× POST (3/min), scan (2/min), dashboard (20/min), preferences GET (30/min), preferences PUT (20/min)
+> - `authenticated_user` fixture — direct DB user creation bypassing HTTP endpoints
+> - `auth_client` fixture — pre-authenticated `AsyncClient` with JWT token
+> - `test_auth_integration.py` (NEW) — 5 integration tests: full lifecycle (register→login→protected→refresh→re-access), fixture validation, edge cases (no-token 401, invalid-token 401)
+> - Resolved 168 pre-existing `ModuleNotFoundError` test errors (429→602 total passing)
+> - Tier-1 retrospective audit passed — 2 findings resolved (G1: logout deferred to E2E, G2: User type hint)
 
 ---
 
@@ -404,3 +411,4 @@
 | 15     | 3             | 12        | 0            | 1        |
 | 16     | 3             | 11        | 0            | 1        |
 | 17     | 4             | 10        | 0            | 1        |
+| 18     | 3             | 3         | 0            | 1        |

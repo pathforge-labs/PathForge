@@ -21,9 +21,12 @@ import logging
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette.requests import Request
 
 from app.core.auth import get_current_user
+from app.core.config import settings
 from app.core.database import get_db
+from app.core.rate_limit import limiter
 from app.models.user import User
 from app.schemas.collective_intelligence import (
     CareerPulseRequest,
@@ -66,8 +69,10 @@ router = APIRouter(
         "projections, personalized to your Career DNA."
     ),
 )
+@limiter.limit(settings.rate_limit_career_dna)
 async def create_industry_snapshot(
-    request: IndustrySnapshotRequest,
+    request: Request,
+    body: IndustrySnapshotRequest,
     current_user: User = Depends(get_current_user),
     database: AsyncSession = Depends(get_db),
 ) -> IndustrySnapshotResponse:
@@ -76,8 +81,8 @@ async def create_industry_snapshot(
         snapshot = await ci_service.get_industry_snapshot(
             database,
             user_id=current_user.id,
-            industry=request.industry,
-            region=request.region,
+            industry=body.industry,
+            region=body.region,
         )
         return IndustrySnapshotResponse.model_validate(snapshot)
     except ValueError as exc:
@@ -101,8 +106,10 @@ async def create_industry_snapshot(
         "positioning and negotiation insights."
     ),
 )
+@limiter.limit(settings.rate_limit_career_dna)
 async def create_salary_benchmark(
-    request: SalaryBenchmarkRequest,
+    request: Request,
+    body: SalaryBenchmarkRequest,
     current_user: User = Depends(get_current_user),
     database: AsyncSession = Depends(get_db),
 ) -> SalaryBenchmarkResponse:
@@ -111,10 +118,10 @@ async def create_salary_benchmark(
         benchmark = await ci_service.get_salary_benchmark(
             database,
             user_id=current_user.id,
-            role=request.role,
-            location=request.location,
-            experience_years=request.experience_years,
-            currency=request.currency,
+            role=body.role,
+            location=body.location,
+            experience_years=body.experience_years,
+            currency=body.currency,
         )
         return SalaryBenchmarkResponse.model_validate(benchmark)
     except ValueError as exc:
@@ -138,8 +145,10 @@ async def create_salary_benchmark(
         "(minimum 10 in cohort) for privacy."
     ),
 )
+@limiter.limit(settings.rate_limit_career_dna)
 async def create_peer_cohort_analysis(
-    request: PeerCohortRequest,
+    request: Request,
+    body: PeerCohortRequest,
     current_user: User = Depends(get_current_user),
     database: AsyncSession = Depends(get_db),
 ) -> PeerCohortAnalysisResponse:
@@ -148,10 +157,10 @@ async def create_peer_cohort_analysis(
         analysis = await ci_service.get_peer_cohort_analysis(
             database,
             user_id=current_user.id,
-            role=request.role,
-            experience_range_min=request.experience_range_min,
-            experience_range_max=request.experience_range_max,
-            region=request.region,
+            role=body.role,
+            experience_range_min=body.experience_range_min,
+            experience_range_max=body.experience_range_max,
+            region=body.region,
         )
         return PeerCohortAnalysisResponse.model_validate(analysis)
     except ValueError as exc:
@@ -175,8 +184,10 @@ async def create_peer_cohort_analysis(
         "No competitor offers this metric."
     ),
 )
+@limiter.limit(settings.rate_limit_career_dna)
 async def create_career_pulse(
-    request: CareerPulseRequest,
+    request: Request,
+    body: CareerPulseRequest,
     current_user: User = Depends(get_current_user),
     database: AsyncSession = Depends(get_db),
 ) -> CareerPulseResponse:
@@ -185,8 +196,8 @@ async def create_career_pulse(
         pulse = await ci_service.get_career_pulse(
             database,
             user_id=current_user.id,
-            industry=request.industry,
-            region=request.region,
+            industry=body.industry,
+            region=body.region,
         )
         return CareerPulseResponse.model_validate(pulse)
     except ValueError as exc:
@@ -208,7 +219,9 @@ async def create_career_pulse(
         "snapshots, salary benchmarks, peer analyses, and preferences."
     ),
 )
+@limiter.limit(settings.rate_limit_embed)
 async def get_dashboard(
+    request: Request,
     current_user: User = Depends(get_current_user),
     database: AsyncSession = Depends(get_db),
 ) -> CollectiveIntelligenceDashboardResponse:
@@ -262,8 +275,10 @@ async def get_dashboard(
         "all in one request."
     ),
 )
+@limiter.limit("2/minute")
 async def run_scan(
-    request: IntelligenceScanRequest,
+    request: Request,
+    body: IntelligenceScanRequest,
     current_user: User = Depends(get_current_user),
     database: AsyncSession = Depends(get_db),
 ) -> IntelligenceScanResponse:
@@ -272,9 +287,9 @@ async def run_scan(
         data = await ci_service.run_intelligence_scan(
             database,
             user_id=current_user.id,
-            industry=request.industry,
-            region=request.region,
-            currency=request.currency,
+            industry=body.industry,
+            region=body.region,
+            currency=body.currency,
         )
         return IntelligenceScanResponse(
             career_pulse=(
@@ -320,8 +335,10 @@ async def run_scan(
         "best fit based on demand and trend direction."
     ),
 )
+@limiter.limit(settings.rate_limit_career_dna)
 async def compare_industries_endpoint(
-    request: IndustryComparisonRequest,
+    request: Request,
+    body: IndustryComparisonRequest,
     current_user: User = Depends(get_current_user),
     database: AsyncSession = Depends(get_db),
 ) -> IndustryComparisonResponse:
@@ -330,8 +347,8 @@ async def compare_industries_endpoint(
         data = await ci_service.compare_industries(
             database,
             user_id=current_user.id,
-            industries=request.industries,
-            region=request.region,
+            industries=body.industries,
+            region=body.region,
         )
         return IndustryComparisonResponse(
             snapshots=[
@@ -357,7 +374,9 @@ async def compare_industries_endpoint(
     summary="Get CI preferences",
     description="Get current Collective Intelligence preferences.",
 )
+@limiter.limit(settings.rate_limit_parse)
 async def get_preferences(
+    request: Request,
     current_user: User = Depends(get_current_user),
     database: AsyncSession = Depends(get_db),
 ) -> CollectiveIntelligencePreferenceResponse:
@@ -385,8 +404,10 @@ async def get_preferences(
         "included modules, industries, locations, and currency."
     ),
 )
+@limiter.limit(settings.rate_limit_embed)
 async def update_preferences(
-    request: CollectiveIntelligencePreferenceUpdate,
+    request: Request,
+    body: CollectiveIntelligencePreferenceUpdate,
     current_user: User = Depends(get_current_user),
     database: AsyncSession = Depends(get_db),
 ) -> CollectiveIntelligencePreferenceResponse:
@@ -395,7 +416,7 @@ async def update_preferences(
         preference = await ci_service.get_or_update_preferences(
             database,
             user_id=current_user.id,
-            updates=request.model_dump(exclude_unset=True),
+            updates=body.model_dump(exclude_unset=True),
         )
         return CollectiveIntelligencePreferenceResponse.model_validate(
             preference,

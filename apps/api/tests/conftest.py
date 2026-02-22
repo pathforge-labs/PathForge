@@ -149,3 +149,43 @@ async def auth_headers(client: AsyncClient, registered_user: dict) -> dict:
     assert response.status_code == 200
     token = response.json()["access_token"]
     return {"Authorization": f"Bearer {token}"}
+
+
+@pytest.fixture
+async def authenticated_user(db_session: AsyncSession) -> "User":
+    """Create a test user directly in the database and return the ORM object.
+
+    Unlike ``registered_user``, this fixture bypasses HTTP endpoints,
+    providing a deterministic User instance for integration tests that
+    need an authenticated context without depending on the auth routes.
+    """
+    from app.core.security import hash_password
+    from app.models.user import User
+
+    user = User(
+        email="integration@pathforge.eu",
+        hashed_password=hash_password("IntegrationPass123!"),
+        full_name="Integration User",
+    )
+    db_session.add(user)
+    await db_session.flush()
+    await db_session.refresh(user)
+    return user
+
+
+@pytest.fixture
+async def auth_client(
+    client: AsyncClient,
+    authenticated_user: "User",
+) -> AsyncClient:
+    """Return an AsyncClient pre-configured with valid auth headers.
+
+    Combines the ``client`` and ``authenticated_user`` fixtures to
+    provide a ready-to-use authenticated HTTP client for integration
+    tests targeting protected endpoints.
+    """
+    from app.core.security import create_access_token
+
+    token = create_access_token(str(authenticated_user.id))
+    client.headers["Authorization"] = f"Bearer {token}"
+    return client
