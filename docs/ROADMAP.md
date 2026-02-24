@@ -470,7 +470,7 @@
 > - GDPR Export: JSON package with AI methodology disclosure, SHA-256 checksums, 1-export-per-24h rate limit
 > - 101 Sprint 22 tests (39 CCC + 35 Notification + 27 Profile) — 901/901 total suite passing
 > - Tier-1 retrospective audit — all areas Tier-1 Compliant ✅
-> - 4 optional findings deferred to Sprint 23 (async export queue, email digest delivery, MyPy cleanup, conftest TYPE_CHECKING)
+> - 4 deferred findings resolved: MyPy cleanup, conftest TYPE_CHECKING, async export queue, email digest delivery ✅
 
 ---
 
@@ -510,6 +510,7 @@
 | 2026-02-19 | Turnstile CSP fix (execute-on-demand) | Post-9        | ✅ Done | execution: execute mode, Tier-1 audit ✅     |
 | 2026-02-20 | PowerShell shell conventions          | 10            | ✅ Done | Skill created, 12 `&&` fixes across 6 files  |
 | 2026-02-21 | MyPy 15→0 type warnings               | 14            | ✅ Done | 6 files, +22/−81 lines, full green CI        |
+| 2026-02-24 | Sprint 22 audit fixes (4 findings)    | 22            | ✅ Done | MyPy, TYPE_CHECKING, async export, email     |
 
 ---
 
@@ -539,4 +540,4 @@
 | 19     | 4             | 12        | 0            | 1        |
 | 20     | 7             | 7         | 0            | 2        |
 | 21     | 7             | 7         | 0            | 1        |
-| 22     | 6             | 6         | 0            | 2        |
+| 22     | 6             | 6         | 1            | 3        |

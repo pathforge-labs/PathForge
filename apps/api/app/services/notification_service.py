@@ -14,6 +14,7 @@ Digest flow:
     1. Query unread notifications for period
     2. Aggregate by engine and severity
     3. Persist digest record
+    4. Send digest email (if configured)
 """
 
 import logging
@@ -352,6 +353,9 @@ class NotificationService:
         db.add(digest)
         await db.flush()
 
+        # Attempt email delivery (fire-and-forget)
+        await _send_digest_email(db, digest=digest, user_id=user_id)
+
         return digest
 
     # ── Digest List ────────────────────────────────────────────
@@ -432,3 +436,129 @@ class NotificationService:
 
         await db.flush()
         return pref
+
+
+# ── Email Delivery ─────────────────────────────────────────────
+
+
+async def _send_digest_email(
+    db: AsyncSession,
+    *,
+    digest: NotificationDigest,
+    user_id: uuid.UUID,
+) -> None:
+    """Send a digest email via Resend API.
+
+    Config-gated: requires ``RESEND_API_KEY`` and
+    ``DIGEST_EMAIL_ENABLED=true``. Fails gracefully —
+    errors are logged but never propagate.
+    """
+    from app.core.config import settings
+
+    if not settings.resend_api_key or not settings.digest_email_enabled:
+        logger.debug(
+            "Digest email delivery disabled (API key or flag not set)",
+        )
+        return
+
+    try:
+        import httpx
+
+        # Resolve user email
+        from app.models.user import User
+
+        user_result = await db.execute(
+            select(User.email).where(User.id == str(user_id)),
+        )
+        user_email = user_result.scalar_one_or_none()
+        if not user_email:
+            logger.warning(
+                "Cannot send digest email: user %s not found", user_id,
+            )
+            return
+
+        html_body = _format_digest_html(digest)
+
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            response = await client.post(
+                "https://api.resend.com/emails",
+                headers={
+                    "Authorization": f"Bearer {settings.resend_api_key}",
+                    "Content-Type": "application/json",
+                },
+                json={
+                    "from": settings.digest_from_email,
+                    "to": [user_email],
+                    "subject": (
+                        f"PathForge — Your {digest.digest_type.title()} "
+                        f"Career Digest ({digest.notification_count} alerts)"
+                    ),
+                    "html": html_body,
+                },
+            )
+            response.raise_for_status()
+
+        # Mark digest as sent
+        digest.sent_at = datetime.now(UTC)
+        await db.flush()
+
+        logger.info(
+            "Digest email sent for user %s (digest %s)",
+            user_id, digest.id,
+        )
+
+    except Exception:
+        logger.exception(
+            "Failed to send digest email for user %s", user_id,
+        )
+
+
+def _format_digest_html(digest: NotificationDigest) -> str:
+    """Format a digest into a simple HTML email body."""
+    summary = digest.summary or {}
+    by_engine = summary.get("by_engine", {})
+    by_severity = summary.get("by_severity", {})
+
+    engine_rows = "".join(
+        f"<tr><td>{engine}</td><td>{count}</td></tr>"
+        for engine, count in by_engine.items()
+    )
+    severity_rows = "".join(
+        f"<tr><td>{severity}</td><td>{count}</td></tr>"
+        for severity, count in by_severity.items()
+    )
+
+    return f"""\
+    <html>
+    <body style="font-family: system-ui, sans-serif; color: #1a1a2e;">
+      <h2 style="color: #6c5ce7;">PathForge Career Digest</h2>
+      <p>
+        <strong>{digest.notification_count}</strong> notifications
+        from {digest.period_start:%Y-%m-%d} to {digest.period_end:%Y-%m-%d}
+      </p>
+
+      <h3>By Engine</h3>
+      <table border="1" cellpadding="6" cellspacing="0"
+             style="border-collapse: collapse; width: 100%; max-width: 400px;">
+        <tr style="background: #dfe6e9;">
+          <th>Engine</th><th>Count</th>
+        </tr>
+        {engine_rows}
+      </table>
+
+      <h3>By Severity</h3>
+      <table border="1" cellpadding="6" cellspacing="0"
+             style="border-collapse: collapse; width: 100%; max-width: 400px;">
+        <tr style="background: #dfe6e9;">
+          <th>Severity</th><th>Count</th>
+        </tr>
+        {severity_rows}
+      </table>
+
+      <hr style="border: 1px solid #dfe6e9; margin: 24px 0;" />
+      <p style="color: #636e72; font-size: 12px;">
+        AI-generated career intelligence. Maximum confidence: 85%.
+        <br />Manage notification preferences in your PathForge dashboard.
+      </p>
+    </body>
+    </html>"""

@@ -107,6 +107,11 @@ class Settings(BaseSettings):
     adzuna_app_key: str = ""
     jooble_api_key: str = ""
 
+    # ── Email Delivery (Resend) ──────────────────────────────────
+    resend_api_key: str = ""
+    digest_email_enabled: bool = False
+    digest_from_email: str = "notifications@pathforge.eu"
+
     @property
     def is_production(self) -> bool:
         return self.environment == "production"

@@ -14,6 +14,7 @@ Export pipeline:
     6. Set 7-day expiry
 """
 
+import asyncio
 import hashlib
 import json
 import logging
@@ -39,6 +40,8 @@ logger = logging.getLogger(__name__)
 EXPORT_RATE_LIMIT_HOURS = 24
 # Export expiry: 7 days
 EXPORT_EXPIRY_DAYS = 7
+# Maximum export payload size: 50 MB
+MAX_EXPORT_SIZE_BYTES = 50 * 1024 * 1024
 
 # Engine model mapping for data collection
 # (Import engines lazily to avoid circular imports)
@@ -56,6 +59,9 @@ ENGINE_DATA_COLLECTORS: dict[str, str] = {
     "transition_pathways": "app.models.transition_pathways.TransitionPath",
     "career_passport": "app.models.career_passport.CountryComparison",
 }
+
+# Background task references (prevent GC of fire-and-forget tasks)
+_background_tasks: set[asyncio.Task[None]] = set()
 
 
 class UserProfileService:
@@ -265,12 +271,23 @@ class UserProfileService:
         db.add(export_request)
         await db.flush()
 
-        # Process synchronously for now (Sprint 23: async queue)
-        result = await UserProfileService._process_export(
-            db, export_request=export_request, user_id=user_id,
+        # Fire background processing task (Sprint 22: async queue)
+        task = asyncio.create_task(
+            _process_export_background(
+                db, export_request=export_request, user_id=user_id,
+            ),
         )
+        _background_tasks.add(task)
+        task.add_done_callback(_background_tasks.discard)
 
-        return result
+        return {
+            "status": "processing",
+            "export_id": str(export_request.id),
+            "detail": (
+                "Export is being processed. Poll GET /export/{id} "
+                "for status."
+            ),
+        }
 
     @staticmethod
     async def get_export_status(
@@ -341,6 +358,8 @@ class UserProfileService:
         - AI methodology disclosure
         - Data categories with record counts
         - SHA-256 checksum for integrity
+
+        Memory-guarded: rejects payloads exceeding MAX_EXPORT_SIZE_BYTES.
         """
         export_request.status = ExportStatus.PROCESSING.value
         await db.flush()
@@ -352,8 +371,33 @@ class UserProfileService:
                 export_type=export_request.export_type,
             )
 
+            # Compact JSON for reduced memory footprint
+            payload_json = json.dumps(
+                payload, default=str, sort_keys=True,
+                separators=(",", ":"),
+            )
+            payload_size = len(payload_json.encode("utf-8"))
+
+            # Memory guard: reject oversized payloads
+            if payload_size > MAX_EXPORT_SIZE_BYTES:
+                logger.warning(
+                    "Export payload too large for user %s: %d bytes",
+                    user_id, payload_size,
+                )
+                export_request.status = ExportStatus.FAILED.value
+                export_request.error_message = (
+                    f"Export payload exceeds maximum size "
+                    f"({MAX_EXPORT_SIZE_BYTES // (1024 * 1024)} MB). "
+                    f"Please contact support."
+                )
+                await db.flush()
+                return {
+                    "status": "failed",
+                    "export_id": str(export_request.id),
+                    "detail": export_request.error_message,
+                }
+
             # Compute checksum
-            payload_json = json.dumps(payload, default=str, sort_keys=True)
             checksum = hashlib.sha256(
                 payload_json.encode("utf-8"),
             ).hexdigest()
@@ -366,7 +410,7 @@ class UserProfileService:
             export_request.status = ExportStatus.COMPLETED.value
             export_request.checksum = checksum
             export_request.record_count = record_count
-            export_request.file_size_bytes = len(payload_json.encode("utf-8"))
+            export_request.file_size_bytes = payload_size
             export_request.completed_at = now
             export_request.expires_at = now + timedelta(
                 days=EXPORT_EXPIRY_DAYS,
@@ -395,6 +439,31 @@ class UserProfileService:
                 "export_id": str(export_request.id),
                 "detail": "Export processing failed. Please try again.",
             }
+
+
+# ── Background Export Processing ───────────────────────────────
+
+
+async def _process_export_background(
+    db: AsyncSession,
+    *,
+    export_request: DataExportRequest,
+    user_id: uuid.UUID,
+) -> None:
+    """Background wrapper for export processing.
+
+    Delegates to ``UserProfileService._process_export`` and logs
+    any errors. Never raises — designed for ``asyncio.create_task``.
+    """
+    try:
+        await UserProfileService._process_export(
+            db, export_request=export_request, user_id=user_id,
+        )
+    except Exception:
+        logger.exception(
+            "Background export failed for user %s, export %s",
+            user_id, export_request.id,
+        )
 
 
 # ── Export Payload Builder ─────────────────────────────────────

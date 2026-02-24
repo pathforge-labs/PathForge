@@ -254,6 +254,11 @@ class NotificationDigest(Base, UUIDMixin, TimestampMixin):
         JSON, nullable=True,
     )
 
+    # ── Delivery tracking ──
+    sent_at: Mapped[datetime.datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True, default=None,
+    )
+
     # ── Relationships ──
     user: Mapped[User] = relationship("User")
 

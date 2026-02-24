@@ -30,6 +30,14 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 - `models/__init__.py` — 7 new models + `__all__` sort fix
 - `conftest.py` — UUID type compatibility for PostgreSQL ↔ SQLite test environments
 
+### Fixed (Audit Remediation — 2026-02-24)
+
+- **MyPy career_action_planner** — `ComparePlansResult.recommended_plan_id` type `str | None` → `uuid.UUID | None`, `model_validate()` replaces `**dict` spread, direct import from helpers module
+- **conftest.py TYPE_CHECKING** — `TYPE_CHECKING` guard for `User`, `from __future__ import annotations`, typed all compiler functions + fixtures, narrowed `type: ignore[method-assign]`
+- **Async export queue** — `request_export` now returns `"processing"` immediately via `asyncio.create_task`, 50MB `MAX_EXPORT_SIZE_BYTES` OOM guard, compact JSON serialization
+- **Email digest delivery** — Resend API integration with config-gated `_send_digest_email`, `sent_at` column on `NotificationDigest`, `_format_digest_html` branded template
+- Updated `test_user_profile.py` assertion for async export response format
+
 ---
 
 ## [Sprint 21] — Career Action Planner™ — 2026-02-23

@@ -55,7 +55,7 @@ class ComparePlansResult:
     """Typed result from compare_plans pipeline."""
 
     plans: list[CareerActionPlan]
-    recommended_plan_id: str | None
+    recommended_plan_id: uuid.UUID | None
     recommendation_reasoning: str
 
 

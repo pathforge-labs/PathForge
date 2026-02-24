@@ -51,6 +51,9 @@ from app.schemas.career_action_planner import (
     UpdatePlanStatusRequest,
 )
 from app.services import career_action_planner_service as service
+from app.services._career_action_planner_helpers import (
+    compare_plans as compare_plans_fn,
+)
 
 router = APIRouter(
     prefix="/career-action-planner",
@@ -95,7 +98,7 @@ async def get_dashboard(
             PlanRecommendationResponse.model_validate(rec)
             for rec in result.recent_recommendations
         ],
-        stats=PlanStatsResponse(**result.stats),
+        stats=PlanStatsResponse.model_validate(result.stats),
         preferences=pref_response,
     )
 
@@ -325,7 +328,7 @@ async def compare_plans(
     database: AsyncSession = Depends(get_db),
 ) -> PlanComparisonResponse:
     """Compare all user plans and recommend the best option."""
-    result = await service.compare_plans(
+    result = await compare_plans_fn(
         database, user_id=current_user.id,
     )
 

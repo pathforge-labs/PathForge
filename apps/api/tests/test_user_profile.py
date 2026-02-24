@@ -436,6 +436,6 @@ class TestExportRateLimiting:
         result = await UserProfileService.request_export(
             db_session, user_id=user_id,
         )
-        # First request should always succeed
-        assert result.get("status") != "rate_limited"
-        assert "export" in result or "id" in result or "export_type" in result or result.get("status") == "completed"
+        # First request should always succeed (may return processing or completed)
+        assert result.get("status") in {"processing", "completed"}
+        assert "export_id" in result

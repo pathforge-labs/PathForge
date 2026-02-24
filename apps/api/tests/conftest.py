@@ -8,63 +8,79 @@ Registers custom type compilers to handle PostgreSQL-specific
 column types (ARRAY, Vector, JSON) that don't exist in SQLite.
 """
 
+from __future__ import annotations
+
 import asyncio
+import uuid as _uuid
 from collections.abc import AsyncGenerator
+from typing import TYPE_CHECKING, Any
 
 import pytest
 from httpx import ASGITransport, AsyncClient
 
 # pgvector's Vector type
-from pgvector.sqlalchemy import Vector
+from pgvector.sqlalchemy import Vector  # type: ignore[import-untyped]
 from sqlalchemy import event
 from sqlalchemy.dialects.postgresql import ARRAY, JSON
+from sqlalchemy.dialects.postgresql import UUID as PG_UUID
+from sqlalchemy.engine.interfaces import Dialect
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.ext.compiler import compiles
+from sqlalchemy.sql.type_api import TypeEngine
+
+if TYPE_CHECKING:
+    from app.models.user import User
+
 
 # ── SQLite ↔ PostgreSQL Type Compatibility ────────────────────
 #
 # We need to register compilation hooks BEFORE importing models,
 # so that when Base.metadata.create_all runs, the types are known.
-from sqlalchemy.ext.compiler import compiles
 
 
 # ARRAY → TEXT (SQLite stores serialized representation)
-@compiles(ARRAY, "sqlite")
-def _compile_array_sqlite(type_, compiler, **kw):
+@compiles(ARRAY, "sqlite")  # type: ignore[misc]
+def _compile_array_sqlite(
+    type_: TypeEngine, compiler: Any, **kw: Any,
+) -> str:
     return "TEXT"
 
 
 # Vector → TEXT
-@compiles(Vector, "sqlite")
-def _compile_vector_sqlite(type_, compiler, **kw):
+@compiles(Vector, "sqlite")  # type: ignore[misc]
+def _compile_vector_sqlite(
+    type_: TypeEngine, compiler: Any, **kw: Any,
+) -> str:
     return "TEXT"
 
 
 # JSON → TEXT
-@compiles(JSON, "sqlite")
-def _compile_json_sqlite(type_, compiler, **kw):
+@compiles(JSON, "sqlite")  # type: ignore[misc]
+def _compile_json_sqlite(
+    type_: TypeEngine, compiler: Any, **kw: Any,
+) -> str:
     return "TEXT"
 
 
 # PostgreSQL UUID → TEXT (SQLite stores as string representation)
-from sqlalchemy.dialects.postgresql import UUID as PG_UUID
-
-
-@compiles(PG_UUID, "sqlite")
-def _compile_uuid_sqlite(type_, compiler, **kw):
+@compiles(PG_UUID, "sqlite")  # type: ignore[misc]
+def _compile_uuid_sqlite(
+    type_: TypeEngine, compiler: Any, **kw: Any,
+) -> str:
     return "TEXT"
 
 
 # Patch UUID bind processor to accept both uuid.UUID and str values
 # in SQLite. The default processor calls value.hex which fails on strings.
-import uuid as _uuid
-
 _original_uuid_bind = PG_UUID.bind_processor
 
 
-def _patched_uuid_bind(self, dialect):
+def _patched_uuid_bind(
+    self: PG_UUID, dialect: Dialect,
+) -> Any:
     """Return a processor that handles both UUID objects and strings."""
     if dialect.name == "sqlite":
-        def process(value):
+        def process(value: Any) -> str | None:
             if value is None:
                 return None
             if isinstance(value, _uuid.UUID):
@@ -74,17 +90,19 @@ def _patched_uuid_bind(self, dialect):
     return _original_uuid_bind(self, dialect)
 
 
-PG_UUID.bind_processor = _patched_uuid_bind  # type: ignore[assignment]
+PG_UUID.bind_processor = _patched_uuid_bind  # type: ignore[method-assign]
 
 # Also patch result_processor to convert TEXT back to uuid.UUID for SQLite
 _original_uuid_result = PG_UUID.result_processor
 
 
-def _patched_uuid_result(self, dialect, coltype):
+def _patched_uuid_result(
+    self: PG_UUID, dialect: Dialect, coltype: Any,
+) -> Any:
     """Convert TEXT strings back to uuid.UUID objects for SQLite."""
     if dialect.name == "sqlite":
         if getattr(self, "as_uuid", False):
-            def process(value):
+            def process(value: Any) -> _uuid.UUID | None:
                 if value is not None:
                     return _uuid.UUID(str(value))
                 return None
@@ -93,7 +111,7 @@ def _patched_uuid_result(self, dialect, coltype):
     return _original_uuid_result(self, dialect, coltype)
 
 
-PG_UUID.result_processor = _patched_uuid_result  # type: ignore[assignment]
+PG_UUID.result_processor = _patched_uuid_result  # type: ignore[method-assign]
 
 
 # ── Now import models (which triggers Base.metadata population) ──
@@ -105,15 +123,15 @@ TEST_DATABASE_URL = "sqlite+aiosqlite:///:memory:"
 
 
 @pytest.fixture(scope="session")
-def event_loop():
+def event_loop() -> asyncio.AbstractEventLoop:
     """Create an event loop for the test session."""
     loop = asyncio.new_event_loop()
-    yield loop
+    yield loop  # type: ignore[misc]
     loop.close()
 
 
 @pytest.fixture(scope="session")
-async def test_engine():
+async def test_engine() -> AsyncGenerator[Any, None]:
     """Create a test database engine with all tables."""
     engine = create_async_engine(TEST_DATABASE_URL, echo=False)
 
@@ -129,7 +147,7 @@ async def test_engine():
 
 
 @pytest.fixture
-async def db_session(test_engine) -> AsyncGenerator[AsyncSession, None]:
+async def db_session(test_engine: Any) -> AsyncGenerator[AsyncSession, None]:
     """Provide a transactional session that rolls back after each test."""
     # Use a connection-level transaction so each test is isolated
     async with test_engine.connect() as conn:
@@ -143,10 +161,12 @@ async def db_session(test_engine) -> AsyncGenerator[AsyncSession, None]:
 
         # Restart nested savepoint after each session commit
         @event.listens_for(session.sync_session, "after_transaction_end")
-        def _restart_nested(session_sync, transaction_sync):
+        def _restart_nested(
+            session_sync: Any, transaction_sync: Any,
+        ) -> None:
             nonlocal nested
             if not nested.is_active:
-                nested = conn.sync_connection.begin_nested()
+                nested = conn.sync_connection.begin_nested()  # type: ignore[union-attr]
 
         yield session
 
@@ -175,7 +195,7 @@ async def client(db_session: AsyncSession) -> AsyncGenerator[AsyncClient, None]:
 
 
 @pytest.fixture
-async def registered_user(client: AsyncClient) -> dict:
+async def registered_user(client: AsyncClient) -> dict[str, str]:
     """Register a test user and return their data."""
     payload = {
         "email": "test@pathforge.eu",
@@ -188,7 +208,7 @@ async def registered_user(client: AsyncClient) -> dict:
 
 
 @pytest.fixture
-async def auth_headers(client: AsyncClient, registered_user: dict) -> dict:
+async def auth_headers(client: AsyncClient, registered_user: dict[str, str]) -> dict[str, str]:
     """Login and return authorization headers."""
     response = await client.post(
         "/api/v1/auth/login",
@@ -203,7 +223,7 @@ async def auth_headers(client: AsyncClient, registered_user: dict) -> dict:
 
 
 @pytest.fixture
-async def authenticated_user(db_session: AsyncSession) -> "User":
+async def authenticated_user(db_session: AsyncSession) -> User:
     """Create a test user directly in the database and return the ORM object.
 
     Unlike ``registered_user``, this fixture bypasses HTTP endpoints,
@@ -211,9 +231,9 @@ async def authenticated_user(db_session: AsyncSession) -> "User":
     need an authenticated context without depending on the auth routes.
     """
     from app.core.security import hash_password
-    from app.models.user import User
+    from app.models.user import User as UserModel
 
-    user = User(
+    user = UserModel(
         email="integration@pathforge.eu",
         hashed_password=hash_password("IntegrationPass123!"),
         full_name="Integration User",
@@ -227,7 +247,7 @@ async def authenticated_user(db_session: AsyncSession) -> "User":
 @pytest.fixture
 async def auth_client(
     client: AsyncClient,
-    authenticated_user: "User",
+    authenticated_user: User,
 ) -> AsyncClient:
     """Return an AsyncClient pre-configured with valid auth headers.
 
