@@ -279,6 +279,7 @@ When you see these: **STOP. Return to Phase 1.**
 
 - [root-cause-tracing.md](./root-cause-tracing.md) — Trace bugs backward through call stack to find the original trigger
 - [defense-in-depth.md](./defense-in-depth.md) — Add validation at multiple layers after finding root cause
+- [condition-based-waiting.md](./condition-based-waiting.md) — Replace arbitrary timeouts with condition polling
 
 ---
 
