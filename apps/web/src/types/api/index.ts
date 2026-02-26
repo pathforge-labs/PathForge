@@ -16,3 +16,9 @@ export type * from "./ai";
 export type * from "./applications";
 export type * from "./blacklist";
 export type * from "./analytics";
+
+// ── Sprint 27: Intelligence Hub ────────────────────────────────
+export type * from "./skill-decay";
+export type * from "./salary-intelligence";
+export type * from "./career-simulation";
+export type * from "./transition-pathways";

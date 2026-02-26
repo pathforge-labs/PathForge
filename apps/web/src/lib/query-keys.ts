@@ -103,4 +103,48 @@ export const queryKeys = {
   ai: {
     all: ["ai"] as const,
   },
+
+  // ── Sprint 27: Intelligence Hub ───────────────────────
+
+  // ── Skill Decay & Growth Tracker ──────────────────────
+  skillDecay: {
+    all: ["skill-decay"] as const,
+    dashboard: () => ["skill-decay", "dashboard"] as const,
+    freshness: () => ["skill-decay", "freshness"] as const,
+    marketDemand: () => ["skill-decay", "market-demand"] as const,
+    velocityMap: () => ["skill-decay", "velocity-map"] as const,
+    reskillingPathways: () => ["skill-decay", "reskilling-pathways"] as const,
+    preferences: () => ["skill-decay", "preferences"] as const,
+  },
+
+  // ── Salary Intelligence Engine™ ───────────────────────
+  salaryIntelligence: {
+    all: ["salary-intelligence"] as const,
+    dashboard: () => ["salary-intelligence", "dashboard"] as const,
+    estimate: () => ["salary-intelligence", "estimate"] as const,
+    skillImpacts: () => ["salary-intelligence", "skill-impacts"] as const,
+    trajectory: () => ["salary-intelligence", "trajectory"] as const,
+    scenarios: () => ["salary-intelligence", "scenarios"] as const,
+    scenario: (id: string) => ["salary-intelligence", "scenario", id] as const,
+    preferences: () => ["salary-intelligence", "preferences"] as const,
+  },
+
+  // ── Career Simulation Engine™ ─────────────────────────
+  careerSimulation: {
+    all: ["career-simulation"] as const,
+    dashboard: (page?: number) => ["career-simulation", "dashboard", { page }] as const,
+    detail: (id: string) => ["career-simulation", "detail", id] as const,
+    preferences: () => ["career-simulation", "preferences"] as const,
+  },
+
+  // ── Transition Pathways ───────────────────────────────
+  transitionPathways: {
+    all: ["transition-pathways"] as const,
+    dashboard: () => ["transition-pathways", "dashboard"] as const,
+    list: () => ["transition-pathways", "list"] as const,
+    detail: (id: string) => ["transition-pathways", "detail", id] as const,
+    skillBridge: (id: string) => ["transition-pathways", "skill-bridge", id] as const,
+    milestones: (id: string) => ["transition-pathways", "milestones", id] as const,
+    preferences: () => ["transition-pathways", "preferences"] as const,
+  },
 } as const;

@@ -1,7 +1,7 @@
 # PathForge — Live Sprint Board
 
 > **Single Source of Truth** for all sprint tracking and task management.
-> **Last Updated**: 2026-02-26 | **Current Phase**: F (Dashboard Experience) — Sprint 26 complete
+> **Last Updated**: 2026-02-26 | **Current Phase**: F (Dashboard Experience) — Sprint 27 complete
 > **Document ownership (ADR-010)**: Phase-level definitions live in `ARCHITECTURE.md` Section 7. This file tracks sprint-level execution.
 
 ---
@@ -604,14 +604,16 @@
 > - Quality Gate architecture document: 12-platform competitive analysis, 5/6 features first-to-market
 > - Sprint 25 audit tracked items resolved: R1 (dynamic readiness) → Phase 2, R3 (auth migration) → Phase 0, R2 (PDF/DOCX) → deferred Sprint 29
 
-### Sprint 27 — Intelligence Hub
+### Sprint 27 — Intelligence Hub (✅ Complete)
 
-- [ ] Skill Decay tracker with freshness indicators + velocity map
-- [ ] Salary Intelligence display with skill impact modeling
-- [ ] Career Simulation "what-if" interface (5 scenario types)
-- [ ] Transition Pathways explorer with success probability
-- [ ] Shared intelligence card component system
-- [ ] Career Resilience Score™ historical trend line — Sprint 26 audit O2
+- [x] Skill Decay tracker with freshness indicators + velocity map
+- [x] Salary Intelligence display with skill impact modeling
+- [x] Career Simulation "what-if" interface (5 scenario types)
+- [x] Transition Pathways explorer with success probability
+- [x] Shared intelligence card component system (IntelligenceCard 5-slot + HeadlineInsight)
+- [-] Career Resilience Score™ historical trend line — Sprint 26 audit O2 → deferred O3
+
+> **Sprint 27 Deliverables**: 25 new files + 4 modified. 50 TypeScript interfaces, 41 API methods, 26 query keys, 32 hooks, 8 components, 4 dashboard pages, sidebar navigation updated. 53 new tests (total: 204/204 frontend, 1016/1016 backend). Tier-1 audit: all 8 areas compliant ✅.
 
 ### Sprint 28 — Network Intelligence & Command Center
 

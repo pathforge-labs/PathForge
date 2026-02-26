@@ -25,6 +25,10 @@ const navigation = [
   { name: "Resumes", href: "/dashboard/resumes", icon: "📄" },
   { name: "Career DNA", href: "/dashboard/career-dna", icon: "🧬" },
   { name: "Threat Radar", href: "/dashboard/threat-radar", icon: "🛡️" },
+  { name: "Skills Health", href: "/dashboard/skill-decay", icon: "🔋" },
+  { name: "Salary Intelligence", href: "/dashboard/salary-intelligence", icon: "💰" },
+  { name: "Career Simulator", href: "/dashboard/career-simulation", icon: "🔮" },
+  { name: "Career Moves", href: "/dashboard/transition-pathways", icon: "🔄" },
   { name: "Settings", href: "/dashboard/settings", icon: "⚙️" },
 ] as const;
 

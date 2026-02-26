@@ -23,3 +23,9 @@ export * as aiApi from "./ai";
 export * as applicationsApi from "./applications";
 export * as blacklistApi from "./blacklist";
 export * as analyticsApi from "./analytics";
+
+// ── Sprint 27: Intelligence Hub ────────────────────────────────
+export { skillDecayApi } from "./skill-decay";
+export { salaryIntelligenceApi } from "./salary-intelligence";
+export { careerSimulationApi } from "./career-simulation";
+export { transitionPathwaysApi } from "./transition-pathways";

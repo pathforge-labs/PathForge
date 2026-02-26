@@ -1,13 +1,13 @@
 {
   "version": "1.0.0",
-  "sprint": "Sprint 26",
+  "sprint": "Sprint 27",
   "phase": "F — Dashboard Experience",
-  "focus": "Career DNA & Threat Radar Dashboard",
-  "last_commit": "560a64a",
-  "last_session": "2026-02-26T14:35:00+01:00",
+  "focus": "Intelligence Hub (Skill Decay, Salary Intelligence, Career Simulation, Transition Pathways)",
+  "last_commit": "pending",
+  "last_session": "2026-02-26T15:46:00+01:00",
   "tracking": {
-    "frontend_tests": 151,
-    "test_suites": 14,
+    "frontend_tests": 204,
+    "test_suites": 19,
     "backend_tests": 1016,
     "tsc_errors": 0,
     "npm_audit_vulnerabilities": 0
