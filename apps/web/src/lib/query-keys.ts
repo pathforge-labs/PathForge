@@ -147,4 +147,54 @@ export const queryKeys = {
     milestones: (id: string) => ["transition-pathways", "milestones", id] as const,
     preferences: () => ["transition-pathways", "preferences"] as const,
   },
+
+  // ── Sprint 28: Network Intelligence & Command Center ──
+
+  // ── Hidden Job Market Detector™ ────────────────────────
+  hiddenJobMarket: {
+    all: ["hidden-job-market"] as const,
+    dashboard: () => ["hidden-job-market", "dashboard"] as const,
+    signal: (id: string) => ["hidden-job-market", "signal", id] as const,
+    opportunities: () => ["hidden-job-market", "opportunities"] as const,
+    preferences: () => ["hidden-job-market", "preferences"] as const,
+  },
+
+  // ── Cross-Border Career Passport™ ──────────────────────
+  careerPassport: {
+    all: ["career-passport"] as const,
+    dashboard: () => ["career-passport", "dashboard"] as const,
+    credential: (id: string) => ["career-passport", "credential", id] as const,
+    marketDemand: (country: string) => ["career-passport", "market-demand", country] as const,
+    preferences: () => ["career-passport", "preferences"] as const,
+  },
+
+  // ── Interview Intelligence™ ────────────────────────────
+  interviewIntelligence: {
+    all: ["interview-intelligence"] as const,
+    dashboard: () => ["interview-intelligence", "dashboard"] as const,
+    prep: (id: string) => ["interview-intelligence", "prep", id] as const,
+    preferences: () => ["interview-intelligence", "preferences"] as const,
+  },
+
+  // ── Cross-Engine Recommendation Intelligence™ ──────────
+  recommendations: {
+    all: ["recommendations"] as const,
+    dashboard: () => ["recommendations", "dashboard"] as const,
+    list: (params?: Record<string, unknown>) => ["recommendations", "list", params] as const,
+    detail: (id: string) => ["recommendations", "detail", id] as const,
+    correlations: (id: string) => ["recommendations", "correlations", id] as const,
+    batches: () => ["recommendations", "batches"] as const,
+    preferences: () => ["recommendations", "preferences"] as const,
+  },
+
+  // ── Career Workflow Automation Engine™ ──────────────────
+  workflows: {
+    all: ["workflows"] as const,
+    dashboard: () => ["workflows", "dashboard"] as const,
+    list: (params?: Record<string, unknown>) => ["workflows", "list", params] as const,
+    detail: (id: string) => ["workflows", "detail", id] as const,
+    templates: () => ["workflows", "templates"] as const,
+    executions: (workflowId: string) => ["workflows", "executions", workflowId] as const,
+    preferences: () => ["workflows", "preferences"] as const,
+  },
 } as const;

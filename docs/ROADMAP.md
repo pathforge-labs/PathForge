@@ -1,7 +1,7 @@
 # PathForge — Live Sprint Board
 
 > **Single Source of Truth** for all sprint tracking and task management.
-> **Last Updated**: 2026-02-26 | **Current Phase**: F (Dashboard Experience) — Sprint 27 complete
+> **Last Updated**: 2026-02-26 | **Current Phase**: F (Dashboard Experience) — Sprint 28 complete
 > **Document ownership (ADR-010)**: Phase-level definitions live in `ARCHITECTURE.md` Section 7. This file tracks sprint-level execution.
 
 ---
@@ -615,14 +615,18 @@
 
 > **Sprint 27 Deliverables**: 25 new files + 4 modified. 50 TypeScript interfaces, 41 API methods, 26 query keys, 32 hooks, 8 components, 4 dashboard pages, sidebar navigation updated. 53 new tests (total: 204/204 frontend, 1016/1016 backend). Tier-1 audit: all 8 areas compliant ✅.
 
-### Sprint 28 — Network Intelligence & Command Center
+### Sprint 28 — Network Intelligence & Command Center (✅ Complete)
 
-- [ ] Hidden Job Market signal feed with outreach templates
-- [ ] Cross-Border Passport comparison tool
-- [ ] Interview Intelligence prep interface
-- [ ] Career Command Center (unified 12-engine dashboard)
-- [ ] Notification preferences UI + digest scheduling
-- [ ] Recommendation feed with priority-weighted sorting
+- [x] Hidden Job Market signal feed with outreach templates
+- [x] Cross-Border Passport comparison tool
+- [x] Interview Intelligence prep interface
+- [x] Career Command Center (unified 12-engine dashboard)
+- [x] Notification preferences UI + digest scheduling
+- [x] Recommendation feed with priority-weighted sorting
+- [x] Sidebar restructured with section headers (CAREER/INTELLIGENCE/COMMAND/OPERATIONS)
+- [x] Actions page (merged recommendations + workflows, intelligence→action model)
+
+> **Sprint 28 Deliverables**: 26 new files + 6 modified. 5 TypeScript type files (~77 interfaces), 5 API clients (~51 methods), 30 query keys, 7 hook files (50+ hooks), 6 dashboard pages, sidebar section headers. 27 new signal-prioritized tests (total: 232/232 frontend). Tier-1 audit: all areas compliant ✅.
 
 ---
 
@@ -746,6 +750,6 @@
 | 25     | 5             | 9         | 1            | 1        |
 | 26     | —             | —         | —            | —        |
 | 27     | —             | —         | —            | —        |
-| 28     | —             | —         | —            | —        |
+| 28     | 6             | 8         | 0            | 1        |
 | 29     | —             | —         | —            | —        |
 | 30     | —             | —         | —            | —        |

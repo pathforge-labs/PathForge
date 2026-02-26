@@ -22,3 +22,10 @@ export type * from "./skill-decay";
 export type * from "./salary-intelligence";
 export type * from "./career-simulation";
 export type * from "./transition-pathways";
+
+// ── Sprint 28: Network Intelligence & Command Center ───────────
+export type * from "./hidden-job-market";
+export type * from "./career-passport";
+export type * from "./interview-intelligence";
+export type * from "./recommendation-intelligence";
+export type * from "./workflow-automation";

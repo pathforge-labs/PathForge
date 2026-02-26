@@ -17,19 +17,62 @@ import { useAuth } from "@/hooks/use-auth";
 
 /* ── Navigation ────────────────────────────────────────────── */
 
-const navigation = [
-  { name: "Dashboard", href: "/dashboard", icon: "📊" },
-  { name: "Onboarding", href: "/dashboard/onboarding", icon: "🚀" },
-  { name: "Job Matches", href: "/dashboard/matches", icon: "🎯" },
-  { name: "Applications", href: "/dashboard/applications", icon: "📋" },
-  { name: "Resumes", href: "/dashboard/resumes", icon: "📄" },
-  { name: "Career DNA", href: "/dashboard/career-dna", icon: "🧬" },
-  { name: "Threat Radar", href: "/dashboard/threat-radar", icon: "🛡️" },
-  { name: "Skills Health", href: "/dashboard/skill-decay", icon: "🔋" },
-  { name: "Salary Intelligence", href: "/dashboard/salary-intelligence", icon: "💰" },
-  { name: "Career Simulator", href: "/dashboard/career-simulation", icon: "🔮" },
-  { name: "Career Moves", href: "/dashboard/transition-pathways", icon: "🔄" },
-  { name: "Settings", href: "/dashboard/settings", icon: "⚙️" },
+interface NavItem {
+  readonly name: string;
+  readonly href: string;
+  readonly icon: string;
+}
+
+interface NavSection {
+  readonly label: string;
+  readonly items: readonly NavItem[];
+}
+
+const navigation: readonly NavSection[] = [
+  {
+    label: "",
+    items: [
+      { name: "Dashboard", href: "/dashboard", icon: "📊" },
+      { name: "Onboarding", href: "/dashboard/onboarding", icon: "🚀" },
+    ],
+  },
+  {
+    label: "CAREER",
+    items: [
+      { name: "Career DNA", href: "/dashboard/career-dna", icon: "🧬" },
+      { name: "Threat Radar", href: "/dashboard/threat-radar", icon: "🛡️" },
+      { name: "Job Matches", href: "/dashboard/matches", icon: "🎯" },
+      { name: "Applications", href: "/dashboard/applications", icon: "📋" },
+      { name: "Resumes", href: "/dashboard/resumes", icon: "📄" },
+    ],
+  },
+  {
+    label: "INTELLIGENCE",
+    items: [
+      { name: "Hidden Market", href: "/dashboard/hidden-job-market", icon: "🕵️" },
+      { name: "Career Passport", href: "/dashboard/career-passport", icon: "🌍" },
+      { name: "Interview Prep", href: "/dashboard/interview-prep", icon: "🎤" },
+      { name: "Skills Health", href: "/dashboard/skill-decay", icon: "🔋" },
+      { name: "Salary Intelligence", href: "/dashboard/salary-intelligence", icon: "💰" },
+      { name: "Career Simulator", href: "/dashboard/career-simulation", icon: "🔮" },
+      { name: "Career Moves", href: "/dashboard/transition-pathways", icon: "🔄" },
+    ],
+  },
+  {
+    label: "COMMAND",
+    items: [
+      { name: "Command Center", href: "/dashboard/command-center", icon: "🎛️" },
+      { name: "Actions", href: "/dashboard/recommendations", icon: "⚡" },
+    ],
+  },
+  {
+    label: "OPERATIONS",
+    items: [
+      { name: "Notifications", href: "/dashboard/notifications", icon: "🔔" },
+      { name: "Analytics", href: "/dashboard/analytics", icon: "📈" },
+      { name: "Settings", href: "/dashboard/settings", icon: "⚙️" },
+    ],
+  },
 ] as const;
 
 /* ── Component ─────────────────────────────────────────────── */
@@ -119,28 +162,39 @@ export default function DashboardLayout({
         <Separator />
 
         {/* Navigation */}
-        <nav className="flex-1 space-y-1 px-3 py-4">
-          {navigation.map((item) => {
-            const active = isActive(item.href);
-            return (
-              <Link
-                key={item.name}
-                href={item.href}
-                onClick={() => setSidebarOpen(false)}
-                className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all duration-150 ${
-                  active
-                    ? "bg-primary/10 text-primary font-medium"
-                    : "text-sidebar-foreground hover:bg-sidebar-accent"
-                }`}
-              >
-                <span>{item.icon}</span>
-                {item.name}
-                {active && (
-                  <div className="ml-auto h-1.5 w-1.5 rounded-full bg-primary" />
-                )}
-              </Link>
-            );
-          })}
+        <nav className="flex-1 overflow-y-auto px-3 py-4">
+          {navigation.map((section) => (
+            <div key={section.label || "_top"} className="mb-3">
+              {section.label && (
+                <p className="mb-1 px-3 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60">
+                  {section.label}
+                </p>
+              )}
+              <div className="space-y-0.5">
+                {section.items.map((item) => {
+                  const active = isActive(item.href);
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      onClick={() => setSidebarOpen(false)}
+                      className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all duration-150 ${
+                        active
+                          ? "bg-primary/10 text-primary font-medium"
+                          : "text-sidebar-foreground hover:bg-sidebar-accent"
+                      }`}
+                    >
+                      <span>{item.icon}</span>
+                      {item.name}
+                      {active && (
+                        <div className="ml-auto h-1.5 w-1.5 rounded-full bg-primary" />
+                      )}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </nav>
 
         <Separator />

@@ -63,3 +63,25 @@ export function useRefreshVitals() {
     },
   });
 }
+
+export function useCommandCenterPreferences() {
+  const { isAuthenticated } = useAuth();
+
+  return useQuery({
+    queryKey: queryKeys.commandCenter.preferences(),
+    queryFn: () => commandCenterApi.getPreferences(),
+    enabled: isAuthenticated,
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+export function useUpdateCommandCenterPreferences() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: Record<string, unknown>) => commandCenterApi.updatePreferences(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.commandCenter.preferences() });
+    },
+  });
+}

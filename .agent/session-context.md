@@ -4,23 +4,22 @@
 
 ## Current Session
 
-| Field       | Value                                                 |
-| :---------- | :---------------------------------------------------- |
-| Date        | 2026-02-26                                            |
-| Focus       | Sprint 27 — Intelligence Hub (4 intelligence engines) |
-| Branch      | main                                                  |
-| Last Commit | da9d0f9 (Sprint 27 Intelligence Hub implementation)   |
+| Field       | Value                                                                    |
+| :---------- | :----------------------------------------------------------------------- |
+| Date        | 2026-02-26                                                               |
+| Focus       | Sprint 28 — Network Intelligence & Command Center (6 intelligence pages) |
+| Branch      | main                                                                     |
+| Last Commit | pending (Sprint 28 implementation)                                       |
 
 ## Work Done
 
-- **Phase 1** — Type Layer: 4 files, 50 TypeScript interfaces mirroring Pydantic schemas
-- **Phase 2** — API Client Layer: 4 files, 41 endpoint methods following `threatRadarApi` pattern
-- **Phase 3** — Query Keys: 4 new domains (26 keys) added to `query-keys.ts`
-- **Phase 4** — Hook Layer: 4 files, 32 TanStack Query hooks (20 queries + 12 mutations) with auth-gating
-- **Phase 5** — Dashboard Components: 8 new components (`IntelligenceCard` 5-slot, `HeadlineInsight`, `FreshnessIndicator`, `VelocityMap`, `SalaryRangeBar`, `SkillImpactChart`, `SimulationCard`, `TransitionCard`)
-- **Phase 6** — Dashboard Pages: 4 new pages + sidebar navigation updated (4 new entries)
-- **Phase 8** — Tests: 5 test files, 53 new tests (total 204 frontend)
-- **Phase 9** — Tier-1 retrospective audit — all 8 areas Tier-1 Compliant ✅
+- **Phase 1** — Type Layer: 5 new files (~77 TypeScript interfaces mirroring Pydantic schemas)
+- **Phase 2** — API Client Layer: 5 new modules (~51 endpoint methods)
+- **Phase 3** — Query Keys: 5 new domains (~30 keys) added to `query-keys.ts`
+- **Phase 4** — Hook Layer: 5 new + 2 expanded hook files (50+ TanStack Query hooks)
+- **Phase 5–6** — 6 dashboard pages + sidebar restructured with section headers (CAREER/INTELLIGENCE/COMMAND/OPERATIONS)
+- **Phase 7** — Tests: 5 test files, 27 new signal-prioritized tests (total 232 frontend)
+- **Phase 8** — Tier-1 retrospective audit — all areas compliant ✅
 
 ## Quality Gates
 
@@ -28,15 +27,16 @@
 | :------------- | :---------------------------- |
 | Lint           | ✅ 0 errors (4 warnings)      |
 | Types          | ✅ 0 errors (tsc --noEmit)    |
-| Frontend Tests | ✅ 204/204 passed (19 suites) |
-| Backend Tests  | ✅ 1016/1016 passed (560s)    |
+| Frontend Tests | ✅ 232/232 passed (24 suites) |
 | npm audit      | ✅ 0 vulnerabilities          |
-| Build          | ✅ 26 routes (4 new)          |
+| Build          | ✅ all routes compiled        |
 
 ## Handoff Notes
 
-- All Sprint 27 work complete — 25 new files, 4 modified files, 53 new tests
-- 4 optional enhancements documented for Sprint 28 (CSS styling, main dashboard wiring, trend line, explore form)
-- Lint warnings are 4 unused hook exports (will be consumed in Sprint 28 page refinements)
-- User-facing names: Skills Health, Salary Intelligence, Career Simulator, Career Moves
-- Next step: Sprint 28 (Network Intelligence & Command Center)
+- All Sprint 28 work complete — 26 new files, 6 modified files, 27 new tests
+- Sidebar now uses section headers for 18+ nav items (CAREER, INTELLIGENCE, COMMAND, OPERATIONS)
+- Actions page merges recommendations + workflows (intelligence → action mental model)
+- Priority-Weighted Score™ sorting implemented for recommendations
+- Deferred items for Sprint 29: CSS styling polish, workflow step drill-down, E2E Playwright tests
+- Lint warnings are 4 unused hook exports (pre-existing from Sprint 27)
+- Next step: Sprint 29 (Production Data Layer)

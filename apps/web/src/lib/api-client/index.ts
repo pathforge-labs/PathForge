@@ -29,3 +29,10 @@ export { skillDecayApi } from "./skill-decay";
 export { salaryIntelligenceApi } from "./salary-intelligence";
 export { careerSimulationApi } from "./career-simulation";
 export { transitionPathwaysApi } from "./transition-pathways";
+
+// ── Sprint 28: Network Intelligence & Command Center ───────────
+export { hiddenJobMarketApi } from "./hidden-job-market";
+export { careerPassportApi } from "./career-passport";
+export { interviewIntelligenceApi } from "./interview-intelligence";
+export { recommendationApi } from "./recommendation-intelligence";
+export { workflowApi } from "./workflow-automation";
