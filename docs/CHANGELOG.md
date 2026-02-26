@@ -5,6 +5,31 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [Sprint 25] — Core User Flow — 2026-02-26
+
+### Added
+
+- **FileUpload component** (`components/file-upload.tsx`) — drag-drop + click-to-browse, 5MB limit, `.txt/.pdf/.doc/.docx` accept, accessibility (keyboard, ARIA), file preview with size formatting
+- **Career DNA Readiness Score™** (`components/career-dna-readiness.tsx`) — animated SVG circular progress ring (0–100), 6-dimension status grid, score-tier coloring, contextual guidance. **Innovation: no competitor offers this.**
+- **User Profile hooks** (`hooks/api/use-user-profile.ts`) — `useUserProfile`, `useOnboardingStatus` (auth-gated queries), `useUpdateProfile`, `useRequestDataExport` (mutations with invalidation)
+- **23 new frontend tests** across 3 suites:
+  - `use-user-profile.test.ts` (7): auth-gating, mutations, query invalidation
+  - `file-upload.test.tsx` (8): validation, callbacks, error states, file removal
+  - `use-onboarding.test.ts` (8): state machine, navigation constraints, reset
+- Architecture decision record: `docs/architecture/sprint-25-core-user-flow.md` with 12-competitor analysis
+- 12-competitor market analysis confirming PathForge as first-mover in individual-owned career intelligence
+
+### Changed
+
+- **Onboarding hook** (`hooks/use-onboarding.ts`) — upgraded from 4→5 steps (upload→parse→dna→readiness→dashboard), added `file` state + `setFile()`, `generateCareerDna()`, FileReader support for `.txt`
+- **Onboarding page** (`onboarding/page.tsx`) — full rewrite: FileUpload + paste toggle, parse preview, Career DNA generation progress, Readiness Score™ display, dashboard redirect
+- **Dashboard page** (`dashboard/page.tsx`) — dynamic data from `useCareerDnaSummary`, `useOnboardingStatus`, skeleton loaders, conditional Get Started CTA, `bg-linear-to-br` (Tailwind v4)
+- **Settings page** (`settings/page.tsx`) — profile CRUD with inline edit form, GDPR data export request (Art. 20), error/success feedback
+- `ROADMAP.md` — Sprint 25 marked complete with implementation detail
+- `session-context.md` / `session-state.json` — updated with Sprint 25 metrics
+
+---
+
 ## [Sprint 24] — API Client & Auth Integration (Remediation + Tests) — 2026-02-25
 
 ### Added
