@@ -126,6 +126,9 @@ class Settings(BaseSettings):
     rate_limit_refresh: str = "10/minute"    # Token refresh protection
     rate_limit_global_default: str = "200/minute"  # Configurable global default
 
+    # ── Push Notification Rate Limits (Sprint 33) ──────────────────
+    rate_limit_push: str = "10/minute"    # Push token registration/status
+
     # ── Sentry Error Tracking (Sprint 30) ────────────────────────
     sentry_dsn: str = ""                    # Empty = disabled, zero overhead
     sentry_traces_sample_rate: float = 1.0  # Start 100%, dial to 0.1 after baseline week

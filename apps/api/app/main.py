@@ -109,6 +109,13 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     except Exception:
         logger.warning("Failed to dispose database engine during shutdown")
 
+    # 4. Close push notification HTTP client (Sprint 33 F7)
+    try:
+        from app.services import push_service
+        await push_service.close_http_client()
+    except Exception:
+        logger.warning("Failed to close push HTTP client during shutdown")
+
     shutdown_duration_ms = round((time.perf_counter() - shutdown_start) * 1000, 2)
     logger.info("Graceful shutdown completed", extra={"duration_ms": shutdown_duration_ms})
 

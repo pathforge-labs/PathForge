@@ -45,7 +45,11 @@ class PushTokenDeregister(BaseModel):
 
 
 class PushTokenStatusResponse(BaseModel):
-    """Push token registration status."""
+    """Push token registration status.
+
+    Note: ``token`` returns a masked value (``***xxxx``)
+    for PII protection. Full token is never exposed via API.
+    """
 
     registered: bool
     token: str | None = None

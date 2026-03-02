@@ -313,7 +313,7 @@ async def update_preferences(
     summary="Register device push token",
     description="Register or reactivate a device push token (idempotent).",
 )
-@limiter.limit(settings.rate_limit_embed)
+@limiter.limit(settings.rate_limit_push)
 async def register_push_token(
     request: Request,
     body: PushTokenRegister,
@@ -329,7 +329,7 @@ async def register_push_token(
     )
     return PushTokenStatusResponse(
         registered=True,
-        token=token.device_token,
+        token=push_service.mask_token(token.device_token),
         platform=token.platform,
     )
 
@@ -340,7 +340,7 @@ async def register_push_token(
     description="Deactivate the current device push token.",
     status_code=status.HTTP_200_OK,
 )
-@limiter.limit(settings.rate_limit_embed)
+@limiter.limit(settings.rate_limit_push)
 async def deregister_push_token(
     request: Request,
     body: PushTokenDeregister,
@@ -365,7 +365,7 @@ async def deregister_push_token(
     summary="Get push registration status",
     description="Check whether the current user has an active push token.",
 )
-@limiter.limit(settings.rate_limit_parse)
+@limiter.limit(settings.rate_limit_push)
 async def get_push_status(
     request: Request,
     current_user: User = Depends(get_current_user),

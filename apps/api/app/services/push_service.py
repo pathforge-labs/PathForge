@@ -26,10 +26,11 @@ from __future__ import annotations
 import asyncio
 import logging
 import uuid
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 from typing import Any, cast
 
-from sqlalchemy import func, select, update
+import httpx
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.notification import CareerNotification, NotificationPreference
@@ -43,6 +44,53 @@ MAX_PUSH_PER_DAY = 3
 MAX_RETRY_ATTEMPTS = 3
 RETRY_BASE_DELAY_SECONDS = 1.0
 EXPO_PUSH_URL = "https://exp.host/--/api/v2/push/send"
+
+
+# ── Token Masking (Sprint 33 F6) ──────────────────────────────
+
+
+def mask_token(token: str) -> str:
+    """Mask device token for API responses (Sprint 33 F6).
+
+    Hides all but last 4 characters to prevent token enumeration
+    while still allowing users to identify their device.
+
+    Example: ``ExponentPushToken[abc123xyz]`` → ``***xyz]``
+    """
+    if len(token) <= 4:
+        return "***"
+    return f"***{token[-4:]}"
+
+
+# ── HTTP Client (Sprint 33 F7) ────────────────────────────────
+
+_http_client: httpx.AsyncClient | None = None
+
+
+async def get_http_client() -> httpx.AsyncClient:
+    """Lazy singleton for Expo Push API calls (Sprint 33 F7).
+
+    Connection pooling prevents TCP churn at scale.
+    Client lifecycle managed by application lifespan.
+    """
+    global _http_client
+    if _http_client is None or _http_client.is_closed:
+        _http_client = httpx.AsyncClient(
+            timeout=10.0,
+            limits=httpx.Limits(
+                max_connections=10,
+                max_keepalive_connections=5,
+            ),
+        )
+    return _http_client
+
+
+async def close_http_client() -> None:
+    """Graceful shutdown — close shared HTTP client."""
+    global _http_client
+    if _http_client is not None and not _http_client.is_closed:
+        await _http_client.aclose()
+        _http_client = None
 
 
 # ── Public API ─────────────────────────────────────────────────
@@ -82,8 +130,8 @@ async def dispatch(
             )
             return
 
-        # 3. Rate limit check
-        daily_count = await _get_daily_push_count(db, user_id=user_id)
+        # 3. Rate limit check (Sprint 33 F4: count dispatches, not tokens)
+        daily_count = _get_daily_push_count(pref)
         if daily_count >= MAX_PUSH_PER_DAY:
             logger.debug(
                 "Push suppressed: daily limit (%d/%d) for user %s",
@@ -109,6 +157,9 @@ async def dispatch(
                 push_token=token,
                 payload=payload,
             )
+
+        # Increment dispatch counter (Sprint 33 F4)
+        await _increment_dispatch_count(db, pref=pref)
 
     except Exception:
         logger.exception(
@@ -206,7 +257,7 @@ async def get_status(
 
     return {
         "registered": True,
-        "token": token.device_token,
+        "token": mask_token(token.device_token),
         "platform": token.platform,
     }
 
@@ -243,25 +294,30 @@ def _in_quiet_hours(pref: NotificationPreference) -> bool:
     return now_time >= start or now_time <= end
 
 
-async def _get_daily_push_count(
+def _get_daily_push_count(pref: NotificationPreference) -> int:
+    """Read daily push count from preference (Sprint 33 F4).
+
+    Pure function — no DB query. Reads counter from the preference
+    object, treating stale dates as zero.
+    """
+    if pref.last_push_date != date.today():
+        return 0
+    return pref.daily_push_count
+
+
+async def _increment_dispatch_count(
     db: AsyncSession,
     *,
-    user_id: uuid.UUID,
-) -> int:
-    """Count push tokens used today for rate limiting."""
-    today_start = datetime.now(UTC).replace(
-        hour=0, minute=0, second=0, microsecond=0,
-    )
-    result = await db.execute(
-        select(func.count())
-        .select_from(PushToken)
-        .where(
-            PushToken.user_id == str(user_id),
-            PushToken.is_active.is_(True),
-            PushToken.last_used_at >= today_start,
-        ),
-    )
-    return result.scalar_one() or 0
+    pref: NotificationPreference,
+) -> None:
+    """Increment dispatch counter, reset on new day (Sprint 33 F4)."""
+    today = date.today()
+    if pref.last_push_date != today:
+        pref.daily_push_count = 1
+    else:
+        pref.daily_push_count += 1
+    pref.last_push_date = today
+    await db.flush()
 
 
 async def _get_active_tokens(
@@ -308,9 +364,8 @@ async def _send_to_token(
 
     Retries up to MAX_RETRY_ATTEMPTS with exponential backoff.
     Invalidates token on HTTP 410 (Gone = expired token).
+    Uses shared httpx client for connection pooling (Sprint 33 F7).
     """
-    import httpx
-
     message = {
         "to": push_token.device_token,
         **payload,
@@ -318,24 +373,24 @@ async def _send_to_token(
 
     for attempt in range(MAX_RETRY_ATTEMPTS):
         try:
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                response = await client.post(
-                    EXPO_PUSH_URL,
-                    json=message,
-                    headers={"Content-Type": "application/json"},
+            client = await get_http_client()
+            response = await client.post(
+                EXPO_PUSH_URL,
+                json=message,
+                headers={"Content-Type": "application/json"},
+            )
+
+            if response.status_code == 410:
+                # Token expired — deactivate
+                push_token.is_active = False
+                await db.flush()
+                logger.info(
+                    "Push token invalidated (410): %s...",
+                    push_token.device_token[:20],
                 )
+                return
 
-                if response.status_code == 410:
-                    # Token expired — deactivate
-                    push_token.is_active = False
-                    await db.flush()
-                    logger.info(
-                        "Push token invalidated (410): %s...",
-                        push_token.device_token[:20],
-                    )
-                    return
-
-                response.raise_for_status()
+            response.raise_for_status()
 
             # Update last_used_at
             push_token.last_used_at = datetime.now(UTC)

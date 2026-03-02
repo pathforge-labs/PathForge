@@ -31,6 +31,7 @@ from typing import TYPE_CHECKING, Any
 
 from sqlalchemy import (
     Boolean,
+    Date,
     DateTime,
     ForeignKey,
     Integer,
@@ -206,6 +207,14 @@ class NotificationPreference(Base, UUIDMixin, TimestampMixin):
     )
     push_notifications: Mapped[bool] = mapped_column(
         Boolean, default=False, server_default="false", nullable=False,
+    )
+
+    # ── Push rate tracking (Sprint 33 F4) ──
+    daily_push_count: Mapped[int] = mapped_column(
+        Integer, default=0, server_default="0", nullable=False,
+    )
+    last_push_date: Mapped[datetime.date | None] = mapped_column(
+        Date, nullable=True,
     )
 
     # ── Relationships ──
