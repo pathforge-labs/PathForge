@@ -15,6 +15,7 @@ class UserRegisterRequest(BaseModel):
     email: EmailStr
     password: str = Field(min_length=8, max_length=128)
     full_name: str = Field(min_length=1, max_length=255)
+    invite_token: str | None = Field(default=None, max_length=64)  # F17: backward compatible
 
 
 class UserLoginRequest(BaseModel):

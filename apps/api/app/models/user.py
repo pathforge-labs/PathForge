@@ -6,6 +6,7 @@ Platform user account with authentication fields.
 
 from __future__ import annotations
 
+import enum
 from typing import TYPE_CHECKING
 
 from sqlalchemy import Boolean, String, Text
@@ -18,7 +19,16 @@ if TYPE_CHECKING:
     from app.models.career_dna import CareerDNA
     from app.models.preference import Preference
     from app.models.resume import Resume
+    from app.models.subscription import Subscription
     from app.models.token_blacklist import BlacklistEntry
+
+
+# Sprint 34: User role for RBAC (F24: StrEnum pattern)
+class UserRole(enum.StrEnum):
+    """User access level classification."""
+
+    USER = "user"
+    ADMIN = "admin"
 
 
 class User(UUIDMixin, TimestampMixin, Base):
@@ -31,6 +41,11 @@ class User(UUIDMixin, TimestampMixin, Base):
     is_verified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     auth_provider: Mapped[str] = mapped_column(String(50), default="email", nullable=False)
     avatar_url: Mapped[str | None] = mapped_column(Text, nullable=True)
+    # Sprint 34: RBAC role (D3)
+    role: Mapped[str] = mapped_column(
+        String(20), default=UserRole.USER.value, server_default="user",
+        nullable=False, index=True,
+    )
 
     # Relationships
     resumes: Mapped[list[Resume]] = relationship(
@@ -47,6 +62,10 @@ class User(UUIDMixin, TimestampMixin, Base):
     )
     career_dna: Mapped[CareerDNA | None] = relationship(
         "CareerDNA", back_populates="user", uselist=False, cascade="all, delete-orphan"
+    )
+    # Sprint 34: Billing (F36: eager loading support)
+    subscription: Mapped[Subscription | None] = relationship(
+        "Subscription", back_populates="user", uselist=False, cascade="all, delete-orphan"
     )
 
     def __repr__(self) -> str:

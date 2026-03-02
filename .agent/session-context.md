@@ -4,46 +4,41 @@
 
 ## Current Session
 
-| Field       | Value                                                            |
-| :---------- | :--------------------------------------------------------------- |
-| Date        | 2026-03-02                                                       |
-| Focus       | Sprint 33 Session 2 — F4/F6/F7 Remediation + Dependabot Security |
-| Branch      | main                                                             |
-| Last Commit | adf6de1 (fix(deps): resolve 7 high-severity Dependabot alerts)   |
+| Field       | Value                                            |
+| :---------- | :----------------------------------------------- |
+| Date        | 2026-03-02                                       |
+| Focus       | TSC Tier-1 Compliance — pnpm type resolution fix |
+| Branch      | main                                             |
+| Last Commit | 84a0cd0 (Sprint 34 + TSC Tier-1 fix)             |
 
 ## Work Done
 
-- **Sprint 33 Session 1** (prior):
-  - WS-1: Alembic merge migration (`9i0j1k2l3m4n`) — 4 heads → 1
-  - WS-2: Code extractions + 24 new mobile tests
-  - WS-3: Security F2/F3 + deep link router
-  - WS-4: Pinned `@types/react` + `@types/react-dom`
-  - WS-5: Architecture documentation
-- **Sprint 33 Session 2**:
-  - F4: Rate limit redesign — dispatch-based counter on `NotificationPreference`
-  - F6: PII masking — `mask_token()` in both push endpoints
-  - F7: Connection pooling — httpx `AsyncClient` singleton + lifespan shutdown
-  - Alembic migration `a1b2c3d4e5f6` — push rate tracking columns
-  - 14 new backend tests (`test_push_service.py`) — 1,030/1,030 total
-  - 7 Dependabot alerts resolved (tar, serialize-javascript, minimatch)
+- **TSC Error Resolution** (12 errors → 0):
+  - Root cause: dual `@types/react` resolution in pnpm monorepo (symlink vs `.pnpm` store paths)
+  - Fix: `tsconfig.json` `paths` aliases (`"react"`, `"@types/react"`) force single type identity
+  - 5 approaches tested: `PropsWithChildren`, `ComponentType`, explicit `{children}`, `typeRoots`, `preserveSymlinks`
+  - `preserveSymlinks` fixed React errors but introduced 139 new errors — reverted
+  - `paths` aliases: zero errors, zero side effects
+  - Updated wrapper types in 7 test files for consistency
+- **Sprint 34** (backend-only, from prior session):
+  - Stripe billing, admin RBAC, waitlist management, public career profiles
+  - 20 files (3 modified + 17 new), 26 API endpoints
 
 ## Quality Gates
 
-| Gate          | Status                 |
-| :------------ | :--------------------- |
-| Ruff Lint     | ✅ 0 errors            |
-| MyPy Types    | ✅ 0 new errors        |
-| ESLint (Web)  | ✅ 0 errors            |
-| Backend Tests | ✅ 1,030/1,030         |
-| Mobile Tests  | ✅ 69/69 (7 suites)    |
-| Web Tests     | ✅ 232/232 (24 suites) |
-| pnpm audit    | ✅ 0 vulnerabilities   |
-| Pre-push hook | ✅ ALL GATES PASSED    |
+| Gate          | Status               |
+| :------------ | :------------------- |
+| Ruff Lint     | ✅ 0 errors          |
+| MyPy Types    | ✅ 93 files, 0 err   |
+| ESLint (Web)  | ✅ 0 errors          |
+| TSC (Web)     | ✅ 0 errors          |
+| Security Scan | ✅ 0 vulnerabilities |
+| Build         | ✅ 36 routes         |
+| Vitest (Web)  | ✅ 232/232 passed    |
 
 ## Handoff Notes
 
-- Sprint 33 fully complete — 1,331 total tests (1,030 backend + 232 web + 69 mobile)
-- 0 deferred items for F4/F6/F7
-- R7 (httpx in `_send_digest_email`) deferred — Resend API, not Expo (out of scope)
-- 0 known npm/pip vulnerabilities
-- Next step: Sprint 34 planning
+- Sprint 34 fully committed with TSC Tier-1 compliance achieved
+- All quality gates green — no partially compliant items remain
+- Alembic migration ready but not applied (needs Docker/DB)
+- Next step: Sprint 35 planning

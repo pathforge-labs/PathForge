@@ -26,6 +26,8 @@ dependencies = [
     "bcrypt>=4.2.0",
     # Sprint 30: Error tracking
     "sentry-sdk[fastapi]>=2.19.0",
+    # Sprint 34: Stripe billing
+    "stripe>=14.0.0",
 ]
 
 [project.optional-dependencies]
@@ -82,6 +84,23 @@ python_version = "3.12"
 strict = true
 warn_return_any = true
 warn_unused_configs = true
+
+# ── Third-party libraries without type stubs ───────────────
+# slowapi has no py.typed marker or stub package.
+# stripe SDK has partial typing gaps (construct_event, etc.).
+[[tool.mypy.overrides]]
+module = ["slowapi.*", "stripe.*"]
+ignore_missing_imports = true
+follow_imports = "silent"
+
+# ── Route modules: slowapi decorator typing ────────────────
+# @limiter.limit (slowapi) returns an untyped decorator that
+# infects @router.get/post stacks. FastAPI ships inline stubs,
+# but stacked untyped + typed decorators propagate the untyped
+# status. All route handler function bodies remain fully typed.
+[[tool.mypy.overrides]]
+module = "app.api.v1.*"
+disallow_untyped_decorators = false
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

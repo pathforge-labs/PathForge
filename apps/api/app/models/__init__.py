@@ -5,6 +5,7 @@ Central import point for all SQLAlchemy models.
 Alembic auto-generates migrations from these imports.
 """
 
+from app.models.admin import AdminAuditLog
 from app.models.ai_transparency import AITransparencyRecord
 from app.models.analytics import CVExperiment, FunnelEvent, MarketInsight
 from app.models.application import Application, CVVersion
@@ -78,6 +79,7 @@ from app.models.predictive_career import (
     PredictiveCareerPreference,
 )
 from app.models.preference import BlacklistEntry, Preference
+from app.models.public_profile import PublicCareerProfile
 from app.models.push_token import PushToken
 from app.models.recommendation_intelligence import (
     CrossEngineRecommendation,
@@ -100,6 +102,13 @@ from app.models.skill_decay import (
     SkillFreshness,
     SkillVelocityEntry,
 )
+from app.models.subscription import (
+    BillingEvent,
+    Subscription,
+    SubscriptionStatus,
+    SubscriptionTier,
+    UsageRecord,
+)
 from app.models.threat_radar import (
     AlertPreference,
     AutomationRisk,
@@ -115,8 +124,9 @@ from app.models.transition_pathways import (
     TransitionPath,
     TransitionPreference,
 )
-from app.models.user import User
+from app.models.user import User, UserRole
 from app.models.user_profile import DataExportRequest, UserProfile
+from app.models.waitlist import WaitlistEntry, WaitlistStatus
 from app.models.workflow_automation import (
     CareerWorkflow,
     WorkflowExecution,
@@ -126,10 +136,12 @@ from app.models.workflow_automation import (
 
 __all__ = [
     "AITransparencyRecord",
+    "AdminAuditLog",
     "AlertPreference",
     "Application",
     "AutomationRisk",
     "Base",
+    "BillingEvent",
     "BlacklistEntry",
     "CVExperiment",
     "CVVersion",
@@ -181,6 +193,7 @@ __all__ = [
     "PlanRecommendation",
     "PredictiveCareerPreference",
     "Preference",
+    "PublicCareerProfile",
     "PushToken",
     "RecommendationBatch",
     "RecommendationCorrelation",
@@ -206,15 +219,22 @@ __all__ = [
     "SkillSalaryImpact",
     "SkillShieldEntry",
     "SkillVelocityEntry",
+    "Subscription",
+    "SubscriptionStatus",
+    "SubscriptionTier",
     "ThreatAlert",
     "TransitionComparison",
     "TransitionMilestone",
     "TransitionPath",
     "TransitionPreference",
+    "UsageRecord",
     "User",
     "UserProfile",
+    "UserRole",
     "ValuesProfile",
     "VisaAssessment",
+    "WaitlistEntry",
+    "WaitlistStatus",
     "WorkflowExecution",
     "WorkflowPreference",
     "WorkflowStep",

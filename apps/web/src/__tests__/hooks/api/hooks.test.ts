@@ -69,10 +69,10 @@ function createTestQueryClient(): QueryClient {
   });
 }
 
-function createWrapper(): ({ children }: { children: ReactNode }) => React.JSX.Element {
+function createWrapper(): ({ children }: { children: React.ReactNode }) => React.ReactNode {
   const queryClient = createTestQueryClient();
-  return function TestWrapper({ children }: { children: ReactNode }): React.JSX.Element {
-    return React.createElement(QueryClientProvider, { client: queryClient }, children as React.ReactNode);
+  return function TestWrapper({ children }: { children: React.ReactNode }): React.ReactNode {
+    return React.createElement(QueryClientProvider, { client: queryClient }, children);
   };
 }
 
@@ -169,7 +169,7 @@ describe("API Hooks", () => {
 
       const invalidateSpy = vi.spyOn(queryClient, "invalidateQueries");
 
-      const wrapper = ({ children }: { children: ReactNode }) =>
+      const wrapper = ({ children }: { children: React.ReactNode }): React.ReactNode =>
         React.createElement(QueryClientProvider, { client: queryClient }, children);
 
       const { result } = renderHook(() => useGenerateCareerDna(), { wrapper });

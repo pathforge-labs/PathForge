@@ -1,7 +1,7 @@
 # PathForge — Live Sprint Board
 
 > **Single Source of Truth** for all sprint tracking and task management.
-> **Last Updated**: 2026-03-02 | **Current Phase**: I (Mobile) — Sprint 33 complete
+> **Last Updated**: 2026-03-02 | **Current Phase**: I (Mobile) — Sprint 34 complete
 > **Document ownership (ADR-010)**: Phase-level definitions live in `ARCHITECTURE.md` Section 7. This file tracks sprint-level execution.
 
 ---
@@ -731,10 +731,28 @@
 - [x] 7 Dependabot alerts resolved (tar, serialize-javascript, minimatch via pnpm overrides)
 - [x] `pnpm audit`: 0 known vulnerabilities
 
-- [ ] Stripe billing (subscription tiers, feature gating, usage metering)
-- [ ] Admin dashboard (user management, system health)
-- [ ] Waitlist → onboarding conversion flow
-- [ ] Public career profiles (opt-in)
+### Sprint 34 — Monetization & Growth Infrastructure (📋 Complete)
+
+> Sprint 34: Backend billing w/ Stripe SDK, admin dashboard with RBAC, waitlist management, public career profiles. Backend-only (no frontend).
+
+- [x] Stripe billing SDK integration (`stripe>=14.0.0`, API version pin)
+- [x] Subscription models — `Subscription`, `UsageRecord`, `BillingEvent` with state machine
+- [x] Billing service — webhook processing (idempotent dedup F2), state transitions (F3), row-level locking (F25)
+- [x] Checkout & portal sessions — lazy Stripe customer creation (F9)
+- [x] Feature gating — `TIER_ENGINES`, `TIER_SCAN_LIMITS`, `require_feature()` dependency (F34)
+- [x] Admin RBAC — `UserRole` StrEnum, `require_admin` dependency, last-admin guard (F5)
+- [x] Admin dashboard — 8 endpoints: users CRUD, subscription override, system health, audit logs
+- [x] Waitlist service — FIFO positioning (F7), email normalization (F27), batch invite, auto-link users (F21)
+- [x] Waitlist routes — 5 endpoints: join, position, stats, list, invite
+- [x] Public profiles — slug-based access, unpublished by default (F6), reserved word validation (F26)
+- [x] Public profile routes — 6 endpoints: own, create, update, publish, unpublish, public view
+- [x] Config expansion — 17 new settings (Stripe keys, billing toggle, rate limits, initial admin email)
+- [x] Alembic migration `b2c3d4e5f6g7` — 6 tables (subscriptions, usage_records, billing_events, admin_audit_log, waitlist_entries, public_profiles)
+- [x] Admin CLI — `promote_admin` and `list_admins` commands (F18)
+- [x] mypy configuration — `[[tool.mypy.overrides]]` for slowapi/stripe + route module decorator typing
+- [x] SSE audit — 6 findings fixed (indentation, DRY admin auth, webhook error safety, B904 compliance)
+
+> **Sprint 34 Deliverables**: 20 files (3 modified + 17 new). Backend-only sprint. Models: 6 new (Subscription, UsageRecord, BillingEvent, AdminAuditLog, WaitlistEntry, PublicProfile). Services: 4 new (billing, admin, waitlist, public_profile). Routes: 4 new (billing 7ep, admin 8ep, waitlist 5ep, profiles 6ep). Schemas: 4 new (subscription, admin, waitlist, public_profile). Quality gates: Ruff ✅ 0 errors, mypy ✅ 93 files, ESLint ✅ 0 errors, TSC ✅ 0 errors, Security ✅ 0 vulnerabilities, Build ✅ 36 routes. 3 audit passes (36 findings → 0). TSC pnpm type resolution fix applied post-sprint.
 
 ---
 
@@ -775,6 +793,7 @@
 | 2026-02-20 | PowerShell shell conventions          | 10            | ✅ Done | Skill created, 12 `&&` fixes across 6 files  |
 | 2026-02-21 | MyPy 15→0 type warnings               | 14            | ✅ Done | 6 files, +22/−81 lines, full green CI        |
 | 2026-02-24 | Sprint 22 audit fixes (4 findings)    | 22            | ✅ Done | MyPy, TYPE_CHECKING, async export, email     |
+| 2026-03-02 | TSC pnpm type resolution fix          | Post-34       | ✅ Done | `paths` alias in tsconfig, 12 errors → 0     |
 
 ---
 
@@ -816,3 +835,4 @@
 | 31     | 17            | 19          | 0            | 1        |
 | 32     | 7             | 5 (+2 def)  | 0            | 2        |
 | 33     | 8             | 8           | 0            | 1        |
+| 34     | 16            | 16          | 0            | 1        |

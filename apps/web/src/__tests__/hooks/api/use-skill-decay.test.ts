@@ -73,9 +73,9 @@ function createTestQueryClient(): QueryClient {
   });
 }
 
-function createWrapper(): ({ children }: { children: ReactNode }) => React.JSX.Element {
+function createWrapper(): ({ children }: { children: ReactNode }) => React.ReactNode {
   const queryClient = createTestQueryClient();
-  return function TestWrapper({ children }: { children: ReactNode }): React.JSX.Element {
+  return function TestWrapper({ children }: { children: ReactNode }): React.ReactNode {
     return React.createElement(QueryClientProvider, { client: queryClient }, children);
   };
 }
@@ -185,8 +185,8 @@ describe("Skill Decay Hooks", () => {
       const queryClient = createTestQueryClient();
       const invalidateSpy = vi.spyOn(queryClient, "invalidateQueries");
 
-      const wrapper = ({ children }: { children: ReactNode }) =>
-        React.createElement(QueryClientProvider, { client: queryClient }, children as React.ReactNode);
+      const wrapper = ({ children }: { children: ReactNode }): React.ReactNode =>
+        React.createElement(QueryClientProvider, { client: queryClient }, children);
 
       const { result } = renderHook(() => useTriggerDecayScan(), { wrapper });
 
@@ -224,8 +224,8 @@ describe("Skill Decay Hooks", () => {
       const queryClient = createTestQueryClient();
       const invalidateSpy = vi.spyOn(queryClient, "invalidateQueries");
 
-      const wrapper = ({ children }: { children: ReactNode }) =>
-        React.createElement(QueryClientProvider, { client: queryClient }, children as React.ReactNode);
+      const wrapper = ({ children }: { children: ReactNode }): React.ReactNode =>
+        React.createElement(QueryClientProvider, { client: queryClient }, children);
 
       const { result } = renderHook(() => useUpdateSkillDecayPreferences(), { wrapper });
 

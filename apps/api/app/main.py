@@ -20,11 +20,13 @@ from fastapi.responses import JSONResponse
 from slowapi.errors import RateLimitExceeded
 
 from app.api.v1 import (
+    admin,
     ai,
     ai_transparency,
     analytics,
     applications,
     auth,
+    billing,
     blacklist,
     career_action_planner,
     career_command_center,
@@ -38,6 +40,7 @@ from app.api.v1 import (
     notifications,
     observability,
     predictive_career,
+    public_profiles,
     recommendation_intelligence,
     salary_intelligence,
     skill_decay,
@@ -45,6 +48,7 @@ from app.api.v1 import (
     transition_pathways,
     user_profile,
     users,
+    waitlist,
     well_known,
     workflow_automation,
 )
@@ -76,6 +80,27 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     # Sprint 30 WS-1: Initialize Sentry error tracking
     from app.core.sentry import init_sentry
     init_sentry()
+
+    # Sprint 34: Pin Stripe API version (F15)
+    try:
+        import stripe
+        stripe.api_version = settings.stripe_api_version
+        logger.info("Stripe API version pinned: %s", settings.stripe_api_version)
+    except ImportError:
+        pass
+
+    # Sprint 34: Auto-promote initial admin (D3)
+    if settings.initial_admin_email:
+        try:
+            from app.core.database import async_session_factory
+            from app.services.admin_service import AdminService
+
+            async with async_session_factory() as session, session.begin():
+                await AdminService.auto_promote_initial_admin(
+                    session, settings.initial_admin_email
+                )
+        except Exception:
+            logger.warning("Initial admin promotion skipped (DB may not be ready)")
 
     logger.info(
         "PathForge API started",
@@ -212,6 +237,13 @@ def create_app() -> FastAPI:
     application.include_router(workflow_automation.router, prefix="/api/v1")
     application.include_router(observability.router, prefix="/api/v1")
     application.include_router(ai_transparency.router, prefix="/api/v1")
+
+    # Sprint 34: Monetization & Growth routers
+    application.include_router(billing.router, prefix="/api/v1")
+    application.include_router(billing.webhook_router, prefix="/api/v1")
+    application.include_router(admin.router, prefix="/api/v1")
+    application.include_router(waitlist.router, prefix="/api/v1")
+    application.include_router(public_profiles.router, prefix="/api/v1")
 
     return application
 

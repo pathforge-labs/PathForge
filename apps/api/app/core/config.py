@@ -156,6 +156,23 @@ class Settings(BaseSettings):
     digest_email_enabled: bool = False
     digest_from_email: str = "notifications@pathforge.eu"
 
+    # ── Stripe Billing (Sprint 34) ────────────────────────────────
+    stripe_secret_key: str = ""
+    stripe_webhook_secret: str = ""
+    stripe_publishable_key: str = ""
+    stripe_pro_price_id: str = ""
+    stripe_premium_price_id: str = ""
+    stripe_pro_yearly_price_id: str = ""
+    stripe_premium_yearly_price_id: str = ""
+    stripe_api_version: str = "2026-01-28"   # F15: pinned
+    billing_enabled: bool = False             # F1/F11: kill switch
+
+    # ── Admin & Growth (Sprint 34) ────────────────────────────────
+    initial_admin_email: str = ""             # D3: startup admin promotion
+    rate_limit_admin: str = "30/minute"       # F8: admin endpoint rate limit
+    rate_limit_waitlist: str = "5/minute"
+    rate_limit_public_profile: str = "30/minute"
+
     @property
     def is_production(self) -> bool:
         return self.environment == "production"

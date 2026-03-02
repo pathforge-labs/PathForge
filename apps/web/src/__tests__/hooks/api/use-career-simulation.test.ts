@@ -62,9 +62,9 @@ function createTestQueryClient(): QueryClient {
   });
 }
 
-function createWrapper(): ({ children }: { children: ReactNode }) => React.JSX.Element {
+function createWrapper(): ({ children }: { children: React.ReactNode }) => React.ReactNode {
   const queryClient = createTestQueryClient();
-  return function TestWrapper({ children }: { children: ReactNode }): React.JSX.Element {
+  return function TestWrapper({ children }: { children: React.ReactNode }): React.ReactNode {
     return React.createElement(QueryClientProvider, { client: queryClient }, children);
   };
 }
@@ -117,8 +117,8 @@ describe("Career Simulation Hooks", () => {
     it("should call simulateRole and invalidate queries", async () => {
       const queryClient = createTestQueryClient();
       const invalidateSpy = vi.spyOn(queryClient, "invalidateQueries");
-      const wrapper = ({ children }: { children: ReactNode }) =>
-        React.createElement(QueryClientProvider, { client: queryClient }, children as React.ReactNode);
+      const wrapper = ({ children }: { children: React.ReactNode }): React.ReactNode =>
+        React.createElement(QueryClientProvider, { client: queryClient }, children);
 
       const { result } = renderHook(() => useSimulateRole(), { wrapper });
       result.current.mutate({ target_role: "Data Engineer" });
@@ -151,8 +151,8 @@ describe("Career Simulation Hooks", () => {
     it("should delete and invalidate queries", async () => {
       const queryClient = createTestQueryClient();
       const invalidateSpy = vi.spyOn(queryClient, "invalidateQueries");
-      const wrapper = ({ children }: { children: ReactNode }) =>
-        React.createElement(QueryClientProvider, { client: queryClient }, children as React.ReactNode);
+      const wrapper = ({ children }: { children: React.ReactNode }): React.ReactNode =>
+        React.createElement(QueryClientProvider, { client: queryClient }, children);
 
       const { result } = renderHook(() => useDeleteSimulation(), { wrapper });
       result.current.mutate("sim1");
