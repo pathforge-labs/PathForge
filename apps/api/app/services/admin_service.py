@@ -257,10 +257,15 @@ class AdminService:
 
         # Redis
         try:
+            from collections.abc import Awaitable
+            from typing import cast
+
             from app.core.token_blacklist import token_blacklist
 
             redis_conn = await token_blacklist.get_redis()
-            await redis_conn.ping()
+            # redis.asyncio.Redis.ping() is typed as Awaitable[bool] | bool;
+            # we always use the async client, so cast to the awaitable variant.
+            await cast(Awaitable[bool], redis_conn.ping())
             health["redis"] = "healthy"
         except Exception:
             health["redis"] = "unhealthy"
