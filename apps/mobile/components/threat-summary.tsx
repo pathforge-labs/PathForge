@@ -19,13 +19,13 @@ import { BRAND, FONT_SIZE, FONT_WEIGHT, SPACING } from "../constants/theme";
 
 // ── Risk Level Badge ────────────────────────────────────────
 
-function getRiskColor(score: number): string {
+export function getRiskColor(score: number): string {
   if (score >= 70) return "#EF4444"; // High risk = red
   if (score >= 40) return "#F59E0B"; // Medium risk = amber
   return "#10B981"; // Low risk = green
 }
 
-function getRiskLabel(score: number): string {
+export function getRiskLabel(score: number): string {
   if (score >= 70) return "High Risk";
   if (score >= 40) return "Moderate Risk";
   return "Low Risk";

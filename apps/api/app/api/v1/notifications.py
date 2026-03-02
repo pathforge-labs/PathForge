@@ -349,7 +349,7 @@ async def deregister_push_token(
 ) -> dict[str, bool]:
     """Deregister a device push token."""
     deactivated = await push_service.deregister_token(
-        database, device_token=body.token,
+        database, user_id=current_user.id, device_token=body.token,
     )
     if not deactivated:
         raise HTTPException(

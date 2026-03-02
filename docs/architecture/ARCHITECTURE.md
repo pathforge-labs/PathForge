@@ -410,6 +410,7 @@ graph LR
 | `CareerSimulation`         | 🔥 "What-if" scenario result           | id, user_id, scenario_type, inputs, projected_outcome, confidence                                     |
 | `CompanySignal`            | 🔥 Hidden job market signal            | id, company_name, signal_type, strength, source, detected_at                                          |
 | `CredentialMapping`        | 🔥 Cross-border qualification map      | id, source_credential, source_country, target_equivalents, confidence                                 |
+| `PushToken`                | Mobile push notification token         | id, user_id, device_token, platform, device_name, is_active, last_used_at                             |
 
 ---
 

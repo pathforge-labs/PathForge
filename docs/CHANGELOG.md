@@ -5,6 +5,35 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [Sprint 33] — Testing + Migrations + Security Hardening — 2026-03-02
+
+### Added
+
+- **Alembic merge migration** (`9i0j1k2l3m4n`) — consolidates 4 unmerged heads into single head, creates `push_tokens` table, adds `push_notifications` column to `notif_preferences`
+- **Deep link router** (`apps/mobile/lib/deep-link-router.ts`) — whitelist-based route validation with `resolveDeepLink()`, `isValidDeepLink()`, safe fallback to home
+- **Code extractions** — `buildDimensions` + `DimensionCard` → `career-dna-helpers.ts`, `getRiskColor`/`getRiskLabel` exported from `threat-summary.tsx`
+- **24 new mobile tests** across 4 suites:
+  - `build-dimensions.test.ts` (6): profile states, edge cases, dimension mapping
+  - `threat-summary.test.tsx` (5): risk thresholds, color/label mapping
+  - `use-push-notifications.test.ts` (6): permission flow, registration, deregistration, error handling
+  - `deep-link-router.test.ts` (7): known routes, fallback, validation, security
+
+### Changed
+
+- **`push_service.py`** — `deregister_token()` now requires `user_id` parameter for ownership verification
+- **`notifications.py`** — passes `current_user.id` to `deregister_token` service method
+- **`notifications.ts` (mobile API client)** — `deregisterPushToken()` sends token via `RequestOptions.body`
+- **`use-push-notifications.ts`** — integrated `resolveDeepLink()` for validated deep link navigation; sends `expoPushToken` on deregister
+- **`career-dna.tsx`** — imports `buildDimensions` and `DimensionCard` from extracted helper module
+- **`package.json` (web)** — pinned `@types/react` to `19.2.14` and `@types/react-dom` to `19.2.3` (removed caret ranges)
+
+### Security
+
+- **F2 (Critical)**: Ownership verification on push token deregistration — prevents any user from deregistering another user's token
+- **F3 (High)**: Client-server contract mismatch fixed — mobile now sends token in request body as expected by server
+
+---
+
 ## [Sprint 29] — Production Data Layer — 2026-02-27
 
 ### Added

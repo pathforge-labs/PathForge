@@ -163,12 +163,20 @@ async def register_token(
 async def deregister_token(
     db: AsyncSession,
     *,
+    user_id: uuid.UUID,
     device_token: str,
 ) -> bool:
-    """Deactivate a device push token. Returns True if found."""
+    """Deactivate a device push token. Returns True if found.
+
+    Only deactivates tokens owned by the specified user (Sprint 33
+    audit F2: ownership verification).
+    """
     result = await db.execute(
         update(PushToken)
-        .where(PushToken.device_token == device_token)
+        .where(
+            PushToken.device_token == device_token,
+            PushToken.user_id == str(user_id),
+        )
         .values(is_active=False)
     )
     deactivated = cast(int, result.rowcount) > 0  # type: ignore[attr-defined]

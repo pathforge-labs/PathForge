@@ -1,7 +1,7 @@
 # PathForge — Live Sprint Board
 
 > **Single Source of Truth** for all sprint tracking and task management.
-> **Last Updated**: 2026-03-01 | **Current Phase**: I (Mobile) — Sprint 32 complete
+> **Last Updated**: 2026-03-02 | **Current Phase**: I (Mobile) — Sprint 33 complete
 > **Document ownership (ADR-010)**: Phase-level definitions live in `ARCHITECTURE.md` Section 7. This file tracks sprint-level execution.
 
 ---
@@ -707,13 +707,18 @@
 
 > **Sprint 32 Deliverables**: 21 files (10 modified + 11 new). 5 phases: backend push infrastructure, mobile Career DNA view, Threat Summary, push notification client, shared types. Backend: 53/53 core tests, 35/35 notification tests. Mobile: tsc 0 errors. Shared: tsc 0 errors. npm audit: 0 vulnerabilities. 6 audit findings resolved (#1, #4, #8, #12, #15, #17). 2 high-priority items deferred to Sprint 33 (Alembic migration, mobile tests).
 
-### Sprint 33 — Testing + Migrations (⏳ Upcoming)
+### Sprint 33 — Testing + Migrations + Security Hardening (✅ Complete)
 
-- [ ] Alembic migration for PushToken + push_notifications column (R2)
-- [ ] Mobile unit tests for Sprint 32 components (~20 tests) (R1)
-- [ ] Web build @types/react v19 fix (R3)
-- [ ] Deep link handler → router.push() (R4)
-- [ ] Tier-1 retrospective audit
+- [x] Alembic merge migration — 4 heads → 1 (`9i0j1k2l3m4n`), `push_tokens` table + `push_notifications` column
+- [x] Security F2: `deregister_token()` ownership verification (`user_id` filter)
+- [x] Security F3: Client-server contract fix (`deregisterPushToken` body payload)
+- [x] Deep link router — whitelist-based `resolveDeepLink()` with safe fallback
+- [x] Code extractions — `buildDimensions` → `career-dna-helpers.ts`, `getRiskColor`/`getRiskLabel` exported
+- [x] 24 new mobile tests (4 suites: buildDimensions, threat helpers, push hook, deep link router)
+- [x] Web build stability — pinned `@types/react` + `@types/react-dom` to exact versions
+- [x] Architecture documentation — push notification flow, entity definitions updated
+
+> **Sprint 33 Deliverables**: 14 files (8 modified + 6 new). 2 Critical security fixes (F2 ownership, F3 contract), Alembic merge migration, deep link router, 4 code extractions, 24 new mobile tests (69/69 total). Backend: 1,016/1,016 tests, 0 lint/type errors. Mobile: 69/69 tests (7 suites). Web: 232/232 tests, build ✅ (36/36 pages). Tier-1 audit: all areas compliant ✅.
 
 - [ ] Stripe billing (subscription tiers, feature gating, usage metering)
 - [ ] Admin dashboard (user management, system health)
@@ -799,3 +804,4 @@
 | 30     | 8             | 10 (+1 def) | 1            | 2        |
 | 31     | 17            | 19          | 0            | 1        |
 | 32     | 7             | 5 (+2 def)  | 0            | 2        |
+| 33     | 8             | 8           | 0            | 1        |

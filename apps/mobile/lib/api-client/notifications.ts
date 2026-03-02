@@ -33,8 +33,10 @@ export async function registerPushToken(
   return post<void>("/api/v1/notifications/push-token", data);
 }
 
-export async function deregisterPushToken(): Promise<void> {
-  return del("/api/v1/notifications/push-token");
+export async function deregisterPushToken(
+  data: { token: string },
+): Promise<void> {
+  return del("/api/v1/notifications/push-token", { body: data });
 }
 
 export async function getPushStatus(): Promise<PushStatusResponse> {

@@ -11,11 +11,14 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Platform } from "react-native";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
+import { useRouter } from "expo-router";
+import type { Href } from "expo-router";
 
 import {
   registerPushToken,
   deregisterPushToken,
 } from "../lib/api-client/notifications";
+import { resolveDeepLink } from "../lib/deep-link-router";
 
 // ── Types ───────────────────────────────────────────────────
 
@@ -43,6 +46,7 @@ export function usePushNotifications(): UsePushNotificationsReturn {
   const [expoPushToken, setExpoPushToken] = useState<string | null>(null);
   const [permissionGranted, setPermissionGranted] = useState(false);
   const notificationResponseRef = useRef<Notifications.Subscription | null>(null);
+  const router = useRouter();
 
   // Register token with backend
   const registerToken = useCallback(async (token: string): Promise<void> => {
@@ -100,13 +104,14 @@ export function usePushNotifications(): UsePushNotificationsReturn {
 
   // Deregister on logout
   const handleDeregister = useCallback(async (): Promise<void> => {
+    if (!expoPushToken) return;
     try {
-      await deregisterPushToken();
+      await deregisterPushToken({ token: expoPushToken });
       setExpoPushToken(null);
     } catch (error) {
       console.warn("[Push] Deregister failed (best-effort):", error);
     }
-  }, []);
+  }, [expoPushToken]);
 
   // Listen for notification taps (deep linking)
   useEffect(() => {
@@ -114,8 +119,8 @@ export function usePushNotifications(): UsePushNotificationsReturn {
       Notifications.addNotificationResponseReceivedListener((response) => {
         const actionUrl = response.notification.request.content.data?.action_url;
         if (typeof actionUrl === "string" && actionUrl.length > 0) {
-          // Deep link handling — router.push(actionUrl) would be called here
-          console.info("[Push] Deep link:", actionUrl);
+          const result = resolveDeepLink(actionUrl);
+          router.push(result.route as Href);
         }
       });
 

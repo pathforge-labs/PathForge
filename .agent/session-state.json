@@ -1,25 +1,25 @@
 {
   "version": "1.0.0",
-  "sprint": "Sprint 32",
+  "sprint": "Sprint 33",
   "phase": "I — Mobile Platform",
-  "focus": "Code Review — @types/react v19 TypeScript fix + Sprint 32 Intelligence Delivery",
-  "last_commit": "c2adf3c",
-  "last_session": "2026-03-02T00:47:00+01:00",
+  "focus": "Sprint 33 — Testing + Migrations + Security Hardening",
+  "last_commit": "eb73f71",
+  "last_session": "2026-03-02T02:30:00+01:00",
   "tracking": {
     "backend_tests": 1016,
     "frontend_tests": 232,
-    "mobile_tests": 45,
+    "mobile_tests": 69,
     "e2e_specs": 8,
-    "test_suites": 27,
+    "test_suites": 31,
     "tsc_errors": 0,
     "npm_audit_vulnerabilities": 0,
     "mobile_ui_components": 10,
     "mobile_hooks": 6,
     "mobile_screens": 8,
-    "tier1_audit_score": 9.0,
-    "files_changed": 12,
+    "tier1_audit_score": 9.5,
+    "files_changed": 14,
     "web_build_status": "SUCCESS",
-    "audit_findings_resolved": 7,
-    "audit_items_deferred": 2
+    "audit_findings_resolved": 2,
+    "audit_items_deferred": 3
   }
 }
