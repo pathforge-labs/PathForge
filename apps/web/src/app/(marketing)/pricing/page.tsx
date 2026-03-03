@@ -10,7 +10,7 @@
 
 import type { Metadata } from "next";
 
-import { APP_NAME, APP_URL, pageTitle } from "@/config/brand";
+import { APP_NAME, APP_URL } from "@/config/brand";
 import { PRICING_TIERS } from "@/config/pricing";
 
 import { PricingPageClient } from "./PricingPageClient";
@@ -18,7 +18,7 @@ import { PricingPageClient } from "./PricingPageClient";
 // ── Metadata ───────────────────────────────────────────────
 
 export const metadata: Metadata = {
-  title: pageTitle("Pricing"),
+  title: "Pricing",
   description: `Compare ${APP_NAME} plans. Start free, upgrade to Pro or Premium for advanced career intelligence. Cancel anytime.`,
   openGraph: {
     title: `${APP_NAME} Pricing — Plans for Every Career Stage`,

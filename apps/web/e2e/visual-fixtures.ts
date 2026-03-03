@@ -62,6 +62,7 @@ async function handleApiRoute(route: { request: () => { url: () => string }; ful
     });
   } else {
     // Fallback: return empty JSON for unmapped API routes
+    console.warn(`[VR] Unmapped API route: ${pathname}`);
     await route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -146,9 +147,9 @@ export async function navigateAndWait(
   page: Page,
   path: string,
   contentSelector: string,
-  timeout: number = 15_000,
+  timeout: number = 30_000,
 ): Promise<void> {
-  await page.goto(path);
+  await page.goto(path, { waitUntil: "domcontentloaded" });
   await page.waitForSelector(contentSelector, { timeout });
 }
 

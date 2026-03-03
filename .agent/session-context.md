@@ -1,49 +1,45 @@
 # Session Context — PathForge
 
-> Last Updated: 2026-03-03
+> Last Updated: 2026-03-04
 
 ## Current Session
 
-| Field       | Value                                                           |
-| :---------- | :-------------------------------------------------------------- |
-| Date        | 2026-03-03                                                      |
-| Focus       | Tier-1 Production Audit + CI Fixes + Sprint 37 Planning         |
-| Branch      | main                                                            |
-| Last Commit | 6b6bcc6 (mypy type-arg fixes + CI migration path + worker stub) |
+| Field       | Value                                               |
+| :---------- | :-------------------------------------------------- |
+| Date        | 2026-03-04                                          |
+| Focus       | Sprint 37 — Production Audit Remediation & CI Green |
+| Branch      | main                                                |
+| Last Commit | pending (22 files modified, awaiting commit & push) |
 
 ## Work Done
 
-- **Tier-1 Production Audit** — full-stack production readiness assessment:
-  - Visual inspection of 7 marketing pages (all polished ✅)
-  - Visual inspection of auth pages (login/register — polished split-screen design ✅)
-  - Dashboard auth guard verification (redirects to login correctly ✅)
-  - **C1 CRITICAL**: Pricing page missing CSS — Sprint 35 `PricingCard.tsx` uses BEM classes with zero matching styles
-  - **C2 CRITICAL**: Visual regression tests can't pass — auth mock doesn't include `/api/v1/auth/me` endpoint
-  - M1: Pricing page title duplication, M2: CSP missing localhost:8000 for dev
-
-- **CI Pipeline Fixes** (commit `6b6bcc6`):
-  - `user_activity.py`: `dict` → `dict[str, Any]` (mypy type-arg)
-  - `threat_radar.py`: `dict` → `dict[str, Any]` (2 locations)
-  - `career_dna.py`: `dict` → `dict[str, Any]` (payload parameter)
-  - `worker.py`: stub `recalculate_growth_vector` with warning log
-  - `ci.yml`: removed incorrect `working-directory` from migration step
-
-- **Sprint 37 Planning** — 8 workstreams defined in ROADMAP based on audit findings
+- **Sprint 37 Execution** — 9 workstreams + 2 ad-hoc tasks completed:
+  - WS-1: Pricing BEM CSS (~500 lines, 31 selectors, dark/responsive/reduced-motion)
+  - WS-2: VR mocks — billing (correct FeatureAccessResponse shape) + auth tokens
+  - WS-3: VR CI resilience — 30s timeouts, `domcontentloaded` waitUntil
+  - WS-4: CSP `connect-src` dev fix (localhost:8000)
+  - WS-5: Title dedup (removed `pageTitle()` import)
+  - WS-6: Worker production implementation (CareerDNAService.generate_full_profile)
+  - WS-7: CI `continue-on-error` cleanup (4 removed, 2 kept)
+  - WS-9: MyPy 17→0 errors across 10 files
+  - WS-10: Gemini Code Assist (O1: Alembic ignore, O2: error patterns, O3: branches)
+  - Bonus: skeleton.tsx ESLint warning fix (React 19 ref)
 
 ## Quality Gates
 
-| Gate         | Status                         |
-| :----------- | :----------------------------- |
-| Ruff Lint    | ✅ 0 errors                    |
-| ESLint (Web) | ✅ 0 errors                    |
-| TSC (Web)    | ✅ 0 errors                    |
-| Build        | ✅ 38 routes                   |
-| MyPy         | ⚠️ Improved (4 type-arg fixed) |
+| Gate       | Status                  |
+| :--------- | :---------------------- |
+| Ruff       | ✅ 0 errors             |
+| MyPy       | ✅ 0 errors (183 files) |
+| ESLint     | ✅ 0 errors, 0 warnings |
+| TSC        | ✅ 0 errors             |
+| Pytest     | ✅ 1,087 passed         |
+| pnpm audit | ✅ 0 vulnerabilities    |
+| Build      | ✅ 38 routes            |
 
 ## Handoff Notes
 
-- Sprint 37 has 8 workstreams ready — all derived from Tier-1 audit findings
-- **Priority**: WS-1 (pricing CSS) and WS-2 (VR auth mock) are critical blockers
-- WS-6 (`recalculate_growth_vector`) is deferred from Sprint 36 — currently stubbed
-- Visual regression baselines still need CI bootstrap (WS-7)
-- Pending push: 2 commits (CI fixes + session tracking)
+- WS-8 (Full CI green) deferred — VR baselines require `update-baselines.yml` dispatch after push
+- Dispatch order: commit → push → Actions → "Update Visual Regression Baselines" → Run workflow → main
+- After baselines bootstrapped, CI should pass all 4 jobs (api-quality, web-quality, visual-regression, mobile-quality)
+- `gh` CLI not installed locally — use GitHub Actions UI for workflow dispatch

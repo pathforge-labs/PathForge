@@ -1,7 +1,7 @@
 # PathForge — Live Sprint Board
 
 > **Single Source of Truth** for all sprint tracking and task management.
-> **Last Updated**: 2026-03-03 | **Current Phase**: J (Production Maturity) — Sprint 36 complete
+> **Last Updated**: 2026-03-04 | **Current Phase**: J (Production Maturity) — Sprint 37 complete
 > **Document ownership (ADR-010)**: Phase-level definitions live in `ARCHITECTURE.md` Section 7. This file tracks sprint-level execution.
 
 ---
@@ -796,18 +796,23 @@
 
 > **Sprint 36 Deliverables**: 47 files (24 modified + 23 new). 7 workstreams completed. WS-7 standalone: 4 new e2e files, 1 new CI workflow, 3 modified configs, 1 policy doc. Quality gates: Ruff ✅ 0 errors, ESLint ✅ 0 errors (1 pre-existing warning), TSC ✅ 0 errors, Build ✅ 38 routes. New dependencies: `@sentry/react-native`, `@axe-core/playwright`. Tier-1 retrospective audit: all areas compliant ✅.
 
-### Sprint 37 — Production Audit Remediation & CI Green (🔜 Next)
+### Sprint 37 — Production Audit Remediation & CI Green (✅ Complete)
 
 > Sprint 37: Resolves all critical findings from the Tier-1 production audit (2026-03-03). Focuses on broken pricing page CSS, visual regression test architecture, CI pipeline fixes, and minor polish items. Goal: full CI green across all jobs.
 
-- [ ] WS-1: Pricing page CSS restoration — add complete BEM stylesheet for Sprint 35 `PricingCard`/`PricingGrid`/`PricingPageClient` components (`pricing-card__*`, `pricing-page__*` classes in `globals.css`), dark mode variants, responsive breakpoints
-- [ ] WS-2: Visual regression auth fix — add `/api/v1/auth/me` mock to `mock-api-data.ts`, verify `useAuth()` hook receives valid user object during visual tests, ensure dashboard pages render `h1` within timeout
-- [ ] WS-3: Visual regression CI resilience — increase `navigateAndWait` timeout to 30s, add `waitUntil: 'domcontentloaded'` to `page.goto()`, verify 14/14 tests pass in CI
-- [ ] WS-4: CSP `connect-src` dev fix — add `localhost:8000` to Content Security Policy in development mode, prevent console errors during local API development
-- [ ] WS-5: Pricing page title fix — fix `pageTitle()` helper or `Pricing` page metadata to eliminate duplicate "PathForge" in title (`"Pricing | PathForge | PathForge"` → `"Pricing | PathForge"`)
-- [ ] WS-6: `CareerDNAService.recalculate_growth_vector` implementation — implement the deferred growth vector recalculation pipeline (currently stubbed in `worker.py`)
-- [ ] WS-7: CI baseline bootstrap — trigger `Update Visual Regression Baselines` workflow, verify all 14 baseline images committed, confirm CI enforcement mode (`updateSnapshots: 'none'`) passes
-- [ ] WS-8: Full CI green verification — all jobs passing: `api-quality`, `web-quality`, `visual-regression`, `migration-check`
+- [x] WS-1: Pricing page CSS restoration — 31 BEM selectors (~500 lines) for `PricingCard`/`PricingGrid`/`PricingPageClient` components, dark mode variants, responsive breakpoints, reduced-motion support
+- [x] WS-2: Visual regression auth fix — `MOCK_BILLING_FEATURES` (matches `FeatureAccessResponse`), `MOCK_TOKEN_RESPONSE`, 4 new `API_ROUTE_MAP` entries, `console.warn` for unmapped routes
+- [x] WS-3: Visual regression CI resilience — `navigateAndWait` timeout 15s→30s, `waitUntil: 'domcontentloaded'`, `navigationTimeout` 30s in playwright.config
+- [x] WS-4: CSP `connect-src` dev fix — `localhost:8000` added via `isDev` conditional in `next.config.ts`
+- [x] WS-5: Pricing page title fix — removed `pageTitle()` import, set simple `"Pricing"` string, eliminated duplicate title
+- [x] WS-6: Worker production implementation — replaced stub with `CareerDNAService.generate_full_profile(dimensions=["growth_vector"])` + `uuid.UUID()` conversion
+- [x] WS-7: CI `continue-on-error` cleanup — removed 4 directives (MyPy, VR job, VR tests, perf tests), kept 2 intentional (pip-audit, pnpm audit)
+- [ ] WS-8: Full CI green verification — deferred to post-push (VR baselines require workflow dispatch)
+- [x] WS-9: MyPy compliance — 17→0 errors across 10 files (removed 7 stale `type: ignore`, added 4 `type: ignore[misc]`, added 2 explicit casts)
+- [x] WS-10: Gemini Code Assist enhancements — O1: Alembic ignore pattern, O2: error handling patterns, O3: branch conventions
+- [x] Bonus: `skeleton.tsx` ESLint warning fix (unused `ref` in React 19)
+
+> **Sprint 37 Deliverables**: 22 files (21 modified + 1 new). 9 workstreams completed, 1 deferred (WS-8 requires post-push VR baseline bootstrap). Quality gates: Ruff ✅ 0 errors, ESLint ✅ 0 errors / 0 warnings, TSC ✅ 0 errors, MyPy ✅ 0 errors (183 files), Build ✅ 38 routes, Tests ✅ 1,087 passed, pnpm audit ✅ 0 vulnerabilities. Tier-1 retrospective audit: all areas compliant ✅.
 
 ---
 
@@ -849,6 +854,8 @@
 | 2026-02-21 | MyPy 15→0 type warnings               | 14            | ✅ Done | 6 files, +22/−81 lines, full green CI        |
 | 2026-02-24 | Sprint 22 audit fixes (4 findings)    | 22            | ✅ Done | MyPy, TYPE_CHECKING, async export, email     |
 | 2026-03-02 | TSC pnpm type resolution fix          | Post-34       | ✅ Done | `paths` alias in tsconfig, 12 errors → 0     |
+| 2026-03-04 | MyPy 17→0 + stale ignore cleanup      | 37            | ✅ Done | 10 files, 183 source files clean             |
+| 2026-03-04 | Skeleton.tsx ESLint warning fix       | 37            | ✅ Done | Unused `ref` from React 19 migration         |
 
 ---
 
@@ -893,3 +900,4 @@
 | 34     | 16            | 16          | 0            | 1        |
 | 35     | 10            | 10          | 0            | 2        |
 | 36     | 8             | 7 (+1 def)  | 0            | 1        |
+| 37     | 10            | 9 (+1 def)  | 2            | 1        |

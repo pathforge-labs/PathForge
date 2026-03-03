@@ -46,6 +46,16 @@ PathForge is an AI-powered career intelligence platform built as a
 - SQL injection prevention: always use SQLAlchemy ORM, never raw SQL strings.
 - Rate limiting required on all public and AI-powered endpoints (`slowapi`).
 
+### Error Handling
+
+- **LLM calls** use the tiered fallback chain: Deep → Primary → Fast.
+  If all tiers fail, raise `LLMError` — caught by `llm_error_handler` (503).
+- Never swallow exceptions silently. Use `logger.exception()` for unexpected
+  errors and structured `logger.warning()` for degraded-mode fallbacks.
+- Circuit breaker pattern (`app/core/circuit_breaker.py`) for external APIs
+  (Adzuna, Jooble, Voyage AI). Redis-backed state: CLOSED → OPEN → HALF_OPEN.
+- Dead letter queue (`worker.py`) for ARQ jobs that exhaust all retries.
+
 ### Testing
 
 - `pytest` with `@pytest.mark.asyncio` for async tests.
@@ -118,6 +128,8 @@ All commits must follow: `type(scope): description`
 
 - `main` — development integration branch
 - `production` — deployed production code
+- `dev/emre` — active development branch (PR source)
+- Feature branches: `feat/<scope>-<description>` (e.g., `feat/web-pricing-redesign`)
 - Never commit `.env` files, `node_modules`, or secrets.
 
 ## Architecture Rules

@@ -52,7 +52,7 @@ export default defineConfig({
 
     // Audit M1: Disable animations for deterministic screenshots
     actionTimeout: 10_000,
-    navigationTimeout: 15_000,
+    navigationTimeout: 30_000,
   },
 
   projects: [

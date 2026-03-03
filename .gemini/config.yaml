@@ -63,3 +63,6 @@ ignore_patterns:
   # Agent & session tracking (not production code)
   - ".agent/**"
   - "docs/baselines/**"
+
+  # Alembic migration files (auto-generated, reviewed separately)
+  - "apps/api/alembic/versions/**"

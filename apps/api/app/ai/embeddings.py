@@ -52,7 +52,7 @@ class EmbeddingService:
     def _get_client(self) -> Any:
         """Lazy-initialize the Voyage AI client."""
         if self._client is None:
-            self._client = voyageai.Client(api_key=self._api_key)  # type: ignore[attr-defined]
+            self._client = voyageai.Client(api_key=self._api_key)
         return self._client
 
     async def embed_text(self, text: str) -> list[float]:

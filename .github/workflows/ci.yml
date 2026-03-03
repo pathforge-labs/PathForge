@@ -76,7 +76,6 @@ jobs:
 
       - name: Type check (mypy)
         working-directory: apps/api
-        continue-on-error: true # Non-blocking: pre-existing type gaps tracked as tech debt
         run: python -m mypy app/ --ignore-missing-imports
 
       - name: Test (pytest)
@@ -175,16 +174,14 @@ jobs:
         working-directory: apps/mobile
         run: pnpm test
 
-  # ── Visual Regression (Sprint 36 WS-7) ─────────────────────
-  # Non-blocking until golden baselines are bootstrapped via
-  # the dedicated update-baselines.yml workflow (workflow_dispatch).
-  # Once baselines exist, remove continue-on-error to enforce gating.
+  # Visual regression tests only run when baselines exist (checked at step
+  # level). Without baselines the steps are skipped and the job succeeds.
+  # Failures are blocking — review artifacts and run update-baselines.yml.
   visual-regression:
     name: Visual Regression & Performance Baselines
     needs: [changes, web-quality]
     if: needs.changes.outputs.web == 'true'
     runs-on: ubuntu-latest
-    continue-on-error: true
 
     steps:
       - uses: actions/checkout@v4
@@ -228,7 +225,6 @@ jobs:
         id: visual-tests
         if: steps.baselines.outputs.found == 'true'
         working-directory: apps/web
-        continue-on-error: true
         run: npx playwright test e2e/visual-regression.spec.ts --project=chromium
         env:
           CI: "true"
@@ -239,7 +235,6 @@ jobs:
         id: perf-tests
         if: steps.baselines.outputs.found == 'true'
         working-directory: apps/web
-        continue-on-error: true
         run: npx playwright test e2e/performance-baseline.spec.ts --project=chromium
         env:
           CI: "true"

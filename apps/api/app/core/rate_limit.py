@@ -39,7 +39,7 @@ def _get_user_or_ip(request: Request) -> str:
     user = getattr(request.state, "user", None)
     if user and hasattr(user, "id"):
         return f"user:{user.id}"
-    return get_remote_address(request)
+    return str(get_remote_address(request))
 
 
 def _resolve_storage_uri() -> str:

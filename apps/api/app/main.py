@@ -204,7 +204,7 @@ def create_app() -> FastAPI:
     # ── Error Handlers ─────────────────────────────────────────
     register_error_handlers(application)
     application.state.limiter = limiter
-    application.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_response)  # type: ignore[arg-type]
+    application.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_response)
 
     # ── Routes ─────────────────────────────────────────────────
     # Well-known endpoints at root level (no /api/v1 prefix)

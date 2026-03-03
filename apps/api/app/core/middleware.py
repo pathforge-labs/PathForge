@@ -36,7 +36,7 @@ request_id_var: ContextVar[str] = ContextVar("request_id", default="")
 correlation_id_var: ContextVar[str] = ContextVar("correlation_id", default="")
 
 
-class RequestIDMiddleware(BaseHTTPMiddleware):
+class RequestIDMiddleware(BaseHTTPMiddleware):  # type: ignore[misc]
     """
     Middleware that assigns a unique request ID and correlation ID.
 
@@ -101,7 +101,7 @@ class RequestIDMiddleware(BaseHTTPMiddleware):
             correlation_id_var.reset(cid_token)
 
 
-class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):  # type: ignore[misc]
     """
     OWASP-compliant security headers middleware.
 
@@ -171,7 +171,7 @@ BOT_TRAP_EXCLUDES: frozenset[str] = frozenset({
 })
 
 
-class BotTrapMiddleware(BaseHTTPMiddleware):
+class BotTrapMiddleware(BaseHTTPMiddleware):  # type: ignore[misc]
     """
     Short-circuit known vulnerability scanner probe paths.
 

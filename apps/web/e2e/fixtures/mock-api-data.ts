@@ -289,6 +289,44 @@ export const MOCK_SALARY_INTELLIGENCE = {
   last_updated: "2026-01-14T00:00:00Z",
 } as const;
 
+/* ── Billing Features ────────────────────────────────────── */
+
+/**
+ * Sprint 37 WS-2: Mock billing features matching FeatureAccessResponse.
+ * Without this, VR pricing screenshots show all cards as "Coming Soon"
+ * because billingEnabled defaults to false.
+ */
+export const MOCK_BILLING_FEATURES = {
+  tier: "pro" as const,
+  engines: [
+    "career_dna",
+    "threat_radar",
+    "skill_decay",
+    "salary_intelligence",
+    "career_simulation",
+    "interview_intelligence",
+    "hidden_job_market",
+    "collective_intelligence",
+    "recommendation_intelligence",
+    "career_action_planner",
+  ],
+  scan_limit: 30,
+  billing_enabled: true,
+} as const;
+
+/* ── Auth Token Response (defensive mock) ────────────────── */
+
+/**
+ * Sprint 37 WS-2: Defensive auth mock.
+ * JWT exp=2286 prevents 401 in normal VR flow, but these provide
+ * a safety net if refresh is triggered by race conditions.
+ */
+export const MOCK_TOKEN_RESPONSE = {
+  access_token: "vr-mock-access-token-001",
+  refresh_token: "vr-mock-refresh-token-001",
+  token_type: "bearer",
+} as const;
+
 /* ── Route Map ───────────────────────────────────────────── */
 
 /**
@@ -298,12 +336,18 @@ export const MOCK_SALARY_INTELLIGENCE = {
 export const API_ROUTE_MAP: Record<string, unknown> = {
   // Auth
   "/api/v1/users/me": MOCK_USER,
+  "/api/v1/auth/refresh": MOCK_TOKEN_RESPONSE,
+  "/api/v1/auth/login": MOCK_TOKEN_RESPONSE,
+  "/api/v1/auth/logout": { status: "ok" },
 
   // Health
   "/api/v1/health/ready": MOCK_HEALTH,
 
   // Onboarding
   "/api/v1/users/onboarding-status": MOCK_ONBOARDING_STATUS,
+
+  // Billing (Sprint 37 WS-2)
+  "/api/v1/billing/features": MOCK_BILLING_FEATURES,
 
   // Career DNA
   "/api/v1/career-dna": MOCK_CAREER_DNA_PROFILE,

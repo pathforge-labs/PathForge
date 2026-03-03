@@ -98,18 +98,35 @@ async def run_matching_pipeline(
 async def recalculate_intelligence(
     ctx: dict[str, Any], user_id: str
 ) -> dict[str, Any]:
-    """Recalculate career intelligence after target role change."""
+    """Recalculate career intelligence after target role change.
+
+    Uses CareerDNAService.generate_full_profile to recompute the
+    growth_vector dimension. The service auto-gathers resume data,
+    skills, and preferences from the database.
+
+    Sprint 37 WS-6: Production implementation replacing placeholder.
+    """
+    import uuid
+
     logger.info("Recalculating intelligence for user %s", user_id)
 
     try:
-        # NOTE: CareerDNAService.recalculate_growth_vector is not yet
-        # implemented.  Log a placeholder until Sprint 37 delivers the
-        # full recalculation pipeline.
-        logger.warning(
-            "recalculate_growth_vector not yet implemented — skipping",
-            user_id=user_id,
-        )
-        result: dict[str, Any] = {"status": "skipped", "reason": "not_implemented"}
+        from app.core.database import async_session_factory
+        from app.services.career_dna_service import CareerDNAService
+
+        async with async_session_factory() as session:
+            career_dna = await CareerDNAService.generate_full_profile(
+                session,
+                user_id=uuid.UUID(user_id),
+                dimensions=["growth_vector"],
+            )
+            await session.commit()
+
+        result: dict[str, Any] = {
+            "status": "completed",
+            "recalculated": ["growth_vector"],
+            "version": career_dna.version if career_dna else 0,
+        }
         logger.info(
             "Intelligence recalculation completed for user %s", user_id
         )
