@@ -84,6 +84,9 @@ python_version = "3.12"
 strict = true
 warn_return_any = true
 warn_unused_configs = true
+# Disabled: local stubs (newer) and CI stubs (older) differ in coverage.
+# type: ignore comments needed for CI may be flagged as unused locally.
+warn_unused_ignores = false
 
 # ── Third-party libraries without type stubs ───────────────
 # slowapi has no py.typed marker or stub package.

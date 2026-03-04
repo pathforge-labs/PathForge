@@ -39,7 +39,7 @@ logger = logging.getLogger(__name__)
 # ── Suppress noisy LiteLLM logs in non-debug mode ──────────────
 litellm.suppress_debug_info = True
 if not settings.debug:
-    litellm.set_verbose = False
+    litellm.set_verbose = False  # type: ignore[attr-defined]
 
 
 class LLMTier(enum.StrEnum):
@@ -109,7 +109,7 @@ async def _get_budget_redis() -> aioredis.Redis:
     if _budget_redis is None:
         _budget_redis = cast(
             aioredis.Redis,
-            aioredis.from_url(settings.redis_url, decode_responses=True),
+            aioredis.from_url(settings.redis_url, decode_responses=True),  # type: ignore[no-untyped-call]
         )
     return _budget_redis
 

@@ -78,7 +78,7 @@ class CircuitBreaker:
         if self._redis is None:
             self._redis = cast(
                 aioredis.Redis,
-                aioredis.from_url(self._redis_url, decode_responses=True),
+                aioredis.from_url(self._redis_url, decode_responses=True),  # type: ignore[no-untyped-call]
             )
         return self._redis
 
