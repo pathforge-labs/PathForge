@@ -61,6 +61,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
@@ -70,7 +75,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: apps/api
-        run: pip install ".[dev,ai]"
+        run: uv pip install ".[dev,ai]" --system
 
       - name: Lint (ruff)
         working-directory: apps/api
@@ -98,7 +103,7 @@ jobs:
         working-directory: apps/api
         continue-on-error: true # Non-blocking: initial baseline
         run: |
-          pip install pip-audit
+          uv pip install pip-audit --system
           python -m pip_audit --desc --progress-spinner off
 
   # ── Web Quality Gate ─────────────────────────────────────

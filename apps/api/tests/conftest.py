@@ -124,7 +124,12 @@ TEST_DATABASE_URL = "sqlite+aiosqlite:///:memory:"
 
 @pytest.fixture(scope="session")
 def event_loop() -> asyncio.AbstractEventLoop:
-    """Create an event loop for the test session."""
+    """Create an event loop for the test session.
+
+    Note: This fixture is deprecated in pytest-asyncio >= 0.24 but still
+    required for our session-scoped async fixtures (test_engine, etc.).
+    Migration to loop_scope markers planned for a future sprint.
+    """
     loop = asyncio.new_event_loop()
     yield loop  # type: ignore[misc]
     loop.close()
