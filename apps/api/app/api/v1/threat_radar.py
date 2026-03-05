@@ -41,6 +41,7 @@ from app.schemas.threat_radar import (
     ThreatRadarOverviewResponse,
     ThreatRadarScanResponse,
 )
+from app.services.billing_service import BillingService
 from app.services.threat_radar_service import ThreatRadarService
 
 if TYPE_CHECKING:
@@ -123,7 +124,14 @@ async def trigger_threat_scan(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> ThreatRadarScanResponse:
-    """Execute full Career Threat Radar™ analysis pipeline."""
+    """Execute full Career Threat Radar™ analysis pipeline.
+
+    Sprint 38 C2/C5: Scan limit enforcement + usage tracking.
+    """
+    # C5: Pre-check scan limit before AI call
+    if settings.billing_enabled:
+        await BillingService.check_scan_limit(db, current_user, "threat_radar")
+
     result = await ThreatRadarService.run_full_scan(
         db,
         user_id=current_user.id,
@@ -136,6 +144,10 @@ async def trigger_threat_scan(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=result.get("detail", "Career DNA profile required"),
         )
+
+    # C2: Record usage after successful scan
+    if settings.billing_enabled:
+        await BillingService.record_usage(db, current_user, "threat_radar")
 
     await db.commit()
 

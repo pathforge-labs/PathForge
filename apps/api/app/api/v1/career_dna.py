@@ -35,6 +35,7 @@ from app.schemas.career_dna import (
     SkillGenomeResponse,
     ValuesProfileResponse,
 )
+from app.services.billing_service import BillingService
 from app.services.career_dna_service import CareerDNAService
 
 if TYPE_CHECKING:
@@ -117,11 +118,21 @@ async def generate_career_dna(
     Trigger full Career DNA analysis from user's resume data.
 
     Optionally specify a subset of dimensions to refresh.
+    Sprint 38 C2/C5: Scan limit enforcement + usage tracking.
     """
+    # C5: Pre-check scan limit before AI call
+    if settings.billing_enabled:
+        await BillingService.check_scan_limit(db, current_user, "career_dna")
+
     dimensions = payload.dimensions if payload else None
     career_dna = await CareerDNAService.generate_full_profile(
         db, user_id=current_user.id, dimensions=dimensions
     )
+
+    # C2: Record usage after successful scan
+    if settings.billing_enabled:
+        await BillingService.record_usage(db, current_user, "career_dna")
+
     await db.commit()
     return _build_full_response(career_dna)
 

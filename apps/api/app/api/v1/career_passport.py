@@ -30,7 +30,9 @@ from starlette.status import (
     HTTP_404_NOT_FOUND,
 )
 
+from app.core.config import settings
 from app.core.database import get_db
+from app.core.feature_gate import require_feature
 from app.core.rate_limit import limiter
 from app.core.security import get_current_user
 from app.models.user import User
@@ -51,6 +53,7 @@ from app.schemas.career_passport import (
     VisaAssessmentResponse,
 )
 from app.services import career_passport_service
+from app.services.billing_service import BillingService
 
 router = APIRouter(
     prefix="/career-passport",
@@ -122,6 +125,7 @@ async def get_dashboard(
     response_model=PassportScanResponse,
     status_code=HTTP_201_CREATED,
     summary="Full passport scan",
+    dependencies=[Depends(require_feature("career_passport"))],
 )
 @limiter.limit("3/minute")
 async def full_scan(
@@ -131,7 +135,14 @@ async def full_scan(
     current_user: User = Depends(get_current_user),
     database: AsyncSession = Depends(get_db),
 ) -> PassportScanResponse:
-    """Execute full passport analysis for a target country."""
+    """Execute full passport analysis for a target country.
+
+    Sprint 38 C1/C2/C5: Feature gating + scan limit + usage tracking.
+    """
+    # C5: Pre-check scan limit before AI call
+    if settings.billing_enabled:
+        await BillingService.check_scan_limit(database, current_user, "career_passport")
+
     try:
         result = await career_passport_service.full_passport_scan(
             database,
@@ -141,24 +152,28 @@ async def full_scan(
             target_country=body.target_country,
             nationality=nationality,
         )
+
+        # C2: Record usage after successful scan
+        if settings.billing_enabled:
+            await BillingService.record_usage(database, current_user, "career_passport")
+
+        return PassportScanResponse(
+            credential_mapping=CredentialMappingResponse.model_validate(
+                result["credential_mapping"],
+            ),
+            country_comparison=CountryComparisonResponse.model_validate(
+                result["country_comparison"],
+            ),
+            visa_assessment=VisaAssessmentResponse.model_validate(
+                result["visa_assessment"],
+            ),
+            market_demand=MarketDemandResponse.model_validate(
+                result["market_demand"],
+            ),
+            passport_score=PassportScoreResponse(**result["passport_score"]),
+        )
     except ValueError as exc:
         raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail=str(exc)) from exc
-
-    return PassportScanResponse(
-        credential_mapping=CredentialMappingResponse.model_validate(
-            result["credential_mapping"],
-        ),
-        country_comparison=CountryComparisonResponse.model_validate(
-            result["country_comparison"],
-        ),
-        visa_assessment=VisaAssessmentResponse.model_validate(
-            result["visa_assessment"],
-        ),
-        market_demand=MarketDemandResponse.model_validate(
-            result["market_demand"],
-        ),
-        passport_score=PassportScoreResponse(**result["passport_score"]),
-    )
 
 
 # ── Credential Mapping ────────────────────────────────────────

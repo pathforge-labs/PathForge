@@ -117,6 +117,24 @@ PG_UUID.result_processor = _patched_uuid_result  # type: ignore[method-assign]
 # ── Now import models (which triggers Base.metadata population) ──
 from app.models.base import Base
 
+# ── Test JWT Secrets (RFC 7518 §3.2 compliant) ───────────────
+# PyJWT ≥ 2.10 raises InsecureKeyLengthWarning for HMAC keys < 32 bytes.
+# Override settings with 32+ byte test-safe values to prevent warnings
+# regardless of environment configuration.
+
+_TEST_JWT_SECRET = "pathforge-test-jwt-secret-32bytes!"  # 34 bytes
+_TEST_JWT_REFRESH = "pathforge-test-refresh-secret-32b!"  # 35 bytes
+
+
+@pytest.fixture(autouse=True, scope="session")
+def _override_jwt_secrets() -> None:
+    """Ensure JWT secrets meet PyJWT minimum key length in all tests."""
+    from app.core.config import settings
+
+    object.__setattr__(settings, "jwt_secret", _TEST_JWT_SECRET)
+    object.__setattr__(settings, "jwt_refresh_secret", _TEST_JWT_REFRESH)
+
+
 # ── Test Database ─────────────────────────────────────────────
 
 TEST_DATABASE_URL = "sqlite+aiosqlite:///:memory:"

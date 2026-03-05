@@ -32,7 +32,9 @@ from starlette.status import (
     HTTP_404_NOT_FOUND,
 )
 
+from app.core.config import settings
 from app.core.database import get_db
+from app.core.feature_gate import require_feature
 from app.core.rate_limit import limiter
 from app.core.security import get_current_user
 from app.models.user import User
@@ -51,6 +53,7 @@ from app.schemas.career_simulation import (
     SkillInvestmentSimRequest,
 )
 from app.services import career_simulation_service
+from app.services.billing_service import BillingService
 
 if TYPE_CHECKING:
     from app.models.career_simulation import CareerSimulation
@@ -124,6 +127,7 @@ async def get_dashboard(
     status_code=HTTP_201_CREATED,
     summary="Simulate role transition",
     description="What-if: What happens if I switch to a new role?",
+    dependencies=[Depends(require_feature("career_simulation"))],
 )
 @limiter.limit("5/minute")
 async def simulate_role(
@@ -132,7 +136,14 @@ async def simulate_role(
     current_user: User = Depends(get_current_user),
     database: AsyncSession = Depends(get_db),
 ) -> CareerSimulationResponse:
-    """Run role transition what-if simulation."""
+    """Run role transition what-if simulation.
+
+    Sprint 38 C1/C2/C5: Feature gating + scan limit + usage tracking.
+    """
+    # C5: Pre-check scan limit before AI call
+    if settings.billing_enabled:
+        await BillingService.check_scan_limit(database, current_user, "career_simulation")
+
     simulation = await career_simulation_service.simulate_role_transition(
         database,
         user_id=current_user.id,
@@ -140,6 +151,11 @@ async def simulate_role(
         target_industry=body.target_industry,
         target_location=body.target_location,
     )
+
+    # C2: Record usage after successful simulation
+    if settings.billing_enabled:
+        await BillingService.record_usage(database, current_user, "career_simulation")
+
     return _build_full_response(simulation)
 
 
@@ -152,6 +168,7 @@ async def simulate_role(
     status_code=HTTP_201_CREATED,
     summary="Simulate geographic move",
     description="What-if: What happens if I relocate to a new city/country?",
+    dependencies=[Depends(require_feature("career_simulation"))],
 )
 @limiter.limit("5/minute")
 async def simulate_geo(
@@ -180,6 +197,7 @@ async def simulate_geo(
     status_code=HTTP_201_CREATED,
     summary="Simulate skill investment",
     description="What-if: What happens if I invest in learning new skills?",
+    dependencies=[Depends(require_feature("career_simulation"))],
 )
 @limiter.limit("5/minute")
 async def simulate_skill(
@@ -207,6 +225,7 @@ async def simulate_skill(
     status_code=HTTP_201_CREATED,
     summary="Simulate industry pivot",
     description="What-if: What happens if I move to a different industry?",
+    dependencies=[Depends(require_feature("career_simulation"))],
 )
 @limiter.limit("5/minute")
 async def simulate_industry(
@@ -234,6 +253,7 @@ async def simulate_industry(
     status_code=HTTP_201_CREATED,
     summary="Simulate seniority jump",
     description="What-if: What happens if I move up to a higher seniority level?",
+    dependencies=[Depends(require_feature("career_simulation"))],
 )
 @limiter.limit("5/minute")
 async def simulate_seniority(

@@ -228,6 +228,44 @@ class BillingService:
     # ── Usage Tracking ─────────────────────────────────────────
 
     @staticmethod
+    async def check_scan_limit(
+        db: AsyncSession,
+        user: User,
+        engine: str,
+    ) -> None:
+        """Raise 403 if user has exhausted scans for the current period.
+
+        Called BEFORE AI operation to prevent cost leakage.
+        Does nothing when billing is disabled (graceful degradation).
+        """
+        from fastapi import HTTPException
+        from fastapi import status as http_status
+
+        from app.core.feature_gate import get_scan_limit
+
+        if not settings.billing_enabled:
+            return
+
+        tier = get_user_tier(user)
+        limit = get_scan_limit(tier)
+        if limit is None:
+            return  # Unlimited tier (premium)
+
+        summary = await BillingService.get_usage_summary(db, user)
+        if summary["scans_used"] >= limit:
+            raise HTTPException(
+                status_code=http_status.HTTP_403_FORBIDDEN,
+                detail={
+                    "error": "scan_limit_exceeded",
+                    "message": f"You have used all {limit} scans for this period.",
+                    "current_tier": tier,
+                    "scans_used": summary["scans_used"],
+                    "scan_limit": limit,
+                    "upgrade_url": "/api/v1/billing/checkout",
+                },
+            )
+
+    @staticmethod
     async def record_usage(
         db: AsyncSession,
         user: User,

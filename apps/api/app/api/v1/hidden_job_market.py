@@ -29,7 +29,9 @@ from starlette.status import (
     HTTP_404_NOT_FOUND,
 )
 
+from app.core.config import settings
 from app.core.database import get_db
+from app.core.feature_gate import require_feature
 from app.core.rate_limit import limiter
 from app.core.security import get_current_user
 from app.models.user import User
@@ -48,6 +50,7 @@ from app.schemas.hidden_job_market import (
     SignalComparisonResponse,
 )
 from app.services import hidden_job_market_service
+from app.services.billing_service import BillingService
 
 router = APIRouter(
     prefix="/hidden-job-market",
@@ -103,6 +106,7 @@ async def get_dashboard(
     response_model=list[CompanySignalResponse],
     status_code=HTTP_201_CREATED,
     summary="Scan company for signals",
+    dependencies=[Depends(require_feature("hidden_job_market"))],
 )
 @limiter.limit("3/minute")
 async def scan_company(
@@ -112,6 +116,10 @@ async def scan_company(
     database: AsyncSession = Depends(get_db),
 ) -> list[CompanySignalResponse]:
     """Scan a specific company for growth and hiring signals."""
+    # C5: Pre-check scan limit before AI call
+    if settings.billing_enabled:
+        await BillingService.check_scan_limit(database, current_user, "hidden_job_market")
+
     try:
         signals = await hidden_job_market_service.scan_company(
             database,
@@ -122,6 +130,10 @@ async def scan_company(
         )
     except ValueError as exc:
         raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+    # C2: Record usage after successful scan
+    if settings.billing_enabled:
+        await BillingService.record_usage(database, current_user, "hidden_job_market")
+
 
     return [
         CompanySignalResponse.model_validate(signal)

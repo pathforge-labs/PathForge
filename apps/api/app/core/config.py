@@ -11,13 +11,18 @@ Usage:
     from app.core.config import EMBEDDING_DIM
 """
 
+import logging
+
+from pydantic import model_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+_config_logger = logging.getLogger(__name__)
+
 # ── Module Constants (compile-time, not runtime-configurable) ────────
 # Changing EMBEDDING_DIM requires re-embedding ALL vectors + index rebuild.
 # This is intentionally NOT a settings field — it must match the Voyage AI
 # model output dimension and the pgvector column definition.
 EMBEDDING_DIM: int = 3072
-
-from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):  # type: ignore[misc]
@@ -57,7 +62,7 @@ class Settings(BaseSettings):  # type: ignore[misc]
     redis_socket_timeout: int = 5
 
     # ── JWT Authentication ──────────────────────────────────────
-    jwt_secret: str = "change-me-in-production-use-a-real-secret"
+    jwt_secret: str = "pathforge-dev-secret-change-in-production"
     jwt_refresh_secret: str = "change-me-refresh-secret-must-differ"
     jwt_algorithm: str = "HS256"
     jwt_access_token_expire_minutes: int = 60
@@ -173,6 +178,42 @@ class Settings(BaseSettings):  # type: ignore[misc]
     rate_limit_waitlist: str = "5/minute"
     rate_limit_public_profile: str = "30/minute"
     rate_limit_billing: str = "10/minute"     # S35/AC4: billing mutation rate limit
+
+    # ── Sprint 38 H3: JWT Secret Production Guard ────────────
+    _INSECURE_JWT_DEFAULTS: frozenset[str] = frozenset({
+        "change-me-in-production-use-a-real-secret",
+        "change-me-refresh-secret-must-differ",
+    })
+
+    @model_validator(mode="after")
+    def _validate_jwt_secrets(self) -> "Settings":
+        """Block startup if default JWT secrets are used in production."""
+        for field_name in ("jwt_secret", "jwt_refresh_secret"):
+            value = getattr(self, field_name)
+            if value in self._INSECURE_JWT_DEFAULTS:
+                if self.environment == "production":
+                    msg = (
+                        f"FATAL: {field_name} uses an insecure default value. "
+                        f"Set a strong, unique secret via environment variable "
+                        f"before deploying to production."
+                    )
+                    raise ValueError(msg)
+                _config_logger.warning(
+                    "⚠️  %s uses insecure default — acceptable for %s only",
+                    field_name,
+                    self.environment,
+                )
+        if self.jwt_secret == self.jwt_refresh_secret:
+            if self.environment == "production":
+                msg = (
+                    "FATAL: jwt_secret and jwt_refresh_secret must differ. "
+                    "Using identical secrets compromises token security."
+                )
+                raise ValueError(msg)
+            _config_logger.warning(
+                "⚠️  jwt_secret and jwt_refresh_secret are identical — fix before production"
+            )
+        return self
 
     @property
     def is_production(self) -> bool:

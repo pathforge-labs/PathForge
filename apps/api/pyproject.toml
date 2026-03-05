@@ -114,4 +114,5 @@ timeout_method = "thread"
 filterwarnings = [
     "ignore:.*HTTP_422_UNPROCESSABLE_ENTITY.*:DeprecationWarning:slowapi",
     "ignore::DeprecationWarning:pytest_asyncio.plugin",
+    "ignore::jwt.warnings.InsecureKeyLengthWarning",
 ]

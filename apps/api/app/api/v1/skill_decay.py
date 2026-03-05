@@ -24,6 +24,7 @@ from starlette.requests import Request
 
 from app.core.config import settings
 from app.core.database import get_db
+from app.core.feature_gate import require_feature
 from app.core.rate_limit import limiter
 from app.core.security import get_current_user
 from app.models.user import User
@@ -38,6 +39,7 @@ from app.schemas.skill_decay import (
     SkillRefreshRequest,
     SkillVelocityEntryResponse,
 )
+from app.services.billing_service import BillingService
 from app.services.skill_decay_service import SkillDecayService
 
 if TYPE_CHECKING:
@@ -118,6 +120,7 @@ async def get_skill_decay_dashboard(
     response_model=SkillDecayScanResponse,
     status_code=status.HTTP_201_CREATED,
     summary="Trigger comprehensive skill decay scan",
+    dependencies=[Depends(require_feature("skill_decay"))],
 )
 @limiter.limit(settings.rate_limit_career_dna)
 async def trigger_skill_decay_scan(
@@ -125,7 +128,14 @@ async def trigger_skill_decay_scan(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> SkillDecayScanResponse:
-    """Execute full Skill Decay & Growth Tracker analysis pipeline."""
+    """Execute full Skill Decay & Growth Tracker analysis pipeline.
+
+    Sprint 38 C1/C2/C5: Feature gating + scan limit + usage tracking.
+    """
+    # C5: Pre-check scan limit before AI call
+    if settings.billing_enabled:
+        await BillingService.check_scan_limit(db, current_user, "skill_decay")
+
     result = await SkillDecayService.run_full_scan(
         db,
         user_id=current_user.id,
@@ -136,6 +146,10 @@ async def trigger_skill_decay_scan(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=result.get("detail", "Career DNA profile required"),
         )
+
+    # C2: Record usage after successful scan
+    if settings.billing_enabled:
+        await BillingService.record_usage(db, current_user, "skill_decay")
 
     await db.commit()
 

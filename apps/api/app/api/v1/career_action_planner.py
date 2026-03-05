@@ -30,7 +30,9 @@ from starlette.status import (
 )
 
 from app.core.auth import get_current_user
+from app.core.config import settings
 from app.core.database import get_db
+from app.core.feature_gate import require_feature
 from app.core.rate_limit import limiter
 from app.models.user import User
 from app.schemas.career_action_planner import (
@@ -54,6 +56,7 @@ from app.services import career_action_planner_service as service
 from app.services._career_action_planner_helpers import (
     compare_plans as compare_plans_fn,
 )
+from app.services.billing_service import BillingService
 
 router = APIRouter(
     prefix="/career-action-planner",
@@ -111,6 +114,7 @@ async def get_dashboard(
     response_model=PlanScanResponse,
     status_code=HTTP_201_CREATED,
     summary="Generate a new career action plan",
+    dependencies=[Depends(require_feature("career_action_planner"))],
 )
 @limiter.limit("2/minute")
 async def create_plan_scan(
@@ -123,7 +127,12 @@ async def create_plan_scan(
 
     Career Sprint Methodology™ — creates a personalized, time-bound
     career development plan with milestones and recommendations.
+    Sprint 38 C1/C2/C5: Feature gating + scan limit + usage tracking.
     """
+    # C5: Pre-check scan limit before AI call
+    if settings.billing_enabled:
+        await BillingService.check_scan_limit(database, current_user, "career_action_planner")
+
     try:
         result = await service.generate_plan(
             database, user_id=current_user.id, request_data=body,
@@ -133,6 +142,10 @@ async def create_plan_scan(
             status_code=HTTP_422_UNPROCESSABLE_CONTENT,
             detail=str(exc),
         ) from exc
+
+    # C2: Record usage after successful scan
+    if settings.billing_enabled:
+        await BillingService.record_usage(database, current_user, "career_action_planner")
 
     return PlanScanResponse(
         plan=CareerActionPlanResponse.model_validate(result.plan),

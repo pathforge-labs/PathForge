@@ -30,7 +30,9 @@ from starlette.status import (
     HTTP_404_NOT_FOUND,
 )
 
+from app.core.config import settings
 from app.core.database import get_db
+from app.core.feature_gate import require_feature
 from app.core.rate_limit import limiter
 from app.core.security import get_current_user
 from app.models.user import User
@@ -49,6 +51,7 @@ from app.schemas.interview_intelligence import (
     NegotiationScriptResponse,
 )
 from app.services import interview_intelligence_service
+from app.services.billing_service import BillingService
 
 logger = logging.getLogger(__name__)
 
@@ -104,6 +107,7 @@ async def get_dashboard(
         "Create a company-specific interview preparation session. "
         "Analyzes the company, generates questions, and maps STAR examples from Career DNA."
     ),
+    dependencies=[Depends(require_feature("interview_intelligence"))],
 )
 @limiter.limit("5/minute")
 async def create_prep(
@@ -113,6 +117,10 @@ async def create_prep(
     database: AsyncSession = Depends(get_db),
 ) -> InterviewPrepResponse:
     """Create a new interview prep session."""
+    # C5: Pre-check scan limit before AI call
+    if settings.billing_enabled:
+        await BillingService.check_scan_limit(database, current_user, "interview_intelligence")
+
     prep = await interview_intelligence_service.create_interview_prep(
         database,
         user_id=current_user.id,
@@ -120,6 +128,10 @@ async def create_prep(
         target_role=body.target_role,
         prep_depth=body.prep_depth,
     )
+    # C2: Record usage after successful scan
+    if settings.billing_enabled:
+        await BillingService.record_usage(database, current_user, "interview_intelligence")
+
     return InterviewPrepResponse.model_validate(prep)
 
 

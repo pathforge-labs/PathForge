@@ -28,6 +28,7 @@ from starlette.requests import Request
 from app.core.auth import get_current_user
 from app.core.config import settings
 from app.core.database import get_db
+from app.core.feature_gate import require_feature
 from app.core.rate_limit import limiter
 from app.models.user import User
 from app.schemas.recommendation_intelligence import (
@@ -41,6 +42,7 @@ from app.schemas.recommendation_intelligence import (
     RecommendationSummary,
     UpdateRecommendationStatusRequest,
 )
+from app.services.billing_service import BillingService
 from app.services.recommendation_intelligence_service import (
     RecommendationIntelligenceService,
 )
@@ -126,6 +128,7 @@ async def get_dashboard(
         "Intelligence Fusion Engine™ — trigger recommendation "
         "generation by correlating signals from all 12 engines."
     ),
+    dependencies=[Depends(require_feature("recommendation_intelligence"))],
 )
 @limiter.limit("3/minute")
 async def generate_recommendations(
@@ -134,7 +137,14 @@ async def generate_recommendations(
     current_user: User = Depends(get_current_user),
     database: AsyncSession = Depends(get_db),
 ) -> RecommendationBatchResponse:
-    """Generate new recommendation batch."""
+    """Generate new recommendation batch.
+
+    Sprint 38 C1/C2/C5: Feature gating + scan limit + usage tracking.
+    """
+    # C5: Pre-check scan limit before AI call
+    if settings.billing_enabled:
+        await BillingService.check_scan_limit(database, current_user, "recommendation_intelligence")
+
     try:
         batch = await RecommendationIntelligenceService.generate_recommendations(
             database,
@@ -142,6 +152,11 @@ async def generate_recommendations(
             batch_type=body.batch_type,
             focus_categories=body.focus_categories,
         )
+
+        # C2: Record usage after successful scan
+        if settings.billing_enabled:
+            await BillingService.record_usage(database, current_user, "recommendation_intelligence")
+
         return RecommendationBatchResponse.model_validate(batch)
     except ValueError as exc:
         raise HTTPException(

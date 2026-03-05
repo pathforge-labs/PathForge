@@ -26,6 +26,7 @@ from starlette.requests import Request
 
 from app.core.config import settings
 from app.core.database import get_db
+from app.core.feature_gate import require_feature
 from app.core.rate_limit import limiter
 from app.core.security import get_current_user
 from app.models.user import User
@@ -43,6 +44,7 @@ from app.schemas.salary_intelligence import (
     SkillSalaryImpactResponse,
     SkillWhatIfRequest,
 )
+from app.services.billing_service import BillingService
 from app.services.salary_intelligence_service import SalaryIntelligenceService
 
 router = APIRouter(
@@ -78,6 +80,7 @@ async def get_salary_dashboard(
     response_model=SalaryScanResponse,
     summary="Trigger full salary intelligence scan",
     status_code=status.HTTP_200_OK,
+    dependencies=[Depends(require_feature("salary_intelligence"))],
 )
 @limiter.limit(settings.rate_limit_career_dna)
 async def run_salary_scan(
@@ -85,7 +88,14 @@ async def run_salary_scan(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> SalaryScanResponse:
-    """Execute full salary analysis pipeline: estimate → impacts → history."""
+    """Execute full salary analysis pipeline: estimate → impacts → history.
+
+    Sprint 38 C1/C2/C5: Feature gating + scan limit + usage tracking.
+    """
+    # C5: Pre-check scan limit before AI call
+    if settings.billing_enabled:
+        await BillingService.check_scan_limit(db, current_user, "salary_intelligence")
+
     data: dict[str, Any] = await SalaryIntelligenceService.run_full_scan(
         db, user_id=current_user.id,
     )
@@ -95,6 +105,10 @@ async def run_salary_scan(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=data.get("detail", "Salary scan failed"),
         )
+
+    # C2: Record usage after successful scan
+    if settings.billing_enabled:
+        await BillingService.record_usage(db, current_user, "salary_intelligence")
 
     return SalaryScanResponse(
         status=data.get("status", "completed"),

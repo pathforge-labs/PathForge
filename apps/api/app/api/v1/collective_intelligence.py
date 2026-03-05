@@ -26,6 +26,7 @@ from starlette.requests import Request
 from app.core.auth import get_current_user
 from app.core.config import settings
 from app.core.database import get_db
+from app.core.feature_gate import require_feature
 from app.core.rate_limit import limiter
 from app.models.user import User
 from app.schemas.collective_intelligence import (
@@ -46,6 +47,7 @@ from app.schemas.collective_intelligence import (
     SalaryBenchmarkResponse,
 )
 from app.services import collective_intelligence_service as ci_service
+from app.services.billing_service import BillingService
 
 logger = logging.getLogger(__name__)
 
@@ -68,6 +70,7 @@ router = APIRouter(
         "hiring trends, emerging skills, salary ranges, and growth "
         "projections, personalized to your Career DNA."
     ),
+    dependencies=[Depends(require_feature("collective_intelligence"))],
 )
 @limiter.limit(settings.rate_limit_career_dna)
 async def create_industry_snapshot(
@@ -76,7 +79,14 @@ async def create_industry_snapshot(
     current_user: User = Depends(get_current_user),
     database: AsyncSession = Depends(get_db),
 ) -> IndustrySnapshotResponse:
-    """Analyze an industry's health and trends."""
+    """Analyze an industry's health and trends.
+
+    Sprint 38 C1/C2/C5: Feature gating + scan limit + usage tracking.
+    """
+    # C5: Pre-check scan limit before AI call
+    if settings.billing_enabled:
+        await BillingService.check_scan_limit(database, current_user, "collective_intelligence")
+
     try:
         snapshot = await ci_service.get_industry_snapshot(
             database,
@@ -84,6 +94,11 @@ async def create_industry_snapshot(
             industry=body.industry,
             region=body.region,
         )
+
+        # C2: Record usage after successful scan
+        if settings.billing_enabled:
+            await BillingService.record_usage(database, current_user, "collective_intelligence")
+
         return IndustrySnapshotResponse.model_validate(snapshot)
     except ValueError as exc:
         raise HTTPException(

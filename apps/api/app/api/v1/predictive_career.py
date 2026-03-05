@@ -25,6 +25,7 @@ from starlette.requests import Request
 from app.core.auth import get_current_user
 from app.core.config import settings
 from app.core.database import get_db
+from app.core.feature_gate import require_feature
 from app.core.rate_limit import limiter
 from app.models.user import User
 from app.schemas.predictive_career import (
@@ -42,6 +43,7 @@ from app.schemas.predictive_career import (
     PredictiveScanResponse,
 )
 from app.services import predictive_career_service as pc_service
+from app.services.billing_service import BillingService
 
 logger = logging.getLogger(__name__)
 
@@ -64,6 +66,7 @@ router = APIRouter(
         "and growing roles that match your Career DNA skill set, "
         "before they appear on mainstream job boards."
     ),
+    dependencies=[Depends(require_feature("predictive_career"))],
 )
 @limiter.limit(settings.rate_limit_career_dna)
 async def scan_emerging_roles(
@@ -72,7 +75,14 @@ async def scan_emerging_roles(
     current_user: User = Depends(get_current_user),
     database: AsyncSession = Depends(get_db),
 ) -> list[EmergingRoleResponse]:
-    """Detect emerging roles matching user."""
+    """Detect emerging roles matching user.
+
+    Sprint 38 C1/C2/C5: Feature gating + scan limit + usage tracking.
+    """
+    # C5: Pre-check scan limit before AI call
+    if settings.billing_enabled:
+        await BillingService.check_scan_limit(database, current_user, "predictive_career")
+
     try:
         roles = await pc_service.scan_emerging_roles(
             database,
@@ -81,6 +91,11 @@ async def scan_emerging_roles(
             region=body.region,
             min_skill_overlap_pct=body.min_skill_overlap_pct,
         )
+
+        # C2: Record usage after successful scan
+        if settings.billing_enabled:
+            await BillingService.record_usage(database, current_user, "predictive_career")
+
         return [
             EmergingRoleResponse.model_validate(role)
             for role in roles
