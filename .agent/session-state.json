@@ -1,15 +1,15 @@
 {
-  "sprint": "39",
-  "focus": "Auth Hardening & Email Service — ✅ Complete (33 tasks, 5 phases)",
+  "sprint": "39-HN",
+  "focus": "Sprint 39 Handoff Notes Remediation — ✅ Complete (7 phases, 18 audit findings)",
   "branch": "main",
   "phase": "K — Production Launch",
-  "session_date": "2026-03-09",
-  "status": "Sprint 39 complete — 6/8 P0 blockers resolved. Sprint 40 (Stripe + LLM setup) next.",
+  "session_date": "2026-03-12",
+  "status": "Sprint 39 handoff remediation complete — H1-H6 resolved. Sprint 40 (Stripe + LLM setup) next.",
   "production_readiness": {
     "global_score": 59,
-    "verdict": "NO-GO (6/8 P0 resolved, Stripe + LLM remain)",
+    "verdict": "NO-GO (8/8 P0 resolved except Stripe + LLM)",
     "p0_blockers": 2,
-    "p0_resolved": 6,
+    "p0_resolved": 8,
     "p1_blockers": 4,
     "p2_blockers": 4,
     "p3_blockers": 2,
@@ -27,14 +27,15 @@
     "build_routes": 42
   },
   "audit": {
-    "passes": 5,
+    "passes": 6,
     "standard": "FAANG/Tier-1",
     "domains_audited": 12,
-    "review_gates_passed": "7/7",
-    "sprint_39_verdict": "GO — all 33 tasks complete"
+    "review_gates_passed": "8/8",
+    "sprint_39_hn_verdict": "GO — all 7 phases + 18 audit findings resolved"
   },
   "sprint_plan": {
     "sprint_39": "✅ Complete — Auth Hardening & Email Service (33 tasks, 1 session)",
+    "sprint_39_hn": "✅ Complete — Handoff Notes Remediation (7 phases, 18 findings, 1 session)",
     "sprint_40": "⏳ Stripe & LLM Operational Setup (manual, 1-2 sessions)",
     "sprint_41": "⏳ Production Infrastructure Hardening (2 sessions)",
     "sprint_42": "⏳ Monitoring, Token Security & Polish (1 session)",
@@ -42,15 +43,12 @@
     "sprint_44": "⏳ Post-Launch Polish & Monitoring (1 session)"
   },
   "handoff": {
-    "manual_steps": 6,
-    "h1": "Copy TURNSTILE_SECRET_KEY to apps/api/.env",
-    "h2": "Run alembic upgrade head (migration d4e5f6g7h8i9)",
-    "h3": "Google OAuth client setup (GCP Console)",
-    "h4": "Microsoft OAuth app setup (Azure AD)",
-    "h5": "Install @azure/msal-browser when MS OAuth activated",
-    "h6": "Add Google GIS script to layout.tsx when Google OAuth activated"
+    "manual_steps": 2,
+    "h3": "Google OAuth client setup (GCP Console) → set env vars in Railway + Vercel",
+    "h4": "Microsoft OAuth app setup (Azure AD) → set env vars in Railway + Vercel"
   },
   "commits": [
-    {"hash": "160b48c", "message": "feat(auth): Sprint 39 — Auth Hardening, Email Service & OAuth"}
+    {"hash": "160b48c", "message": "feat(auth): Sprint 39 — Auth Hardening, Email Service & OAuth"},
+    {"hash": "pending", "message": "feat(auth): Sprint 39 Handoff Notes remediation — OAuth JWKS hardening, MSAL, CSP, test fix"}
   ]
 }

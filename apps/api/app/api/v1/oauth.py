@@ -4,20 +4,27 @@ PathForge API — OAuth Routes
 Social login endpoints for Google and Microsoft OAuth providers.
 
 Sprint 39: Phase E — Google + Microsoft OAuth / Social Login.
+Tier-1 Audit: F2 (JWKS), F9 (google-auth), F10 (msal cleanup),
+              F11/F12 (asyncio.to_thread), F14 (Literal), F16 (auto-verify).
 
 Flow:
 1. Frontend obtains an ID token via Google Sign-In SDK or MSAL.js
 2. Frontend sends the ID token to POST /auth/oauth/{provider}
-3. Backend verifies the token with the provider
+3. Backend verifies the token with the provider (JWKS for Microsoft,
+   google-auth for Google) — both run in thread pool to avoid blocking
 4. Backend creates or retrieves the user, auto-verified
 5. Backend returns access + refresh JWT tokens
 """
 
 from __future__ import annotations
 
+import asyncio
 import logging
+from typing import Literal
 
+import jwt as pyjwt
 from fastapi import APIRouter, Depends, HTTPException, Request, status
+from jwt import PyJWKClient
 from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -32,6 +39,10 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/auth/oauth", tags=["OAuth"])
 
+# ── Types ──────────────────────────────────────────────────────
+
+OAuthProvider = Literal["google", "microsoft"]
+
 
 # ── Request Schema ─────────────────────────────────────────────
 
@@ -41,11 +52,37 @@ class OAuthTokenRequest(BaseModel):
     id_token: str = Field(min_length=1, description="ID token from OAuth provider")
 
 
+# ── Microsoft JWKS Client (cached, lazy-initialized) ──────────
+
+_MICROSOFT_JWKS_URL = "https://login.microsoftonline.com/common/discovery/v2.0/keys"
+_ms_jwks_client: PyJWKClient | None = None
+
+
+def _get_ms_jwks_client() -> PyJWKClient:
+    """Lazily create a cached JWKS client for Microsoft token verification.
+
+    Keys are cached for 1 hour to avoid redundant HTTP calls.
+    The client is a module-level singleton for efficiency.
+    """
+    global _ms_jwks_client
+    if _ms_jwks_client is None:
+        _ms_jwks_client = PyJWKClient(
+            _MICROSOFT_JWKS_URL,
+            cache_keys=True,
+            lifespan=3600,
+        )
+    return _ms_jwks_client
+
+
 # ── Token Verification ─────────────────────────────────────────
 
 
 async def _verify_google_token(id_token: str) -> dict[str, str]:
     """Verify a Google ID token and return user info.
+
+    Uses google-auth library for OIDC token verification.
+    The verification call is synchronous (uses ``requests`` internally),
+    so we run it in a thread pool to avoid blocking the event loop (F12).
 
     Returns:
         Dict with 'email', 'name', and 'sub' (Google user ID).
@@ -63,7 +100,10 @@ async def _verify_google_token(id_token: str) -> dict[str, str]:
         from google.auth.transport.requests import Request as GoogleRequest
         from google.oauth2 import id_token as google_id_token
 
-        claims = google_id_token.verify_oauth2_token(
+        # F12: google.oauth2.id_token.verify_oauth2_token uses synchronous HTTP
+        # via the `requests` library — must run in thread pool
+        claims = await asyncio.to_thread(
+            google_id_token.verify_oauth2_token,
             id_token,
             GoogleRequest(),
             settings.google_oauth_client_id,
@@ -88,7 +128,11 @@ async def _verify_google_token(id_token: str) -> dict[str, str]:
 
 
 async def _verify_microsoft_token(id_token: str) -> dict[str, str]:
-    """Verify a Microsoft ID token and return user info.
+    """Verify a Microsoft ID token using JWKS and return user info.
+
+    Uses PyJWT's PyJWKClient to fetch Microsoft's public signing keys
+    and verify the RS256 signature. The JWKS HTTP call is synchronous,
+    so we run it in a thread pool to avoid blocking the event loop (F11).
 
     Returns:
         Dict with 'email', 'name', and 'sub' (Microsoft user ID).
@@ -103,41 +147,24 @@ async def _verify_microsoft_token(id_token: str) -> dict[str, str]:
         )
 
     try:
-        import msal
+        jwks_client = _get_ms_jwks_client()
 
-        # Create a confidential client for token validation
-        app = msal.ConfidentialClientApplication(
-            settings.microsoft_oauth_client_id,
-            authority="https://login.microsoftonline.com/common",
-            client_credential=settings.microsoft_oauth_client_secret,
+        # F11: PyJWKClient.get_signing_key_from_jwt() is synchronous HTTP
+        # — must run in thread pool to avoid blocking the event loop
+        signing_key = await asyncio.to_thread(
+            jwks_client.get_signing_key_from_jwt, id_token
         )
 
-        # Validate the ID token
-        app.acquire_token_by_authorization_code(
-            code="",  # Not used for validation
-            scopes=["openid", "email", "profile"],
+        claims = pyjwt.decode(
+            id_token,
+            signing_key.key,
+            algorithms=["RS256"],
+            audience=settings.microsoft_oauth_client_id,
+            options={"verify_exp": True},
         )
 
-        # For ID token validation, we decode and verify the JWT
-        import jwt as pyjwt
-        from jwt import PyJWTError
-
-        # Decode without verification first to get claims
-        # In production, we should verify with Microsoft's JWKS
-        try:
-            unverified = pyjwt.decode(
-                id_token,
-                options={"verify_signature": False},
-                algorithms=["RS256"],
-            )
-        except PyJWTError as decode_err:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid Microsoft ID token",
-            ) from decode_err
-
-        email = unverified.get("email") or unverified.get("preferred_username")
-        name = unverified.get("name", "")
+        email = claims.get("email") or claims.get("preferred_username")
+        name = claims.get("name", "")
 
         if not email:
             raise HTTPException(
@@ -145,31 +172,20 @@ async def _verify_microsoft_token(id_token: str) -> dict[str, str]:
                 detail="Microsoft token does not contain an email address",
             )
 
-        # Verify the audience matches our client ID
-        aud = unverified.get("aud")
-        if aud != settings.microsoft_oauth_client_id:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Microsoft token audience mismatch",
-            )
+        return {"email": email, "name": name, "sub": claims.get("sub", "")}
 
-        return {"email": email, "name": name, "sub": unverified.get("sub", "")}
-
-    except Exception as exc:
-        if isinstance(exc, HTTPException):
-            raise
+    except pyjwt.ExpiredSignatureError as exc:
+        logger.warning("Microsoft token has expired")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Microsoft token has expired",
+        ) from exc
+    except pyjwt.InvalidTokenError as exc:
         logger.warning("Microsoft token verification failed: %s", exc)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid Microsoft ID token",
         ) from exc
-
-
-_PROVIDER_VERIFIERS = {
-    "google": _verify_google_token,
-    "microsoft": _verify_microsoft_token,
-}
-
 
 # ── OAuth Endpoints ────────────────────────────────────────────
 
@@ -182,22 +198,18 @@ _PROVIDER_VERIFIERS = {
 @limiter.limit(settings.rate_limit_login)
 async def oauth_login(
     request: Request,
-    provider: str,
+    provider: OAuthProvider,
     payload: OAuthTokenRequest,
     db: AsyncSession = Depends(get_db),
 ) -> TokenResponse:
     """Exchange an OAuth provider ID token for PathForge JWT tokens.
 
-    Supported providers: google, microsoft.
+    Supported providers: google, microsoft (F14: enforced via Literal type).
     If the user doesn't exist, they are auto-created with is_verified=True.
-    If the user exists with a different provider, account linking is attempted.
+    If the user exists, account linking is attempted (F16: auto-verify).
     """
-    verifier = _PROVIDER_VERIFIERS.get(provider)
-    if not verifier:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Unsupported OAuth provider: {provider}. Use 'google' or 'microsoft'.",
-        )
+    # F14: FastAPI auto-validates provider via Literal type — no manual check needed
+    verifier = _verify_google_token if provider == "google" else _verify_microsoft_token
 
     # Verify the ID token with the provider
     user_info = await verifier(payload.id_token)
@@ -208,13 +220,19 @@ async def oauth_login(
     user = await UserService.get_by_email(db, email)
 
     if user:
-        # E7: Account linking — if user exists but with different provider,
-        # we allow login since email is verified by the OAuth provider
+        # Account linking — if user exists but with different provider,
+        # allow login since email is verified by the OAuth provider
         if not user.is_active:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="User account is inactive",
             )
+        # F16: OAuth provider verified this email — mark user as verified
+        # This handles the edge case where a user registered via email/password
+        # but never verified their email, then signs in via OAuth
+        if not user.is_verified:
+            user.is_verified = True
+            await db.flush()
     else:
         # Create new OAuth user (no password, auto-verified)
         user = await UserService.create_user(

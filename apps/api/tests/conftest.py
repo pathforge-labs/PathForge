@@ -135,6 +135,20 @@ def _override_jwt_secrets() -> None:
     object.__setattr__(settings, "jwt_refresh_secret", _TEST_JWT_REFRESH)
 
 
+@pytest.fixture(autouse=True, scope="session")
+def _disable_turnstile() -> None:
+    """Disable Turnstile CAPTCHA verification in all tests.
+
+    Without this, tests that hit registration/login endpoints would fail
+    with 400 when TURNSTILE_SECRET_KEY is set in the local .env.
+    Setting the key to empty string triggers the skip-path in
+    verify_turnstile_token().
+    """
+    from app.core.config import settings
+
+    object.__setattr__(settings, "turnstile_secret_key", "")
+
+
 # ── Test Database ─────────────────────────────────────────────
 
 TEST_DATABASE_URL = "sqlite+aiosqlite:///:memory:"

@@ -103,6 +103,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@azure/msal-browser':
+        specifier: ^5.4.0
+        version: 5.4.0
       '@sentry/nextjs':
         specifier: ^10.41.0
         version: 10.41.0(@opentelemetry/context-async-hooks@2.5.1(@opentelemetry/api@1.9.0))(@opentelemetry/core@2.5.1(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.5.1(@opentelemetry/api@1.9.0))(next@16.1.6(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(@playwright/test@1.58.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react@19.2.3)(webpack@5.105.3)
@@ -232,6 +235,14 @@ packages:
     resolution: {integrity: sha512-mKEfoUIB1MkVTht0BGZFXtSAEKXMJoDkyV5YZ9jbBmZCcWDz71tegNsdTkIN8zc/yMi5Gm2kx7Z5YQ9PfWNAWw==}
     peerDependencies:
       playwright-core: '>= 1.0.0'
+
+  '@azure/msal-browser@5.4.0':
+    resolution: {integrity: sha512-GvRbLNk26oPOPpnry4Ym8wtXrmdozGm2Sry5EKfui0siwnEuAKWEeMLLyosDo5nVEIIDO1C2t/+HpVzqqCWlfQ==}
+    engines: {node: '>=0.8.0'}
+
+  '@azure/msal-common@16.2.0':
+    resolution: {integrity: sha512-ge0nGzTLmEE5lg7tSCbTBrYqMGkpFQeQEtqfcKPuGJn/FPFf8Xz51uDfZsm5xpstNZGMYPhHvnYbL8OeNp/aLw==}
+    engines: {node: '>=0.8.0'}
 
   '@babel/code-frame@7.10.4':
     resolution: {integrity: sha512-vG6SvB6oYEhvgisZNFRmRCUkLz11c7rp+tbNTynGqc6mS1d5ATd/sGyV6W0KZZnXRKMTzZDRgQT3Ou9jhpAfUg==}
@@ -8716,6 +8727,12 @@ snapshots:
     dependencies:
       axe-core: 4.11.1
       playwright-core: 1.58.2
+
+  '@azure/msal-browser@5.4.0':
+    dependencies:
+      '@azure/msal-common': 16.2.0
+
+  '@azure/msal-common@16.2.0': {}
 
   '@babel/code-frame@7.10.4':
     dependencies:

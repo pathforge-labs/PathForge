@@ -67,7 +67,7 @@ export const authApi = {
 
   // ── Sprint 39: OAuth / Social Login ───────────────────────
 
-  oauthLogin: (provider: string, data: OAuthTokenRequest): Promise<TokenResponse> =>
+  oauthLogin: (provider: "google" | "microsoft", data: OAuthTokenRequest): Promise<TokenResponse> =>
     fetchPublic<TokenResponse>(`/api/v1/auth/oauth/${provider}`, {
       method: "POST",
       body: data,

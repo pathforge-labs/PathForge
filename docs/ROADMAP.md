@@ -1,7 +1,7 @@
 # PathForge — Live Sprint Board
 
 > **Single Source of Truth** for all sprint tracking and task management.
-> **Last Updated**: 2026-03-09 | **Current Phase**: K (Production Launch) — Sprint 39 ✅ complete, Sprint 40 next
+> **Last Updated**: 2026-03-12 | **Current Phase**: K (Production Launch) — Sprint 39 Handoff Remediation ✅, Sprint 40 next
 > **Document ownership (ADR-010)**: Phase-level definitions live in `ARCHITECTURE.md` Section 7. This file tracks sprint-level execution.
 
 ---
@@ -1006,49 +1006,50 @@
 
 > Unplanned tasks that emerged during development. These are logged here and attributed to the sprint during which they occurred.
 
-| Date       | Task                                       | During Sprint | Status  | Notes                                        |
-| :--------- | :----------------------------------------- | :------------ | :------ | :------------------------------------------- |
-| 2026-02-13 | Production branch setup & gitflow          | 6a            | ✅ Done | Documented in DEVELOPMENT_WORKFLOW.md        |
-| 2026-02-13 | Retrospective audit remediation            | 5→6a          | ✅ Done | 11 findings across 12 files                  |
-| 2026-02-14 | Performance optimization (Tier 1-4)        | 6a.1          | ✅ Done | Image, scroll, bundle optimizations          |
-| 2026-02-14 | Professional Project Tracking System       | 6b            | ✅ Done | This system itself                           |
-| 2026-02-14 | Sprint 6b Analytics implementation         | 6b            | ✅ Done | 3 models, 8 endpoints, 17 tests              |
-| 2026-02-14 | Agent Customization Architecture           | Post-6b       | ✅ Done | GEMINI.md, 8 rules, 16 workflows             |
-| 2026-02-15 | PPTS v1.1 — 8 audit findings               | Post-7        | ✅ Done | Volatile-only state, staleness detect        |
-| 2026-02-15 | ESLint cleanup — 7 issues resolved         | Post-7        | ✅ Done | 0 errors, 0 warnings achieved                |
-| 2026-02-16 | MyPy type annotation overhaul              | Post-9        | ✅ Done | 165→0 errors, 32 files, 3 bugs fixed         |
-| 2026-02-16 | CI pipeline fix — ai extras                | Post-9        | ✅ Done | Test collection failures resolved            |
-| 2026-02-16 | Contact page redesign (Tier-1)             | Post-9        | ✅ Done | 2-col layout, dept cards, FAQ grid           |
-| 2026-02-16 | Navbar/footer/sitemap updates              | Post-9        | ✅ Done | Contact link, social links, JSON-LD          |
-| 2026-02-16 | Pricing section + Tier-1 audit             | Post-9        | ✅ Done | 3 tiers, PricingCards, 9 audit fixes         |
-| 2026-02-17 | Google Workspace + email aliases           | Post-9        | ✅ Done | emre@pathforge.eu + 4 aliases                |
-| 2026-02-17 | Resend email integration                   | Post-9        | ✅ Done | SPF/DKIM/DMARC DNS verified                  |
-| 2026-02-17 | GA4 + Consent Mode v2                      | Post-9        | ✅ Done | G-EKGQR1ZWH3, consent-aware tracking         |
-| 2026-02-17 | Google Search Console verified             | Post-9        | ✅ Done | DNS TXT record, robots.ts created            |
-| 2026-02-17 | Vercel deploy pipeline setup               | Post-9        | ✅ Done | Monorepo config, auto-deploy disabled        |
-| 2026-02-17 | CI/CD pnpm version fix                     | Post-9        | ✅ Done | Removed explicit version from actions        |
-| 2026-02-17 | GitHub Secrets (Vercel)                    | Post-9        | ✅ Done | 3 secrets, deploy pipeline tested ✅         |
-| 2026-02-18 | Railway API deployment                     | Post-9        | ✅ Done | 3 fixes, health check verified ✅            |
-| 2026-02-18 | DNS configuration (GoDaddy→Vercel)         | Post-9        | ✅ Done | pathforge.eu live, Valid Configuration       |
-| 2026-02-18 | DKIM Google Workspace                      | Post-9        | ✅ Done | google.\_domainkey TXT, auth active          |
-| 2026-02-18 | Vercel + Railway env vars                  | Post-9        | ✅ Done | 13 Railway + 6 Vercel vars configured        |
-| 2026-02-19 | Turnstile error resolution                 | Post-9        | ✅ Done | useTurnstile hook, 300030/preload fix        |
-| 2026-02-19 | Waitlist duplicate handling                | Post-9        | ✅ Done | Duplicate detection, diff emails, rate limit |
-| 2026-02-19 | UI/UX polish session                       | Post-9        | ✅ Done | 6 issues + drag/swipe, deployed to prod      |
-| 2026-02-19 | Turnstile CSP fix (execute-on-demand)      | Post-9        | ✅ Done | execution: execute mode, Tier-1 audit ✅     |
-| 2026-02-20 | PowerShell shell conventions               | 10            | ✅ Done | Skill created, 12 `&&` fixes across 6 files  |
-| 2026-02-21 | MyPy 15→0 type warnings                    | 14            | ✅ Done | 6 files, +22/−81 lines, full green CI        |
-| 2026-02-24 | Sprint 22 audit fixes (4 findings)         | 22            | ✅ Done | MyPy, TYPE_CHECKING, async export, email     |
-| 2026-03-02 | TSC pnpm type resolution fix               | Post-34       | ✅ Done | `paths` alias in tsconfig, 12 errors → 0     |
-| 2026-03-04 | MyPy 17→0 + stale ignore cleanup           | 37            | ✅ Done | 10 files, 183 source files clean             |
-| 2026-03-04 | Skeleton.tsx ESLint warning fix            | 37            | ✅ Done | Unused `ref` from React 19 migration         |
-| 2026-03-04 | Pre-push hook MyPy optimization            | Post-37       | ✅ Done | 212s→15s push, MyPy CI-only, Tier-1 audit ✅ |
-| 2026-03-04 | CI job timeouts + pytest-timeout           | Post-37       | ✅ Done | All 5 CI jobs, 120s per-test timeout         |
-| 2026-03-04 | uv migration for API CI job                | Post-37       | ✅ Done | 10-100x faster dep install, caching          |
-| 2026-03-04 | Migration chain + deprecation fixes        | Post-37       | ✅ Done | Alembic chain, utcnow, HTTP_422, bcrypt opt  |
-| 2026-03-09 | /plan workflow — Strategic Sprint Planning | Pre-39        | ✅ Done | 73→261 lines, 3 Tier-1 audits, 27 findings   |
-| 2026-03-09 | Core workflow suite Tier-1 upgrade         | Pre-39        | ✅ Done | 4 workflows, 4 audit passes, 47 findings     |
-| 2026-03-09 | Sprint 39 — Auth Hardening & Email Service | 39            | ✅ Done | 33 tasks, 5 phases, 25 files, /review 7/7 ✅ |
+| Date       | Task                                       | During Sprint | Status  | Notes                                                                 |
+| :--------- | :----------------------------------------- | :------------ | :------ | :-------------------------------------------------------------------- |
+| 2026-02-13 | Production branch setup & gitflow          | 6a            | ✅ Done | Documented in DEVELOPMENT_WORKFLOW.md                                 |
+| 2026-02-13 | Retrospective audit remediation            | 5→6a          | ✅ Done | 11 findings across 12 files                                           |
+| 2026-02-14 | Performance optimization (Tier 1-4)        | 6a.1          | ✅ Done | Image, scroll, bundle optimizations                                   |
+| 2026-02-14 | Professional Project Tracking System       | 6b            | ✅ Done | This system itself                                                    |
+| 2026-02-14 | Sprint 6b Analytics implementation         | 6b            | ✅ Done | 3 models, 8 endpoints, 17 tests                                       |
+| 2026-02-14 | Agent Customization Architecture           | Post-6b       | ✅ Done | GEMINI.md, 8 rules, 16 workflows                                      |
+| 2026-02-15 | PPTS v1.1 — 8 audit findings               | Post-7        | ✅ Done | Volatile-only state, staleness detect                                 |
+| 2026-02-15 | ESLint cleanup — 7 issues resolved         | Post-7        | ✅ Done | 0 errors, 0 warnings achieved                                         |
+| 2026-02-16 | MyPy type annotation overhaul              | Post-9        | ✅ Done | 165→0 errors, 32 files, 3 bugs fixed                                  |
+| 2026-02-16 | CI pipeline fix — ai extras                | Post-9        | ✅ Done | Test collection failures resolved                                     |
+| 2026-02-16 | Contact page redesign (Tier-1)             | Post-9        | ✅ Done | 2-col layout, dept cards, FAQ grid                                    |
+| 2026-02-16 | Navbar/footer/sitemap updates              | Post-9        | ✅ Done | Contact link, social links, JSON-LD                                   |
+| 2026-02-16 | Pricing section + Tier-1 audit             | Post-9        | ✅ Done | 3 tiers, PricingCards, 9 audit fixes                                  |
+| 2026-02-17 | Google Workspace + email aliases           | Post-9        | ✅ Done | emre@pathforge.eu + 4 aliases                                         |
+| 2026-02-17 | Resend email integration                   | Post-9        | ✅ Done | SPF/DKIM/DMARC DNS verified                                           |
+| 2026-02-17 | GA4 + Consent Mode v2                      | Post-9        | ✅ Done | G-EKGQR1ZWH3, consent-aware tracking                                  |
+| 2026-02-17 | Google Search Console verified             | Post-9        | ✅ Done | DNS TXT record, robots.ts created                                     |
+| 2026-02-17 | Vercel deploy pipeline setup               | Post-9        | ✅ Done | Monorepo config, auto-deploy disabled                                 |
+| 2026-02-17 | CI/CD pnpm version fix                     | Post-9        | ✅ Done | Removed explicit version from actions                                 |
+| 2026-02-17 | GitHub Secrets (Vercel)                    | Post-9        | ✅ Done | 3 secrets, deploy pipeline tested ✅                                  |
+| 2026-02-18 | Railway API deployment                     | Post-9        | ✅ Done | 3 fixes, health check verified ✅                                     |
+| 2026-02-18 | DNS configuration (GoDaddy→Vercel)         | Post-9        | ✅ Done | pathforge.eu live, Valid Configuration                                |
+| 2026-02-18 | DKIM Google Workspace                      | Post-9        | ✅ Done | google.\_domainkey TXT, auth active                                   |
+| 2026-02-18 | Vercel + Railway env vars                  | Post-9        | ✅ Done | 13 Railway + 6 Vercel vars configured                                 |
+| 2026-02-19 | Turnstile error resolution                 | Post-9        | ✅ Done | useTurnstile hook, 300030/preload fix                                 |
+| 2026-02-19 | Waitlist duplicate handling                | Post-9        | ✅ Done | Duplicate detection, diff emails, rate limit                          |
+| 2026-02-19 | UI/UX polish session                       | Post-9        | ✅ Done | 6 issues + drag/swipe, deployed to prod                               |
+| 2026-02-19 | Turnstile CSP fix (execute-on-demand)      | Post-9        | ✅ Done | execution: execute mode, Tier-1 audit ✅                              |
+| 2026-02-20 | PowerShell shell conventions               | 10            | ✅ Done | Skill created, 12 `&&` fixes across 6 files                           |
+| 2026-02-21 | MyPy 15→0 type warnings                    | 14            | ✅ Done | 6 files, +22/−81 lines, full green CI                                 |
+| 2026-02-24 | Sprint 22 audit fixes (4 findings)         | 22            | ✅ Done | MyPy, TYPE_CHECKING, async export, email                              |
+| 2026-03-02 | TSC pnpm type resolution fix               | Post-34       | ✅ Done | `paths` alias in tsconfig, 12 errors → 0                              |
+| 2026-03-04 | MyPy 17→0 + stale ignore cleanup           | 37            | ✅ Done | 10 files, 183 source files clean                                      |
+| 2026-03-04 | Skeleton.tsx ESLint warning fix            | 37            | ✅ Done | Unused `ref` from React 19 migration                                  |
+| 2026-03-04 | Pre-push hook MyPy optimization            | Post-37       | ✅ Done | 212s→15s push, MyPy CI-only, Tier-1 audit ✅                          |
+| 2026-03-04 | CI job timeouts + pytest-timeout           | Post-37       | ✅ Done | All 5 CI jobs, 120s per-test timeout                                  |
+| 2026-03-04 | uv migration for API CI job                | Post-37       | ✅ Done | 10-100x faster dep install, caching                                   |
+| 2026-03-04 | Migration chain + deprecation fixes        | Post-37       | ✅ Done | Alembic chain, utcnow, HTTP_422, bcrypt opt                           |
+| 2026-03-09 | /plan workflow — Strategic Sprint Planning | Pre-39        | ✅ Done | 73→261 lines, 3 Tier-1 audits, 27 findings                            |
+| 2026-03-09 | Core workflow suite Tier-1 upgrade         | Pre-39        | ✅ Done | 4 workflows, 4 audit passes, 47 findings                              |
+| 2026-03-09 | Sprint 39 — Auth Hardening & Email Service | 39            | ✅ Done | 33 tasks, 5 phases, 25 files, /review 7/7 ✅                          |
+| 2026-03-12 | Sprint 39 Handoff Notes Remediation        | Post-39       | ✅ Done | 18 audit findings, 13 files, OAuth JWKS hardening, Turnstile test fix |
 
 ---
 
@@ -1096,3 +1097,4 @@
 | 37     | 10            | 9 (+1 def)  | 2            | 1        |
 | 38     | 10            | 10 (+1 def) | 1            | 3        |
 | 39     | 33            | 33          | 0            | 1        |
+| 39-HN  | 7 (handoff)   | 7           | 1            | 1        |
