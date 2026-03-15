@@ -1,11 +1,11 @@
 # Coding Style Rules
 
 > **Priority**: HIGH — Enforced in reviews
-> **Scope**: PathForge workspace (TypeScript + Python)
+> **Scope**: All workspaces (TypeScript + Python)
 
 ---
 
-## TypeScript (Frontend — Next.js 15)
+## TypeScript (Frontend & Backend)
 
 - **STRICT** mode enabled (`strict: true` in `tsconfig.json`)
 - **NO** `any` type usage — use `unknown` with type guards when needed
@@ -26,7 +26,7 @@
 
 ---
 
-## Python (Backend — FastAPI + SQLAlchemy)
+## Python (Backend)
 
 - **Type hints** on ALL function signatures (parameters + return)
 - **Pydantic** models for all request/response validation
@@ -34,18 +34,6 @@
 - `snake_case` for functions, variables, modules
 - `PascalCase` for classes (SQLAlchemy models, Pydantic schemas)
 - **f-strings** preferred over `.format()` or `%`
-
-### Module Organization
-
-```
-app/
-├── api/v1/           # Route handlers (thin — delegate to services)
-├── core/             # Security, config, database setup
-├── models/           # SQLAlchemy ORM models
-├── schemas/          # Pydantic request/response schemas
-├── services/         # Business logic layer
-└── ai/               # AI engine (parser, embeddings, matching, tailor)
-```
 
 ---
 

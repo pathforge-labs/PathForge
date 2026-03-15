@@ -1,6 +1,6 @@
 # Session End Checklist
 
-> **Framework**: Antigravity AI Kit v2.0.0  
+> **Framework**: Antigravity AI Kit v3.1.0  
 > **Purpose**: Complete this checklist before ending any work session  
 > **Principle**: Context preservation for continuity
 
@@ -9,35 +9,25 @@
 ## 📝 Context Preservation
 
 - [ ] **session-context.md** updated with:
-  - Session summary (handoff notes only)
-  - Handoff notes for next session
+  - What was accomplished
+  - Open items and next steps
   - Any blockers discovered
-  - ⚠️ NO task lists — use ROADMAP.md instead
-- [ ] **session-state.json** updated:
-  - Last commit (must match HEAD), branch, test count
-  - ⚠️ Volatile-only fields (v2.1.0 schema) — NO task arrays, NO static project metadata
+- [ ] **session-state.json** updated
+  - ⚠️ **Volatile-only metadata**: Only update machine-readable fields (lastCommit, currentTask, status). Never track task progress here.
 
 ---
 
-## 🗺️ Sprint State Sync (Auto)
-
-> **MANDATORY**: See `.agent/rules/sprint-tracking.md` for full protocol.
+## 📋 Sprint State Sync
 
 - [ ] **docs/ROADMAP.md** updated:
-  - Completed tasks marked `[x]`
-  - In-progress tasks marked `[/]`
-  - New ad-hoc work logged in Ad-Hoc Work Log table
-  - Sprint velocity table updated
-- [ ] **docs/CHANGELOG.md** updated:
-  - This session's changes logged under current sprint
-- [ ] **Verify no duplicate tracking**:
-  - No task arrays in `session-state.json`
-  - No task lists in `session-context.md`
-  - No completed items list in `session-context.md`
-- [ ] **Sync verification**:
-  - `session-state.json → repository.lastCommit` matches `git log --oneline -1`
-  - `session-context.md → Last Session Summary` references work done THIS session
-  - `session-state.json → session.focus` matches what was actually worked on
+  - Completed items marked `[x]`
+  - In-progress items marked `[/]`
+  - New discovered items added under appropriate section
+- [ ] **docs/CHANGELOG.md** synced with shipped work from this session
+- [ ] **Duplicate tracking prevention**:
+  - [ ] No task status tracked outside ROADMAP.md
+  - [ ] No duplicate entries between ROADMAP ↔ CHANGELOG ↔ session-context
+- [ ] **Sync verification**: ROADMAP.md ↔ session-context.md ↔ session-state.json reflect same state
 
 ---
 

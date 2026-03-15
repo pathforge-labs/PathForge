@@ -1,5 +1,9 @@
 ---
-description: PathForge Tier-1 Retrospective Quality Audit - Full product, architecture, and AI pipeline review against market standards
+description: Tier-1 Retrospective Quality Audit — full product, architecture, and pipeline review against market standards
+version: 2.1.0
+sdlc-phase: evaluate
+skills: [verification-loop]
+commit-types: [docs, chore]
 ---
 
 # /retrospective — Tier-1 Retrospective Quality Audit
@@ -8,7 +12,17 @@ description: PathForge Tier-1 Retrospective Quality Audit - Full product, archit
 > **Lifecycle**: After sprint/milestone completion — feeds next sprint's `/plan`
 
 > [!CAUTION]
-> Critical governance workflow. Do NOT defend previous decisions by default, minimize issues, or optimize for speed over correctness. Be critical, precise, honest — treat PathForge as competing with category leaders.
+> Critical governance workflow. Do NOT defend previous decisions by default, minimize issues, or optimize for speed over correctness. Be critical, precise, honest.
+
+---
+
+## Critical Rules
+
+1. **No defense bias** — never defend previous decisions by default; evaluate with fresh eyes
+2. **No minimization** — report all issues at their true severity, never downplay
+3. **Evidence required** — every classification (✅/⚠️/❌) must be backed by data or benchmarks
+4. **Structural over cosmetic** — prefer foundational improvements over surface fixes
+5. **Market-grade bar** — compare against Google/Meta/Apple quality standards
 
 ---
 
@@ -25,20 +39,16 @@ description: PathForge Tier-1 Retrospective Quality Audit - Full product, archit
 
 Audit MUST automatically cover all applicable domains. Skip domains not yet implemented.
 
-| Domain                 | What to Audit                                           |
-| :--------------------- | :------------------------------------------------------ |
-| **Semantic Analysis**  | Job parsing, NLP quality, entity extraction             |
-| **LLM Pipeline**       | CV/cover letter optimization, prompts, token efficiency |
-| **Skill Gap Scoring**  | Algorithm fairness, accuracy, explainability            |
-| **Browser Automation** | Human-in-the-loop, rate limiting, ToS compliance        |
-| **Application Funnel** | Measurable stages, conversion tracking, feedback        |
-| **Market Insights**    | Data freshness, accuracy, geographic relevance          |
-| **Architecture**       | Backend, frontend, infra, database, AI integration      |
-| **Auth & Onboarding**  | Registration, login, profile, data import               |
-| **Public Surface**     | Landing page, messaging, positioning, SEO               |
-| **Security & Privacy** | Data handling, encryption, GDPR, data sovereignty       |
-| **AI Ethics & Bias**   | Scoring fairness, demographic bias, transparency        |
-| **Testing**            | Coverage, strategy, regression prevention               |
+| Domain                | What to Audit                                        |
+| :-------------------- | :--------------------------------------------------- |
+| **Architecture**      | Backend, frontend, infra, database, AI integration   |
+| **Code Quality**      | Patterns, consistency, type safety, test coverage    |
+| **Security & Privacy**| Data handling, encryption, GDPR, authentication      |
+| **Performance**       | Load times, bundle size, API latency, caching        |
+| **Testing**           | Coverage, strategy, regression prevention            |
+| **Documentation**     | API docs, README, inline comments, decision records  |
+| **CI/CD**             | Pipeline reliability, deployment safety              |
+| **UX/Accessibility**  | User experience, a11y compliance, responsive design  |
 
 > [!IMPORTANT]
 > Nothing is assumed correct. Every completed item is subject to re-evaluation.
@@ -53,25 +63,27 @@ Execute IN ORDER. Do not skip any step.
 
 // turbo
 
-Load and catalog: project docs, task tracking, git log (main), ADRs, feature specs, AI pipeline configs. Produce a **Completed Task & System Inventory**.
+Load and catalog: project docs, task tracking, git log (main), ADRs, feature specs. Produce a **Completed Task & System Inventory**.
 
 ### Step 2: Market Benchmark Analysis
 
 // turbo
 
-For each feature, evaluate against market leaders (LinkedIn, Indeed, Glassdoor, Stepstone, Hired) and AI-native competitors (Jobscan, Rezi, Teal, Huntr, LazyApply):
+For each feature, evaluate against market leaders and best-in-class implementations:
 
-| Feature | PathForge  | Market Leader | Gap?     | Notes    |
-| :------ | :--------- | :------------ | :------- | :------- |
-| [name]  | [approach] | [best impl.]  | ✅/⚠️/❌ | [detail] |
+| Feature | Current  | Market Leader | Gap?     | Notes    |
+| :------ | :------- | :------------ | :------- | :------- |
+| [name]  | [approach] | [best impl.]| ✅/⚠️/❌ | [detail] |
 
 ### Step 3: Outdated Pattern Detection
 
+// turbo
+
 Evaluate each item:
 
-- Legacy UX, architecture, or AI pipeline assumptions?
+- Legacy UX, architecture, or pipeline assumptions?
 - Deprecated libraries, patterns, or anti-patterns?
-- Reflects 2024-2026 best practices or older thinking?
+- Reflects current best practices or older thinking?
 
 | Area   | Current  | Issue          | Modern Alternative |
 | :----- | :------- | :------------- | :----------------- |
@@ -79,28 +91,34 @@ Evaluate each item:
 
 ### Step 4: Tier-1 Quality Validation
 
+// turbo
+
 For each system: Would it pass review at Google/Meta/Apple? Senior-level or merely functional? Shortcuts, missing edge cases? Code quality meet strict TypeScript/testing standards? AI pipelines reproducible and benchmarked?
 
 ### Step 5: Ethics, Bias & Automation Safety
 
+// turbo
+
 - AI scoring bias (demographic, linguistic)?
 - Automated actions transparent and explainable?
 - GDPR compliance and data sovereignty?
-- Automation safeguards effective (human-in-the-loop, rate limiting, opt-out)?
-- Browser automation ToS compliant?
+- Automation safeguards effective (human-in-the-loop, rate limiting)?
 
 ### Step 6: Differentiation Alignment
 
-Check each feature against PathForge values:
+// turbo
 
-- Precision > Volume philosophy?
-- Measurable, transparent funnels?
+Check each feature against your product values:
+
+- Quality > Volume philosophy?
+- Measurable, transparent outcomes?
 - Human-in-the-loop control?
-- Ethical automation (anti-spam, ToS)?
+- Ethical automation?
 - Explainable AI scoring?
-- Data sovereignty preserved?
 
 ### Step 7: Classification & Reporting
+
+// turbo
 
 | Classification         | Meaning                             | Action             |
 | :--------------------- | :---------------------------------- | :----------------- |
@@ -113,7 +131,7 @@ Check each feature against PathForge values:
 ## Output Template
 
 ```markdown
-# PathForge Tier-1 Retrospective Audit Report
+# Tier-1 Retrospective Audit Report
 
 > Date: [date] · Sprint: [N] · Auditor: Antigravity AI Kit
 
@@ -155,7 +173,7 @@ Check each feature against PathForge values:
 
 **PROHIBITED:** Defending past decisions by default · minimizing issues · optimizing speed over correctness · marking ✅ without evidence · skipping domains
 
-**REQUIRED:** PhD-level rigor · market-grade bar · revisions for all non-compliant areas · actionable recommendations · competitor/best-practice citations
+**REQUIRED:** Rigorous analysis · market-grade bar · revisions for all non-compliant areas · actionable recommendations
 
 ---
 
@@ -174,10 +192,6 @@ Check each feature against PathForge values:
 
 ## Related Resources
 
-| Resource        | Path                               |
-| :-------------- | :--------------------------------- |
-| Quality Gate    | `.agent/workflows/quality-gate.md` |
-| Plan            | `.agent/workflows/plan.md`         |
-| Review          | `.agent/workflows/review.md`       |
-| Product Context | `.agent/product.md`                |
-| ADR Directory   | `.agent/decisions/`                |
+- **Previous**: Sprint/milestone completion triggers this workflow
+- **Next**: `/plan` (findings feed next sprint's planning)
+- **Related**: `/quality-gate` (pre-task validation) · `/review` (code-level quality gates)

@@ -1,22 +1,11 @@
 ---
 name: backend-specialist
-description: Backend Development Architect — designs and builds server-side systems with security, scalability, and maintainability
-triggers:
-  [
-    backend,
-    api,
-    server,
-    database,
-    auth,
-    rest,
-    graphql,
-    endpoint,
-    middleware,
-    security,
-    node,
-    nest,
-    express,
-  ]
+description: "Backend Development Architect — designs and builds server-side systems with security, scalability, and maintainability"
+domain: backend
+triggers: [backend, api, server, database, auth, rest, graphql, endpoint, middleware, security, node, nest, express]
+authority: backend-code
+reports-to: alignment-engine
+relatedWorkflows: [orchestrate]
 ---
 
 # Backend Development Architect
@@ -278,5 +267,10 @@ After editing any file:
 
 ---
 
-> **Source**: Adapted from [vudovn/antigravity-kit](https://github.com/vudovn/antigravity-kit) backend-specialist agent.
-> **Adapted for**: Antigravity AI Kit v2.0.0 (besync-labs)
+## Collaboration
+
+- Works with `architect` for system-level design decisions
+- Works with `database-architect` for schema and query optimization
+- Works with `security-reviewer` for auth/authz patterns
+- Works with `devops-engineer` for deployment and infrastructure
+- Works with `performance-optimizer` for latency optimization

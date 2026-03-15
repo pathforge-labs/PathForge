@@ -1,19 +1,22 @@
 ---
-description: PathForge Tier-1 Quality Gate - Mandatory pre-task research and validation protocol
+description: Pre-task research and validation protocol. Market research, gap analysis, and ethics review before implementation.
+version: 2.1.0
+sdlc-phase: discover
+skills: [brainstorming]
+commit-types: [docs, chore]
 ---
 
 # /quality-gate — Pre-Task Research & Validation Protocol
 
-> **Trigger**: `/quality-gate` — mandatory before implementation of new features or refactors
+> **Trigger**: `/quality-gate` — recommended before implementation of new features or refactors
 > **Lifecycle**: Before `/plan` — research informs planning
-> **Output**: `docs/RESEARCH-{slug}.md`
 
 > [!CAUTION]
-> This is a mandatory governance gate. You must complete market research, gap analysis, and ethics review before any implementation begins. Approval required.
+> Governance gate. Complete market research, gap analysis, and ethics review before implementation begins. Approval required.
 
 ---
 
-## 🔴 Critical Rules
+## Critical Rules
 
 1. **RESEARCH FIRST** — no implementation without validated research
 2. **EVIDENCE-BASED** — all claims backed by market data or competitor analysis
@@ -46,8 +49,6 @@ Execute IN ORDER. Do not skip any step.
 Research the task domain across minimum 5 market leaders:
 
 - Identify the top competitors for the feature domain
-- For PathForge job-platform features: LinkedIn, Indeed, Glassdoor, Stepstone, Hired, Jobscan, Rezi, Teal, Huntr, LazyApply
-- For other domains: identify the category leaders
 - Document: how is this feature implemented today?
 - Document: why did users adopt it? What outcomes does it drive?
 
@@ -67,8 +68,8 @@ Produce a comparison table:
 
 Identify and document:
 
-- Where PathForge meets/exceeds market standards
-- Where PathForge is BELOW market level
+- Where your product meets/exceeds market standards
+- Where your product is BELOW market level
 - Outdated patterns in current/proposed approach
 - If the approach uses deceptive, spammy, or harmful patterns → **REJECT**
 
@@ -76,7 +77,7 @@ Identify and document:
 
 // turbo
 
-Define how PathForge improves upon the market baseline:
+Define how your product improves upon the market baseline:
 
 - More transparent? (explainable metrics, clear scoring)
 - More ethical? (human-in-the-loop, consent-first)
@@ -102,12 +103,12 @@ Evaluate:
 
 // turbo
 
-Compile findings into `docs/RESEARCH-{slug}.md`:
+Compile findings into a research report:
 
 1. Research summary (from Steps 1-5)
 2. Key insights extracted
 3. Risks of weak approaches
-4. Proposed PathForge-grade solution
+4. Proposed solution
 5. Why this approach is superior
 6. Dependencies and blockers
 
@@ -116,6 +117,44 @@ Compile findings into `docs/RESEARCH-{slug}.md`:
 Present the Research Report to the Product Owner via `notify_user`.
 **Implementation may NOT begin until explicit approval is received.**
 After approval, proceed to `/plan` for structured task planning.
+
+---
+
+## Output Template
+
+```markdown
+# Quality Gate Report: [Feature Name]
+
+> Date: [date] · Author: Antigravity AI Kit
+
+## Market Research (≥5 competitors)
+
+| Competitor | Approach | AI/ML | UX Pattern | Automation | Privacy |
+| :--------- | :------- | :---- | :--------- | :--------- | :------ |
+| [leader]   | ...      | ...   | ...        | ...        | ...     |
+
+## Gap Analysis
+
+| Area | Current State | Market Standard | Gap? |
+| :--- | :------------ | :-------------- | :--- |
+| [area] | [state] | [standard] | ✅/⚠️/❌ |
+
+## Enhancement Strategy
+
+[How we improve upon the market baseline]
+
+## Ethics & Safety Review
+
+| Risk | Assessment | Mitigation |
+| :--- | :--------- | :--------- |
+| [risk] | [level] | [strategy] |
+
+## Verdict
+
+✅ Approved / ❌ Rejected — [reasoning]
+
+After approval: proceed to `/plan` for implementation planning.
+```
 
 ---
 
@@ -135,7 +174,7 @@ If any of these conditions are met, **REJECT** the task:
 
 **PROHIBITED:** Implementing without research · skipping competitor analysis · ignoring ethics review · proceeding without approval · marking research "complete" without evidence
 
-**REQUIRED:** Minimum 5 competitors analyzed · enhancement over baseline documented · all risks mitigated · output saved to `docs/RESEARCH-{slug}.md` · Product Owner approval
+**REQUIRED:** Minimum 5 competitors analyzed · enhancement over baseline documented · all risks mitigated · Product Owner approval
 
 ---
 
@@ -146,14 +185,12 @@ If any of these conditions are met, **REJECT** the task:
 - [ ] Gap detection documented
 - [ ] Enhancement strategy defined (improvement over baseline)
 - [ ] Ethics/bias/automation review completed
-- [ ] Research report saved to `docs/RESEARCH-{slug}.md`
+- [ ] Research report saved as artifact
 - [ ] Presented to Product Owner and approved
 
 ## Related Resources
 
-| Resource          | Path                                |
-| :---------------- | :---------------------------------- |
-| Quality Gate Rule | `.agent/rules/quality-gate.md`      |
-| Plan (next step)  | `.agent/workflows/plan.md`          |
-| Retrospective     | `.agent/workflows/retrospective.md` |
-| Product Context   | `.agent/product.md`                 |
+- **Previous**: `/brainstorm` (explore options before validation)
+- **Next**: `/plan` (implementation planning after approval)
+- **Related**: `/retrospective` (post-sprint audit applies similar rigor)
+- **Skill**: `.agent/skills/brainstorming/SKILL.md` (Socratic questioning patterns)

@@ -1,11 +1,13 @@
 ---
+name: shell-conventions
 description: PowerShell shell conventions for Windows. Avoid bash-isms. Reference before running terminal commands.
+triggers: [powershell, terminal, shell, command, run, windows, cli]
 ---
 
 # Shell Conventions — Windows PowerShell 5.x
 
 > **Environment**: Windows PowerShell 5.x (NOT PowerShell 7/Core)
-> **Scope**: All `run_command` tool calls across all PathForge workspaces
+> **Scope**: All `run_command` tool calls across all workspaces
 
 ---
 
@@ -35,14 +37,14 @@ description: PowerShell shell conventions for Windows. Avoid bash-isms. Referenc
 ### ❌ WRONG: Chaining with &&
 
 ```bash
-cd apps/api && .venv/Scripts/python -m pytest tests/ -q
+cd src && npm test && npm run build
 ```
 
 ### ✅ RIGHT: Use Cwd parameter
 
 ```powershell
-# Set Cwd to "apps/api" on run_command, then just run:
-& ".venv\Scripts\python.exe" -m pytest tests/ -q
+# Set Cwd to "src" on run_command, then just run:
+npm test
 ```
 
 ### ✅ RIGHT: Sequential with ;
@@ -60,14 +62,31 @@ git status; git log --oneline -5
 
 ---
 
-## Common PathForge Commands
+## Common Patterns
 
-| Task              | Command                                       | Cwd        |
-| ----------------- | --------------------------------------------- | ---------- |
-| Run backend tests | `& ".venv\Scripts\pytest.exe" tests/ -q`      | `apps/api` |
-| Run ruff lint     | `& ".venv\Scripts\ruff.exe" check app/`       | `apps/api` |
-| Run ruff fix      | `& ".venv\Scripts\ruff.exe" check --fix app/` | `apps/api` |
-| Alembic migrate   | `& ".venv\Scripts\alembic.exe" upgrade head`  | `apps/api` |
-| Frontend lint     | `npx next lint`                               | `apps/web` |
-| Frontend build    | `pnpm build`                                  | `apps/web` |
-| Type check        | `npx tsc --noEmit`                            | `apps/web` |
+| Task                | PowerShell Command                          |
+| ------------------- | ------------------------------------------- |
+| Run Node.js tests   | `npm test`                                  |
+| Run Python tests    | `& ".venv\Scripts\pytest.exe" tests/ -q`    |
+| Run linter          | `npm run lint`                              |
+| Check git status    | `git status`                                |
+| Build project       | `npm run build`                             |
+| Install deps        | `npm install`                               |
+| List files          | `Get-ChildItem -Recurse`                    |
+| Find in files       | `Select-String -Pattern "text" -Path "*.md"`|
+
+---
+
+## Virtual Environment (Python)
+
+```powershell
+# Activate (PowerShell)
+& ".venv\Scripts\Activate.ps1"
+
+# Run without activation (preferred for tool calls)
+& ".venv\Scripts\python.exe" -m pytest tests/ -q
+& ".venv\Scripts\python.exe" -m ruff check app/
+```
+
+> [!TIP]
+> For `run_command` tool calls, prefer calling the executable directly with `&` rather than activating the virtual environment.

@@ -1,113 +1,157 @@
 ---
 description: Systematic debugging workflow. Activates DEBUG mode for problem investigation.
+version: 2.1.0
+sdlc-phase: reactive
+skills: [debugging-strategies]
+commit-types: [fix]
 ---
 
-# /debug - Systematic Problem Investigation
+# /debug — Systematic Problem Investigation
 
-$ARGUMENTS
+> **Trigger**: `/debug [issue description]`
+> **Lifecycle**: Reactive — any SDLC phase
 
----
+> [!CAUTION]
+> Debugging may involve production systems. Never apply untested fixes to production. Always identify and document the root cause before implementing changes.
 
-## Purpose
-
-Activates DEBUG mode for systematic investigation of issues, errors, or unexpected behavior.
-Uses the `debugging-strategies` skill (4-phase methodology with Iron Law enforcement).
-
----
-
-## Behavior
-
-### Phase 1: Root Cause Investigation
-
-1. **Read error messages** — full stack trace, error codes, line numbers
-2. **Reproduce** — exact steps, consistent trigger, environment details
-3. **Check recent changes** — `git log`, `git diff`, new deps or config
-4. **Multi-component trace** — add diagnostic logging at each layer boundary (API → Service → DB)
-
-> ⚠️ **Iron Law**: NO fixes proposed until Phase 1 is complete.
-
-### Phase 2: Pattern Analysis
-
-5. **Find working examples** — similar working code in codebase
-6. **Compare** — identify every difference between working and broken
-7. **Understand dependencies** — config, environment, assumptions
-
-### Phase 3: Hypothesis & Testing
-
-8. **Form single hypothesis** — "I think X because Y"
-9. **Test minimally** — smallest possible change, one variable at a time
-10. **Verify** — worked → Phase 4, didn't → new hypothesis (don't stack fixes)
-
-### Phase 4: Implementation
-
-11. **Create failing test** — automated regression test before fixing
-12. **Implement single fix** — address root cause, one change only
-13. **Verify fix** — failing test passes, full suite green, original issue resolved
+> [!TIP]
+> This workflow leverages the **debugging-strategies** skill. Read `.agent/skills/debugging-strategies/SKILL.md` for extended guidance.
 
 ---
 
-## Output Format
+## Critical Rules
+
+1. **Root cause required** — never apply a fix without understanding why the issue occurs
+2. **No guessing** — form hypotheses, test them systematically, eliminate possibilities
+3. **Prevention mandatory** — every fix must include measures to prevent recurrence
+4. **Preserve evidence** — capture error messages, logs, and reproduction steps before changing anything
+5. **Minimal changes** — fix only what's broken; avoid scope creep during debugging
+
+---
+
+## Argument Parsing
+
+| Command | Action |
+| :-------------------------- | :------------------------------------------- |
+| `/debug` | Prompt for issue description |
+| `/debug [issue]` | Investigate the specified issue directly |
+
+---
+
+## Steps
+
+// turbo
+1. **Gather Information**
+   - Capture the exact error message, stack trace, or unexpected behavior
+   - Document reproduction steps (reliable vs. intermittent)
+   - Note expected vs. actual behavior
+
+// turbo
+2. **Environment Diagnostics**
+   - Operating system and version
+   - Runtime versions (Node.js, Python, etc.)
+   - Recent git changes (`git log -5 --oneline`)
+   - Relevant environment variables and config
+   - Dependency versions (`package.json`, `pyproject.toml`, etc.)
+
+// turbo
+3. **Form Hypotheses**
+   - List 3+ possible causes, ordered by likelihood
+   - Consider: recent changes, dependency issues, environment differences, data edge cases
+
+// turbo
+4. **Investigate Systematically**
+   - Test each hypothesis in order of likelihood
+   - Check logs, data flow, network requests, and state
+   - Use elimination method — rule out causes definitively
+   - Document findings for each hypothesis tested
+
+5. **Apply Fix**
+   - Implement the minimal fix that addresses the root cause
+   - Verify the fix resolves the original issue
+   - Confirm no regressions are introduced
+
+6. **Prevent Recurrence**
+   - Add tests that would catch this issue
+   - Add validation, error handling, or guardrails as needed
+   - Document the root cause for future reference
+
+---
+
+## Output Template
 
 ```markdown
 ## 🔍 Debug: [Issue]
 
-### Phase 1: Root Cause Investigation
+### 1. Symptom
 
-**Symptom**: [What's happening]
-**Error**: `[error message]`
-**File**: `[filepath:line]`
-**Recent changes**: [git log/diff findings]
-**Layer trace**: [which boundary fails]
+[What's happening — error message, unexpected behavior]
 
-### Phase 2: Pattern Analysis
+### 2. Environment
 
-**Working reference**: [similar working code]
-**Key differences**: [what's different]
+- **OS**: [os]
+- **Runtime**: [runtime and version]
+- **Recent Changes**: [last 3 commits]
 
-### Phase 3: Hypothesis
+### 3. Hypotheses
 
-🎯 **Hypothesis**: "I think [X] is the root cause because [Y]"
-**Test**: [minimal change to verify]
-**Result**: ✅ Confirmed / ❌ Refuted → [new hypothesis]
+1. ❓ [Most likely cause] — [why]
+2. ❓ [Second possibility] — [why]
+3. ❓ [Less likely cause] — [why]
 
-### Phase 4: Fix
+### 4. Investigation
 
-**Root cause**: [explanation]
-**Regression test**: [test name + assertion]
-**Fix**: [code change]
-**Verification**: [test suite results]
-**Prevention**: 🛡️ [defense-in-depth measures]
+**Hypothesis 1:** [What I checked] → [Result: confirmed / eliminated]
+**Hypothesis 2:** [What I checked] → [Result]
+
+### 5. Root Cause
+
+🎯 **[Root cause explanation]**
+
+### 6. Fix Applied
+
+[Code changes with explanation]
+
+### 7. Prevention
+
+🛡️ [Tests added, validation added, documentation updated]
+
+After fix: proceed to `/test` for regression verification.
 ```
 
 ---
 
-## Escalation Protocol
+## Governance
 
-If **3+ fixes** have failed:
+**PROHIBITED:**
+- Applying fixes without identifying the root cause
+- Guessing randomly without structured hypothesis testing
+- Modifying production systems without rollback plan
+- Ignoring prevention measures after a fix
+- Skipping failed steps · proceeding without resolution
 
-1. **STOP** — don't attempt Fix #4
-2. **Question architecture** — is the pattern fundamentally sound?
-3. **Discuss with user** — present evidence from all 3 attempts
-4. **Consider refactor** — architecture change vs. symptom patching
-
----
-
-## Examples
-
-```
-/debug login not working
-/debug API returns 500
-/debug tests failing after migration
-/debug CI build broken
-/debug career DNA generation timeout
-```
+**REQUIRED:**
+- Evidence-based hypothesis testing
+- Root cause documentation before any fix
+- Prevention measures (tests, validation, guardrails)
+- Regression verification after fix
 
 ---
 
-## Key Principles
+## Completion Criteria
 
-- **Root cause first** — no fixes without investigation
-- **One hypothesis at a time** — don't stack changes
-- **Test before fixing** — create failing test first
-- **Fix at source** — use root-cause-tracing, not symptom patching
-- **Defend in depth** — add validation at multiple layers after fix
+- [ ] Error/issue is fully reproduced and documented
+- [ ] Environment diagnostics are captured
+- [ ] Root cause is identified with evidence
+- [ ] Fix is applied and verified
+- [ ] Prevention measures are implemented (tests, validation)
+- [ ] No regressions introduced
+- [ ] After fix: proceed to `/test` for full regression check
+
+---
+
+## Related Resources
+
+- **Next**: `/test` (regression verification after fix)
+- **Skill**: `.agent/skills/debugging-strategies/SKILL.md`
+- **Related Skills**: `.agent/skills/testing-patterns/SKILL.md`

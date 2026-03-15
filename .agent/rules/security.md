@@ -1,14 +1,13 @@
 # Security Rules
 
 > **Priority**: CRITICAL — Inviolable
-> **Scope**: PathForge workspace — AI career platform handling PII
 
 ---
 
 ## Secrets Management
 
 - **NEVER** hardcode secrets in source code
-- **ALWAYS** use environment variables via `app.core.config.settings`
+- **ALWAYS** use environment variables via project config
 - **BLOCK** commits containing `sk-`, `api_key=`, `password=`, `secret=`
 - **MAINTAIN** `.env.example` with all required variables (values redacted)
 - `.env` files MUST be in `.gitignore` — no exceptions
@@ -17,7 +16,7 @@
 
 ## Input Validation
 
-- **Backend**: Pydantic models validate ALL request bodies and query params
+- **Backend**: Pydantic/Zod models validate ALL request bodies and query params
 - **Frontend**: Zod schemas validate ALL form inputs and API responses
 - **NEVER** trust client-side data — re-validate server-side
 - **SANITIZE** all input before database writes or AI pipeline consumption
@@ -29,16 +28,15 @@
 
 - **JWT** with separate access and refresh token secrets
 - **REQUIRE** authentication on all sensitive endpoints
-- Rate limiting: **5 login attempts/minute**, **10 API calls/hour**, **30/day** per user
+- Rate limiting: **5 login attempts/minute**, **10 API calls/hour/user** (adjust per project)
 - **ROTATE** tokens on logout and password change
 - Refresh tokens: httpOnly cookies, NOT localStorage
 
 ---
 
-## Data Protection (GDPR Compliance)
+## Data Protection
 
-> PathForge processes career-sensitive PII (resumes, salary data, job history).
-> GDPR compliance is a legal requirement within EU/NL jurisdiction.
+> Projects processing PII must comply with applicable data protection regulations (GDPR, CCPA, etc.).
 
 | Principle          | Implementation                                  |
 | :----------------- | :---------------------------------------------- |
@@ -47,14 +45,14 @@
 | Right to erasure   | User account deletion cascades to all user data |
 | Data encryption    | PII encrypted at rest (database-level)          |
 | Transfer security  | HTTPS enforced for all API communication        |
-| Consent            | Explicit opt-in for AI processing of resumes    |
+| Consent            | Explicit opt-in for AI processing of user data  |
 | Retention          | Define and enforce data retention periods       |
 
 ---
 
 ## API Security
 
-- **CORS**: Restrict to known origins only (`pathforge.eu`, `pathforge.nl`, `localhost`)
+- **CORS**: Restrict to known origins only (project domains + localhost)
 - **Headers**: Set security headers (`X-Content-Type-Options`, `X-Frame-Options`, `Strict-Transport-Security`)
 - **Logging**: Log auth failures, never log passwords or tokens
 - **Dependencies**: Run `npm audit` and `pip audit` before releases

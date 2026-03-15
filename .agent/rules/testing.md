@@ -1,7 +1,6 @@
 # Testing Rules
 
 > **Priority**: HIGH — Enforced before merge
-> **Scope**: PathForge workspace (pytest + Jest/Vitest)
 
 ---
 
@@ -18,23 +17,12 @@
 | Type        | Required       | Coverage                | Framework                         |
 | :---------- | :------------- | :---------------------- | :-------------------------------- |
 | Unit        | MANDATORY      | All service logic       | pytest (backend), Jest (frontend) |
-| Integration | MANDATORY      | API endpoints           | pytest + httpx `TestClient`       |
-| E2E         | Critical flows | Auth, onboarding, apply | Playwright                        |
+| Integration | MANDATORY      | API endpoints           | pytest + httpx / supertest        |
+| E2E         | Critical flows | Auth, onboarding, core  | Playwright                        |
 
 ---
 
 ## Backend Testing (Python — pytest)
-
-### Structure
-
-```
-tests/
-├── test_auth.py          # Authentication endpoints
-├── test_ai_service.py    # AI engine unit tests
-├── test_applications.py  # Application pipeline
-├── test_analytics.py     # Analytics endpoints
-└── conftest.py           # Shared fixtures
-```
 
 ### Conventions
 
@@ -42,30 +30,30 @@ tests/
 - Function naming: `test_<action>_<expected_result>()`
 - Use `@pytest.fixture` for reusable test data
 - Use `TestClient` from `httpx` for API endpoint testing
-- Mock external services (AI providers, job APIs) with `unittest.mock`
+- Mock external services (AI providers, third-party APIs) with `unittest.mock`
 - Each test file: `client` and `auth_headers` fixtures from `conftest.py`
 
 ### Example Pattern
 
 ```python
-def test_create_funnel_event_success(
+def test_create_resource_success(
     client: TestClient,
     auth_headers: dict[str, str],
 ) -> None:
-    """Test successful funnel event creation."""
+    """Test successful resource creation."""
     response = client.post(
-        "/api/v1/analytics/funnel/events",
-        json={"stage": "resume_uploaded", "metadata": {}},
+        "/api/v1/resources",
+        json={"name": "test_resource", "metadata": {}},
         headers=auth_headers,
     )
     assert response.status_code == 200
     data = response.json()
-    assert data["stage"] == "resume_uploaded"
+    assert data["name"] == "test_resource"
 ```
 
 ---
 
-## Frontend Testing (TypeScript)
+## Frontend Testing (TypeScript — Jest/Vitest)
 
 ### Naming Convention
 
@@ -87,6 +75,6 @@ describe("[Component]", () => {
 | :------------ | :------------------------------------- |
 | Independent   | Tests don't depend on each other       |
 | Deterministic | Same result every run — no random data |
-| Fast          | Unit tests < 100ms each                |
+| Fast          | Unit tests < 100ms each               |
 | Isolated      | External services always mocked        |
 | Readable      | Test name describes the scenario       |

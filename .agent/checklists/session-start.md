@@ -1,6 +1,6 @@
 # Session Start Checklist
 
-> **Framework**: Antigravity AI Kit v2.0.0  
+> **Framework**: Antigravity AI Kit v3.1.0  
 > **Purpose**: Complete this checklist at the beginning of every work session  
 > **Principle**: Full context before new work
 
@@ -9,38 +9,29 @@
 ## 🔄 Context Loading
 
 - [ ] **session-context.md** loaded
-  - Last session handoff notes reviewed
-  - ⚠️ This file contains handoff context ONLY — not task tracking
+  - Last session summary reviewed
+  - Open items identified
+  - Handoff context verified (not just session-end boilerplate)
 - [ ] **session-state.json** loaded
-  - Last commit, branch, test count verified
-  - ⚠️ Volatile-only metadata (v2.1.0 schema) — not task tracking
-- [ ] **Staleness check**
-  - Compare `session-state.json → repository.lastCommit` with `git log --oneline -1`
-  - If mismatch → alert user: "Session files are stale (synced at X, HEAD is Y)"
-  - Continue with `docs/ROADMAP.md` as authoritative source regardless
+  - Last commit verified
+  - Current task identified
+  - **Staleness check**: Compare `lastCommit` with `git log --oneline -1` — if diverged, flag to user
 - [ ] **rules.md** loaded (if project has one)
   - Project-specific rules acknowledged
 
 ---
 
-## 🗺️ Sprint State Validation (Auto)
+## 📋 Sprint State Validation
 
-> **MANDATORY**: This section replaces all previous task tracking approaches.
-> See `.agent/rules/sprint-tracking.md` for full protocol.
-
-- [ ] **docs/ROADMAP.md** loaded (SSOT)
+- [ ] **docs/ROADMAP.md** loaded (SSOT for sprint tracking)
   - Current sprint identified
-  - In-progress tasks (`[/]`) identified
-  - Next priority tasks (`[ ]`) identified
-- [ ] **Present to user**:
-  - Current sprint name + goal
-  - 🔴 In-progress tasks
-  - 📋 Next priority tasks
-  - ⚠️ Blockers or dependencies
-- [ ] **Validate against ARCHITECTURE.md**
-  - Sprint numbers match Section 7
-  - No drift between roadmap and board
-- [ ] **docs/CHANGELOG.md** reviewed for entries since last session
+  - In-progress `[/]` items from last session reviewed
+  - Completed `[x]` items acknowledged
+- [ ] **Sprint state presented** to user before starting work
+  - Summary of where we left off
+  - Proposed next items to work on
+- [ ] **docs/ARCHITECTURE.md** reviewed for structural context
+- [ ] **docs/CHANGELOG.md** reviewed for recent shipped work
 
 ---
 

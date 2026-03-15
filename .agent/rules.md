@@ -30,7 +30,7 @@ These constraints are **inviolable** and cannot be overridden by any agent, poli
 
 You are the **Alignment Engine** — the central orchestrator of the AI development ecosystem.
 
-### Agent Ecosystem (15 Core)
+### Agent Ecosystem (19 Core)
 
 | Agent                        | Responsibility                    | Specification                     |
 | ---------------------------- | --------------------------------- | --------------------------------- |
@@ -49,12 +49,18 @@ You are the **Alignment Engine** — the central orchestrator of the AI developm
 | **🚀 DevOps Engineer**       | CI/CD, deployment                 | `agents/devops-engineer.md`       |
 | **⚡ Performance Optimizer** | Core Web Vitals optimization      | `agents/performance-optimizer.md` |
 | **🔭 Explorer Agent**        | Codebase discovery                | `agents/explorer-agent.md`        |
+| **🎨 Frontend Specialist**   | React, Next.js, UI architecture   | `agents/frontend-specialist.md`   |
+| **⚙️ Backend Specialist**    | Node.js, NestJS, API design       | `agents/backend-specialist.md`    |
+| **📊 Sprint Orchestrator**   | Sprint planning, velocity         | `agents/sprint-orchestrator.md`   |
+| **🛡️ Reliability Engineer**  | SRE, production readiness         | `agents/reliability-engineer.md`  |
 
-### Commands (20 Core)
+### Commands (31 Core)
+
+Standardized entry points for developer intent across 8 categories.
 
 See `commands/README.md` for full documentation.
 
-### Skills (14 Core)
+### Skills (31 Core)
 
 | Skill                                                            | Purpose                       |
 | ---------------------------------------------------------------- | ----------------------------- |
@@ -72,6 +78,23 @@ See `commands/README.md` for full documentation.
 | [performance-profiling](./skills/performance-profiling/SKILL.md) | Core Web Vitals optimization  |
 | [brainstorming](./skills/brainstorming/SKILL.md)                 | Socratic discovery protocol   |
 | [plan-writing](./skills/plan-writing/SKILL.md)                   | Structured task breakdown     |
+| [api-patterns](./skills/api-patterns/SKILL.md)                   | RESTful API design patterns   |
+| [architecture](./skills/architecture/SKILL.md)                   | System design patterns        |
+| [clean-code](./skills/clean-code/SKILL.md)                       | Code quality principles       |
+| [database-design](./skills/database-design/SKILL.md)             | Schema optimization           |
+| [testing-patterns](./skills/testing-patterns/SKILL.md)           | TDD, unit, integration        |
+| [typescript-expert](./skills/typescript-expert/SKILL.md)         | Advanced TypeScript patterns  |
+| [frontend-patterns](./skills/frontend-patterns/SKILL.md)         | React, component design       |
+| [nodejs-patterns](./skills/nodejs-patterns/SKILL.md)             | Backend patterns              |
+| [debugging-strategies](./skills/debugging-strategies/SKILL.md)   | Systematic debugging          |
+| [security-practices](./skills/security-practices/SKILL.md)       | OWASP, vulnerability prevention |
+| [docker-patterns](./skills/docker-patterns/SKILL.md)             | Containerization              |
+| [git-workflow](./skills/git-workflow/SKILL.md)                   | Branching, commits            |
+| [mcp-integration](./skills/mcp-integration/SKILL.md)             | MCP server integration          |
+| [context-budget](./skills/context-budget/SKILL.md)               | LLM token budget management     |
+| [i18n-localization](./skills/i18n-localization/SKILL.md)         | Internationalization patterns   |
+| [shell-conventions](./skills/shell-conventions/SKILL.md)         | PowerShell/Bash conventions     |
+| [ui-ux-pro-max](./skills/ui-ux-pro-max/SKILL.md)               | Premium UI/UX design system     |
 
 ### Skill Loading Protocol
 

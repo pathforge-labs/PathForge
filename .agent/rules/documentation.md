@@ -1,61 +1,74 @@
 # Documentation Rules
 
-> **Priority**: HIGH — Enforced at session end
-> **Scope**: PathForge workspace
+> **Priority**: HIGH — Enforced in reviews
 
 ---
 
 ## Document Hierarchy
 
-| Document                       | Purpose                               | Update Frequency          |
-| :----------------------------- | :------------------------------------ | :------------------------ |
-| `docs/ARCHITECTURE.md`         | System design, sprint definitions     | When architecture changes |
-| `docs/ROADMAP.md`              | Sprint board (SSOT for task tracking) | Every session             |
-| `docs/CHANGELOG.md`            | Per-sprint shipped work               | Every session             |
-| `docs/DEVELOPMENT_WORKFLOW.md` | Git workflow, conventions             | When process changes      |
-| `docs/AGENT_ARCHITECTURE.md`   | Agent customization reference         | When agent config changes |
-| `.agent/session-context.md`    | Session handoff notes (NO task lists) | Every session end         |
-| `.agent/session-state.json`    | Machine-readable metadata             | Every session end         |
+| File                     | Role                         | Update Frequency    |
+| :----------------------- | :--------------------------- | :------------------ |
+| `docs/ARCHITECTURE.md`   | System design, tech stack    | On architecture changes |
+| `docs/ROADMAP.md`        | Sprint tracking (SSOT)       | Every session start/end |
+| `docs/CHANGELOG.md`      | Shipped work log             | Every session end       |
+| `.agent/session-context.md` | Session handoff context   | Every session end       |
+| `.agent/session-state.json` | Machine-readable metadata | Every session end       |
 
 ---
 
-## Documentation Standards
+## ROADMAP.md as SSOT
 
-### ROADMAP.md (SSOT)
+**`docs/ROADMAP.md` is the Single Source of Truth for sprint tracking.**
 
-- **ONLY** place where task status is tracked (`[ ]`, `[/]`, `[x]`, `[-]`)
-- Sprint definitions reference `ARCHITECTURE.md` Section 7
-- Ad-hoc work logged in the Ad-Hoc Work Log table
-- Sprint velocity tracked per sprint
+- **NEVER** track task status in any other file
+- **ALWAYS** read ROADMAP.md at session start before doing anything
+- **UPDATE** ROADMAP.md at session end with completed/in-progress items
+- **PRESENT** sprint state to user after loading
 
-### CHANGELOG.md
+---
 
-- Follow [Keep a Changelog](https://keepachangelog.com/) format
-- Organize by sprint, not by date
-- Categories: `Added`, `Changed`, `Fixed`, `Removed`
-- Every user-facing change gets an entry
+## CHANGELOG.md Format
 
-### Inline Documentation
+Follow [Keep a Changelog](https://keepachangelog.com/):
 
-- **WHY** over **WHAT** — code should be self-documenting
-- Complex algorithms: explain the approach before the code
-- Workarounds: include the issue/reason and expected resolution
-- API docstrings: describe purpose, parameters, return values, and raised exceptions
+```markdown
+## [Sprint X] — YYYY-MM-DD
+
+### Added
+- New feature description
+
+### Changed
+- Modified behavior description
+
+### Fixed
+- Bug fix description
+```
+
+---
+
+## Inline Documentation
+
+- **WHY over WHAT**: Comments explain rationale, not mechanics
+- **Complex logic**: Every non-obvious algorithm needs a comment explaining WHY it exists
+- **API docs**: Public APIs documented with JSDoc/docstrings
+- **No stale comments**: If code changes, comments must change too
 
 ---
 
 ## Preservation Rule
 
-> Inspired by Amazon's "writing survives meetings" culture.
+**No valuable content shall be silently deleted.**
 
-- **No valuable content shall be silently deleted**
-- When removing documentation, explain what was removed and why
-- When moving content, update all cross-references in the same commit
+- When updating files, apply changes **additively**
+- If content must be removed, explicitly document what was removed and why
+- Never silently drop sections when rewriting files
 
 ---
 
 ## Cross-Reference Integrity
 
-- File references in docs must resolve to real paths
-- When a file is renamed or moved, update all referencing documents
-- Sprint numbers must match between `ROADMAP.md` and `ARCHITECTURE.md`
+**When referencing actions in other files, complete those actions in the same commit.**
+
+- **Reference = Action**: "Move to X.md" means update X.md immediately
+- **Completion Check**: Verify all referenced actions are completed
+- **No broken links**: All file references must point to existing files

@@ -188,5 +188,4 @@ export const config = {
 
 ---
 
-> **Source**: Inspired by [vudovn/antigravity-kit](https://github.com/vudovn/antigravity-kit) i18n-localization skill.
-> **Adapted for**: Antigravity AI Kit v2.0.0 (besync-labs)
+> **Source**: Antigravity AI Kit — [besync-labs/antigravity-ai-kit](https://github.com/besync-labs/antigravity-ai-kit)

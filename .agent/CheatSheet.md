@@ -1,351 +1,305 @@
-# 🚀 Antigravity AI Kit — CheatSheet
+# Antigravity AI Kit — CheatSheet
 
-> **Version**: v2.0.0 | **Capabilities**: 17 Agents · 31 Commands · 27 Skills · 13 Workflows
-> **Hızlı Başlangıç**: Her oturum `/status` ile başlar, Session End Checklist ile biter.
-
----
-
-## 📋 Session Lifecycle (Günlük Akış)
-
-### 🟢 Session Start
-
-```
-/status
-```
-
-Bu komut otomatik olarak:
-
-1. `session-context.md` yükler (son oturum özeti, open items)
-2. `session-state.json` okur (son commit, aktif branch)
-3. Git durumu kontrol eder
-4. Aktif task'ı gösterir
-
-**İlk iş olarak kontrol et:**
-
-```bash
-git status          # Temiz mi?
-git branch          # Doğru branch'te misin?
-npm install         # Dependencies güncel mi?
-npm run dev         # Çalışıyor mu?
-```
-
-> 📌 Detay: `.agent/checklists/session-start.md`
+> **Version**: v3.1.0 | **Quick Reference** for all capabilities
+> **Session**: Start with `/status`, end with session-end checklist
 
 ---
 
-### 🔴 Session End
+## 🚀 Session Lifecycle
 
-Her oturum bitiminde şu adımları takip et:
+### Start a Session
 
-1. **Testler/Build geçiyor mu?**
+1. Run `/status` to load context
+2. Review sprint state from `docs/ROADMAP.md`
+3. Verify Git state and dependencies
+4. Confirm direction with user
 
-   ```bash
-   npm test
-   npm run build
-   npm run lint
-   ```
+### End a Session
 
-2. **Context güncelle:**
-   - `session-context.md` → Ne yapıldı, ne kaldı, blocker var mı?
-   - `session-state.json` → Otomatik/manuel güncelleme
-
-3. **Commit ve push:**
-   ```bash
-   git add -A
-   git commit -m "chore(session): end session - [özet]"
-   git push origin [branch]
-   ```
-
-> 📌 Detay: `.agent/checklists/session-end.md`
+1. Update `docs/ROADMAP.md` with completed/in-progress items
+2. Sync `docs/CHANGELOG.md` with shipped work
+3. Update `.agent/session-context.md` with handoff notes
+4. Update `.agent/session-state.json`
+5. Commit all tracking files
+6. Push (triggers LOCAL-CI-GATE)
 
 ---
 
-## ⚡ Komut Referansı — Tam Liste (31 Komut)
+## 📋 Commands (31)
 
-### 🔵 Çekirdek İş Akışı (En Sık Kullanılan)
+### Core Workflow
 
-| Komut        | Ne Yapar                                  | Örnek Kullanım                                   |
-| :----------- | :---------------------------------------- | :----------------------------------------------- |
-| `/status`    | Oturum durumunu gösterir                  | `/status`                                        |
-| `/plan`      | Uygulama planı oluşturur                  | `/plan Add JWT authentication`                   |
-| `/implement` | Onaylanmış planı uygular                  | `/implement` veya `/implement user registration` |
-| `/verify`    | Build + lint + test + security çalıştırır | `/verify` veya `/verify --fix`                   |
+| Command | Description |
+|:--------|:------------|
+| `/plan` | Create implementation plan |
+| `/implement` | Execute the approved plan |
+| `/verify` | Run all quality gates |
+| `/status` | Check project status |
 
-**Tipik akış:**
+### Development
 
-```
-/plan User authentication with JWT
-  → Plan onayı al
-/implement
-  → Kodla
-/verify
-  → Kalite kontrolü
-```
+| Command | Description |
+|:--------|:------------|
+| `/build` | Build a new feature from scratch |
+| `/fix` | Fix linting, type, or build errors |
+| `/debug` | Systematic debugging process |
+| `/refactor` | Improve code quality |
+| `/cook` | Full scratch-to-done workflow |
 
----
+### Documentation & Git
 
-### 🟢 Geliştirme Komutları
+| Command | Description |
+|:--------|:------------|
+| `/doc` | Generate documentation |
+| `/adr` | Create Architecture Decision Record |
+| `/changelog` | Generate changelog from commits |
+| `/git` | Git operations with best practices |
+| `/pr` | Create or manage pull requests |
 
-| Komut       | Ne Yapar                                     | Örnek                                   |
-| :---------- | :------------------------------------------- | :-------------------------------------- |
-| `/build`    | Sıfırdan özellik inşa et                     | `/build product listing page`           |
-| `/fix`      | Lint, type veya build hatalarını düzelt      | `/fix TypeScript errors in auth module` |
-| `/debug`    | Sistematik hata ayıklama                     | `/debug login fails on mobile`          |
-| `/refactor` | Kod kalitesini iyileştir                     | `/refactor extract service layer`       |
-| `/cook`     | **Tam iş akışı** (plan→code→test→doc→verify) | `/cook payment checkout flow`           |
+### Exploration & Research
 
-> 💡 **`/cook` = En güçlü komut.** Sıfırdan bitmiş ürüne tek komutla.
+| Command | Description |
+|:--------|:------------|
+| `/scout` | Explore and understand codebase |
+| `/research` | Research technologies or solutions |
+| `/ask` | Ask questions about code |
 
----
+### Quality & Security
 
-### 📝 Dokümantasyon & Git
+| Command | Description |
+|:--------|:------------|
+| `/code-review` | Run code review |
+| `/tdd` | Test-driven development workflow |
+| `/security-scan` | Security audit and vulnerability scan |
+| `/perf` | Performance analysis and optimization |
 
-| Komut        | Ne Yapar                         | Örnek                                   |
-| :----------- | :------------------------------- | :-------------------------------------- |
-| `/doc`       | Dokümantasyon oluştur            | `/doc API reference for auth endpoints` |
-| `/adr`       | Mimari Karar Kaydı (ADR) oluştur | `/adr Switch from REST to GraphQL`      |
-| `/changelog` | Commit'lerden changelog oluştur  | `/changelog`                            |
-| `/git`       | Git işlemleri (best practices)   | `/git merge feature/auth into develop`  |
-| `/pr`        | Pull request oluştur/yönet       | `/pr create for feature/auth`           |
+### Integration & Deployment
 
----
+| Command | Description |
+|:--------|:------------|
+| `/integrate` | Third-party service integration |
+| `/db` | Database schema and migrations |
+| `/deploy` | Deploy to target environment |
+| `/design` | UI/UX design specifications |
 
-### 🔍 Keşif & Araştırma
+### Context Management
 
-| Komut       | Ne Yapar                    | Örnek                                     |
-| :---------- | :-------------------------- | :---------------------------------------- |
-| `/scout`    | Codebase yapısını analiz et | `/scout src/services`                     |
-| `/research` | Teknoloji/çözüm araştır     | `/research best auth library for Next.js` |
-| `/ask`      | Kod hakkında soru sor       | `/ask How does the auth middleware work?` |
-
-> 💡 **Yeni bir projede ilk iş**: `/scout` ile codebase'i keşfet.
-
----
-
-### 🛡️ Kalite & Güvenlik
-
-| Komut            | Ne Yapar                            | Örnek                     |
-| :--------------- | :---------------------------------- | :------------------------ |
-| `/code-review`   | Kod incelemesi çalıştır             | `/code-review src/auth/`  |
-| `/tdd`           | Test-driven development akışı       | `/tdd user service`       |
-| `/security-scan` | Güvenlik denetimi ve zafiyet tarama | `/security-scan`          |
-| `/perf`          | Performans analizi ve optimizasyon  | `/perf API response time` |
+| Command | Description |
+|:--------|:------------|
+| `/learn` | Extract patterns from session |
+| `/checkpoint` | Save progress checkpoint |
+| `/compact` | Compress context for memory |
+| `/eval` | Evaluate metrics |
+| `/setup` | Configure project with kit |
+| `/help` | Show available commands |
 
 ---
 
-### 🔧 Entegrasyon & Altyapı
+## 🤖 Agents (19)
 
-| Komut        | Ne Yapar                          | Örnek                                      |
-| :----------- | :-------------------------------- | :----------------------------------------- |
-| `/integrate` | 3. parti servis entegrasyonu      | `/integrate Stripe payments`               |
-| `/db`        | Veritabanı şema ve migration'ları | `/db add users table with email, password` |
-| `/deploy`    | Hedef ortama deploy et            | `/deploy staging`                          |
-| `/design`    | UI/UX tasarım spesifikasyonları   | `/design login page mobile-first`          |
+### Core Development
 
----
+| Agent | Purpose |
+|:------|:--------|
+| 📋 Planner | Feature planning, risk assessment |
+| 🏛️ Architect | System design, ADR creation |
+| 🔍 Code Reviewer | Quality + security review |
+| 🧪 TDD Guide | Test-first enforcement |
+| 🔧 Build Error Resolver | Rapid build fixes |
+| 🎨 Frontend Specialist | React, Next.js, UI architecture |
+| ⚙️ Backend Specialist | Node.js, Python, API design |
 
-### 🧠 Bağlam Yönetimi
+### Quality & Security
 
-| Komut         | Ne Yapar                             | Örnek                         |
-| :------------ | :----------------------------------- | :---------------------------- |
-| `/checkpoint` | İlerleme kaydet (save point)         | `/checkpoint before-refactor` |
-| `/compact`    | Context'i sıkıştır (bellek yönetimi) | `/compact`                    |
-| `/learn`      | Oturumdan pattern çıkar              | `/learn`                      |
-| `/eval`       | Metrikleri değerlendir               | `/eval`                       |
-| `/setup`      | Projeyi kit ile yapılandır           | `/setup`                      |
-| `/help`       | Kullanılabilir komutları listele     | `/help`                       |
+| Agent | Purpose |
+|:------|:--------|
+| 🔐 Security Reviewer | Vulnerability analysis |
+| 🎭 E2E Runner | End-to-end testing |
+| ⚡ Performance Optimizer | Core Web Vitals optimization |
 
-> 💡 **Uzun oturumlarda**: `/compact` ile context'i sıkıştır, performansı koru.
-> 💡 **Riskli değişiklik öncesi**: `/checkpoint before-refactor` ile kaydet.
+### Infrastructure
 
----
+| Agent | Purpose |
+|:------|:--------|
+| 📱 Mobile Developer | React Native/Expo development |
+| 🗄️ Database Architect | Schema design, queries |
+| 🚀 DevOps Engineer | CI/CD, deployment |
+| 🛡️ Reliability Engineer | SRE, production readiness |
 
-## 🤖 Agent'lar (17 Uzman)
+### Maintenance & Discovery
 
-Agent'lar komutlar tarafından otomatik çağrılır. Manuel olarak da referans verebilirsin:
-
-| Agent                   | Uzmanlık Alanı                         |
-| :---------------------- | :------------------------------------- |
-| `planner`               | Uygulama planlaması                    |
-| `architect`             | Sistem mimarisi                        |
-| `frontend-specialist`   | 🆕 React/Next.js, deep design thinking |
-| `backend-specialist`    | 🆕 API, güvenlik, veritabanı           |
-| `mobile-developer`      | React Native / Expo                    |
-| `database-architect`    | Veritabanı tasarımı                    |
-| `security-reviewer`     | Güvenlik denetimi                      |
-| `code-reviewer`         | Kod kalitesi                           |
-| `tdd-guide`             | Test-driven development                |
-| `devops-engineer`       | CI/CD, Docker, deployment              |
-| `performance-optimizer` | Performans iyileştirme                 |
-| `build-error-resolver`  | Build hata çözümü                      |
-| `refactor-cleaner`      | Refactoring                            |
-| `doc-updater`           | Dokümantasyon                          |
-| `explorer-agent`        | Codebase keşfi                         |
-| `knowledge-agent`       | Bilgi yönetimi                         |
-| `e2e-runner`            | End-to-end testler                     |
+| Agent | Purpose |
+|:------|:--------|
+| 🧹 Refactor Cleaner | Dead code cleanup |
+| 📚 Doc Updater | Documentation sync |
+| 🧠 Knowledge Agent | RAG retrieval |
+| 🔭 Explorer Agent | Codebase discovery |
+| 📊 Sprint Orchestrator | Sprint planning & velocity |
 
 ---
 
-## 🛠️ Skill'ler (27 Kabiliyet)
+## 🧩 Skills (31)
 
-Skill'ler agent'lara detaylı rehberlik sağlar:
+### Operational (5)
 
-| Kategori         | Skill'ler                                                                                                |
-| :--------------- | :------------------------------------------------------------------------------------------------------- |
-| **Geliştirme**   | `clean-code`, `typescript-expert`, `nodejs-patterns`, `frontend-patterns`, `api-patterns`, `app-builder` |
-| **Mimari**       | `architecture`, `database-design`, `docker-patterns`                                                     |
-| **Kalite**       | `testing-patterns`, `webapp-testing`, `verification-loop`, `security-practices`, `performance-profiling` |
-| **Operasyonel**  | `debugging-strategies`, `deployment-procedures`, `git-workflow`                                          |
-| **Planlama**     | `plan-writing`, `brainstorming`, `strategic-compact`, `eval-harness`                                     |
-| **Orkestrasyon** | `intelligent-routing`, `parallel-agents`, `behavioral-modes`, `continuous-learning`                      |
-| **Domain**       | `mobile-design`, `i18n-localization` 🆕                                                                  |
+| Skill | Purpose |
+|:------|:--------|
+| verification-loop | Continuous quality gates |
+| continuous-learning | Pattern extraction (PAAL) |
+| strategic-compact | Context window management |
+| eval-harness | Performance evaluation |
+| context-budget | LLM token budget management |
 
----
+### Orchestration (4)
 
-## 📐 Workflow'lar (13 İş Akışı)
+| Skill | Purpose |
+|:------|:--------|
+| intelligent-routing | Automatic agent selection |
+| parallel-agents | Multi-agent orchestration |
+| behavioral-modes | Adaptive AI operation modes |
+| mcp-integration | MCP server integration |
 
-Workflow'lar birden fazla komutu zincirler:
+### Domain — Architecture & Design (6)
 
-| Workflow         | Açıklama                                                         |
-| :--------------- | :--------------------------------------------------------------- |
-| `/plan`          | Planlama iş akışı                                                |
-| `/create`        | Sıfırdan özellik oluşturma                                       |
-| `/debug`         | Sistematik hata ayıklama                                         |
-| `/deploy`        | Deployment pipeline                                              |
-| `/enhance`       | Mevcut kodu iyileştirme                                          |
-| `/orchestrate`   | Multi-agent orkestrasyon                                         |
-| `/preview`       | Görsel önizleme                                                  |
-| `/test`          | Test iş akışı                                                    |
-| `/brainstorm`    | Beyin fırtınası                                                  |
-| `/status`        | Durum raporu                                                     |
-| `/ui-ux-pro-max` | Gelişmiş UI/UX tasarım akışı                                     |
-| `/quality-gate`  | 🆕 Zorunlu görev-öncesi araştırma ve doğrulama protokolü         |
-| `/retrospective` | 🆕 Tier-1 retrospektif kalite denetimi — tam ürün yüzey taraması |
+| Skill | Purpose |
+|:------|:--------|
+| architecture | System design patterns |
+| api-patterns | RESTful API design |
+| database-design | Schema optimization |
+| frontend-patterns | React/component patterns |
+| nodejs-patterns | Backend patterns |
+| i18n-localization | Internationalization |
 
----
+### Domain — Code Quality (4)
 
-## 📋 Checklist'ler (3 Kalite Kapısı)
+| Skill | Purpose |
+|:------|:--------|
+| clean-code | Code quality principles |
+| typescript-expert | Advanced TypeScript |
+| testing-patterns | TDD, unit, integration |
+| debugging-strategies | Systematic debugging |
 
-| Checklist         | Ne Zaman           | Dosya                         |
-| :---------------- | :----------------- | :---------------------------- |
-| **Session Start** | Her oturum başında | `checklists/session-start.md` |
-| **Pre-Commit**    | Her commit öncesi  | `checklists/pre-commit.md`    |
-| **Session End**   | Her oturum sonunda | `checklists/session-end.md`   |
+### Domain — Operations (3)
 
-### Pre-Commit Checklist (Kısa Özet)
+| Skill | Purpose |
+|:------|:--------|
+| docker-patterns | Containerization |
+| git-workflow | Branching, commits |
+| security-practices | OWASP, vulnerability prevention |
 
-```
-✅ Debug kodu yok (console.log, debugger)
-✅ Testler geçiyor (npm test)
-✅ Build başarılı (npm run build)
-✅ Lint temiz (npm run lint)
-✅ Secret yok (API key, password)
-✅ Conventional commit mesajı
-```
+### Development (9)
 
-**Commit format:**
-
-```bash
-git commit -m "feat(auth): add JWT refresh token support"
-git commit -m "fix(api): handle null user in profile endpoint"
-git commit -m "docs(readme): add installation instructions"
-```
-
-**Types**: `feat` · `fix` · `docs` · `style` · `refactor` · `test` · `chore` · `perf` · `ci`
+| Skill | Purpose |
+|:------|:--------|
+| app-builder | Full-stack scaffolding |
+| mobile-design | Mobile UI/UX patterns |
+| webapp-testing | E2E and Playwright testing |
+| deployment-procedures | CI/CD and rollback strategies |
+| performance-profiling | Core Web Vitals optimization |
+| brainstorming | Socratic discovery protocol |
+| plan-writing | Structured task breakdown |
+| shell-conventions | PowerShell/Bash conventions |
+| ui-ux-pro-max | Premium UI/UX design system |
 
 ---
 
-## ⚖️ Governance Kuralları
+## 🔄 Workflows (14)
 
-| Dosya                   | İçerik                                                |
-| :---------------------- | :---------------------------------------------------- |
-| `rules.md`              | Ana yönetim kuralları                                 |
-| `rules/coding-style.md` | Kodlama stili                                         |
-| `rules/git-workflow.md` | Git iş akışı                                          |
-| `rules/security.md`     | Güvenlik kuralları                                    |
-| `rules/testing.md`      | Test standartları                                     |
-| `rules/quality-gate.md` | 🆕 Tier-1 kalite kapısı — zorunlu araştırma protokolü |
-
-### Trust-Grade Kısıtları
-
-```
-Trust > Optimization    → Kullanıcı güveni hiçbir zaman feda edilmez
-Safety > Growth         → Güvenlik iş hedeflerinin önünde gelir
-Completion > Suggestion → Yeni iş önermeden önce mevcut işi bitir
-```
+| Workflow | Command | Phase |
+|:---------|:--------|:------|
+| brainstorm | `/brainstorm` | Discover |
+| quality-gate | `/quality-gate` | Discover |
+| plan | `/plan` | Plan |
+| create | `/create` | Build |
+| enhance | `/enhance` | Build |
+| preview | `/preview` | Build |
+| ui-ux-pro-max | `/ui-ux-pro-max` | Build |
+| test | `/test` | Verify |
+| review | `/review` | Verify |
+| deploy | `/deploy` | Ship |
+| debug | `/debug` | Reactive |
+| orchestrate | `/orchestrate` | Reactive |
+| retrospective | `/retrospective` | Evaluate |
+| status | `/status` | Cross-cutting |
 
 ---
 
-## 🎯 Sık Kullanılan Senaryolar
+## ✅ Checklists
 
-### Senaryo 1: Yeni Özellik Geliştirme
+| Checklist | When to Use |
+|:----------|:------------|
+| `session-start.md` | Beginning of every work session |
+| `session-end.md` | Before ending any work session |
+| `pre-commit.md` | Before every commit |
 
-```
-/status                              # Oturum durumu
-/plan Add user profile page          # Planlama
-  → Plan onayla
-/implement                           # Uygulama
-/verify                              # Kalite kontrol
-/code-review                         # Kod inceleme
-git commit -m "feat(profile): add user profile page"
-git push origin feature/profile
-```
+---
 
-### Senaryo 2: Bug Fix
+## ⚖️ Governance Rules (6)
 
-```
-/status                              # Context yükle
-/debug login fails after token expiry # Sistematik debug
-/fix                                 # Düzelt
-/verify                              # Doğrula
-git commit -m "fix(auth): handle expired JWT refresh"
-```
+| Rule File | Scope |
+|:----------|:------|
+| `coding-style.md` | TypeScript + Python conventions |
+| `security.md` | Secrets, auth, data protection, AI safety |
+| `testing.md` | TDD, pytest, Jest/Vitest patterns |
+| `git-workflow.md` | Commits, branches, push policy |
+| `documentation.md` | Doc hierarchy, SSOT, preservation |
+| `sprint-tracking.md` | ROADMAP.md as SSOT, session protocols |
 
-### Senaryo 3: Codebase Keşfi (Yeni Proje)
+---
 
-```
-/scout                               # Genel yapı
-/scout src/services                   # Servis katmanı
-/ask How does authentication work?    # Detay sor
-```
+## 🎯 Common Scenarios
 
-### Senaryo 4: Tam İş Akışı (Sıfırdan Bitmiş)
+### 1. Starting a New Feature
 
 ```
-/cook payment checkout flow           # Plan→Code→Test→Doc→Verify
+/status → /plan → /create → /test → /review → /deploy
 ```
 
-### Senaryo 5: Refactoring
+### 2. Fixing a Bug
 
 ```
-/checkpoint before-refactor           # Save point
-/refactor extract repository pattern  # Refactor
-/verify                              # Her şey çalışıyor mu?
-/code-review                         # Kalite kontrol
+/status → /debug → /fix → /test → /review
+```
+
+### 3. UI/UX Design Work
+
+```
+/brainstorm → /quality-gate → /ui-ux-pro-max → /preview → /review
+```
+
+### 4. Code Quality Improvement
+
+```
+/status → /review → /refactor → /test → /verify
+```
+
+### 5. Sprint Planning
+
+```
+/status → /plan → /brainstorm → update ROADMAP.md
 ```
 
 ---
 
-## 📁 Dizin Yapısı
+## 📁 Directory Structure
 
 ```
 .agent/
-├── README.md              # Genel bakış
-├── CheatSheet.md          # ← Bu dosya
-├── rules.md               # Ana governance kuralları
-├── session-context.md     # El ile güncellenen oturum bağlamı
-├── session-state.json     # Makine tarafından okunan durum
+├── rules.md                 # Core governance & identity
+├── session-state.json       # Machine-readable state
+├── session-context.md       # Human-readable session context
+├── CheatSheet.md            # This file
+├── manifest.json            # Capability registry
 │
-├── agents/          (18)  # Uzman agent tanımları
-├── commands/        (32)  # Slash komut tanımları
-├── skills/          (27)  # Kabiliyet modülleri
-├── workflows/       (14)  # İş akışı zincirleri (README dahil)
-├── checklists/      (4)   # Kalite kapıları
-├── hooks/           (3)   # Event-driven otomasyon
-└── rules/           (5)   # Modüler governance kuralları
+├── agents/                  # 19 specialized agents
+├── commands/                # 31 slash commands
+├── skills/                  # 31 capability extensions
+├── workflows/               # 14 slash command workflows
+├── hooks/                   # Event-driven automation
+├── rules/                   # 6 modular governance rules
+├── contexts/                # Mode switching (brainstorm, debug, etc.)
+├── checklists/              # Session & pre-commit verification
+├── templates/               # Feature, ADR, bug-report templates
+├── decisions/               # Architecture Decision Records
+└── engine/                  # Runtime engine configs
 ```
-
----
-
-> **Kaynak**: [besync-labs/antigravity-ai-kit](https://github.com/besync-labs/antigravity-ai-kit) v2.0.0
-> **Güncellenme**: 2026-02-09

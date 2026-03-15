@@ -8,8 +8,6 @@
 > The pre-push hook runs the full LOCAL-CI-GATE (lint, type-check, tests, build) which takes 60-160 seconds.
 > Premature pushes waste time and block the agent. Only push once, at session end, after all work is verified.
 
----
-
 ## Commit Format
 
 ```

@@ -1,10 +1,10 @@
 {
-  "sprint": "39-HN-S2",
-  "focus": "Sprint 39 Handoff Notes Session 2 — H3/H4 OAuth Provider Setup Complete",
+  "sprint": "Pre-40",
+  "focus": "Antigravity AI Kit v3.1.0 upgrade — backup, init --force, restore, verify",
   "branch": "main",
   "phase": "K — Production Launch",
-  "session_date": "2026-03-12",
-  "status": "H3 (Google) + H4 (Microsoft) OAuth setup complete. H7 added for E2E testing. Sprint 40 next.",
+  "session_date": "2026-03-15",
+  "status": "AI Kit v3.1.0 installed. 57 files updated, 9 new items, 8 PF customizations preserved. Sprint 40 next.",
   "production_readiness": {
     "global_score": 59,
     "verdict": "NO-GO (Stripe + LLM still pending)",
@@ -23,20 +23,26 @@
     "tsc_errors": 0,
     "eslint_errors": 0,
     "npm_audit_vulns": 0,
-    "pip_audit_vulns": 0,
-    "build_routes": 42
+    "pip_audit_vulns": 1,
+    "build_routes": 15,
+    "kit_version": "3.1.0",
+    "kit_agents": 20,
+    "kit_skills": 31,
+    "kit_commands": 31,
+    "kit_workflows": 15
   },
   "audit": {
-    "passes": 6,
+    "passes": 7,
     "standard": "FAANG/Tier-1",
     "domains_audited": 12,
-    "review_gates_passed": "8/8",
-    "sprint_39_hn_s2_verdict": "GO — H3/H4 OAuth provider setup complete, H7 added for E2E testing"
+    "review_gates_passed": "5/7 (MyPy pre-existing, pip-audit pre-existing)",
+    "kit_upgrade_verdict": "GO — v3.1.0 fully operational, 0 regressions"
   },
   "sprint_plan": {
     "sprint_39": "✅ Complete — Auth Hardening & Email Service (33 tasks, 1 session)",
     "sprint_39_hn": "✅ Complete — Handoff Notes Remediation (7 phases, 18 findings, 1 session)",
     "sprint_39_hn_s2": "✅ Complete — H3/H4 OAuth Provider Setup (Google GCP + Microsoft Azure)",
+    "pre_40": "✅ Complete — Antigravity AI Kit v3.1.0 upgrade (57 files, 1 session)",
     "sprint_40": "⏳ Stripe & LLM Operational Setup + OAuth E2E Testing (manual, 1-2 sessions)",
     "sprint_41": "⏳ Production Infrastructure Hardening (2 sessions)",
     "sprint_42": "⏳ Monitoring, Token Security & Polish (1 session)",
@@ -44,14 +50,15 @@
     "sprint_44": "⏳ Post-Launch Polish & Monitoring (1 session)"
   },
   "handoff": {
-    "manual_steps": 3,
+    "manual_steps": 4,
     "h7": "OAuth E2E testing — test Google & Microsoft login/register flows end-to-end",
     "h8": "Stripe + LLM API key setup",
-    "h9": "VR baselines (deferred to Sprint 44)"
+    "h9": "VR baselines (deferred to Sprint 44)",
+    "h10": "PyJWT upgrade 2.11.0 → 2.12.0 (CVE-2026-32597)"
   },
   "commits": [
     {"hash": "160b48c", "message": "feat(auth): Sprint 39 — Auth Hardening, Email Service & OAuth"},
     {"hash": "553b791", "message": "feat(auth): Sprint 39 Handoff Notes remediation — OAuth JWKS hardening, MSAL, CSP, test fix"},
-    {"hash": "pending", "message": "fix(auth): MSAL redirectUri fix + H3/H4 OAuth provider setup tracking"}
+    {"hash": "pending", "message": "chore(agent): upgrade Antigravity AI Kit to v3.1.0"}
   ]
 }
