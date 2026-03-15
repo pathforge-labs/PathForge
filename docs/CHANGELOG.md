@@ -5,6 +5,33 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [Pre-Sprint 40] — Antigravity AI Kit v3.1.0 Upgrade — 2026-03-15
+
+### Added
+
+- **2 new agents**: `reliability-engineer` (SRE, production readiness), `sprint-orchestrator` (sprint planning, velocity)
+- **2 new skills**: `context-budget` (LLM token optimization), `mcp-integration` (MCP patterns)
+- **5 new directories**: `engine/` (6 runtime modules), `contexts/` (5 behavioral modes), `decisions/` (1 ADR), `templates/` (3 templates), `hooks/` (hooks.json + templates)
+- **`manifest.json`** — complete capability registry (19 agents, 31 skills, 31 commands, 15 workflows)
+- **`CheatSheet.md`** — 8.6KB full command/workflow/agent reference
+
+### Changed
+
+- **`backend-specialist.md`** — 3.1→8.7KB: multi-ecosystem (Node.js + Python), Decision Frameworks, anti-patterns
+- **`frontend-specialist.md`** — 2.6→13KB: Deep Design Thinking, SaaS Safe Harbor, Maestro Auditor
+- **`rules/`** — 4→8 files: kit adds `documentation.md`, `sprint-tracking.md`; PF preserves `architecture.md`, `quality-gate.md`
+- **`checklists/`** — Sprint State Validation + Staleness check (session-start), Sprint State Sync + Duplicate prevention (session-end)
+- **`rules.md`** — 14.4KB comprehensive Trust-Grade governance rules
+
+### Verified
+
+- Pytest: 1103/1103 ✅ | Ruff: 0 ✅ | ESLint: 0 ✅ | TSC: 0 ✅ | Build: 15 routes ✅
+- npm audit: 0 vulnerabilities ✅
+- 8 PathForge customizations preserved (plan, review, status, migrate, architecture, quality-gate, session files)
+- Commit: `a9ae4f3`
+
+---
+
 ## [Post-Sprint 37] — CI Stability, Migration Chain & Deprecation Fixes — 2026-03-04
 
 ### Fixed
